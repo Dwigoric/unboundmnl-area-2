@@ -37,19 +37,19 @@ const logIn = async () => {
 <template>
     <div class="wrapper">
         <div class="login">
-            <div class="header">Log In</div>
+            <div class="header">Caluag St. Vincent</div>
             <VForm id="login-form" ref="form">
                 <VTextField
+                    class="username-pw-input"
                     v-model="username"
                     id="login-username"
-                    class="username-pw-input"
                     label="Username"
                     required
                 />
                 <VTextField
+                    class="username-pw-input"
                     v-model="password"
                     id="login-pw"
-                    class="username-pw-input"
                     label="Password"
                     required
                 />
@@ -58,7 +58,7 @@ const logIn = async () => {
                 <!--    <label><input type="checkbox" id="login-rememberMe" />Remember Me </label>-->
                 <!--</div>-->
 
-                <VBtn type="submit" class="btn" @click.prevent="logIn">Log In</VBtn>
+                <VBtn type="submit" class="btn capitalize-text" @click.prevent="logIn">Log In</VBtn>
                 <div v-if="errorMessage" class="error" id="login-error">{{ errorMessage }}</div>
             </VForm>
         </div>
