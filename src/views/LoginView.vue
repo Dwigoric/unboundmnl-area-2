@@ -33,27 +33,15 @@ const logIn = async () => {
 </script>
 
 <!-- TODO: Create Login Page -->
-
 <template>
     <div class="bg">
         <div class="wrapper">
             <div class="login">
                 <div class="header">Caluag St. Vincent</div>
                 <VForm id="login-form" ref="form">
-                    <VTextField
-                        class="username-pw-input"
-                        v-model="username"
-                        id="login-username"
-                        label="Username"
-                        required
-                    />
-                    <VTextField
-                        class="username-pw-input"
-                        v-model="password"
-                        id="login-pw"
-                        label="Password"
-                        required
-                    />
+                    <VTextField class="username-pw-input" v-model="username" id="login-username" label="Username"
+                        required />
+                    <VTextField class="username-pw-input" v-model="password" id="login-pw" label="Password" required />
 
 
                     <!-- <div class="rememberMe">
@@ -61,7 +49,8 @@ const logIn = async () => {
                     </div> -->
 
                     <VBtn type="submit" class="btn capitalize-text" @click.prevent="logIn">Log In</VBtn>
-                    <div v-if="errorMessage" class="error" id="login-error">{{ errorMessage }}</div>
+                    <RouterLink to="/officerRegister" VBtn type="submit" class="btn capitalize-text">Log In</RouterLink>
+                    <div v-if="errorMessage" class="error" id="login-error">asd</div>
                 </VForm>
             </div>
         </div>
@@ -71,45 +60,47 @@ const logIn = async () => {
 <!-- Stylesheet -->
 <style scoped>
 
+/* TODO: Scale everything properly !!! */
 .bg {
-    background-image: url('bg.svg');
+    height: 100vh;
+    width: 100vw;
+    background-image: url('../assets/bg.svg');
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center center;
     background-attachment: fixed;
     background-color: var(--vt-c-blue-very-dark);
-    font-family: 'Roboto', sans-serif;
-    font-size: 16px;
     overflow: hidden;
+
+    display: flex;
+    justify-content: center; /* Horizontal centering */
+    align-items: center;
 }
 
-/* TODO: Scale properly */
 .wrapper {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 22%;
-    height: 60%;
+    min-width: 20vw;
+    min-height: 50vh;
 
     background: var(--vt-c-white);
     border-radius: 5px;
-    
+ 
     display: flex;
     justify-content: center;
-    overflow: hidden;
+    overflow: auto;
 }
 
 .login {
-    width: 80%;
-    height: 80%;
+    width: 15vw;
+    min-width: 10vw;
+    height: 40vh;
     margin: auto;
+    /* border: 1px solid black; */
 }
 
 .header {
-    font-size: 24px;
+    font-size: 1.5rem;
     font-weight: bold;
-    
+
     color: var(--vt-c-black);
     text-align: center;
     margin-bottom: 20%;
@@ -139,7 +130,7 @@ const logIn = async () => {
     text-transform: capitalize;
 }
 
-.btn:hover{
+.btn:hover {
     background: var(--vt-c-blue-dark);
 }
 
@@ -163,5 +154,8 @@ const logIn = async () => {
     margin: 25px 1 10px;
     justify-content: center;
 }
-
 </style>
+
+
+
+
