@@ -54,9 +54,10 @@ const logIn = async () => {
                     required
                 />
 
-                <!--<div class="rememberMe">-->
-                <!--    <label><input type="checkbox" id="login-rememberMe" />Remember Me </label>-->
-                <!--</div>-->
+                
+                <!-- <div class="rememberMe">
+                   <label><input type="checkbox" id="login-rememberMe" />Remember Me </label>
+                </div> -->
 
                 <VBtn type="submit" class="btn capitalize-text" @click.prevent="logIn">Log In</VBtn>
                 <div v-if="errorMessage" class="error" id="login-error">{{ errorMessage }}</div>
