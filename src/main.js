@@ -7,7 +7,7 @@ import App from './App.vue'
 import router from './router'
 
 // Import stylesheets
-import './assets/main.css'
+import './assets/base.css'
 import 'vuetify/lib/styles/main.css'
 
 // Build the app
