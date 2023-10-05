@@ -20,7 +20,7 @@
 
 .wrapper {
     position: sticky;
-    
+
     background: var(--vt-c-white);
     border-radius: 5px;
 
@@ -47,8 +47,7 @@
 }
 
 
-.username-pw-input {
-}
+.username-pw-input {}
 
 .btn {
     width: 100%;
@@ -95,14 +94,14 @@
 <template>
     <div class="bg">
         <div class="wrapper">
-            <div class="header">Register Officer</div>
+            <div class="header">Create a User Profile</div>
             <div class="login">
                 <VForm id="login-form" ref="form">
-                    <!-- TODO: [Officer] Create proper fields -->
-                    <VTextField class="username-pw-input" v-model="first_name" id="login-pw" label="Last Name" required /> 
+                    <!-- TODO: [User] Create proper fields -->
+                    <VTextField class="username-pw-input" v-model="first_name" id="login-pw" label="Last Name" required />
                     <VTextField class="username-pw-input" v-model="last_name" id="login-pw" label="First Name" required />
-                    <VTextField class="username-pw-input" v-model="username" id="login-username" label="Username" required />
-                    <VTextField class="username-pw-input" v-model="password" id="login-pw" label="Password" required />
+                    <VTextField class="username-pw-input" v-model="username" id="login-username" label="Age" required />
+                    <VTextField class="username-pw-input" v-model="password" id="login-pw" label="City" required />
 
 
                     <!-- <div class="rememberMe">
