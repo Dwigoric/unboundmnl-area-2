@@ -117,36 +117,85 @@
         <div class="wrapper">
             <div class="header">Create a User Profile</div>
             <div class="infoFields">
-                <div class="header2">Borrower's Information</div>
+                
                 <div class="formDiv">
                     <VForm id="login-form" ref="form">
                         <!-- TODO: [User] Create proper fields -->
-                        <VTextField class="username-pw-input" v-model="first_name" id="login-pw" label="Last Name" required />
-                        <VTextField class="username-pw-input" v-model="last_name" id="login-pw" label="First Name" required />
-                        <VTextField class="username-pw-input" v-model="last_name" id="login-pw" label="Middle Name" required />
-                        <VTextField class="username-pw-input" v-model="username" id="login-username" label="Date of Birth" required />
-                        <VTextField class="username-pw-input" v-model="password" id="login-pw" label="Age" required />
-                        <VTextField class="username-pw-input" v-model="last_name" id="login-pw" label="Gender" required />
-                        <VTextField class="username-pw-input" v-model="last_name" id="login-pw" label="Tin Number" required />
-                        <VTextField class="username-pw-input" v-model="last_name" id="login-pw" label="Civil Status" required />
-                        <VTextField class="username-pw-input" v-model="last_name" id="login-pw" label="Contact Number" required />
-                        <VTextField class="username-pw-input" v-model="last_name" id="login-pw" label="Residence Address" required />
-                        <VTextField class="username-pw-input" v-model="last_name" id="login-pw" label="Monthly Income" required />
-                        <VTextField class="username-pw-input" v-model="last_name" id="login-pw" label="Occupation/Source of Income" required />
-
-
+                        <!-- 
+                            Removed: age
+                            Added: spouse info
+                        -->
+                        <VTextField class="username-pw-input" v-model="username" id="login-username" label="Username" required />
+                        <VTextField class="username-pw-input" v-model="password" id="login-password" label="Password" required />
+                        
+                        <div class="header2">Borrower's Information</div>
+                        <VTextField class="username-pw-input" v-model="first_name" id="login-first-name" label="First Name" required />
+                        <VTextField class="username-pw-input" v-model="middle_name" id="login-middle-name" label="Middle Name" />
+                        <VTextField class="username-pw-input" v-model="last_name" id="login-last-name" label="Last Name" required/>
+                        <VTextField class="username-pw-input" v-model="birthday" id="login-birthday" label="Date of Birth" required />
+                        <VTextField class="username-pw-input" v-model="birthplace" id="login-birthplace" label="Place of Birth" required />
+                        <VTextField class="username-pw-input" v-model="gender" id="login-gender" label="Gender" required />
+                        <VTextField class="username-pw-input" v-model="tin_number" id="login-tin-number" label="TIN Number" required />
+                        <VTextField class="username-pw-input" v-model="civil_status" id="login-civil-status" label="Civil Status" required />
+                        <VTextField class="username-pw-input" v-model="contact_number" id="login-contact-number" label="Contact Number" required />
+                        <VTextField class="username-pw-input" v-model="address" id="login-address" label="Residence Address" required />
+                        <VTextField class="username-pw-input" v-model="monthly_income" id="login-monthly-income" label="Monthly Income" required />
+                        <VTextField class="username-pw-input" v-model="occupation" id="login-occupation" label="Occupation/Source of Income" required />
+                        <!-- Spouse info -->
+                        <div class="header2">Spouse's Information</div>
+                        <VTextField class="username-pw-input" v-model="spouse_first_name" id="login-spouse-first-name" label="Spouse's First Name" />
+                        <VTextField class="username-pw-input" v-model="spouse_middle_name" id="login-spouse-middle-name" label="Spouse's Middle Name" />
+                        <VTextField class="username-pw-input" v-model="spouse_last_name" id="login-spouse-last-name" label="Spouse's Last Name" />
+                        <VTextField class="username-pw-input" v-model="spouse_birthday" id="login-spouse-birthday" label="Spouse's Date of Birth" />
+                        <VTextField class="username-pw-input" v-model="spouse_birthplace" id="login-spouse-birthplace" label="Spouse's Place of Birth" />
+                        <VTextField class="username-pw-input" v-model="spouse_contact_number" id="login-spouse-contact-number" label="Spouse's Contact Number" />
 
                         <!-- <div class="rememberMe">
                         <label><input type="checkbox" id="login-rememberMe" />Remember Me </label>
                         </div> -->
 
                         <div class="btnWrapper">
-                            <VBtn type="submit" class="btn capitalize-text" @click.prevent="logIn">Create User Profile</VBtn>
+                            <VBtn type="submit" class="btn capitalize-text" @click.prevent="registerUser">Create User Profile</VBtn>
                         </div>
-                        <div v-if="errorMessage" class="error" id="login-error"></div>
+                        <div v-if="error_message" class="error" id="login-error"></div>
                     </VForm>
                     </div>
                 </div>
         </div>
     </div>
 </template>
+
+<script>
+export default {
+    data: function() {
+        return {
+            username: "",
+            password: "",
+            first_name: "",
+            middle_name: "",
+            last_name: "",
+            birthday: "",
+            birthplace: "",
+            gender: "",
+            tin_number: "",
+            civil_status: "",
+            contact_number: "",
+            address: "",
+            monthly_income: "",
+            occupation: "",
+            spouse_first_name: "",
+            spouse_last_name: "",
+            spouse_middle_name: "",
+            spouse_contact_number: "",
+            spouse_birthplace: "",
+            spouse_birthday: "",
+            error_message: ""
+        }
+    },
+    methods: {
+        registerUser: function() {
+            
+        }
+    }
+}
+</script>
