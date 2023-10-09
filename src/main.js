@@ -9,6 +9,7 @@ import router from './router'
 // Import stylesheets
 import './assets/base.css'
 import 'vuetify/lib/styles/main.css'
+import '@mdi/font/css/materialdesignicons.css'
 
 // Build the app
 const app = createApp(App)
