@@ -8,13 +8,12 @@
 <style scoped>
 
     .notification-bell-box {
-        min-width: 3rem;
+        min-width: 3.5rem;
         height: 3.5rem;
     }
 
     .notification-bell {
         color: var(--vt-c-gray);
-        
         font-size: 2rem;
     }
 

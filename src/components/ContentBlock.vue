@@ -4,7 +4,10 @@
         :style="
             {width: `${width}${unit}`, 
             height: `${height}${unit}`, 
-            backgroundColor: `${bgColor}`}"
+            backgroundColor: `${bgColor}`,
+            margin: `${margin}${unit}`,
+            padding: `${padding}${unit}`,
+        }"
     >
         <slot></slot>
     </div>
@@ -19,6 +22,14 @@
         bgColor: {
             type: String,
             default: '#FFF'
+        },
+        margin: {
+            type: String,
+            default: '0' // Default margin value
+        },
+        padding: {
+            type: String,
+            default: '1' // Default padding value
         }
     })
 </script>

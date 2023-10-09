@@ -1,6 +1,5 @@
 <script setup>
 // Import vue components
-
 import NavigationDrawer from '../components/NavigationDrawer.vue'
 import UserProfile from '../components/UserProfile.vue'
 import NotificationBtn from '../components/NotificationBtn.vue';
@@ -12,17 +11,19 @@ import ContentBlock from '../components/ContentBlock.vue';
         <NavigationDrawer />
         
         <div class="d-flex flex-column w-100 pl-5">
+
             <!-- Top Bar of Dashboard -->
             <div class="dashboard-top d-flex justify-end align-center">
                 <NotificationBtn />
                 <UserProfile />
             </div>
+
             <!-- Main Dashboard Body -->
-            <div class="dashboard-body d-flex flex-column h-100 py-7">
+            <div class="dashboard-body d-flex flex-column h-100 py-3">
                 <ContentBlock :width="100" :height="50" :unit="'%'" :bg-color="'#FFF'"/>
                 <div class="d-flex h-50 gap-1_25">
-                    <ContentBlock :width="50" :height="90" :unit="'%'" :bg-color="'#FFF'"/>
-                    <ContentBlock :width="50" :height="90" :unit="'%'" :bg-color="'#09a6f3'"/>
+                    <ContentBlock :width="50" :height="102" :unit="'%'" :bg-color="'#FFF'"/>
+                    <ContentBlock :width="50" :height="102" :unit="'%'" :bg-color="'#09a6f3'"/>
                 </div>
             </div>
         </div>        
@@ -33,7 +34,8 @@ import ContentBlock from '../components/ContentBlock.vue';
 
     .dashboard-top {
         gap: 1.5rem;
-        width: 100%; height: 75px;
+        width: 100%; 
+        height: 75px;
     }
 
     .dashboard-body {
@@ -48,8 +50,7 @@ import ContentBlock from '../components/ContentBlock.vue';
         background-color: var(--vt-c-white-off);
     }
 
-    /** hover-scale-sm gives the subtle hover effect to all the floating components
-     */
+    /** hover-scale-sm gives the subtle hover effect to all the floating components **/
     .hover-scale-sm, .hover-scale-md {
         transition: all 0.3s ease; /* 0.3s duration with ease-in-out timing function for smooth effect */
     }

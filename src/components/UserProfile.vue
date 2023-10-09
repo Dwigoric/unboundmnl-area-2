@@ -5,7 +5,7 @@
                 <v-icon icon="mdi-account"></v-icon>
             </v-avatar>
         </div>
-        <div class="d-flex justify-center align-center flex-column px-3 py-2">
+        <div class="d-flex flex-column px-3">
             <!-- note: change these dynamically  -->
             <p class="font-weight-bold name-text">Terence Galarpe</p> 
             <p class="title-text">Loan Officer</p>
@@ -16,6 +16,8 @@
 <style scoped>
     .profile-box {
         background-color: var(--vt-c-white);
+        padding-top: .2%;
+        padding-bottom: .2%;
     }
 
     .user-avatar {
@@ -24,6 +26,7 @@
 
     .name-text {
         font-size: 1.25rem;
+        height: 25px;
     }
 
     .title-text {

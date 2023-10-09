@@ -48,8 +48,8 @@ const logIn = async () => {
                     </div> -->
 
                     <VBtn type="submit" class="btn capitalize-text" @click.prevent="logIn">Log In</VBtn>
-                    <RouterLink to="/officerRegister" VBtn type="submit" class="btn capitalize-text">Officer Register</RouterLink>
-                    <RouterLink to="/userProfileRegister" VBtn type="submit" class="btn capitalize-text">User Profile Register</RouterLink>
+                    <!-- <RouterLink to="/officerRegister" VBtn type="submit" class="btn capitalize-text">Officer Register</RouterLink>
+                    <RouterLink to="/userProfileRegister" VBtn type="submit" class="btn capitalize-text">User Profile Register</RouterLink> -->
                     <div v-if="errorMessage" class="error" id="login-error">asd</div>
                 </VForm>
             </div>
