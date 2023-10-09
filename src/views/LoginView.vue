@@ -32,7 +32,6 @@ const logIn = async () => {
 }
 </script>
 
-<!-- TODO: Create Login Page -->
 <template>
     <div class="bg">
         <div class="wrapper">
@@ -49,7 +48,8 @@ const logIn = async () => {
                     </div> -->
 
                     <VBtn type="submit" class="btn capitalize-text" @click.prevent="logIn">Log In</VBtn>
-                    <RouterLink to="/officerRegister" VBtn type="submit" class="btn capitalize-text">Log In</RouterLink>
+                    <RouterLink to="/officerRegister" VBtn type="submit" class="btn capitalize-text">Officer Register</RouterLink>
+                    <RouterLink to="/userProfileRegister" VBtn type="submit" class="btn capitalize-text">User Profile Register</RouterLink>
                     <div v-if="errorMessage" class="error" id="login-error">asd</div>
                 </VForm>
             </div>

@@ -19,22 +19,21 @@
 }
 
 .wrapper {
-    min-width: 20vw;
-    min-height: 50vh;
-
+    position: sticky;
+    
     background: var(--vt-c-white);
     border-radius: 5px;
 
-    display: flex;
-    justify-content: center;
+    width: 30%;
+    padding: 3%;
+    padding-top: 2%;
+
+    /* display: flex;
+    justify-content: center; */
     overflow: auto;
 }
 
 .login {
-    width: 15vw;
-    min-width: 10vw;
-    height: 40vh;
-    margin: auto;
     /* border: 1px solid black; */
 }
 
@@ -44,17 +43,15 @@
 
     color: var(--vt-c-black);
     text-align: center;
-    margin-bottom: 20%;
+    margin-bottom: 3%;
 }
 
+
 .username-pw-input {
-    position: relative;
-    width: 100%;
 }
 
 .btn {
     width: 100%;
-    padding: 2%;
 
     color: var(--vt-c-white-off);
     font-weight: 600;
@@ -63,8 +60,6 @@
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    margin-top: 20%;
-    margin-bottom: 5%;
 }
 
 .capitalize-text {
@@ -97,15 +92,16 @@
 }
 </style>
 
-<!-- TODO: Create Officer Register Page -->
 <template>
     <div class="bg">
         <div class="wrapper">
+            <div class="header">Register Officer</div>
             <div class="login">
-                <div class="header">Caluag St. Vincent</div>
                 <VForm id="login-form" ref="form">
-                    <VTextField class="username-pw-input" v-model="username" id="login-username" label="Username"
-                        required />
+                    <!-- TODO: [Officer] Create proper fields -->
+                    <VTextField class="username-pw-input" v-model="first_name" id="login-pw" label="Last Name" required /> 
+                    <VTextField class="username-pw-input" v-model="last_name" id="login-pw" label="First Name" required />
+                    <VTextField class="username-pw-input" v-model="username" id="login-username" label="Username" required />
                     <VTextField class="username-pw-input" v-model="password" id="login-pw" label="Password" required />
 
 
@@ -113,8 +109,8 @@
                     <label><input type="checkbox" id="login-rememberMe" />Remember Me </label>
                     </div> -->
 
-                    <VBtn type="submit" class="btn capitalize-text" @click.prevent="logIn">Log In</VBtn>
-                    <div v-if="errorMessage" class="error" id="login-error">asd</div>
+                    <VBtn type="submit" class="btn capitalize-text" @click.prevent="logIn">Register Officer</VBtn>
+                    <div v-if="errorMessage" class="error" id="login-error"></div>
                 </VForm>
             </div>
         </div>
