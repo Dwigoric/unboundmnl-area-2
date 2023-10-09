@@ -1,6 +1,5 @@
 <!-- Stylesheet -->
 <style scoped>
-/* TODO: Scale everything properly !!! */
 .bg {
     height: 100vh;
     width: 100vw;

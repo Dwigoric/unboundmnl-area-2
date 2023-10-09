@@ -10,12 +10,11 @@
             <h1>Unbound MNL</h1>
           </div>
 
-          <v-list color="transparent">
+          <v-list>
 
-            <!-- BUG: Disappears when goes forward to routed page -->
-            <v-list-item link prepend-icon="mdi-home-account">Home</v-list-item>
+            <v-list-item to="/dashboard" link prepend-icon="mdi-home-account">Home</v-list-item>
             <v-list-item link prepend-icon="mdi-file-document-edit-outline">Create Loan</v-list-item>
-            <v-list-item link prepend-icon="mdi-account-box">Officer Profiles</v-list-item>
+            <v-list-item to="/officerProfiles" link prepend-icon="mdi-account-box">Officer Profiles</v-list-item>
             <v-list-item to="/memberProfiles" link prepend-icon="mdi-magnify">Member Profiles</v-list-item>
 
           </v-list>
