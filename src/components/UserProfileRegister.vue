@@ -148,6 +148,7 @@
                         <div class="btnWrapper">
                             <VBtn type="submit" class="btn capitalize-text" @click.prevent="registerUser">Create User Profile</VBtn>
                         </div>
+                        <div v-if="errorMessage !== ''" class="error" id="login-error">{{ errorMessage }}</div>
                     </VForm>
                 </div>
             </div>
@@ -192,15 +193,30 @@ export default {
             rules: { required: 
                 v => !!v || "This field is required"
             },
+            errorMessage: ""
         };
     },
     methods: {
         registerUser: async function() {
-            // const result = await fetch(API_URL + "/users/add", {
-            //     method: "POST",
-            //     headers: { "Content-Type": "application/json"},
-            //     body: JSON.stringify(this.preprocessData())
-            // })
+            const validationResult = await this.$refs.form.validate();
+            if (validationResult.valid) {
+                const result = await fetch(API_URL + "/users/add", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json"},
+                    body: JSON.stringify(this.preprocessData())
+                })
+
+                this.errorMessage = "";
+
+                if (result.status === 200) {
+                    this.$refs.form.reset();
+                } else if (result.status === 400) {
+                    const jsonRes = await result.json();
+                    this.errorMessage = jsonRes.message;
+                } else if (result.status === 500) {
+                    this.errorMessage = "Internal Server Error"
+                }
+            }            
         },
         preprocessData: function() {
             return {
