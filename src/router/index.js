@@ -3,6 +3,7 @@ import LoginView from '../views/LoginView.vue'
 import DashboardMain from '../views/DashboardMain.vue'
 import MemberProfilesView from '../views/MemberProfilesView.vue'
 import OfficerProfilesView from '../views/OfficerProfilesView.vue'
+import testUserProfileRegView from '../views/testUserProfileReg.vue'
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -26,6 +27,12 @@ const router = createRouter({
             path: '/officerProfiles',
             name: 'Officer Register',
             component: OfficerProfilesView
+        },
+
+        {
+            path: '/testUserProfileRegister',
+            name: 'testUserProfileRegister',
+            component: testUserProfileRegView
         },
     ]
 })

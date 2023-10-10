@@ -26,6 +26,7 @@ import ContentBlock from '../components/ContentBlock.vue';
                 <div class="search-wrapper">
                     <v-text-field prepend-icon="mdi-magnify" label="Search Member"></v-text-field>
                     <div class="btnWrapper">
+                        <!-- TODO: Integrate Member Creation Popup (UserProfileRegister.vue) -->
                         <VBtn class="btn capitalize-text" @click.prevent="logIn">Create Member Profile</VBtn>
                     </div>
                 </div>
