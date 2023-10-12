@@ -1,5 +1,5 @@
 <template>
-    <v-card class="elevation-13">
+    <v-card class="elevation-13 mr-7">
       <v-layout>
         <v-navigation-drawer
           class="navigation-drawer py-5"
