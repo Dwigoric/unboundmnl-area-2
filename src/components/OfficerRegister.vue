@@ -8,30 +8,59 @@
         <div class="wrapper">
             <div class="header">
                 <CloseButton @click="() => togglePopup('createOfficerProfile')" />
-                    <div class="header-text">
-                        Register Officer
-                    </div>
-                </div>
-                <div class="infoFields">
-                    <div class="login">
-                        <VForm id="login-form" ref="form">
-                            <!-- TODO: Create proper fields -->
-                            <VTextField class="username-pw-input" v-model="first_name" id="login-pw" label="Last Name" required /> 
-                            <VTextField class="username-pw-input" v-model="last_name" id="login-pw" label="First Name" required />
-                            <VTextField class="username-pw-input" v-model="username" id="login-username" label="Username" required />
-                            <VTextField class="username-pw-input" v-model="password" id="login-pw" label="Password" required />
+                <div class="header-text">Register Officer</div>
+            </div>
+            <div class="infoFields">
+                <div class="login">
+                    <VForm id="login-form" ref="form">
+                        <!-- TODO: Create proper fields -->
+                        <VTextField
+                            class="username-pw-input"
+                            v-model="first_name"
+                            id="login-pw"
+                            label="Last Name"
+                            required
+                        />
+                        <VTextField
+                            class="username-pw-input"
+                            v-model="last_name"
+                            id="login-pw"
+                            label="First Name"
+                            required
+                        />
+                        <VTextField
+                            class="username-pw-input"
+                            v-model="username"
+                            id="login-username"
+                            label="Username"
+                            required
+                        />
+                        <VTextField
+                            class="username-pw-input"
+                            v-model="password"
+                            id="login-pw"
+                            label="Password"
+                            required
+                        />
 
-
-                            <!-- <div class="rememberMe">
+                        <!-- <div class="rememberMe">
                             <label><input type="checkbox" id="login-rememberMe" />Remember Me </label>
                             </div> -->
 
-                            <div class="btnWrapper">
-                                <VBtn type="submit" class="btn capitalize-text" @click.prevent="logIn">Register Officer</VBtn>
-                            </div>
-                            <div v-if="errorMessage" class="error" id="login-error"></div>
-                        </VForm>
-                    </div>
+                        <div class="btnWrapper">
+                            <VBtn
+                                type="submit"
+                                class="btn capitalize-text"
+                                @click.prevent="createOfficer"
+                            >
+                                Register Officer
+                            </VBtn>
+                        </div>
+                        <div v-if="errorMessage" class="error" id="login-error">
+                            {{ errorMessage }}
+                        </div>
+                    </VForm>
+                </div>
             </div>
         </div>
     </div>
@@ -41,6 +70,11 @@
 export default {
     props: {
         togglePopup: Function,
+    },
+    methods: {
+        closePopup() {
+            this.togglePopup('createMemberProfile');
+        }
     }
 }
 </script>
@@ -102,11 +136,10 @@ export default {
 .infoFields {
     padding: 3%;
     padding-top: 0%;
-
 }
 
-
-.username-pw-input {}
+.username-pw-input {
+}
 
 .btn {
     padding: 2%;
@@ -129,7 +162,7 @@ export default {
 }
 
 .rememberMe {
-    font-size: .9em;
+    font-size: 0.9em;
     color: var(--primary-color-jade);
     font-weight: 500;
     margin: -15px 2 15px;
@@ -141,7 +174,7 @@ export default {
 
 .error {
     display: flex;
-    font-size: .9em;
+    font-size: 0.9em;
     text-align: center;
     color: red;
     font-weight: 400;
