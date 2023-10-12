@@ -1,10 +1,20 @@
 <script setup>
-// Import vue components
+// Import packages
 import { ref } from 'vue'
+import { storeToRefs } from 'pinia'
+import jwt_decode from 'jwt-decode'
+
+// Import vue components
 import router from '../router'
 
 // Import constants
 import { API_URL } from '../constants'
+
+// Import stores
+import { useCurrentUserStore } from '../stores/currentUser'
+
+// Define stores
+const currentUserStore = storeToRefs(useCurrentUserStore())
 
 // Define refs
 const username = ref('')
@@ -14,21 +24,35 @@ const errorMessage = ref('')
 
 // Define methods
 const logIn = async () => {
-    const formData = new FormData(form.value)
-
-    // TODO: Finalize login endpoint
-    const response = await fetch(`${API_URL}/login`, {
+    const { token, name } = await fetch(`${API_URL}/auth/login`, {
         method: 'POST',
-        body: formData
-    })
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            username: username.value,
+            password: password.value
+        })
+    }).then((res) => res.json())
 
-    // TODO: Finalize response format
-    const data = await response.json()
-    if (data.success) {
-        await router.push('/dashboard')
-    } else {
-        errorMessage.value = data.message
+    // If name exists, it means that the user is an officer
+    if (name) {
+        // Store name to currentUserStore
+        currentUserStore.name.given = name.given
+        currentUserStore.name.middle = name.middle
+        currentUserStore.name.last = name.last
     }
+
+    // Decode token
+    const { uuid } = jwt_decode(token)
+    currentUserStore.id = uuid
+
+    // TODO: Modify for 'remember me' feature
+    // TODO: Use refresh token instead of storing token itself in cookies
+    // Set cookie
+    window.$cookies.set('credentials', { token, persist: false }, 0)
+
+    // TODO: Redirect admin to admin dashboard?
+    // Redirect to dashboard
+    return router.replace({ name: 'Dashboard' })
 }
 </script>
 
@@ -38,16 +62,28 @@ const logIn = async () => {
             <div class="login">
                 <div class="header">Caluag St. Vincent</div>
                 <VForm id="login-form" ref="form">
-                    <VTextField class="username-pw-input" v-model="username" id="login-username" label="Username"
-                        required />
-                    <VTextField class="username-pw-input" v-model="password" id="login-pw" label="Password" required />
-
+                    <VTextField
+                        class="username-pw-input"
+                        v-model="username"
+                        id="login-username"
+                        label="Username"
+                        required
+                    />
+                    <VTextField
+                        class="username-pw-input"
+                        v-model="password"
+                        id="login-pw"
+                        label="Password"
+                        required
+                    />
 
                     <!-- <div class="rememberMe">
                     <label><input type="checkbox" id="login-rememberMe" />Remember Me </label>
                     </div> -->
 
-                    <VBtn type="submit" class="btn capitalize-text" @click.prevent="logIn">Log In</VBtn>
+                    <VBtn type="submit" class="btn capitalize-text" @click.prevent="logIn"
+                        >Log In</VBtn
+                    >
                     <!-- <RouterLink to="/officerRegister" VBtn type="submit" class="btn capitalize-text">Officer Register</RouterLink>
                     <RouterLink to="/userProfileRegister" VBtn type="submit" class="btn capitalize-text">User Profile Register</RouterLink> -->
                     <div v-if="errorMessage" class="error" id="login-error">asd</div>
@@ -59,7 +95,6 @@ const logIn = async () => {
 
 <!-- Stylesheet -->
 <style scoped>
-
 .bg {
     height: 100vh;
     width: 100vw;
@@ -82,7 +117,7 @@ const logIn = async () => {
 
     background: var(--vt-c-white);
     border-radius: 5px;
- 
+
     display: flex;
     justify-content: center;
     overflow: auto;
@@ -134,7 +169,7 @@ const logIn = async () => {
 }
 
 .rememberMe {
-    font-size: .9em;
+    font-size: 0.9em;
     color: var(--primary-color-jade);
     font-weight: 500;
     margin: -15px 2 15px;
@@ -146,7 +181,7 @@ const logIn = async () => {
 
 .error {
     display: flex;
-    font-size: .9em;
+    font-size: 0.9em;
     text-align: center;
     color: red;
     font-weight: 400;
@@ -154,7 +189,3 @@ const logIn = async () => {
     justify-content: center;
 }
 </style>
-
-
-
-
