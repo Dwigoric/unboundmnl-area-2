@@ -1,7 +1,50 @@
 <script setup>
-    import CloseButton from '../components/CloseButton.vue';
-    import { ref, defineProps } from 'vue';
+// Import packages
+import { ref } from 'vue'
 
+// Import components
+import CloseButton from '../components/CloseButton.vue'
+
+// Import constants
+import { API_URL } from '../constants'
+
+// Define refs
+const first_name = ref('')
+const last_name = ref('')
+const username = ref('')
+const password = ref('')
+const form = ref(null)
+const errorMessage = ref('')
+
+// Props
+defineProps({
+    togglePopup: Function
+})
+
+// Define functions
+const createOfficer = async () => {
+    // TODO: Implement token refresh
+    const { token } = window.$cookies.get('credentials')
+
+    const { uuid, message } = await fetch(`${API_URL}/auth/register-officer`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({
+            username: username.value,
+            password: password.value,
+            name: {
+                given: first_name.value,
+                last: last_name.value
+            }
+        })
+    }).then((res) => res.json())
+
+    // If token does not exist, display error message
+    if (!uuid) errorMessage.value = message
+}
 </script>
 
 <template>
@@ -9,47 +52,63 @@
         <div class="wrapper">
             <div class="header">
                 <CloseButton @click="() => togglePopup('createOfficerProfile')" />
-                    <div class="header-text">
-                        Register Officer
-                    </div>
-                </div>
-                <div class="infoFields">
-                    <div class="login">
-                        <VForm id="login-form" ref="form">
-                            <!-- TODO: Create proper fields -->
-                            <VTextField class="username-pw-input" v-model="first_name" id="login-pw" label="Last Name" required /> 
-                            <VTextField class="username-pw-input" v-model="last_name" id="login-pw" label="First Name" required />
-                            <VTextField class="username-pw-input" v-model="username" id="login-username" label="Username" required />
-                            <VTextField class="username-pw-input" v-model="password" id="login-pw" label="Password" required />
+                <div class="header-text">Register Officer</div>
+            </div>
+            <div class="infoFields">
+                <div class="login">
+                    <VForm id="login-form" ref="form">
+                        <!-- TODO: Create proper fields -->
+                        <VTextField
+                            class="username-pw-input"
+                            v-model="first_name"
+                            id="login-pw"
+                            label="Last Name"
+                            required
+                        />
+                        <VTextField
+                            class="username-pw-input"
+                            v-model="last_name"
+                            id="login-pw"
+                            label="First Name"
+                            required
+                        />
+                        <VTextField
+                            class="username-pw-input"
+                            v-model="username"
+                            id="login-username"
+                            label="Username"
+                            required
+                        />
+                        <VTextField
+                            class="username-pw-input"
+                            v-model="password"
+                            id="login-pw"
+                            label="Password"
+                            required
+                        />
 
-
-                            <!-- <div class="rememberMe">
+                        <!-- <div class="rememberMe">
                             <label><input type="checkbox" id="login-rememberMe" />Remember Me </label>
                             </div> -->
 
-                            <div class="btnWrapper">
-                                <VBtn type="submit" class="btn capitalize-text" @click.prevent="logIn">Register Officer</VBtn>
-                            </div>
-                            <div v-if="errorMessage" class="error" id="login-error"></div>
-                        </VForm>
-                    </div>
+                        <div class="btnWrapper">
+                            <VBtn
+                                type="submit"
+                                class="btn capitalize-text"
+                                @click.prevent="createOfficer"
+                            >
+                                Register Officer
+                            </VBtn>
+                        </div>
+                        <div v-if="errorMessage" class="error" id="login-error">
+                            {{ errorMessage }}
+                        </div>
+                    </VForm>
+                </div>
             </div>
         </div>
     </div>
 </template>
-
-<script>
-export default {
-    props: {
-        togglePopup: Function,
-    },
-    methods: {
-        closePopup() {
-            this.togglePopup('createMemberProfile');
-        }
-    }
-}
-</script>
 
 <!-- Stylesheet -->
 <style scoped>
@@ -108,11 +167,10 @@ export default {
 .infoFields {
     padding: 3%;
     padding-top: 0%;
-
 }
 
-
-.username-pw-input {}
+.username-pw-input {
+}
 
 .btn {
     padding: 2%;
@@ -135,7 +193,7 @@ export default {
 }
 
 .rememberMe {
-    font-size: .9em;
+    font-size: 0.9em;
     color: var(--primary-color-jade);
     font-weight: 500;
     margin: -15px 2 15px;
@@ -147,7 +205,7 @@ export default {
 
 .error {
     display: flex;
-    font-size: .9em;
+    font-size: 0.9em;
     text-align: center;
     color: red;
     font-weight: 400;
