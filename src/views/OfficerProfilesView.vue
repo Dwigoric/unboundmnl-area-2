@@ -1,12 +1,7 @@
-<script setup>
-// Import vue components
-import NavigationDrawer from '../components/NavigationDrawer.vue'
-import UserProfile from '../components/UserProfile.vue'
-import NotificationBtn from '../components/NotificationBtn.vue';
-import ContentBlock from '../components/ContentBlock.vue';
-</script>
-
 <template>
+    <OfficerRegister v-if="popupTriggers.createOfficerProfile" :togglePopup="togglePopup">
+    </OfficerRegister>
+    
     <div class="bg-off-white d-flex px-4 py-2">
         <NavigationDrawer />
 
@@ -27,7 +22,7 @@ import ContentBlock from '../components/ContentBlock.vue';
                     <v-text-field prepend-icon="mdi-magnify" label="Search Officer"></v-text-field>
                     <div class="btnWrapper">
                         <!-- TODO: Integrate Officer Registration Popup (OfficerRegister.vue) -->
-                        <VBtn class="btn capitalize-text" @click.prevent="logIn">Create Officer Profile</VBtn>
+                        <VBtn class="btn capitalize-text" @click="() => togglePopup('createOfficerProfile')" :togglePopup="togglePopup"> Create Officer Profile </VBtn>
                     </div>
                 </div>
 
@@ -38,6 +33,26 @@ import ContentBlock from '../components/ContentBlock.vue';
         </div>
     </div>
 </template>
+
+<script setup>
+import NavigationDrawer from '../components/NavigationDrawer.vue'
+import UserProfile from '../components/UserProfile.vue'
+import NotificationBtn from '../components/NotificationBtn.vue';
+import ContentBlock from '../components/ContentBlock.vue';
+import OfficerRegister from '../components/OfficerRegister.vue'
+import { ref } from 'vue'
+
+// Handles pop up action
+const popupTriggers = ref({
+    createOfficerProfile: false
+});
+
+function togglePopup(trigger) {
+    popupTriggers.value[trigger] = !popupTriggers.value[trigger];
+}
+
+
+</script>
 
 <style>
 .search-wrapper {

@@ -1,12 +1,7 @@
-<script setup>
-// Import vue components
-import NavigationDrawer from '../components/NavigationDrawer.vue'
-import UserProfile from '../components/UserProfile.vue'
-import NotificationBtn from '../components/NotificationBtn.vue';
-import ContentBlock from '../components/ContentBlock.vue';
-</script>
-
 <template>
+    <UserProfileRegister v-if="popupTriggers.createMemberProfile" :togglePopup="togglePopup">
+    </UserProfileRegister>
+
     <div class="bg-off-white d-flex px-4 py-2">
         <NavigationDrawer />
 
@@ -27,17 +22,39 @@ import ContentBlock from '../components/ContentBlock.vue';
                     <v-text-field prepend-icon="mdi-magnify" label="Search Member"></v-text-field>
                     <div class="btnWrapper">
                         <!-- TODO: Integrate Member Creation Popup (UserProfileRegister.vue) -->
-                        <VBtn class="btn capitalize-text" @click.prevent="logIn">Create Member Profile</VBtn>
+                        <VBtn class="btn capitalize-text" @click="() => togglePopup('createMemberProfile')" :togglePopup="togglePopup">Create Member Profile</VBtn>
+                        <!-- <UserProfileRegister /> -->
                     </div>
                 </div>
-
                 <ContentBlock :width="100" :height="102" :unit="'%'" :bg-color="'#FFF'" >
+                
                     <!-- List of members -->
                 </ContentBlock>
             </div>
         </div>
     </div>
 </template>
+
+<script setup>
+// Import vue components
+import NavigationDrawer from '../components/NavigationDrawer.vue'
+import UserProfile from '../components/UserProfile.vue'
+import NotificationBtn from '../components/NotificationBtn.vue'
+import ContentBlock from '../components/ContentBlock.vue'
+import UserProfileRegister from '../components/UserProfileRegister.vue'
+import { ref } from 'vue'
+
+// Handles pop up action
+const popupTriggers = ref({
+    createMemberProfile: false
+});
+
+function togglePopup(trigger) {
+    popupTriggers.value[trigger] = !popupTriggers.value[trigger];
+}
+
+
+</script>
 
 <style>
 .search-wrapper {

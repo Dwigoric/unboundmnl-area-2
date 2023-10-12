@@ -1,120 +1,19 @@
-<!-- Stylesheet -->
-<style scoped>
-.bg {
-    height: 100vh;
-    width: 100vw;
-    background-image: url('../assets/bg.svg');
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center center;
-    background-attachment: fixed;
-    background-color: var(--vt-c-blue-very-dark);
-    overflow: hidden;
+<script setup>
 
-    display: flex;
-    justify-content: center;
-    /* Horizontal centering */
-    align-items: center;
-}
+import CloseButton from '../components/CloseButton.vue';
+import { ref, defineProps } from 'vue';
 
-.wrapper {
-    background: var(--vt-c-white);
-    border-radius: 5px;
-
-    width: 80vw;
-    max-height: 80vh;
-
-    display: flex;
-    flex-direction: column;
-    overflow: auto;
-}
-
-
-.formDiv {
-}
-
-.header {
-    /* border: 1px solid black; */
-    background-color: var(--vt-c-white-off);
-    width: 100%;
-    padding: 2%;
-    
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-
-    font-size: 1.5rem;
-    font-weight: bold;
-
-    text-align: center;
-    margin-bottom: 3%;
-}
-
-.header2 {
-    font-size: 1.2rem;
-    margin-bottom: 3%;
-    font-weight: bold;
-}
-
-.infoFields {
-    padding: 3%;
-
-}
-
-
-.username-pw-input {}
-
-
-.btn {
-    color: var(--vt-c-white-off);
-    font-weight: 600;
-    background: var(--vt-c-blue);
-
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.btnWrapper {
-    /* border: 1px solid black; */
-    display: flex;
-    justify-content: flex-end;
-}
-
-.capitalize-text {
-    text-transform: capitalize;
-}
-
-.btn:hover {
-    background: var(--vt-c-blue-dark);
-}
-
-.rememberMe {
-    font-size: .9em;
-    color: var(--primary-color-jade);
-    font-weight: 500;
-    margin: -15px 2 15px;
-    display: flex;
-    justify-content: right;
-    margin-top: 5px;
-    margin-bottom: 20px;
-}
-
-.error {
-    display: flex;
-    font-size: .9em;
-    text-align: center;
-    color: red;
-    font-weight: 400;
-    margin: 25px 1 10px;
-    justify-content: center;
-}
-</style>
+</script>
 
 <template>
     <div class="bg">
         <div class="wrapper">
-            <div class="header">Create a User Profile</div>
+            <div class="header">
+                <div class="header-text">
+                    <CloseButton @click="() => togglePopup('createMemberProfile')" />
+                    Create a Member Profile
+                </div>
+            </div>
             <div class="infoFields">
                 <div class="formDiv">
                     <VForm id="login-form" ref="form">
@@ -129,17 +28,20 @@
                         <VTextField class="username-pw-input" v-model="tin_number" id="login-tin-number" :rules="[rules.required]" label="TIN Number" />
                         <VSelect class="username-pw-input" v-model="civil_status" :items="['Single', 'Married']" id="login-civil-status" :rules="[rules.required]" label="Civil Status" />
                         <VTextField class="username-pw-input" v-model="contact_number" id="login-contact-number" :rules="[rules.required]" label="Contact Number" />
+
+                        <!-- TODO: Spread the address out more, like in the notes -->
                         <VTextField class="username-pw-input" v-model="address" id="login-address" :rules="[rules.required]" label="Residence Address" />
                         <VTextField class="username-pw-input" v-model="monthly_income" id="login-monthly-income" type="number" :rules="[rules.required]" label="Monthly Income" />
                         <VTextField class="username-pw-input" v-model="occupation" id="login-occupation" :rules="[rules.required]" label="Occupation/Source of Income" />
 
-                        <div class="header2">Spouse's Information</div>
+                        <!-- This is not needed yet -->
+                        <!-- <div class="header2">Spouse's Information</div>
                         <VTextField class="username-pw-input" v-model="spouse_first_name" id="login-spouse-first-name" :rules="[rules.required]" label="Spouse's First Name" />
                         <VTextField class="username-pw-input" v-model="spouse_middle_name" id="login-spouse-middle-name" label="Spouse's Middle Name" />
                         <VTextField class="username-pw-input" v-model="spouse_last_name" id="login-spouse-last-name" :rules="[rules.required]" label="Spouse's Last Name" />
                         <VTextField class="username-pw-input" v-model="spouse_birthday" id="login-spouse-birthday" :rules="[rules.required]" type="date" label="Spouse's Date of Birth" />
                         <VTextField class="username-pw-input" v-model="spouse_birthplace" id="login-spouse-birthplace" :rules="[rules.required]" label="Spouse's Place of Birth" />
-                        <VTextField class="username-pw-input" v-model="spouse_contact_number" id="login-spouse-contact-number" :rules="[rules.required]" label="Spouse's Contact Number" />
+                        <VTextField class="username-pw-input" v-model="spouse_contact_number" id="login-spouse-contact-number" :rules="[rules.required]" label="Spouse's Contact Number" /> -->
 
                         <!-- <div class="rememberMe">
                         <label><input type="checkbox" id="login-rememberMe" />Remember Me </label>
@@ -155,8 +57,9 @@
     </div>
 </template>
 
+
 <script>
-import { API_URL } from "../constants/api_url.js"
+import { API_URL } from "../constants/api_url.js";
 
 const form_fields = {
     username: "",
@@ -194,7 +97,13 @@ export default {
             },
         };
     },
+    props: {
+        togglePopup: Function,
+    },
     methods: {
+        closePopup() {
+            this.togglePopup('createMemberProfile');
+        },
         registerUser: async function() {
             // const result = await fetch(API_URL + "/users/add", {
             //     method: "POST",
@@ -234,3 +143,122 @@ export default {
     },
 }
 </script>
+
+<!-- Stylesheet -->
+<style scoped>
+.bg {
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    position: fixed;
+    z-index: 9999;
+
+    background-color: rgba(0, 0, 0, 0.5);
+
+}
+
+.wrapper {
+    background: var(--vt-c-white);
+    border-radius: 5px;
+
+    width: 60vw;
+    max-height: 80vh;
+
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+
+
+}
+
+
+.formDiv {}
+
+.header {
+    /* border: 1px solid black; */
+    background-color: var(--vt-c-white-off);
+    width: 100%;
+    padding-bottom: 3%;
+    padding-left: 2%;
+    padding-right: 1%;
+    padding-top: 1%;
+
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+
+    font-size: 1.5rem;
+    font-weight: bold;
+
+    text-align: center;
+    margin-bottom: 3%;
+}
+
+
+.header2 {
+    font-size: 1.2rem;
+    margin-bottom: 3%;
+    font-weight: bold;
+}
+
+.infoFields {
+    padding: 3%;
+    padding-top: 0%;
+
+}
+
+
+.username-pw-input {}
+
+
+.btn {
+    padding: 2%;
+    color: var(--vt-c-white-off);
+    font-weight: 600;
+    background: var(--vt-c-blue);
+
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btnWrapper {
+    height: min-content;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.capitalize-text {
+    text-transform: capitalize;
+}
+
+.btn:hover {
+    background: var(--vt-c-blue-dark);
+}
+
+.rememberMe {
+    font-size: .9em;
+    color: var(--primary-color-jade);
+    font-weight: 500;
+    margin: -15px 2 15px;
+    display: flex;
+    justify-content: right;
+    margin-top: 5px;
+    margin-bottom: 20px;
+}
+
+.error {
+    display: flex;
+    font-size: .9em;
+    text-align: center;
+    color: red;
+    font-weight: 400;
+    margin: 25px 1 10px;
+    justify-content: center;
+}
+</style>
