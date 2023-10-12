@@ -24,7 +24,7 @@ const errorMessage = ref('')
 
 // Define methods
 const logIn = async () => {
-    const { token, name } = await fetch(`${API_URL}/auth/login`, {
+    const { token, name, message } = await fetch(`${API_URL}/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -32,6 +32,11 @@ const logIn = async () => {
             password: password.value
         })
     }).then((res) => res.json())
+
+    if (!token) {
+        errorMessage.value = message
+        return
+    }
 
     // If name exists, it means that the user is an officer
     if (name) {
@@ -86,7 +91,7 @@ const logIn = async () => {
                     >
                     <!-- <RouterLink to="/officerRegister" VBtn type="submit" class="btn capitalize-text">Officer Register</RouterLink>
                     <RouterLink to="/userProfileRegister" VBtn type="submit" class="btn capitalize-text">User Profile Register</RouterLink> -->
-                    <div v-if="errorMessage" class="error" id="login-error">asd</div>
+                    <div v-if="errorMessage" class="error" id="login-error">{{ errorMessage }}</div>
                 </VForm>
             </div>
         </div>
