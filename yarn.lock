@@ -3998,6 +3998,7 @@ __metadata:
     vite-plugin-vuetify: ^1.0.2
     vitest: ^0.34.4
     vue: ^3.3.4
+    vue-cookies: ^1.8.3
     vue-router: ^4.2.4
     vuetify: ^3.3.19
   languageName: unknown
@@ -4216,6 +4217,13 @@ __metadata:
   version: 1.8.4
   resolution: "vue-component-type-helpers@npm:1.8.4"
   checksum: ae6ada53945395984716ce276829557c750dc2e7dd3b143512ecd799052aa0e9df2c6247b1bc008f314bc76824c1e36d965f44d6a83601502635bf96403ea207
+  languageName: node
+  linkType: hard
+
+"vue-cookies@npm:^1.8.3":
+  version: 1.8.3
+  resolution: "vue-cookies@npm:1.8.3"
+  checksum: 9a3883beeaf3e871ae5f105c1c79536812c495c0169412e418f6de69d04fb0ee5ecab0267d56fd4b6e1db62a0107b4dcfb31cced77a17cc6148352eda97c08a9
   languageName: node
   linkType: hard
 
