@@ -1,7 +1,6 @@
 <script setup>
 
 import CloseButton from '../components/CloseButton.vue';
-import { ref, defineProps } from 'vue';
 
 </script>
 

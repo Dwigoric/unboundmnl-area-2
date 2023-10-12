@@ -1,6 +1,5 @@
 <script setup>
     import CloseButton from '../components/CloseButton.vue';
-    import { ref, defineProps } from 'vue';
 
 </script>
 
@@ -42,11 +41,6 @@
 export default {
     props: {
         togglePopup: Function,
-    },
-    methods: {
-        closePopup() {
-            this.togglePopup('createMemberProfile');
-        }
     }
 }
 </script>

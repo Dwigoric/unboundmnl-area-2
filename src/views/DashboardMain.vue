@@ -1,16 +1,20 @@
 <script setup>
 // Import vue components
-import NavigationDrawer from '../components/NavigationDrawer.vue'
-import UserProfile from '../components/UserProfile.vue'
+import NavigationDrawer from '../components/NavigationDrawer.vue';
+import UserProfile from '../components/UserProfile.vue';;
 import NotificationBtn from '../components/NotificationBtn.vue';
 import ContentBlock from '../components/ContentBlock.vue';
+import LoanApplicationForm from '../components/LoanApplicationForm.vue';
+import { ref, defineProps } from 'vue';
+
 </script>
 
 <template>
+    <LoanApplicationForm v-if="popupTriggers.createLoanApp" :togglePopup="togglePopup"/>
     <div class="bg-off-white d-flex px-4 py-2">
-        <NavigationDrawer />
+        <NavigationDrawer :togglePopup="togglePopup"/>
         
-        <div class="d-flex flex-column w-100 pl-5">
+        <div class="d-flex flex-column w-100 pl-8">
 
             <!-- Top Bar of Dashboard -->
             <div class="dashboard-top d-flex justify-end align-center">
@@ -19,7 +23,7 @@ import ContentBlock from '../components/ContentBlock.vue';
             </div>
 
             <!-- Main Dashboard Body -->
-            <div class="dashboard-body d-flex flex-column h-100 py-3">
+            <div class="dashboard-body d-flex flex-column h-100 py-4">
                 <ContentBlock :width="100" :height="50" :unit="'%'" :bg-color="'#FFF'"/>
                 <div class="d-flex h-50 gap-1_25">
                     <ContentBlock :width="50" :height="102" :unit="'%'" :bg-color="'#FFF'"/>
@@ -29,6 +33,18 @@ import ContentBlock from '../components/ContentBlock.vue';
         </div>        
     </div>
 </template>
+
+<script>
+// Handles pop up action
+const popupTriggers = ref({
+    createLoanApp: false
+});
+
+function togglePopup(trigger) {
+    popupTriggers.value[trigger] = !popupTriggers.value[trigger];
+}
+
+</script>
 
 <style>
 

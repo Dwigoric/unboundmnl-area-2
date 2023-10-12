@@ -21,9 +21,7 @@
                 <div class="search-wrapper">
                     <v-text-field prepend-icon="mdi-magnify" label="Search Member"></v-text-field>
                     <div class="btnWrapper">
-                        <!-- TODO: Integrate Member Creation Popup (UserProfileRegister.vue) -->
-                        <VBtn class="btn capitalize-text" @click="() => togglePopup('createMemberProfile')" :togglePopup="togglePopup">Create Member Profile</VBtn>
-                        <!-- <UserProfileRegister /> -->
+                        <VBtn class="btn capitalize-text" @click="() => togglePopup('createMemberProfile')">Create Member Profile</VBtn>
                     </div>
                 </div>
                 <ContentBlock :width="100" :height="102" :unit="'%'" :bg-color="'#FFF'" >
@@ -52,8 +50,6 @@ const popupTriggers = ref({
 function togglePopup(trigger) {
     popupTriggers.value[trigger] = !popupTriggers.value[trigger];
 }
-
-
 </script>
 
 <style>

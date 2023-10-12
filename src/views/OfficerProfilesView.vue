@@ -21,8 +21,7 @@
                 <div class="search-wrapper">
                     <v-text-field prepend-icon="mdi-magnify" label="Search Officer"></v-text-field>
                     <div class="btnWrapper">
-                        <!-- TODO: Integrate Officer Registration Popup (OfficerRegister.vue) -->
-                        <VBtn class="btn capitalize-text" @click="() => togglePopup('createOfficerProfile')" :togglePopup="togglePopup"> Create Officer Profile </VBtn>
+                        <VBtn class="btn capitalize-text" @click="() => togglePopup('createOfficerProfile')"> Create Officer Profile </VBtn>
                     </div>
                 </div>
 

@@ -8,7 +8,7 @@
         <div class="d-flex flex-column px-3">
             <!-- note: change these dynamically  -->
             <p class="font-weight-bold name-text">Terence Galarpe</p> 
-            <p class="title-text">Loan Officer</p>
+            <p class="title-text">Secretary</p>
         </div>
     </div>
 </template>

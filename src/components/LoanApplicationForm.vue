@@ -1,69 +1,58 @@
 <script setup>
 
 import CloseButton from '../components/CloseButton.vue';
-import { ref, defineProps } from 'vue';
 
 </script>
 
 <template>
-    <div class="bg">
-        <div class="wrapper">
-            <div class="header">
-                <div class="header-text">
-                    <CloseButton @click="() => togglePopup('createMemberProfile')" />
-                    Create a Loan Application
+    
+    <div class="infoFields">
+        <div class="formDiv">
+            <VForm id="login-form" ref="form">
+                <div class="header2">Borrower's Information</div>
+                <VTextField class="username-pw-input" v-model="username" id="login-username"
+                    :rules="[rules.required]" label="Username" />
+                <VTextField class="username-pw-input" v-model="first_name" id="login-first-name"
+                    :rules="[rules.required]" label="First Name" />
+                <VTextField class="username-pw-input" v-model="middle_name" id="login-middle-name"
+                    label="Middle Name" />
+                <VTextField class="username-pw-input" v-model="last_name" id="login-last-name"
+                    :rules="[rules.required]" label="Last Name" />
+                <VTextField class="username-pw-input" v-model="birthday" id="login-birthday" type="date"
+                    :rules="[rules.required]" label="Date of Birth" />
+                <VTextField class="username-pw-input" v-model="birthplace" id="login-birthplace"
+                    :rules="[rules.required]" label="Place of Birth" />
+                <VSelect class="username-pw-input" v-model="gender" :items="['M', 'F']" id="login-gender"
+                    :rules="[rules.required]" label="Gender" />
+                <VTextField class="username-pw-input" v-model="tin_number" id="login-tin-number"
+                    :rules="[rules.required]" label="TIN Number" />
+                <VSelect class="username-pw-input" v-model="civil_status" :items="['Single', 'Married']"
+                    id="login-civil-status" :rules="[rules.required]" label="Civil Status" />
+                <VTextField class="username-pw-input" v-model="contact_number" id="login-contact-number"
+                    :rules="[rules.required]" label="Contact Number" />
+
+                <!-- TODO: Spread the address out more, like in the notes -->
+                <VTextField class="username-pw-input" v-model="address" id="login-address" :rules="[rules.required]"
+                    label="Residence Address" />
+                <VTextField class="username-pw-input" v-model="monthly_income" id="login-monthly-income"
+                    type="number" :rules="[rules.required]" label="Monthly Income" />
+                <VTextField class="username-pw-input" v-model="occupation" id="login-occupation"
+                    :rules="[rules.required]" label="Occupation/Source of Income" />
+
+                <div class="header2">Spouse's Information</div>
+                <VTextField class="username-pw-input" v-model="spouse_first_name" id="login-spouse-first-name" :rules="[rules.required]" label="Spouse's First Name" />
+                <VTextField class="username-pw-input" v-model="spouse_middle_name" id="login-spouse-middle-name" label="Spouse's Middle Name" />
+                <VTextField class="username-pw-input" v-model="spouse_last_name" id="login-spouse-last-name" :rules="[rules.required]" label="Spouse's Last Name" />
+                <VTextField class="username-pw-input" v-model="spouse_birthday" id="login-spouse-birthday" :rules="[rules.required]" type="date" label="Spouse's Date of Birth" />
+                <VTextField class="username-pw-input" v-model="spouse_birthplace" id="login-spouse-birthplace" :rules="[rules.required]" label="Spouse's Place of Birth" />
+                <VTextField class="username-pw-input" v-model="spouse_contact_number" id="login-spouse-contact-number" :rules="[rules.required]" label="Spouse's Contact Number" />
+
+                <div class="btnWrapper">
+                    <VBtn type="submit" class="btn capitalize-text" @click.prevent="registerUser">Create User
+                        Profile</VBtn>
                 </div>
-            </div>
-            <div class="infoFields">
-                <div class="formDiv">
-                    <VForm id="login-form" ref="form">
-                        <div class="header2">Borrower's Information</div>
-                        <VTextField class="username-pw-input" v-model="username" id="login-username"
-                            :rules="[rules.required]" label="Username" />
-                        <VTextField class="username-pw-input" v-model="first_name" id="login-first-name"
-                            :rules="[rules.required]" label="First Name" />
-                        <VTextField class="username-pw-input" v-model="middle_name" id="login-middle-name"
-                            label="Middle Name" />
-                        <VTextField class="username-pw-input" v-model="last_name" id="login-last-name"
-                            :rules="[rules.required]" label="Last Name" />
-                        <VTextField class="username-pw-input" v-model="birthday" id="login-birthday" type="date"
-                            :rules="[rules.required]" label="Date of Birth" />
-                        <VTextField class="username-pw-input" v-model="birthplace" id="login-birthplace"
-                            :rules="[rules.required]" label="Place of Birth" />
-                        <VSelect class="username-pw-input" v-model="gender" :items="['M', 'F']" id="login-gender"
-                            :rules="[rules.required]" label="Gender" />
-                        <VTextField class="username-pw-input" v-model="tin_number" id="login-tin-number"
-                            :rules="[rules.required]" label="TIN Number" />
-                        <VSelect class="username-pw-input" v-model="civil_status" :items="['Single', 'Married']"
-                            id="login-civil-status" :rules="[rules.required]" label="Civil Status" />
-                        <VTextField class="username-pw-input" v-model="contact_number" id="login-contact-number"
-                            :rules="[rules.required]" label="Contact Number" />
-
-                        <!-- TODO: Spread the address out more, like in the notes -->
-                        <VTextField class="username-pw-input" v-model="address" id="login-address" :rules="[rules.required]"
-                            label="Residence Address" />
-                        <VTextField class="username-pw-input" v-model="monthly_income" id="login-monthly-income"
-                            type="number" :rules="[rules.required]" label="Monthly Income" />
-                        <VTextField class="username-pw-input" v-model="occupation" id="login-occupation"
-                            :rules="[rules.required]" label="Occupation/Source of Income" />
-
-                        <!-- This is not needed yet -->
-                        <div class="header2">Spouse's Information</div>
-                        <VTextField class="username-pw-input" v-model="spouse_first_name" id="login-spouse-first-name" :rules="[rules.required]" label="Spouse's First Name" />
-                        <VTextField class="username-pw-input" v-model="spouse_middle_name" id="login-spouse-middle-name" label="Spouse's Middle Name" />
-                        <VTextField class="username-pw-input" v-model="spouse_last_name" id="login-spouse-last-name" :rules="[rules.required]" label="Spouse's Last Name" />
-                        <VTextField class="username-pw-input" v-model="spouse_birthday" id="login-spouse-birthday" :rules="[rules.required]" type="date" label="Spouse's Date of Birth" />
-                        <VTextField class="username-pw-input" v-model="spouse_birthplace" id="login-spouse-birthplace" :rules="[rules.required]" label="Spouse's Place of Birth" />
-                        <VTextField class="username-pw-input" v-model="spouse_contact_number" id="login-spouse-contact-number" :rules="[rules.required]" label="Spouse's Contact Number" />
-
-                        <div class="btnWrapper">
-                            <VBtn type="submit" class="btn capitalize-text" @click.prevent="registerUser">Create User
-                                Profile</VBtn>
-                        </div>
-                        <div v-if="errorMessage !== ''" class="error" id="login-error">{{ errorMessage }}</div>
-                    </VForm>
-                </div>
-            </div>
+                <div v-if="errorMessage !== ''" class="error" id="login-error">{{ errorMessage }}</div>
+            </VForm>
         </div>
     </div>
 </template>
