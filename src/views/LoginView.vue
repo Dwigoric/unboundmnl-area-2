@@ -91,11 +91,12 @@ const logIn = async () => {
                         <VCheckbox id="checkbox" v-model="remember" label="Remember Me" />
                     </div>
 
+                    <VAlert v-if="errorMessage" type="error" variant="tonal" closable="">
+                        {{ errorMessage }}
+                    </VAlert>
                     <VBtn type="submit" class="btn capitalize-text" @click.prevent="logIn">
                         Log In
                     </VBtn>
-
-                    <div v-if="errorMessage" class="error" id="login-error"></div>
                 </VForm>
             </div>
         </div>

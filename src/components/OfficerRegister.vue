@@ -1,6 +1,5 @@
 <script setup>
-    import CloseButton from '../components/CloseButton.vue';
-
+import CloseButton from '../components/CloseButton.vue'
 </script>
 
 <template>
@@ -47,6 +46,9 @@
                             <label><input type="checkbox" id="login-rememberMe" />Remember Me </label>
                             </div> -->
 
+                        <VAlert v-if="errorMessage" type="error" variant="tonal" closable="">
+                            {{ errorMessage }}
+                        </VAlert>
                         <div class="btnWrapper">
                             <VBtn
                                 type="submit"
@@ -55,9 +57,6 @@
                             >
                                 Register Officer
                             </VBtn>
-                        </div>
-                        <div v-if="errorMessage" class="error" id="login-error">
-                            {{ errorMessage }}
                         </div>
                     </VForm>
                 </div>
@@ -69,11 +68,11 @@
 <script>
 export default {
     props: {
-        togglePopup: Function,
+        togglePopup: Function
     },
     methods: {
         closePopup() {
-            this.togglePopup('createMemberProfile');
+            this.togglePopup('createMemberProfile')
         }
     }
 }
