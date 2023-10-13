@@ -17,10 +17,6 @@ if (credentials) {
     // Decode the token
     const { uuid } = jwt_decode(credentials.token)
     currentUserStore.id = uuid
-
-    // TODO: Modify for 'remember me' feature
-    // Extend the cookie if it is set to persist
-    if (credentials.persist) $cookies.set('credentials', credentials, 0)
 }
 </script>
 

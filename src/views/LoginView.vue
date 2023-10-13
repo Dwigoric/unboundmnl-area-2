@@ -21,6 +21,7 @@ const username = ref('')
 const password = ref('')
 const form = ref(null)
 const errorMessage = ref('')
+const remember = ref(false)
 
 // Define methods
 const logIn = async () => {
@@ -50,10 +51,13 @@ const logIn = async () => {
     const { uuid } = jwt_decode(token)
     currentUserStore.id = uuid
 
-    // TODO: Modify for 'remember me' feature
     // TODO: Use refresh token instead of storing token itself in cookies
     // Set cookie
-    window.$cookies.set('credentials', { token, persist: false }, 0)
+    window.$cookies.set(
+        'credentials',
+        { token, persist: remember.value },
+        remember.value ? '30d' : 0
+    )
 
     // TODO: Redirect admin to admin dashboard?
     // Redirect to dashboard
@@ -83,11 +87,13 @@ const logIn = async () => {
                     />
 
                     <div class="rememberMe">
-                    <input type="checkbox" id="checkbox" v-model="checked" label="Remember Me" /><label class="checkbox-label">Remember Me</label>
+                        <VCheckbox id="checkbox" v-model="remember" label="Remember Me" />
                     </div>
 
-                    <VBtn type="submit" class="btn capitalize-text" @click.prevent="logIn">Log In</VBtn>
-                    
+                    <VBtn type="submit" class="btn capitalize-text" @click.prevent="logIn">
+                        Log In
+                    </VBtn>
+
                     <div v-if="errorMessage" class="error" id="login-error"></div>
                 </VForm>
             </div>
