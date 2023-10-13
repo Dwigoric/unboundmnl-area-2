@@ -91,11 +91,33 @@ import CloseButton from '../components/CloseButton.vue'
                         <!-- TODO: Spread the address out more, like in the notes -->
                         <VTextField
                             class="username-pw-input"
-                            v-model="address"
+                            v-model="address_street"
                             id="login-address"
                             :rules="[rules.required]"
-                            label="Residence Address"
+                            label="Residence Address: Street"
                         />
+                        <VTextField
+                            class="username-pw-input"
+                            v-model="address_barangay"
+                            id="login-address"
+                            :rules="[rules.required]"
+                            label="Residence Address: Barangay"
+                        />
+                        <VTextField
+                            class="username-pw-input"
+                            v-model="address_city"
+                            id="login-address"
+                            :rules="[rules.required]"
+                            label="Residence Address: City"
+                        />
+                        <VTextField
+                            class="username-pw-input"
+                            v-model="address_province"
+                            id="login-address"
+                            :rules="[rules.required]"
+                            label="Residence Address: Province"
+                        />
+                        
                         <VTextField
                             class="username-pw-input"
                             v-model="monthly_income"
@@ -112,18 +134,13 @@ import CloseButton from '../components/CloseButton.vue'
                             label="Occupation/Source of Income"
                         />
 
-                        <!-- This is not needed yet -->
-                        <!-- <div class="header2">Spouse's Information</div>
+                        <div class="header2">Spouse's Information</div>
                         <VTextField class="username-pw-input" v-model="spouse_first_name" id="login-spouse-first-name" :rules="[rules.required]" label="Spouse's First Name" />
                         <VTextField class="username-pw-input" v-model="spouse_middle_name" id="login-spouse-middle-name" label="Spouse's Middle Name" />
                         <VTextField class="username-pw-input" v-model="spouse_last_name" id="login-spouse-last-name" :rules="[rules.required]" label="Spouse's Last Name" />
                         <VTextField class="username-pw-input" v-model="spouse_birthday" id="login-spouse-birthday" :rules="[rules.required]" type="date" label="Spouse's Date of Birth" />
                         <VTextField class="username-pw-input" v-model="spouse_birthplace" id="login-spouse-birthplace" :rules="[rules.required]" label="Spouse's Place of Birth" />
-                        <VTextField class="username-pw-input" v-model="spouse_contact_number" id="login-spouse-contact-number" :rules="[rules.required]" label="Spouse's Contact Number" /> -->
-
-                        <!-- <div class="rememberMe">
-                        <label><input type="checkbox" id="login-rememberMe" />Remember Me </label>
-                        </div> -->
+                        <VTextField class="username-pw-input" v-model="spouse_contact_number" id="login-spouse-contact-number" :rules="[rules.required]" label="Spouse's Contact Number" />
 
                         <VAlert v-if="errorMessage" type="error" variant="tonal" closable="">
                             {{ errorMessage }}
@@ -159,7 +176,10 @@ const form_fields = {
     tin_number: '',
     civil_status: '',
     contact_number: '',
-    address: '',
+    address_street: '',
+    address_barangay: '',
+    address_city: '',
+    address_province: '',
     monthly_income: '',
     occupation: '',
     spouse_first_name: '',
@@ -224,7 +244,12 @@ export default {
                 tin_no: this.tin_number,
                 civil_status: this.civil_status,
                 contact_no: this.contact_number,
-                address: this.address,
+                address: {
+                    street: this.address_street,
+                    barangay: this.address_barangay,
+                    city: this.address_city,
+                    province: this.address_province
+                },
                 monthly_income: this.monthly_income,
                 occupation: this.occupation,
                 spouse: {

@@ -83,10 +83,31 @@ import CloseButton from '../components/CloseButton.vue'
                 <!-- TODO: Spread the address out more, like in the notes -->
                 <VTextField
                     class="username-pw-input"
-                    v-model="address"
+                    v-model="address_street"
                     id="login-address"
                     :rules="[rules.required]"
-                    label="Residence Address"
+                    label="Residence Address: Street"
+                />
+                <VTextField
+                    class="username-pw-input"
+                    v-model="address_barangay"
+                    id="login-address"
+                    :rules="[rules.required]"
+                    label="Residence Address: Barangay"
+                />
+                <VTextField
+                    class="username-pw-input"
+                    v-model="address_city"
+                    id="login-address"
+                    :rules="[rules.required]"
+                    label="Residence Address: City"
+                />
+                <VTextField
+                    class="username-pw-input"
+                    v-model="address_province"
+                    id="login-address"
+                    :rules="[rules.required]"
+                    label="Residence Address: Province"
                 />
                 <VTextField
                     class="username-pw-input"
@@ -176,7 +197,10 @@ const form_fields = {
     tin_number: '',
     civil_status: '',
     contact_number: '',
-    address: '',
+    address_street: '',
+    address_barangay: '',
+    address_city: '',
+    address_province: '',
     monthly_income: '',
     occupation: '',
     spouse_first_name: '',
@@ -209,25 +233,25 @@ export default {
             this.togglePopup('createMemberProfile')
         },
         registerUser: async function () {
-            const validationResult = await this.$refs.form.validate()
-            if (validationResult.valid) {
-                const result = await fetch(API_URL + '/users/add', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(this.preprocessData())
-                })
+            // const validationResult = await this.$refs.form.validate()
+            // if (validationResult.valid) {
+            //     const result = await fetch(API_URL + '/users/add', {
+            //         method: 'POST',
+            //         headers: { 'Content-Type': 'application/json' },
+            //         body: JSON.stringify(this.preprocessData())
+            //     })
 
-                this.errorMessage = ''
+            //     this.errorMessage = ''
 
-                if (result.status === 200) {
-                    this.$refs.form.reset()
-                } else if (result.status === 400) {
-                    const jsonRes = await result.json()
-                    this.errorMessage = jsonRes.message
-                } else if (result.status === 500) {
-                    this.errorMessage = 'Internal Server Error'
-                }
-            }
+            //     if (result.status === 200) {
+            //         this.$refs.form.reset()
+            //     } else if (result.status === 400) {
+            //         const jsonRes = await result.json()
+            //         this.errorMessage = jsonRes.message
+            //     } else if (result.status === 500) {
+            //         this.errorMessage = 'Internal Server Error'
+            //     }
+            // }
         },
         preprocessData: function () {
             return {
@@ -243,7 +267,12 @@ export default {
                 tin_no: this.tin_number,
                 civil_status: this.civil_status,
                 contact_no: this.contact_number,
-                address: this.address,
+                address: {
+                    street: this.address_street,
+                    barangay: this.address_barangay,
+                    city: this.address_city,
+                    province: this.address_province
+                },
                 monthly_income: this.monthly_income,
                 occupation: this.occupation,
                 spouse: {
