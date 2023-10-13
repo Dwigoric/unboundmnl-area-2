@@ -5,6 +5,7 @@ import { defineStore } from 'pinia'
 export const useCurrentUserStore = defineStore('currentUser', () => {
     const name = reactive({ given: '', middle: '', last: '' })
     const id = ref('')
+    const role = ref('')
 
-    return { name, id }
+    return { name, id, role }
 })

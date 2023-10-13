@@ -48,8 +48,9 @@ const logIn = async () => {
     }
 
     // Decode token
-    const { uuid } = jwt_decode(token)
+    const { uuid, role } = jwt_decode(token)
     currentUserStore.id = uuid
+    currentUserStore.role = role
 
     // TODO: Use refresh token instead of storing token itself in cookies
     // Set cookie
