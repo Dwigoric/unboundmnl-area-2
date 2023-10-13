@@ -39,18 +39,15 @@ const logIn = async () => {
         return
     }
 
-    // If name exists, it means that the user is an officer
-    if (name) {
-        // Store name to currentUserStore
+    // Decode token
+    const { uuid, type } = jwt_decode(token)
+    currentUserStore.id = uuid
+
+    if (type === 'officer') {
         currentUserStore.name.given = name.given
         currentUserStore.name.middle = name.middle
         currentUserStore.name.last = name.last
     }
-
-    // Decode token
-    const { uuid, role } = jwt_decode(token)
-    currentUserStore.id = uuid
-    currentUserStore.role = role
 
     // TODO: Use refresh token instead of storing token itself in cookies
     // Set cookie
