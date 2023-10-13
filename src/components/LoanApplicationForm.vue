@@ -62,7 +62,7 @@ import CloseButton from '../components/CloseButton.vue'
                     v-model="tin_number"
                     id="login-tin-number"
                     :rules="[rules.required]"
-                    label="TIN Number"
+                    label="TIN Number (XXX-XXX-XXX-XXX)"
                 />
                 <VSelect
                     class="username-pw-input"
