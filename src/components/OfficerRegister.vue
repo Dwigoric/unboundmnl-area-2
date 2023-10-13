@@ -16,6 +16,7 @@ defineProps({
 // Define refs
 const given_name = ref('')
 const last_name = ref('')
+const role = ref('')
 const username = ref('')
 const password = ref('')
 const form = ref(null)
@@ -83,6 +84,13 @@ const createOfficer = async () => {
                             v-model="last_name"
                             id="login-pw"
                             label="Last Name"
+                            required
+                        />
+                        <VTextField
+                            class="username-pw-input"
+                            v-model="role"
+                            id="login-pw"
+                            label="Role"
                             required
                         />
                         <VTextField
