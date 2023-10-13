@@ -1,5 +1,63 @@
 <script setup>
+// Import packages
+import { ref } from 'vue'
+
+// Import components
 import CloseButton from '../components/CloseButton.vue'
+
+// Import constants
+import { API_URL } from '../constants'
+
+// Props
+defineProps({
+    togglePopup: Function
+})
+
+// Define refs
+const given_name = ref('')
+const last_name = ref('')
+const username = ref('')
+const password = ref('')
+const form = ref(null)
+const errorMessage = ref('')
+
+// Define methods
+const createOfficer = async () => {
+    // Validate form
+    const { valid } = await form.value.validate()
+    if (!valid) return
+
+    // TODO: Implement token refresh
+    const credentials = window.$cookies.get('credentials')
+    if (!credentials) return
+
+    // Send request
+    const { uuid, message } = await fetch(`${API_URL}/auth/register-officer`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${credentials.token}`
+        },
+        body: JSON.stringify({
+            username: username.value,
+            password: password.value,
+            name: {
+                given: given_name.value,
+                last: last_name.value
+            }
+        })
+    }).then((res) => res.json())
+
+    // If UUID is not returned, show error message
+    if (!uuid) {
+        errorMessage.value = message
+        return
+    }
+
+    errorMessage.value = ''
+    // Reset form
+    form.value.reset()
+}
 </script>
 
 <template>
@@ -15,16 +73,16 @@ import CloseButton from '../components/CloseButton.vue'
                         <!-- TODO: Create proper fields -->
                         <VTextField
                             class="username-pw-input"
-                            v-model="first_name"
+                            v-model="given_name"
                             id="login-pw"
-                            label="Last Name"
+                            label="Given Name"
                             required
                         />
                         <VTextField
                             class="username-pw-input"
                             v-model="last_name"
                             id="login-pw"
-                            label="First Name"
+                            label="Last Name"
                             required
                         />
                         <VTextField
@@ -64,19 +122,6 @@ import CloseButton from '../components/CloseButton.vue'
         </div>
     </div>
 </template>
-
-<script>
-export default {
-    props: {
-        togglePopup: Function
-    },
-    methods: {
-        closePopup() {
-            this.togglePopup('createMemberProfile')
-        }
-    }
-}
-</script>
 
 <!-- Stylesheet -->
 <style scoped>
