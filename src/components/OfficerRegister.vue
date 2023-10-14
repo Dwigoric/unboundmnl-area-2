@@ -42,6 +42,7 @@ const createOfficer = async () => {
         body: JSON.stringify({
             username: username.value,
             password: password.value,
+            role: role.value,
             name: {
                 given: given_name.value,
                 last: last_name.value
