@@ -62,51 +62,85 @@ const createOfficer = async () => {
 </script>
 
 <template>
-    <div class="bg">
-        <div class="wrapper">
+    <div class="wrapper">
             <div class="header">
-                <CloseButton @click="() => togglePopup('createOfficerProfile')" />
                 <div class="header-text">Register Officer</div>
             </div>
-            <div class="infoFields">
+            
+            <div class="info-fields-wrapper">
                 <div class="login">
                     <VForm id="login-form" ref="form">
-                        <!-- TODO: Create proper fields -->
-                        <VTextField
-                            class="username-pw-input"
-                            v-model="given_name"
-                            id="login-pw"
-                            label="Given Name"
-                            required
-                        />
-                        <VTextField
-                            class="username-pw-input"
-                            v-model="last_name"
-                            id="login-pw"
-                            label="Last Name"
-                            required
-                        />
-                        <VTextField
-                            class="username-pw-input"
-                            v-model="role"
-                            id="login-pw"
-                            label="Role"
-                            required
-                        />
-                        <VTextField
-                            class="username-pw-input"
-                            v-model="username"
-                            id="login-username"
-                            label="Username"
-                            required
-                        />
-                        <VTextField
-                            class="username-pw-input"
-                            v-model="password"
-                            id="login-pw"
-                            label="Password"
-                            required
-                        />
+                        
+                        <!-- Username -->
+                        <div class="row-tab">
+                            <div class="label">
+                                <div>* Given Name:</div>
+                            </div>
+        
+                            <VTextField
+                                class="username-pw-input"
+                                v-model="given_name"
+                                id="login-pw"
+                                label="Enter Given Name"
+                                required
+                            />
+                        </div>
+                        
+                        <div class="row-tab">
+                            <div class="label">
+                                <div>* Last Name:</div>
+                            </div>
+                            
+                            <VTextField
+                                class="username-pw-input"
+                                v-model="last_name"
+                                id="login-pw"
+                                label="Enter Last Name"
+                                required
+                            />
+                        </div>
+
+                        <div class="row-tab">
+                            <div class="label">
+                                <div>* Role:</div>
+                            </div>
+                            <VTextField
+                                class="username-pw-input"
+                                v-model="role"
+                                id="login-pw"
+                                label="Enter Role"
+                                required
+                            />
+                        </div>
+
+                        <div class="row-tab">
+                            <div class="label">
+                                <div>* Username:</div>
+                            </div>
+                            
+                            <VTextField
+                                class="username-pw-input"
+                                v-model="username"
+                                id="login-username"
+                                label="Enter Username"
+                                required
+                            />
+                        </div>
+
+                        <div class="row-tab">
+                            <div class="label">
+                                <div>* Password:</div>
+                            </div>
+    
+                            <VTextField
+                                class="username-pw-input"
+                                v-model="password"
+                                id="login-pw"
+                                label="Enter Password"
+                                required
+                            />
+                        </div>
+                        
 
                         <!-- <div class="rememberMe">
                             <label><input type="checkbox" id="login-rememberMe" />Remember Me </label>
@@ -115,7 +149,7 @@ const createOfficer = async () => {
                         <VAlert v-if="errorMessage" type="error" variant="tonal" closable="">
                             {{ errorMessage }}
                         </VAlert>
-                        <div class="btnWrapper">
+                        <div class="btn-wrapper">
                             <VBtn
                                 type="submit"
                                 class="btn capitalize-text"
@@ -128,34 +162,13 @@ const createOfficer = async () => {
                 </div>
             </div>
         </div>
-    </div>
 </template>
 
 <!-- Stylesheet -->
 <style scoped>
-.bg {
-    height: 100vh;
-    width: 100vw;
-    overflow: hidden;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    position: fixed;
-    z-index: 9999;
-
-    background-color: rgba(0, 0, 0, 0.5);
-}
 
 .wrapper {
     background: var(--vt-c-white);
-    border-radius: 5px;
-
-    width: 30%;
-
-    /* display: flex;
-    justify-content: center; */
     overflow: auto;
 
     display: flex;
@@ -168,16 +181,6 @@ const createOfficer = async () => {
 
 .header {
     background-color: var(--vt-c-white-off);
-    width: 100%;
-    padding-bottom: 3%;
-    padding-left: 2%;
-    padding-right: 2%;
-    padding-top: 1%;
-
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-
     font-size: 1.5rem;
     font-weight: bold;
 
@@ -185,27 +188,46 @@ const createOfficer = async () => {
     margin-bottom: 3%;
 }
 
-.infoFields {
-    padding: 3%;
-    padding-top: 0%;
+.header-text{
+    margin-bottom: 3%;
 }
 
-.username-pw-input {
+.info-fields-wrapper{
+    padding: 3%;
+    padding-top: 0%;
+    /* border: 1px solid black; */
+}
+
+.row-tab {
+    /* border: 1px solid black; */
+    display: flex;
+    margin-bottom: 1%;
+    margin-left: 3%;
+    margin-right: 3%;
+
+}
+
+.label {
+    margin-top: 15px;
+    margin-right: 2%;
+    /* border: 1px solid black; */
+    width: 20%;
+
+    display: inline-block;
+    text-align: right;
+    vertical-align: top;
 }
 
 .btn {
-    padding: 2%;
-
-    color: var(--vt-c-white-off);
     font-weight: 600;
+    color: var(--vt-c-white-off);
     background: var(--vt-c-blue);
 
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
+    display: flex;
+    align-items: center;
+    text-align: center;
 
-.capitalize-text {
+    border-radius: 5px;
     text-transform: capitalize;
 }
 
@@ -213,28 +235,8 @@ const createOfficer = async () => {
     background: var(--vt-c-blue-dark);
 }
 
-.rememberMe {
-    font-size: 0.9em;
-    color: var(--primary-color-jade);
-    font-weight: 500;
-    margin: -15px 2 15px;
-    display: flex;
-    justify-content: right;
-    margin-top: 5px;
-    margin-bottom: 20px;
-}
 
-.error {
-    display: flex;
-    font-size: 0.9em;
-    text-align: center;
-    color: red;
-    font-weight: 400;
-    margin: 25px 1 10px;
-    justify-content: center;
-}
-
-.btnWrapper {
+.btn-wrapper {
     display: flex;
     justify-content: flex-end;
 }

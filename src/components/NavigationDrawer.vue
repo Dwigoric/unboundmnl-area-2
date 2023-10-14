@@ -29,30 +29,48 @@ const logout = () => {
 </script>
 
 <template>
-    <!-- TODO: Widen width... putangina di ko mahanap -->
-    <v-card class="elevation-13 mr-4">
+    <v-card class="mx-auto pa-5">
         <v-layout>
-            <v-navigation-drawer class="navigation-drawer py-7" theme="dark" permanent>
+            <v-navigation-drawer :width="330" :margin="20"
+                class="navigation-drawer pa-md-4 elevation-9" theme="dark" permanent>
                 <div class="navigation-title-box">
                     <h1>CSVMC</h1>
                 </div>
 
                 <v-list>
-                    <v-list-item to="/dashboard" link prepend-icon="mdi-home-account"
-                        >Home</v-list-item
+                    <v-list-item to="/dashboard" 
+                        link 
+                        prepend-icon="mdi-home-account"
+                        rounded="lg"
+                        class="mt-2"
+                        >Dashboard</v-list-item
                     >
+
                     <v-list-item
                         to="/newLoanApplication"
                         link
                         prepend-icon="mdi-file-document-edit-outline"
+                        rounded="lg"
+                        class="mt-2"
                         >Create New Loan Application</v-list-item
                     >
-                    <v-list-item to="/officerProfiles" link prepend-icon="mdi-account-box"
+
+                    <v-list-item to="/officerProfiles" 
+                        link 
+                        prepend-icon="mdi-account-box"
+                        rounded="lg"
+                        class="mt-2"
                         >Officer Profiles</v-list-item
                     >
-                    <v-list-item to="/memberProfiles" link prepend-icon="mdi-magnify"
+
+                    <v-list-item to="/memberProfiles" 
+                        link 
+                        prepend-icon="mdi-magnify"
+                        rounded="lg"
+                        class="mt-2"
                         >Member Profiles</v-list-item
                     >
+
                 </v-list>
 
                 <template v-slot:append>
@@ -61,7 +79,7 @@ const logout = () => {
                     </div>
                 </template>
             </v-navigation-drawer>
-            <v-main style="height: 97vh"></v-main>
+            <v-main style="height: 94vh"></v-main>
         </v-layout>
     </v-card>
 </template>

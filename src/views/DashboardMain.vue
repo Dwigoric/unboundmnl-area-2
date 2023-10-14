@@ -10,16 +10,21 @@ import { ref, defineProps } from 'vue';
 </script>
 
 <template>
-    <LoanApplicationForm v-if="popupTriggers.createLoanApp" :togglePopup="togglePopup"/>
     <div class="bg-off-white d-flex px-4 py-2">
-        <NavigationDrawer :togglePopup="togglePopup"/>
+        <NavigationDrawer/>
         
         <div class="d-flex flex-column w-100 pl-8">
 
             <!-- Top Bar of Dashboard -->
-            <div class="dashboard-top d-flex justify-end align-center">
-                <NotificationBtn />
-                <UserProfile />
+            <div class="dashboard-top">
+                <div class="breadcrumbs-wrapper">
+                    <v-breadcrumbs :items="['Home', 'Dashboard']"></v-breadcrumbs>
+                </div>
+
+                <div class="dashboard-top-right">
+                    <NotificationBtn />
+                    <UserProfile />
+                </div>
             </div>
 
             <!-- Main Dashboard Body -->
@@ -34,33 +39,30 @@ import { ref, defineProps } from 'vue';
     </div>
 </template>
 
-<script>
-// Handles pop up action
-const popupTriggers = ref({
-    createLoanApp: false
-});
-
-function togglePopup(trigger) {
-    popupTriggers.value[trigger] = !popupTriggers.value[trigger];
-}
-
-</script>
-
-<style>
+<style scoped>
 
     .dashboard-top {
-        gap: 1.5rem;
         width: 100%; 
-        height: 75px;
+        height: 60px;
+        display: flex;
+        justify-content: space-between;
+        margin-top: 10px;
+    }
+
+    .dashboard-top-right {
+        display: flex;
+        gap: 1.5rem;
+    }
+
+    .breadcrumbs-wrapper {
+        margin-left: -15px;
+        font-weight: 600;
     }
 
     .dashboard-body {
         gap: 1.25rem;
     }
 
-    .gap-1_25 {
-        gap: 1.25rem;
-    }
 
     .bg-off-white {
         background-color: var(--vt-c-white-off);

@@ -1,31 +1,80 @@
 <template>
-    <UserProfileRegister v-if="popupTriggers.createMemberProfile" :togglePopup="togglePopup">
-    </UserProfileRegister>
-
     <div class="bg-off-white d-flex px-4 py-2">
         <NavigationDrawer />
 
-        <div class="d-flex flex-column w-100 pl-5">
+        <div class="d-flex flex-column w-100 pl-8">
 
             <!-- Top Bar of Dashboard -->
-            <div class="dashboard-top d-flex justify-end align-center">
-                <NotificationBtn />
-                <UserProfile />
-            </div>
+            <div class="dashboard-top">
+                <div class="breadcrumbs-wrapper">
+                    <v-breadcrumbs :items="['Home', 'Member Profiles']"></v-breadcrumbs>
+                </div>
 
+                <div class="dashboard-top-right">
+                    <NotificationBtn />
+                    <UserProfile />
+                </div>
+            </div>
+            
             <!-- Main Dashboard Body -->
             <div class="dashboard-body d-flex flex-column h-100 py-3">
                 <h2>Member Profiles</h2>
 
-                <!-- Search bar -->
-                <div class="search-wrapper">
-                    <v-text-field prepend-icon="mdi-magnify" label="Search Member"></v-text-field>
-                    <div class="btnWrapper">
-                        <VBtn class="btn capitalize-text" @click="() => togglePopup('createMemberProfile')">Create Member Profile</VBtn>
+                <div class="upper-wrapper">
+                    <!-- Search bar -->
+                    <div class="search-wrapper">
+                        <v-text-field 
+                            prepend-inner-icon="mdi-magnify" 
+                            label="Search Member" 
+                            clearable
+                            />
+                    </div>
+
+                    <div class="btn-wrapper">
+                        <v-dialog width="1200">
+                            <template v-slot:activator="{ props }">
+
+                                <!-- Create Member Profile Button -->
+                                <v-btn 
+                                    class="btn capitalize-text"
+                                    v-bind="props" 
+                                    text="Create Member Profile"> 
+                                </v-btn>
+                            
+                            </template>
+
+                            <!-- Form popup -->
+                            <template v-slot:default="{ isActive }">
+                                <v-card 
+                                    close-on-back
+                                    contained   
+                                    class="form-wrapper"                                
+                                >
+                                
+                                    <v-container>
+                                        <v-row justify="end">
+                                            <v-card-actions>
+                                                <v-btn
+                                                    class="ma-2 capitalize-text"
+                                                    color="var(--vt-c-blue)"
+                                                    @click="isActive.value = false"
+                                                    icon="mdi-close"
+                                                >
+                                                </v-btn>
+                                            </v-card-actions>
+                                        </v-row>
+                                    </v-container>
+
+                                    <MemberProfileRegister />
+
+                                </v-card>
+                            </template>
+
+                        </v-dialog>
                     </div>
                 </div>
-                <ContentBlock :width="100" :height="102" :unit="'%'" :bg-color="'#FFF'" >
-                
+
+                <ContentBlock :width="100" :height="102" :unit="'%'" :bg-color="'#FFF'">
                     <!-- List of members -->
                 </ContentBlock>
             </div>
@@ -39,22 +88,53 @@ import NavigationDrawer from '../components/NavigationDrawer.vue'
 import UserProfile from '../components/UserProfile.vue'
 import NotificationBtn from '../components/NotificationBtn.vue'
 import ContentBlock from '../components/ContentBlock.vue'
-import UserProfileRegister from '../components/UserProfileRegister.vue'
+import MemberProfileRegister from '../components/MemberProfileRegister.vue'
 import { ref } from 'vue'
 
-// Handles pop up action
-const popupTriggers = ref({
-    createMemberProfile: false
-});
-
-function togglePopup(trigger) {
-    popupTriggers.value[trigger] = !popupTriggers.value[trigger];
-}
 </script>
 
-<style>
+<style scoped>
+.dashboard-top {
+    width: 100%;
+    height: 58px;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.dashboard-top-right {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.breadcrumbs-wrapper {
+    margin-left: -15px;
+    font-weight: 600;
+}
+
+.dashboard-body {
+    gap: 1.25rem;
+}
+
+.upper-wrapper {
+    height: 10%;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    /* border: 1px solid black; */
+}
+
 .search-wrapper {
     display: flex;
+    width: 85%;
+}
+
+.btn-wrapper {
+    display: flex;
+    margin-bottom: 22px;
+    /* border: 1px solid black; */
 }
 
 .btn {
@@ -66,32 +146,21 @@ function togglePopup(trigger) {
     align-items: center;
     text-align: center;
 
-    padding-top: 14%;
-    padding-bottom: 14%;
+    padding-top: 15%;
+    padding-bottom: 15%;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-}
-
-.btnWrapper {
-    height: 73%;
-    /* border: 1px solid black; */
-    color: var(--vt-c-white-off);
-    margin-left: 2%;
-}
-
-.capitalize-text {
     text-transform: capitalize;
 }
+
 
 .btn:hover {
     background: var(--vt-c-blue-dark);
 }
 
-.dashboard-top {
-    gap: 1.5rem;
-    width: 100%;
-    height: 75px;
+.form-wrapper {
+    background-color: var(--vt-c-white-off);
 }
 
 .dashboard-body {
@@ -104,20 +173,5 @@ function togglePopup(trigger) {
 
 .bg-off-white {
     background-color: var(--vt-c-white-off);
-}
-
-/** hover-scale-sm gives the subtle hover effect to all the floating components **/
-.hover-scale-sm,
-.hover-scale-md {
-    transition: all 0.3s ease;
-    /* 0.3s duration with ease-in-out timing function for smooth effect */
-}
-
-.hover-scale-sm:hover {
-    transform: scale(1.01);
-}
-
-.hover-scale-md:hover {
-    transform: scale(1.05);
 }
 </style>

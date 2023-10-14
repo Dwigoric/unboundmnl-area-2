@@ -3,8 +3,12 @@
 </script>
 
 <template>
-
+    <div class="header">
+        <div class="header-text">Create Member Profile</div>
+    </div>
     <div class="info-fields">
+        
+
         <div class="form-wrapper">
             <VForm id="login-form" ref="form">
                 <div class="header2">Borrower's Information</div>
@@ -14,14 +18,9 @@
                     <div class="label">
                         <div>* Username:</div>
                     </div>
-    
-                    <VTextField
-                        class="username-pw-input"
-                        v-model="username"
-                        id="login-username"
-                        :rules="[rules.required]"
-                        label="Enter Username"
-                    />
+
+                    <VTextField class="username-pw-input" v-model="username" id="login-username" :rules="[rules.required]"
+                        label="Enter Username" />
                 </div>
 
                 <!-- First Name -->
@@ -30,13 +29,8 @@
                         <div>* First name:</div>
                     </div>
 
-                    <VTextField
-                        class="username-pw-input"
-                        v-model="first_name"
-                        id="login-first-name"
-                        :rules="[rules.required]"
-                        label="Enter First Name"
-                    />
+                    <VTextField class="username-pw-input" v-model="first_name" id="login-first-name"
+                        :rules="[rules.required]" label="Enter First Name" />
                 </div>
 
                 <!-- Middle Name -->
@@ -45,12 +39,8 @@
                         <div>* Middle name:</div>
                     </div>
 
-                    <VTextField
-                        class="username-pw-input"
-                        v-model="middle_name"
-                        id="login-middle-name"
-                        label="Enter Middle Name"
-                    />
+                    <VTextField class="username-pw-input" v-model="middle_name" id="login-middle-name"
+                        label="Enter Middle Name" />
                 </div>
 
                 <!-- Last Name -->
@@ -59,13 +49,8 @@
                         <div>* Last name:</div>
                     </div>
 
-                    <VTextField
-                        class="username-pw-input"
-                        v-model="last_name"
-                        id="login-last-name"
-                        :rules="[rules.required]"
-                        label="Enter Last Name"
-                    />
+                    <VTextField class="username-pw-input" v-model="last_name" id="login-last-name" :rules="[rules.required]"
+                        label="Enter Last Name" />
                 </div>
 
                 <!-- Date of Birth -->
@@ -74,14 +59,8 @@
                         <div>* Date of Birth:</div>
                     </div>
 
-                    <VTextField
-                        class="username-pw-input"
-                        v-model="birthday"
-                        id="login-birthday"
-                        type="date"
-                        :rules="[rules.required]"
-                        label="Select Date of Birth"
-                    />
+                    <VTextField class="username-pw-input" v-model="birthday" id="login-birthday" type="date"
+                        :rules="[rules.required]" label="Select Date of Birth" />
                 </div>
 
                 <!-- Place of Birth -->
@@ -90,13 +69,8 @@
                         <div>* Place of Birth:</div>
                     </div>
 
-                    <VTextField
-                        class="username-pw-input"
-                        v-model="birthplace"
-                        id="login-birthplace"
-                        :rules="[rules.required]"
-                        label="Enter Place of Birth"
-                    />
+                    <VTextField class="username-pw-input" v-model="birthplace" id="login-birthplace"
+                        :rules="[rules.required]" label="Enter Place of Birth" />
                 </div>
 
                 <!-- Gender -->
@@ -106,29 +80,18 @@
                         <div>* Gender:</div>
                     </div>
 
-                    <VSelect
-                        class="username-pw-input"
-                        v-model="gender"
-                        :items="['M', 'F']"
-                        id="login-gender"
-                        :rules="[rules.required]"
-                        label="Select Gender"
-                    /> 
+                    <VSelect class="username-pw-input" v-model="gender" :items="['M', 'F']" id="login-gender"
+                        :rules="[rules.required]" label="Select Gender" />
                 </div>
-                
+
                 <!-- TIN Number -->
                 <div class="row-tab">
                     <div class="label">
                         <div>* TIN Number:</div>
                     </div>
 
-                    <VTextField
-                        class="username-pw-input"
-                        v-model="tin_number"
-                        id="login-tin-number"
-                        :rules="[rules.required]"
-                        label="Enter TIN Number (XXX-XXX-XXX-XXX)"
-                    />
+                    <VTextField class="username-pw-input" v-model="tin_number" id="login-tin-number"
+                        :rules="[rules.required]" label="Enter TIN Number (XXX-XXX-XXX-XXX)" />
                 </div>
 
                 <!-- Civil Status -->
@@ -137,14 +100,8 @@
                         <div>* Civil Status:</div>
                     </div>
 
-                    <VSelect
-                        class="username-pw-input"
-                        v-model="civil_status"
-                        :items="['Single', 'Married']"
-                        id="login-civil-status"
-                        :rules="[rules.required]"
-                        label="Select Civil Status"
-                    />
+                    <VSelect class="username-pw-input" v-model="civil_status" :items="['Single', 'Married']"
+                        id="login-civil-status" :rules="[rules.required]" label="Select Civil Status" />
                 </div>
 
                 <!-- Contact Number -->
@@ -153,43 +110,27 @@
                         <div>* Contact Number:</div>
                     </div>
 
-                    <VTextField
-                        class="username-pw-input"
-                        v-model="contact_number"
-                        id="login-contact-number"
-                        :rules="[rules.required]"
-                        label="Enter Contact Number"
-                    />  
+                    <VTextField class="username-pw-input" v-model="contact_number" id="login-contact-number"
+                        :rules="[rules.required]" label="Enter Contact Number" />
                 </div>
 
                 <!-- Monthly Income -->
                 <div class="row-tab">
-                                    <div class="label">
-                                        <div>* Monthly Income:</div>
-                                    </div>
+                    <div class="label">
+                        <div>* Monthly Income:</div>
+                    </div>
 
-                                    <VTextField
-                                        class="username-pw-input"
-                                        v-model="monthly_income"
-                                        id="login-monthly-income"
-                                        type="number"
-                                        :rules="[rules.required]"
-                                        label="Enter Monthly Income"
-                                    />
-                                </div>
+                    <VTextField class="username-pw-input" v-model="monthly_income" id="login-monthly-income" type="number"
+                        :rules="[rules.required]" label="Enter Monthly Income" />
+                </div>
 
                 <div class="row-tab">
                     <div class="label">
                         <div>* Occupation/Source of Income:</div>
-                    </div>
+                    </div> 
 
-                    <VTextField
-                        class="username-pw-input"
-                        v-model="occupation"
-                        id="login-occupation"
-                        :rules="[rules.required]"
-                        label="Enter Occupation/Source of Income"
-                    />
+                    <VTextField class="username-pw-input" v-model="occupation" id="login-occupation"
+                        :rules="[rules.required]" label="Enter Occupation/Source of Income" />
                 </div>
 
                 <!-- Borrower's Residence -->
@@ -200,13 +141,8 @@
                         <div>* Street:</div>
                     </div>
 
-                    <VTextField
-                        class="username-pw-input"
-                        v-model="address_street"
-                        id="login-address"
-                        :rules="[rules.required]"
-                        label="Enter Street"
-                    />
+                    <VTextField class="username-pw-input" v-model="address_street" id="login-address"
+                        :rules="[rules.required]" label="Enter Street" />
                 </div>
 
                 <div class="row-tab">
@@ -214,13 +150,8 @@
                         <div>* Barangay:</div>
                     </div>
 
-                    <VTextField
-                        class="username-pw-input"
-                        v-model="address_barangay"
-                        id="login-address"
-                        :rules="[rules.required]"
-                        label="Enter Barangay"
-                    />  
+                    <VTextField class="username-pw-input" v-model="address_barangay" id="login-address"
+                        :rules="[rules.required]" label="Enter Barangay" />
                 </div>
 
                 <div class="row-tab">
@@ -228,29 +159,19 @@
                         <div>* City:</div>
                     </div>
 
-                    <VTextField
-                        class="username-pw-input"
-                        v-model="address_city"
-                        id="login-address"
-                        :rules="[rules.required]"
-                        label="Enter City"
-                    />  
+                    <VTextField class="username-pw-input" v-model="address_city" id="login-address"
+                        :rules="[rules.required]" label="Enter City" />
                 </div>
-            
+
                 <div class="row-tab">
                     <div class="label">
                         <div>* Province:</div>
                     </div>
 
-                    <VTextField
-                        class="username-pw-input"
-                        v-model="address_province"
-                        id="login-address"
-                        :rules="[rules.required]"
-                        label="Enter Province"
-                    />    
+                    <VTextField class="username-pw-input" v-model="address_province" id="login-address"
+                        :rules="[rules.required]" label="Enter Province" />
                 </div>
-                
+
                 <!-- Spouse's Information -->
                 <div class="header2">Spouse's Information</div>
 
@@ -260,26 +181,17 @@
                         <div>* Spouse's First Name:</div>
                     </div>
 
-                    <VTextField
-                        class="username-pw-input"
-                        v-model="spouse_first_name"
-                        id="login-spouse-first-name"
-                        :rules="[rules.required]"
-                        label="Enter Spouse's First Name"
-                    />
+                    <VTextField class="username-pw-input" v-model="spouse_first_name" id="login-spouse-first-name"
+                        :rules="[rules.required]" label="Enter Spouse's First Name" />
                 </div>
-                
+
                 <div class="row-tab">
                     <div class="label">
                         <div>* Spouse's Middle Name:</div>
                     </div>
 
-                    <VTextField
-                        class="username-pw-input"
-                        v-model="spouse_middle_name"
-                        id="login-spouse-middle-name"
-                        label="Enter Spouse's Middle Name"
-                    />
+                    <VTextField class="username-pw-input" v-model="spouse_middle_name" id="login-spouse-middle-name"
+                        label="Enter Spouse's Middle Name" />
                 </div>
 
                 <div class="row-tab">
@@ -287,28 +199,17 @@
                         <div>* Spouse's Last Name:</div>
                     </div>
 
-                    <VTextField
-                        class="username-pw-input"
-                        v-model="spouse_last_name"
-                        id="login-spouse-last-name"
-                        :rules="[rules.required]"
-                        label="Enter Spouse's Last Name"
-                    />
+                    <VTextField class="username-pw-input" v-model="spouse_last_name" id="login-spouse-last-name"
+                        :rules="[rules.required]" label="Enter Spouse's Last Name" />
                 </div>
 
                 <div class="row-tab">
                     <div class="label">
                         <div>* Spouse's Date of Birth:</div>
                     </div>
-    
-                    <VTextField
-                        class="username-pw-input"
-                        v-model="spouse_birthday"
-                        id="login-spouse-birthday"
-                        :rules="[rules.required]"
-                        type="date"
-                        label="Select Spouse's Date of Birth"
-                    />
+
+                    <VTextField class="username-pw-input" v-model="spouse_birthday" id="login-spouse-birthday"
+                        :rules="[rules.required]" type="date" label="Select Spouse's Date of Birth" />
                 </div>
 
                 <div class="row-tab">
@@ -316,44 +217,27 @@
                         <div>* Spouse's Place of Birth:</div>
                     </div>
 
-                    <VTextField
-                        class="username-pw-input"
-                        v-model="spouse_birthplace"
-                        id="login-spouse-birthplace"
-                        :rules="[rules.required]"
-                        label="Enter Spouse's Place of Birth"
-                    />
+                    <VTextField class="username-pw-input" v-model="spouse_birthplace" id="login-spouse-birthplace"
+                        :rules="[rules.required]" label="Enter Spouse's Place of Birth" />
                 </div>
 
                 <div class="row-tab">
                     <div class="label">
                         <div>* Spouse's Contact Number:</div>
                     </div>
-                        
-                    <VTextField
-                        class="username-pw-input"
-                        v-model="spouse_contact_number"
-                        id="login-spouse-contact-number"
-                        :rules="[rules.required]"
-                        label="Enter Spouse's Contact Number"
-                    />
+
+                    <VTextField class="username-pw-input" v-model="spouse_contact_number" id="login-spouse-contact-number"
+                        :rules="[rules.required]" label="Enter Spouse's Contact Number" />
                 </div>
-                
-                <VAlert v-if="errorMessage"
-                        type="error" 
-                        closable=""
-                        density="comfortable"
-                        elevation="5"
-                        >
+
+                <VAlert v-if="errorMessage" type="error" closable="" density="comfortable" elevation="5">
                     {{ errorMessage }}
                 </VAlert>
 
                 <div class="btn-wrapper">
-                    <VBtn type="submit" class="btn capitalize-text" @click.prevent="registerUser"
-                        >Create User Profile</VBtn
-                    >
+                    <VBtn type="submit" class="btn capitalize-text" @click.prevent="registerUser">Create Member Profile</VBtn>
                 </div>
-                
+
             </VForm>
         </div>
     </div>
@@ -497,17 +381,17 @@ export default {
     overflow: auto;
 }
 
-.formDiv {
+.info-fields {
+    background-color: var(--vt-c-white);
+    padding: 5%;
+    padding-top: 2%;
+    padding-bottom: 2%;
+    overflow: auto;
 }
-
 .header {
-    /* border: 1px solid black; */
     background-color: var(--vt-c-white-off);
     width: 100%;
     padding-bottom: 3%;
-    padding-left: 2%;
-    padding-right: 1%;
-    padding-top: 1%;
 
     position: sticky;
     top: 0;
@@ -517,7 +401,10 @@ export default {
     font-weight: bold;
 
     text-align: center;
-    margin-bottom: 3%;
+    
+}
+
+.header-text {
 }
 
 .header2 {
@@ -525,22 +412,6 @@ export default {
     margin-bottom: 3%;
     font-weight: bold;
 }
-
-.info-fields {
-    padding: 5%;
-    padding-top: 2%;
-    padding-bottom: 2%;
-    overflow: auto;
-    /* border: 1px solid black; */
-}
-
-.error-msg-wrapper {
-    width: 100%;
-    height: 7vh;
-    position: absolute;
-    z-index: 999;
-}
-
 .row-tab {
     /* border: 1px solid black; */
     display: flex;
@@ -558,17 +429,24 @@ export default {
     vertical-align: top;
 }
 
-.username-pw-input {
+.error-msg-wrapper {
+    width: 100%;
+    height: 7vh;
+    position: absolute;
+    z-index: 999;
 }
 
 .btn {
-    color: var(--vt-c-white-off);
     font-weight: 600;
+    color: var(--vt-c-white-off);
     background: var(--vt-c-blue);
 
-    border: none;
+    display: flex;
+    align-items: center;
+    text-align: center;
+
     border-radius: 5px;
-    cursor: pointer;
+    text-transform: capitalize;
 }
 
 .btn-wrapper {
