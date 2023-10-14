@@ -147,7 +147,13 @@ const createOfficer = async () => {
                             <label><input type="checkbox" id="login-rememberMe" />Remember Me </label>
                             </div> -->
 
-                        <VAlert v-if="errorMessage" type="error" variant="tonal" closable="">
+                        <VAlert 
+                                v-if="errorMessage"
+                                type="error" 
+                                closable=""
+                                density="comfortable"
+                                elevation="5"
+                                >
                             {{ errorMessage }}
                         </VAlert>
                         <div class="btn-wrapper">
@@ -238,6 +244,7 @@ const createOfficer = async () => {
 
 
 .btn-wrapper {
+    margin-top: 2%;
     display: flex;
     justify-content: flex-end;
 }

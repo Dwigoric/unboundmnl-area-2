@@ -230,7 +230,12 @@
                         :rules="[rules.required]" label="Enter Spouse's Contact Number" />
                 </div>
 
-                <VAlert v-if="errorMessage" type="error" closable="" density="comfortable" elevation="5">
+                <VAlert v-if="errorMessage"
+                        type="error" 
+                        closable=""
+                        density="comfortable"
+                        elevation="5"
+                        >
                     {{ errorMessage }}
                 </VAlert>
 
