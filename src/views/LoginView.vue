@@ -1,7 +1,6 @@
 <script setup>
 // Import packages
 import { ref } from 'vue'
-import { storeToRefs } from 'pinia'
 import jwt_decode from 'jwt-decode'
 
 // Import vue components
@@ -14,7 +13,7 @@ import { API_URL } from '../constants'
 import { useCurrentUserStore } from '../stores/currentUser'
 
 // Define stores
-const currentUserStore = storeToRefs(useCurrentUserStore())
+const currentUserStore = useCurrentUserStore()
 
 // Define refs
 const username = ref('')
@@ -57,7 +56,9 @@ const logIn = async () => {
         remember.value ? '30d' : 0
     )
 
-    // TODO: Redirect admin to admin dashboard?
+    // Fetch user
+    await currentUserStore.fetchUser()
+
     // Redirect to dashboard
     return router.replace({ name: 'Dashboard' })
 }

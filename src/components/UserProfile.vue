@@ -1,3 +1,11 @@
+<script setup>
+// Import stores
+import { useCurrentUserStore } from '../stores/currentUser'
+
+// Define stores
+const currentUserStore = useCurrentUserStore()
+</script>
+
 <template>
     <div class="profile-box d-flex rounded-lg elevation-5 hover-scale-md">
         <div class="d-flex justify-center align-center px-2">
@@ -6,31 +14,31 @@
             </v-avatar>
         </div>
         <div class="d-flex flex-column px-3">
-            <!-- note: change these dynamically  -->
-            <p class="font-weight-bold name-text">Terence Galarpe</p> 
-            <p class="title-text">Secretary</p>
+            <p class="font-weight-bold name-text">
+                {{ currentUserStore.name.given }} {{ currentUserStore.name.last }}
+            </p>
+            <p class="title-text">{{ currentUserStore.role }}</p>
         </div>
     </div>
 </template>
 
 <style scoped>
-    .profile-box {
-        background-color: var(--vt-c-white);
-        padding-top: .2%;
-        padding-bottom: .2%;
-    }
+.profile-box {
+    background-color: var(--vt-c-white);
+    padding-top: 0.2%;
+    padding-bottom: 0.2%;
+}
 
-    .user-avatar {
-        background-color: gray;
-    }
+.user-avatar {
+    background-color: gray;
+}
 
-    .name-text {
-        font-size: 1.25rem;
-        height: 25px;
-    }
+.name-text {
+    font-size: 1.25rem;
+    height: 25px;
+}
 
-    .title-text {
-        color: var(--vt-c-gray);
-    }
-
+.title-text {
+    color: var(--vt-c-gray);
+}
 </style>
