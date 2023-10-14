@@ -69,7 +69,6 @@ const logout = () => {
 <style scoped>
 .navigation-drawer {
     background: var(--vt-c-blue-med-dark);
-    width: 3000px;
 }
 
 .navigation-title-box {

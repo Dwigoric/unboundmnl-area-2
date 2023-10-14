@@ -1,182 +1,360 @@
 <script setup>
+import { VLabel } from 'vuetify/lib/components/index.mjs';
 import CloseButton from '../components/CloseButton.vue'
 </script>
 
 <template>
-    <div class="infoFields">
-        <div class="formDiv">
+
+    <div class="info-fields">
+        <div class="form-wrapper">
             <VForm id="login-form" ref="form">
                 <div class="header2">Borrower's Information</div>
-                <VTextField
-                    class="username-pw-input"
-                    v-model="username"
-                    id="login-username"
-                    :rules="[rules.required]"
-                    label="Username"
-                />
-                <VTextField
-                    class="username-pw-input"
-                    v-model="first_name"
-                    id="login-first-name"
-                    :rules="[rules.required]"
-                    label="First Name"
-                />
-                <VTextField
-                    class="username-pw-input"
-                    v-model="middle_name"
-                    id="login-middle-name"
-                    label="Middle Name"
-                />
-                <VTextField
-                    class="username-pw-input"
-                    v-model="last_name"
-                    id="login-last-name"
-                    :rules="[rules.required]"
-                    label="Last Name"
-                />
-                <VTextField
-                    class="username-pw-input"
-                    v-model="birthday"
-                    id="login-birthday"
-                    type="date"
-                    :rules="[rules.required]"
-                    label="Date of Birth"
-                />
-                <VTextField
-                    class="username-pw-input"
-                    v-model="birthplace"
-                    id="login-birthplace"
-                    :rules="[rules.required]"
-                    label="Place of Birth"
-                />
-                <VSelect
-                    class="username-pw-input"
-                    v-model="gender"
-                    :items="['M', 'F']"
-                    id="login-gender"
-                    :rules="[rules.required]"
-                    label="Gender"
-                />
-                <VTextField
-                    class="username-pw-input"
-                    v-model="tin_number"
-                    id="login-tin-number"
-                    :rules="[rules.required]"
-                    label="TIN Number (XXX-XXX-XXX-XXX)"
-                />
-                <VSelect
-                    class="username-pw-input"
-                    v-model="civil_status"
-                    :items="['Single', 'Married']"
-                    id="login-civil-status"
-                    :rules="[rules.required]"
-                    label="Civil Status"
-                />
-                <VTextField
-                    class="username-pw-input"
-                    v-model="contact_number"
-                    id="login-contact-number"
-                    :rules="[rules.required]"
-                    label="Contact Number"
-                />
 
-                <!-- TODO: Spread the address out more, like in the notes -->
-                <VTextField
-                    class="username-pw-input"
-                    v-model="address_street"
-                    id="login-address"
-                    :rules="[rules.required]"
-                    label="Residence Address: Street"
-                />
-                <VTextField
-                    class="username-pw-input"
-                    v-model="address_barangay"
-                    id="login-address"
-                    :rules="[rules.required]"
-                    label="Residence Address: Barangay"
-                />
-                <VTextField
-                    class="username-pw-input"
-                    v-model="address_city"
-                    id="login-address"
-                    :rules="[rules.required]"
-                    label="Residence Address: City"
-                />
-                <VTextField
-                    class="username-pw-input"
-                    v-model="address_province"
-                    id="login-address"
-                    :rules="[rules.required]"
-                    label="Residence Address: Province"
-                />
-                <VTextField
-                    class="username-pw-input"
-                    v-model="monthly_income"
-                    id="login-monthly-income"
-                    type="number"
-                    :rules="[rules.required]"
-                    label="Monthly Income"
-                />
-                <VTextField
-                    class="username-pw-input"
-                    v-model="occupation"
-                    id="login-occupation"
-                    :rules="[rules.required]"
-                    label="Occupation/Source of Income"
-                />
+                <!-- Username -->
+                <div class="row-tab">
+                    <div class="label">
+                        <div>* Username:</div>
+                    </div>
+    
+                    <VTextField
+                        class="username-pw-input"
+                        v-model="username"
+                        id="login-username"
+                        :rules="[rules.required]"
+                        label="Enter Username"
+                    />
+                </div>
 
+                <!-- First Name -->
+                <div class="row-tab">
+                    <div class="label">
+                        <div>* First name:</div>
+                    </div>
+
+                    <VTextField
+                        class="username-pw-input"
+                        v-model="first_name"
+                        id="login-first-name"
+                        :rules="[rules.required]"
+                        label="Enter First Name"
+                    />
+                </div>
+
+                <!-- Middle Name -->
+                <div class="row-tab">
+                    <div class="label">
+                        <div>* Middle name:</div>
+                    </div>
+
+                    <VTextField
+                        class="username-pw-input"
+                        v-model="middle_name"
+                        id="login-middle-name"
+                        label="Enter Middle Name"
+                    />
+                </div>
+
+                <!-- Last Name -->
+                <div class="row-tab">
+                    <div class="label">
+                        <div>* Last name:</div>
+                    </div>
+
+                    <VTextField
+                        class="username-pw-input"
+                        v-model="last_name"
+                        id="login-last-name"
+                        :rules="[rules.required]"
+                        label="Enter Last Name"
+                    />
+                </div>
+
+                <!-- Date of Birth -->
+                <div class="row-tab">
+                    <div class="label">
+                        <div>* Date of Birth:</div>
+                    </div>
+
+                    <VTextField
+                        class="username-pw-input"
+                        v-model="birthday"
+                        id="login-birthday"
+                        type="date"
+                        :rules="[rules.required]"
+                        label="Select Date of Birth"
+                    />
+                </div>
+
+                <!-- Place of Birth -->
+                <div class="row-tab">
+                    <div class="label">
+                        <div>* Place of Birth:</div>
+                    </div>
+
+                    <VTextField
+                        class="username-pw-input"
+                        v-model="birthplace"
+                        id="login-birthplace"
+                        :rules="[rules.required]"
+                        label="Enter Place of Birth"
+                    />
+                </div>
+
+                <!-- Gender -->
+                <!-- XXX: Should this be sex? -->
+                <div class="row-tab">
+                    <div class="label">
+                        <div>* Gender:</div>
+                    </div>
+
+                    <VSelect
+                        class="username-pw-input"
+                        v-model="gender"
+                        :items="['M', 'F']"
+                        id="login-gender"
+                        :rules="[rules.required]"
+                        label="Select Gender"
+                    /> 
+                </div>
+                
+                <!-- TIN Number -->
+                <div class="row-tab">
+                    <div class="label">
+                        <div>* TIN Number:</div>
+                    </div>
+
+                    <VTextField
+                        class="username-pw-input"
+                        v-model="tin_number"
+                        id="login-tin-number"
+                        :rules="[rules.required]"
+                        label="Enter TIN Number (XXX-XXX-XXX-XXX)"
+                    />
+                </div>
+
+                <!-- Civil Status -->
+                <div class="row-tab">
+                    <div class="label">
+                        <div>* Civil Status:</div>
+                    </div>
+
+                    <VSelect
+                        class="username-pw-input"
+                        v-model="civil_status"
+                        :items="['Single', 'Married']"
+                        id="login-civil-status"
+                        :rules="[rules.required]"
+                        label="Select Civil Status"
+                    />
+                </div>
+
+                <!-- Contact Number -->
+                <div class="row-tab">
+                    <div class="label">
+                        <div>* Contact Number:</div>
+                    </div>
+
+                    <VTextField
+                        class="username-pw-input"
+                        v-model="contact_number"
+                        id="login-contact-number"
+                        :rules="[rules.required]"
+                        label="Enter Contact Number"
+                    />  
+                </div>
+
+                <!-- Monthly Income -->
+                <div class="row-tab">
+                                    <div class="label">
+                                        <div>* Monthly Income:</div>
+                                    </div>
+
+                                    <VTextField
+                                        class="username-pw-input"
+                                        v-model="monthly_income"
+                                        id="login-monthly-income"
+                                        type="number"
+                                        :rules="[rules.required]"
+                                        label="Enter Monthly Income"
+                                    />
+                                </div>
+
+                <div class="row-tab">
+                    <div class="label">
+                        <div>* Occupation/Source of Income:</div>
+                    </div>
+
+                    <VTextField
+                        class="username-pw-input"
+                        v-model="occupation"
+                        id="login-occupation"
+                        :rules="[rules.required]"
+                        label="Enter Occupation/Source of Income"
+                    />
+                </div>
+
+                <!-- Borrower's Residence -->
+                <div class="header2">Borrower's Residence</div>
+
+                <div class="row-tab">
+                    <div class="label">
+                        <div>* Street:</div>
+                    </div>
+
+                    <VTextField
+                        class="username-pw-input"
+                        v-model="address_street"
+                        id="login-address"
+                        :rules="[rules.required]"
+                        label="Enter Street"
+                    />
+                </div>
+
+                <div class="row-tab">
+                    <div class="label">
+                        <div>* Barangay:</div>
+                    </div>
+
+                    <VTextField
+                        class="username-pw-input"
+                        v-model="address_barangay"
+                        id="login-address"
+                        :rules="[rules.required]"
+                        label="Enter Barangay"
+                    />  
+                </div>
+
+                <div class="row-tab">
+                    <div class="label">
+                        <div>* City:</div>
+                    </div>
+
+                    <VTextField
+                        class="username-pw-input"
+                        v-model="address_city"
+                        id="login-address"
+                        :rules="[rules.required]"
+                        label="Enter City"
+                    />  
+                </div>
+            
+                <div class="row-tab">
+                    <div class="label">
+                        <div>* Province:</div>
+                    </div>
+
+                    <VTextField
+                        class="username-pw-input"
+                        v-model="address_province"
+                        id="login-address"
+                        :rules="[rules.required]"
+                        label="Enter Province"
+                    />    
+                </div>
+                
+                <!-- Spouse's Information -->
                 <div class="header2">Spouse's Information</div>
-                <VTextField
-                    class="username-pw-input"
-                    v-model="spouse_first_name"
-                    id="login-spouse-first-name"
-                    :rules="[rules.required]"
-                    label="Spouse's First Name"
-                />
-                <VTextField
-                    class="username-pw-input"
-                    v-model="spouse_middle_name"
-                    id="login-spouse-middle-name"
-                    label="Spouse's Middle Name"
-                />
-                <VTextField
-                    class="username-pw-input"
-                    v-model="spouse_last_name"
-                    id="login-spouse-last-name"
-                    :rules="[rules.required]"
-                    label="Spouse's Last Name"
-                />
-                <VTextField
-                    class="username-pw-input"
-                    v-model="spouse_birthday"
-                    id="login-spouse-birthday"
-                    :rules="[rules.required]"
-                    type="date"
-                    label="Spouse's Date of Birth"
-                />
-                <VTextField
-                    class="username-pw-input"
-                    v-model="spouse_birthplace"
-                    id="login-spouse-birthplace"
-                    :rules="[rules.required]"
-                    label="Spouse's Place of Birth"
-                />
-                <VTextField
-                    class="username-pw-input"
-                    v-model="spouse_contact_number"
-                    id="login-spouse-contact-number"
-                    :rules="[rules.required]"
-                    label="Spouse's Contact Number"
-                />
 
-                <VAlert v-if="errorMessage" type="error" variant="tonal" closable="">
+
+                <div class="row-tab">
+                    <div class="label">
+                        <div>* Spouse's First Name:</div>
+                    </div>
+
+                    <VTextField
+                        class="username-pw-input"
+                        v-model="spouse_first_name"
+                        id="login-spouse-first-name"
+                        :rules="[rules.required]"
+                        label="Enter Spouse's First Name"
+                    />
+                </div>
+                
+                <div class="row-tab">
+                    <div class="label">
+                        <div>* Spouse's Middle Name:</div>
+                    </div>
+
+                    <VTextField
+                        class="username-pw-input"
+                        v-model="spouse_middle_name"
+                        id="login-spouse-middle-name"
+                        label="Enter Spouse's Middle Name"
+                    />
+                </div>
+
+                <div class="row-tab">
+                    <div class="label">
+                        <div>* Spouse's Last Name:</div>
+                    </div>
+
+                    <VTextField
+                        class="username-pw-input"
+                        v-model="spouse_last_name"
+                        id="login-spouse-last-name"
+                        :rules="[rules.required]"
+                        label="Enter Spouse's Last Name"
+                    />
+                </div>
+
+                <div class="row-tab">
+                    <div class="label">
+                        <div>* Spouse's Date of Birth:</div>
+                    </div>
+    
+                    <VTextField
+                        class="username-pw-input"
+                        v-model="spouse_birthday"
+                        id="login-spouse-birthday"
+                        :rules="[rules.required]"
+                        type="date"
+                        label="Select Spouse's Date of Birth"
+                    />
+                </div>
+
+                <div class="row-tab">
+                    <div class="label">
+                        <div>* Spouse's Place of Birth:</div>
+                    </div>
+
+                    <VTextField
+                        class="username-pw-input"
+                        v-model="spouse_birthplace"
+                        id="login-spouse-birthplace"
+                        :rules="[rules.required]"
+                        label="Enter Spouse's Place of Birth"
+                    />
+                </div>
+
+                <div class="row-tab">
+                    <div class="label">
+                        <div>* Spouse's Contact Number:</div>
+                    </div>
+                        
+                    <VTextField
+                        class="username-pw-input"
+                        v-model="spouse_contact_number"
+                        id="login-spouse-contact-number"
+                        :rules="[rules.required]"
+                        label="Enter Spouse's Contact Number"
+                    />
+                </div>
+                
+                <VAlert v-if="errorMessage"
+                        type="error" 
+                        closable=""
+                        density="comfortable"
+                        elevation="5"
+                        >
                     {{ errorMessage }}
                 </VAlert>
-                <div class="btnWrapper">
+
+                <div class="btn-wrapper">
                     <VBtn type="submit" class="btn capitalize-text" @click.prevent="registerUser"
                         >Create User Profile</VBtn
                     >
                 </div>
+                
             </VForm>
         </div>
     </div>
@@ -349,9 +527,36 @@ export default {
     font-weight: bold;
 }
 
-.infoFields {
-    padding: 3%;
-    padding-top: 0%;
+.info-fields {
+    padding: 5%;
+    padding-top: 2%;
+    padding-bottom: 2%;
+    overflow: auto;
+    /* border: 1px solid black; */
+}
+
+.error-msg-wrapper {
+    width: 100%;
+    height: 7vh;
+    position: absolute;
+    z-index: 999;
+}
+
+.row-tab {
+    /* border: 1px solid black; */
+    display: flex;
+    margin-bottom: 1%;
+}
+
+.label {
+    margin-top: 15px;
+    margin-right: 2%;
+    /* border: 1px solid black; */
+    width: 30%;
+
+    display: inline-block;
+    text-align: right;
+    vertical-align: top;
 }
 
 .username-pw-input {
@@ -368,10 +573,11 @@ export default {
     cursor: pointer;
 }
 
-.btnWrapper {
+.btn-wrapper {
     height: min-content;
     display: flex;
     justify-content: flex-end;
+    margin-top: 2%;
 }
 
 .capitalize-text {
