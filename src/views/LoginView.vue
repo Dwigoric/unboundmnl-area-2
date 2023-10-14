@@ -67,7 +67,16 @@ const logIn = async () => {
     <div class="bg">
         <div class="wrapper">
             <div class="login">
+                <!-- TODO: Add logo -->
                 <div class="header">CSVMC</div>
+
+                <div class="error-msg-wrapper">
+                   <VAlert v-if="errorMessage" type="error" variant="tonal" closable="">
+                       {{ errorMessage }}
+                   </VAlert>
+                </div>
+
+                <div class="login-form-wrapper">
                 <VForm id="login-form" ref="form">
                     <VTextField
                         class="username-pw-input"
@@ -84,17 +93,22 @@ const logIn = async () => {
                         required
                     />
 
-                    <div class="rememberMe">
-                        <VCheckbox id="checkbox" v-model="remember" label="Remember Me" />
+                    <div class="remember-me-wrapper">
+                        <div class="remember-me">
+                            <VCheckbox 
+                                id="checkbox" 
+                                v-model="remember" 
+                                color="var(--vt-c-blue)"
+                                label="Remember Me" 
+                            />
+                        </div>
                     </div>
 
-                    <VAlert v-if="errorMessage" type="error" variant="tonal" closable="">
-                        {{ errorMessage }}
-                    </VAlert>
                     <VBtn type="submit" class="btn capitalize-text" @click.prevent="logIn">
                         Log In
                     </VBtn>
                 </VForm>
+                </div>
             </div>
         </div>
     </div>
@@ -119,8 +133,8 @@ const logIn = async () => {
 }
 
 .wrapper {
-    min-width: 20vw;
-    min-height: 50vh;
+    min-width: 25vw;
+    min-height: 60vh;
 
     background: var(--vt-c-white);
     border-radius: 5px;
@@ -131,11 +145,8 @@ const logIn = async () => {
 }
 
 .login {
-    width: 15vw;
-    min-width: 10vw;
-    height: 40vh;
+    width: 20vw;
     margin: auto;
-    /* border: 1px solid black; */
 }
 
 .header {
@@ -144,7 +155,17 @@ const logIn = async () => {
 
     color: var(--vt-c-black);
     text-align: center;
-    margin-bottom: 20%;
+    margin-top: 3%;
+    margin-bottom: 2%;
+}
+
+.error-msg-wrapper {
+    width: 100%;
+    height: 7vh;
+}
+
+.login-form-wrapper {
+    margin-top: 3%;
 }
 
 .username-pw-input {
@@ -167,36 +188,19 @@ const logIn = async () => {
     margin-bottom: 5%;
 }
 
-.checkbox-label {
-    margin-left: 2%;
-}
-
-.capitalize-text {
-    text-transform: capitalize;
-}
-
 .btn:hover {
     background: var(--vt-c-blue-dark);
 }
 
-.rememberMe {
-    font-size: 0.9em;
-    color: var(--primary-color-jade);
-    font-weight: 500;
-    margin: -15px 2 15px;
+.remember-me-wrapper {
     display: flex;
-    justify-content: right;
-    margin-top: 5px;
-    margin-bottom: 20px;
+    justify-content: flex-end;
 }
 
-.error {
+.remember-me {
+    font-size: 1rem;
+    color: var(--primary-color-jade);
     display: flex;
-    font-size: 0.9em;
-    text-align: center;
-    color: red;
-    font-weight: 400;
-    margin: 25px 1 10px;
-    justify-content: center;
+    width: fit-content;
 }
 </style>

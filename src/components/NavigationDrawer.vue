@@ -30,7 +30,7 @@ const logout = () => {
 
 <template>
     <!-- TODO: Widen width... putangina di ko mahanap -->
-    <v-card class="elevation-13 mr-16">
+    <v-card class="elevation-13 mr-4">
         <v-layout>
             <v-navigation-drawer class="navigation-drawer py-7" theme="dark" permanent>
                 <div class="navigation-title-box">
