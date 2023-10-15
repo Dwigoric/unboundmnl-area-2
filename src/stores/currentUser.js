@@ -11,12 +11,12 @@ export const useCurrentUserStore = defineStore('currentUser', () => {
     const role = ref('')
 
     const fetchUser = async () => {
-        const { token } = window.$cookies.get('credentials')
+        const credentials = window.$cookies.get('credentials')
 
-        if (!token) return
+        if (!credentials || !credentials.token) return
 
         const params = new URLSearchParams()
-        params.set('access_token', token)
+        params.set('access_token', credentials.token)
         const { officer } = await fetch(`${API_URL}/officers/${id.value}?${params}`).then((res) =>
             res.json()
         )

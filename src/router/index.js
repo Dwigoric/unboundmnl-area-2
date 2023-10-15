@@ -1,4 +1,7 @@
+// Import packages
 import { createRouter, createWebHistory } from 'vue-router'
+
+// Import view components
 import LoginView from '../views/LoginView.vue'
 import DashboardMain from '../views/DashboardMain.vue'
 import MemberProfilesView from '../views/MemberProfilesView.vue'
@@ -12,33 +15,63 @@ const router = createRouter({
         {
             path: '/',
             name: 'Login',
-            component: LoginView
+            component: LoginView,
+            beforeEnter: (to, from, next) => {
+                const credentials = window.$cookies.get('credentials')
+                if (credentials && credentials.token) next({ name: 'Dashboard' })
+                else next()
+            }
         },
         {
             path: '/dashboard',
             name: 'Dashboard',
-            component: DashboardMain
+            component: DashboardMain,
+            beforeEnter: (to, from, next) => {
+                const credentials = window.$cookies.get('credentials')
+                if (!credentials || !credentials.token) next({ name: 'Login' })
+                else next()
+            }
         },
         {
             path: '/memberProfiles',
             name: 'Member Profiles View',
-            component: MemberProfilesView
+            component: MemberProfilesView,
+            beforeEnter: (to, from, next) => {
+                const credentials = window.$cookies.get('credentials')
+                if (!credentials || !credentials.token) next({ name: 'Login' })
+                else next()
+            }
         },
         {
             path: '/officerProfiles',
             name: 'Officer Register',
-            component: OfficerProfilesView
+            component: OfficerProfilesView,
+            beforeEnter: (to, from, next) => {
+                const credentials = window.$cookies.get('credentials')
+                if (!credentials || !credentials.token) next({ name: 'Login' })
+                else next()
+            }
         },
         {
             path: '/newLoanApplication',
             name: 'New Loan Application',
-            component: NewLoanApplication
+            component: NewLoanApplication,
+            beforeEnter: (to, from, next) => {
+                const credentials = window.$cookies.get('credentials')
+                if (!credentials || !credentials.token) next({ name: 'Login' })
+                else next()
+            }
         },
         {
             path: '/testerPage',
             name: 'testPage',
-            component: testUserProfileRegView
-        },
+            component: testUserProfileRegView,
+            beforeEnter: (to, from, next) => {
+                const credentials = window.$cookies.get('credentials')
+                if (!credentials || !credentials.token) next({ name: 'Login' })
+                else next()
+            }
+        }
     ]
 })
 

@@ -4,9 +4,6 @@ import { inject } from 'vue'
 import { RouterView } from 'vue-router'
 import jwt_decode from 'jwt-decode'
 
-// Import router
-import router from './router'
-
 // Import stores
 import { useCurrentUserStore } from './stores/currentUser'
 
@@ -22,8 +19,8 @@ if (credentials) {
     currentUserStore.id = uuid
     currentUserStore.role = role
 
-    // Redirect to dashboard
-    router.replace({ name: 'Dashboard' })
+    // Fetch user
+    currentUserStore.fetchUser()
 }
 </script>
 
