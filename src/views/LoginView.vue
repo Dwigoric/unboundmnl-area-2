@@ -1,34 +1,60 @@
 <script setup>
-// Import vue components
+// Import packages
 import { ref } from 'vue'
+import jwt_decode from 'jwt-decode'
+
+// Import vue components
 import router from '../router'
 
 // Import constants
 import { API_URL } from '../constants'
+
+// Import stores
+import { useCurrentUserStore } from '../stores/currentUser'
+
+// Define stores
+const currentUserStore = useCurrentUserStore()
 
 // Define refs
 const username = ref('')
 const password = ref('')
 const form = ref(null)
 const errorMessage = ref('')
+const remember = ref(false)
 
 // Define methods
 const logIn = async () => {
-    const formData = new FormData(form.value)
-
-    // TODO: Finalize login endpoint
-    const response = await fetch(`${API_URL}/login`, {
+    const { token, message } = await fetch(`${API_URL}/auth/login`, {
         method: 'POST',
-        body: formData
-    })
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            username: username.value,
+            password: password.value
+        })
+    }).then((res) => res.json())
 
-    // TODO: Finalize response format
-    const data = await response.json()
-    if (data.success) {
-        await router.push('/dashboard')
-    } else {
-        errorMessage.value = data.message
+    if (!token) {
+        errorMessage.value = message
+        return
     }
+
+    // Decode token
+    const { uuid } = jwt_decode(token)
+    currentUserStore.id = uuid
+
+    // TODO: Use refresh token instead of storing token itself in cookies
+    // Set cookie
+    window.$cookies.set(
+        'credentials',
+        { token, persist: remember.value },
+        remember.value ? '30d' : 0
+    )
+
+    // Fetch user
+    await currentUserStore.fetchUser()
+
+    // Redirect to dashboard
+    return router.replace({ name: 'Dashboard' })
 }
 </script>
 
@@ -36,22 +62,48 @@ const logIn = async () => {
     <div class="bg">
         <div class="wrapper">
             <div class="login">
-                <div class="header">Caluag St. Vincent</div>
-                <VForm id="login-form" ref="form">
-                    <VTextField class="username-pw-input" v-model="username" id="login-username" label="Username"
-                        required />
-                    <VTextField class="username-pw-input" v-model="password" id="login-pw" label="Password" required />
+                <!-- TODO: Add logo -->
+                <div class="header">CSVMC</div>
 
+                <div class="error-msg-wrapper">
+                    <VAlert v-if="errorMessage" type="error" variant="tonal" closable="">
+                        {{ errorMessage }}
+                    </VAlert>
+                </div>
 
-                    <!-- <div class="rememberMe">
-                    <label><input type="checkbox" id="login-rememberMe" />Remember Me </label>
-                    </div> -->
+                <div class="login-form-wrapper">
+                    <VForm id="login-form" ref="form">
+                        <VTextField
+                            class="username-pw-input"
+                            v-model="username"
+                            id="login-username"
+                            label="Username"
+                            required
+                        />
+                        <VTextField
+                            class="username-pw-input"
+                            v-model="password"
+                            id="login-pw"
+                            label="Password"
+                            required
+                        />
 
-                    <VBtn type="submit" class="btn capitalize-text" @click.prevent="logIn">Log In</VBtn>
-                    <RouterLink to="/officerRegister" VBtn type="submit" class="btn capitalize-text">Officer Register</RouterLink>
-                    <RouterLink to="/userProfileRegister" VBtn type="submit" class="btn capitalize-text">User Profile Register</RouterLink>
-                    <div v-if="errorMessage" class="error" id="login-error">asd</div>
-                </VForm>
+                        <div class="remember-me-wrapper">
+                            <div class="remember-me">
+                                <VCheckbox
+                                    id="checkbox"
+                                    v-model="remember"
+                                    color="var(--vt-c-blue)"
+                                    label="Remember Me"
+                                />
+                            </div>
+                        </div>
+
+                        <VBtn type="submit" class="btn capitalize-text" @click.prevent="logIn">
+                            Log In
+                        </VBtn>
+                    </VForm>
+                </div>
             </div>
         </div>
     </div>
@@ -59,8 +111,6 @@ const logIn = async () => {
 
 <!-- Stylesheet -->
 <style scoped>
-
-/* TODO: Scale everything properly !!! */
 .bg {
     height: 100vh;
     width: 100vw;
@@ -78,23 +128,20 @@ const logIn = async () => {
 }
 
 .wrapper {
-    min-width: 20vw;
-    min-height: 50vh;
+    min-width: 25vw;
+    min-height: 60vh;
 
     background: var(--vt-c-white);
     border-radius: 5px;
- 
+
     display: flex;
     justify-content: center;
     overflow: auto;
 }
 
 .login {
-    width: 15vw;
-    min-width: 10vw;
-    height: 40vh;
+    width: 20vw;
     margin: auto;
-    /* border: 1px solid black; */
 }
 
 .header {
@@ -103,7 +150,17 @@ const logIn = async () => {
 
     color: var(--vt-c-black);
     text-align: center;
-    margin-bottom: 20%;
+    margin-top: 3%;
+    margin-bottom: 2%;
+}
+
+.error-msg-wrapper {
+    width: 100%;
+    height: 7vh;
+}
+
+.login-form-wrapper {
+    margin-top: 3%;
 }
 
 .username-pw-input {
@@ -126,36 +183,19 @@ const logIn = async () => {
     margin-bottom: 5%;
 }
 
-.capitalize-text {
-    text-transform: capitalize;
-}
-
 .btn:hover {
     background: var(--vt-c-blue-dark);
 }
 
-.rememberMe {
-    font-size: .9em;
-    color: var(--primary-color-jade);
-    font-weight: 500;
-    margin: -15px 2 15px;
+.remember-me-wrapper {
     display: flex;
-    justify-content: right;
-    margin-top: 5px;
-    margin-bottom: 20px;
+    justify-content: flex-end;
 }
 
-.error {
+.remember-me {
+    font-size: 1rem;
+    color: var(--primary-color-jade);
     display: flex;
-    font-size: .9em;
-    text-align: center;
-    color: red;
-    font-weight: 400;
-    margin: 25px 1 10px;
-    justify-content: center;
+    width: fit-content;
 }
 </style>
-
-
-
-

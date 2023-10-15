@@ -1,0 +1,240 @@
+<script setup>
+
+// Import Packages
+import { ref, onMounted } from 'vue'
+
+// Import Components
+import NavigationDrawer from '../components/NavigationDrawer.vue'
+import UserProfile from '../components/UserProfile.vue'
+import NotificationBtn from '../components/NotificationBtn.vue';
+import ContentBlock from '../components/ContentBlock.vue';
+import OfficerRegister from '../components/OfficerRegister.vue'
+import OfficerProfileBtn from '../components/OfficerProfileBtn.vue';
+
+// Important Constants
+import { API_URL } from '../constants';
+
+// Handles pop up action
+const popupTriggers = ref({
+    createOfficerProfile: false
+});
+
+function togglePopup(trigger) {
+    popupTriggers.value[trigger] = !popupTriggers.value[trigger];
+}
+
+// Grab token from cookies
+const { token } = window.$cookies.get('credentials') 
+
+/**
+ * Grabs all officers registered in the database.
+ */
+async function getAllOfficers() {
+    // retrieve token
+    const params = new URLSearchParams();
+    params.set('access_token', token);
+
+    try {
+        const response = await fetch(`${API_URL}/officers?${params}`);
+        const officersResponse = await response.json();
+        const officersArray = officersResponse.officers;
+        console.log('Fetched officers:', officersArray);
+        return officersArray;
+    } catch(error) {
+        console.error('Error: ', error);
+    }
+
+}
+
+// Create reactive list of officers 
+const officers = ref([]);
+
+// Upon loading the page
+onMounted(async () =>{
+
+    // Grab all officers
+    officers.value = await getAllOfficers();
+
+})
+
+</script>
+
+<template>
+    <div class="d-flex px-4 py-2">
+        <NavigationDrawer />
+
+        <div class="d-flex flex-column w-100 pl-8">
+
+            <!-- Top Bar of Dashboard -->
+            <div class="dashboard-top">
+                <div class="breadcrumbs-wrapper">
+                    <v-breadcrumbs :items="['Home', 'Officer Profiles']"></v-breadcrumbs>
+                </div>
+
+                <div class="dashboard-top-right">
+                    <NotificationBtn />
+                    <UserProfile />
+                </div>
+            </div>
+
+            <!-- Main Dashboard Body -->
+            <div class="dashboard-body d-flex flex-column h-100 py-3">
+                <h2>Officer Profiles</h2>
+
+                <div class="upper-wrapper">
+                    <!-- Search bar -->
+                    <div class="search-wrapper">
+                        <v-text-field 
+                            prepend-inner-icon="mdi-magnify" 
+                            label="Search Officer" 
+                            clearable
+                            />
+                    </div>
+
+                    <div class="btn-wrapper">
+                        <v-dialog width="900">
+                            <template v-slot:activator="{ props }">
+
+                                <!-- Create Officer Profile Button -->
+                                <v-btn 
+                                    class="btn capitalize-text"
+                                    v-bind="props" 
+                                    text="Create Officer Profile"> 
+                                </v-btn>
+                                
+                            </template>
+
+                            <!-- Form popup -->
+                            <template v-slot:default="{ isActive }">
+                                <v-card 
+                                    close-on-back
+                                    contained   
+                                    class="form-wrapper"                                
+                                >
+                                    
+                                    <v-container>
+                                        <v-row justify="end">
+                                            <v-card-actions>
+                                                <v-btn
+                                                    class="ma-2 capitalize-text"
+                                                    color="var(--vt-c-blue)"
+                                                    @click="isActive.value = false"
+                                                    icon="mdi-close"
+                                                >
+                                                </v-btn>
+                                            </v-card-actions>
+                                        </v-row>
+                                    </v-container>
+
+                                    <OfficerRegister />
+
+                                </v-card>
+                            </template>
+
+                        </v-dialog>
+                    </div>
+                </div>
+                <!--
+                <div v-for="officer in officersArray" :key="officer">
+                    <h2>cool</h2>
+                </div>
+                -->
+                <ContentBlock :width="100" :height="102" :unit="'%'" :bg-color="'#FFF'">
+                    <!-- Render list of officers-->
+                    <div v-for="officer in officers" :key="officer._id" class=" officer-list-box d-flex flex-column " >
+                        <OfficerProfileBtn :givenName="officer.name.given" :lastName="officer.name.last" :username="officer.username"/>
+                    </div>
+
+                </ContentBlock>
+            </div>
+        </div>
+    </div>
+</template>
+
+
+
+<style scoped>
+.dashboard-top {
+    width: 100%; 
+    height: 58px;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.dashboard-top-right {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.breadcrumbs-wrapper {
+    margin-left: -15px;
+    font-weight: 600;
+}
+
+.dashboard-body {
+    gap: 1.25rem;
+}
+
+.upper-wrapper {
+    height: 10%;
+    
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    /* border: 1px solid black; */
+}
+.search-wrapper {
+    display: flex;
+    width: 85%;
+}
+
+.btn-wrapper {
+    display: flex;
+    margin-bottom: 22px;
+    /* border: 1px solid black; */
+}
+
+.btn {
+    font-weight: 600;
+    color: var(--vt-c-white-off);
+    background: var(--vt-c-blue);
+
+    display: flex;
+    align-items: center;
+    text-align: center;
+
+    padding-top: 15%;
+    padding-bottom: 15%;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-transform: capitalize;
+}
+
+
+.btn:hover {
+    background: var(--vt-c-blue-dark);
+}
+.form-wrapper {
+    background-color: var(--vt-c-white-off);
+}
+
+.dashboard-body {
+    gap: 1.25rem;
+}
+
+.gap-1_25 {
+    gap: 1.25rem;
+}
+
+.bg-off-white {
+    background-color: var(--vt-c-white-off);
+}
+
+.officer-list-box {
+    gap: 0.8rem;
+}
+
+</style>

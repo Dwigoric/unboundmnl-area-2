@@ -2,6 +2,7 @@
 :root {
     --vt-c-white: #ffffff;
     --vt-c-white-off: #eff4f9;
+    --vt-c-white-off-forms: #e6eaef;
     --vt-c-gray: #a6a6a6;
 
     --vt-c-black: #1e1e1e;
@@ -42,4 +43,27 @@ body {
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+}
+
+/* Global Classes */
+
+.bg-off-white {
+    background-color: var(--vt-c-white-off);
+}
+
+/** hover-scale-sm gives the subtle hover effect to all the floating components **/
+.hover-scale-sm, .hover-scale-md, .hover-scale-xs {
+    transition: all 0.3s ease; /* 0.3s duration with ease-in-out timing function for smooth effect */
+}
+
+.hover-scale-xs:hover {
+    transform: scale(1.005)
+}
+
+.hover-scale-sm:hover {
+    transform: scale(1.01);
+}
+
+.hover-scale-md:hover {
+    transform: scale(1.05);
 }
