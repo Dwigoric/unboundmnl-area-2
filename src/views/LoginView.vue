@@ -24,7 +24,7 @@ const remember = ref(false)
 
 // Define methods
 const logIn = async () => {
-    const { token, name, message } = await fetch(`${API_URL}/auth/login`, {
+    const { token, message } = await fetch(`${API_URL}/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -39,14 +39,8 @@ const logIn = async () => {
     }
 
     // Decode token
-    const { uuid, type } = jwt_decode(token)
+    const { uuid } = jwt_decode(token)
     currentUserStore.id = uuid
-
-    if (type === 'officer') {
-        currentUserStore.name.given = name.given
-        currentUserStore.name.middle = name.middle
-        currentUserStore.name.last = name.last
-    }
 
     // TODO: Use refresh token instead of storing token itself in cookies
     // Set cookie
@@ -72,43 +66,43 @@ const logIn = async () => {
                 <div class="header">CSVMC</div>
 
                 <div class="error-msg-wrapper">
-                   <VAlert v-if="errorMessage" type="error" variant="tonal" closable="">
-                       {{ errorMessage }}
-                   </VAlert>
+                    <VAlert v-if="errorMessage" type="error" variant="tonal" closable="">
+                        {{ errorMessage }}
+                    </VAlert>
                 </div>
 
                 <div class="login-form-wrapper">
-                <VForm id="login-form" ref="form">
-                    <VTextField
-                        class="username-pw-input"
-                        v-model="username"
-                        id="login-username"
-                        label="Username"
-                        required
-                    />
-                    <VTextField
-                        class="username-pw-input"
-                        v-model="password"
-                        id="login-pw"
-                        label="Password"
-                        required
-                    />
+                    <VForm id="login-form" ref="form">
+                        <VTextField
+                            class="username-pw-input"
+                            v-model="username"
+                            id="login-username"
+                            label="Username"
+                            required
+                        />
+                        <VTextField
+                            class="username-pw-input"
+                            v-model="password"
+                            id="login-pw"
+                            label="Password"
+                            required
+                        />
 
-                    <div class="remember-me-wrapper">
-                        <div class="remember-me">
-                            <VCheckbox 
-                                id="checkbox" 
-                                v-model="remember" 
-                                color="var(--vt-c-blue)"
-                                label="Remember Me" 
-                            />
+                        <div class="remember-me-wrapper">
+                            <div class="remember-me">
+                                <VCheckbox
+                                    id="checkbox"
+                                    v-model="remember"
+                                    color="var(--vt-c-blue)"
+                                    label="Remember Me"
+                                />
+                            </div>
                         </div>
-                    </div>
 
-                    <VBtn type="submit" class="btn capitalize-text" @click.prevent="logIn">
-                        Log In
-                    </VBtn>
-                </VForm>
+                        <VBtn type="submit" class="btn capitalize-text" @click.prevent="logIn">
+                            Log In
+                        </VBtn>
+                    </VForm>
                 </div>
             </div>
         </div>
