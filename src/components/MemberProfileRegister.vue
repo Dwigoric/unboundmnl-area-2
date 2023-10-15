@@ -299,25 +299,25 @@ export default {
             this.togglePopup('createMemberProfile')
         },
         registerUser: async function () {
-            // const validationResult = await this.$refs.form.validate()
-            // if (validationResult.valid) {
-            //     const result = await fetch(API_URL + '/users/add', {
-            //         method: 'POST',
-            //         headers: { 'Content-Type': 'application/json' },
-            //         body: JSON.stringify(this.preprocessData())
-            //     })
+            const validationResult = await this.$refs.form.validate()
+            if (validationResult.valid) {
+                const result = await fetch(API_URL + '/users/add', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(this.preprocessData())
+                })
 
-            //     this.errorMessage = ''
+                this.errorMessage = ''
 
-            //     if (result.status === 200) {
-            //         this.$refs.form.reset()
-            //     } else if (result.status === 400) {
-            //         const jsonRes = await result.json()
-            //         this.errorMessage = jsonRes.message
-            //     } else if (result.status === 500) {
-            //         this.errorMessage = 'Internal Server Error'
-            //     }
-            // }
+                if (result.status === 200) {
+                    this.$refs.form.reset()
+                } else if (result.status === 400) {
+                    const jsonRes = await result.json()
+                    this.errorMessage = jsonRes.message
+                } else if (result.status === 500) {
+                    this.errorMessage = 'Internal Server Error'
+                }
+            }
         },
         preprocessData: function () {
             return {
