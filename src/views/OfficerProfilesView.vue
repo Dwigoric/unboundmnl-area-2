@@ -1,14 +1,66 @@
 <script setup>
+
+// Import Packages
+import { ref, onMounted } from 'vue'
+
+// Import Components
 import NavigationDrawer from '../components/NavigationDrawer.vue'
 import UserProfile from '../components/UserProfile.vue'
 import NotificationBtn from '../components/NotificationBtn.vue';
 import ContentBlock from '../components/ContentBlock.vue';
 import OfficerRegister from '../components/OfficerRegister.vue'
+import OfficerProfileBtn from '../components/OfficerProfileBtn.vue';
+
+// Important Constants
+import { API_URL } from '../constants';
+
+// Handles pop up action
+const popupTriggers = ref({
+    createOfficerProfile: false
+});
+
+function togglePopup(trigger) {
+    popupTriggers.value[trigger] = !popupTriggers.value[trigger];
+}
+
+// Grab token from cookies
+const { token } = window.$cookies.get('credentials') 
+
+/**
+ * Grabs all officers registered in the database.
+ */
+async function getAllOfficers() {
+    // retrieve token
+    const params = new URLSearchParams();
+    params.set('access_token', token);
+
+    try {
+        const response = await fetch(`${API_URL}/officers?${params}`);
+        const officersResponse = await response.json();
+        const officersArray = officersResponse.officers;
+        console.log('Fetched officers:', officersArray);
+        return officersArray;
+    } catch(error) {
+        console.error('Error: ', error);
+    }
+
+}
+
+// Create reactive list of officers 
+const officers = ref([]);
+
+// Upon loading the page
+onMounted(async () =>{
+
+    // Grab all officers
+    officers.value = await getAllOfficers();
+
+})
 
 </script>
 
 <template>
-    <div class="bg-off-white d-flex px-4 py-2">
+    <div class="d-flex px-4 py-2">
         <NavigationDrawer />
 
         <div class="d-flex flex-column w-100 pl-8">
@@ -82,9 +134,17 @@ import OfficerRegister from '../components/OfficerRegister.vue'
                         </v-dialog>
                     </div>
                 </div>
-
+                <!--
+                <div v-for="officer in officersArray" :key="officer">
+                    <h2>cool</h2>
+                </div>
+                -->
                 <ContentBlock :width="100" :height="102" :unit="'%'" :bg-color="'#FFF'">
-                    <!-- List of members -->
+                    <!-- Render list of officers-->
+                    <div v-for="officer in officers" :key="officer._id" class=" officer-list-box d-flex flex-column " >
+                        <OfficerProfileBtn :givenName="officer.name.given" :lastName="officer.name.last" :username="officer.username"/>
+                    </div>
+
                 </ContentBlock>
             </div>
         </div>
@@ -171,6 +231,10 @@ import OfficerRegister from '../components/OfficerRegister.vue'
 
 .bg-off-white {
     background-color: var(--vt-c-white-off);
+}
+
+.officer-list-box {
+    gap: 0.8rem;
 }
 
 </style>

@@ -44,3 +44,26 @@ body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
+
+/* Global Classes */
+
+.bg-off-white {
+    background-color: var(--vt-c-white-off);
+}
+
+/** hover-scale-sm gives the subtle hover effect to all the floating components **/
+.hover-scale-sm, .hover-scale-md, .hover-scale-xs {
+    transition: all 0.3s ease; /* 0.3s duration with ease-in-out timing function for smooth effect */
+}
+
+.hover-scale-xs:hover {
+    transform: scale(1.005)
+}
+
+.hover-scale-sm:hover {
+    transform: scale(1.01);
+}
+
+.hover-scale-md:hover {
+    transform: scale(1.05);
+}

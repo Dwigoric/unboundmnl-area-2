@@ -29,17 +29,17 @@ import { ref, defineProps } from 'vue';
 
             <!-- Main Dashboard Body -->
             <div class="dashboard-body d-flex flex-column h-100 py-4">
-                <ContentBlock :width="100" :height="50" :unit="'%'" :bg-color="'#FFF'"/>
+                <ContentBlock class="hover-scale-sm" :width="100" :height="50" :unit="'%'" :bg-color="'#FFF'"/>
                 <div class="d-flex h-50 gap-1_25">
-                    <ContentBlock :width="50" :height="102" :unit="'%'" :bg-color="'#FFF'"/>
-                    <ContentBlock :width="50" :height="102" :unit="'%'" :bg-color="'#09a6f3'"/>
+                    <ContentBlock class="hover-scale-sm" :width="50" :height="102" :unit="'%'" :bg-color="'#FFF'"/>
+                    <ContentBlock class="hover-scale-sm" :width="50" :height="102" :unit="'%'" :bg-color="'#09a6f3'"/>
                 </div>
             </div>
         </div>        
     </div>
 </template>
 
-<style scoped>
+<style>
 
     .dashboard-top {
         width: 100%; 
@@ -62,23 +62,4 @@ import { ref, defineProps } from 'vue';
     .dashboard-body {
         gap: 1.25rem;
     }
-
-
-    .bg-off-white {
-        background-color: var(--vt-c-white-off);
-    }
-
-    /** hover-scale-sm gives the subtle hover effect to all the floating components **/
-    .hover-scale-sm, .hover-scale-md {
-        transition: all 0.3s ease; /* 0.3s duration with ease-in-out timing function for smooth effect */
-    }
-
-    .hover-scale-sm:hover {
-        transform: scale(1.01);
-    }
-
-    .hover-scale-md:hover {
-        transform: scale(1.05);
-    }
-
 </style>
