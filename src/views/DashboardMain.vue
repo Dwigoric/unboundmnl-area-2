@@ -1,0 +1,65 @@
+<script setup>
+// Import vue components
+import NavigationDrawer from '../components/NavigationDrawer.vue';
+import UserProfile from '../components/UserProfile.vue';;
+import NotificationBtn from '../components/NotificationBtn.vue';
+import ContentBlock from '../components/ContentBlock.vue';
+import LoanApplicationForm from '../components/LoanApplicationForm.vue';
+import { ref, defineProps } from 'vue';
+
+</script>
+
+<template>
+    <div class="bg-off-white d-flex px-4 py-2">
+        <NavigationDrawer/>
+        
+        <div class="d-flex flex-column w-100 pl-8">
+
+            <!-- Top Bar of Dashboard -->
+            <div class="dashboard-top">
+                <div class="breadcrumbs-wrapper">
+                    <v-breadcrumbs :items="['Home', 'Dashboard']"></v-breadcrumbs>
+                </div>
+
+                <div class="dashboard-top-right">
+                    <NotificationBtn />
+                    <UserProfile />
+                </div>
+            </div>
+
+            <!-- Main Dashboard Body -->
+            <div class="dashboard-body d-flex flex-column h-100 py-4">
+                <ContentBlock class="hover-scale-sm" :width="100" :height="50" :unit="'%'" :bg-color="'#FFF'"/>
+                <div class="d-flex h-50 gap-1_25">
+                    <ContentBlock class="hover-scale-sm" :width="50" :height="102" :unit="'%'" :bg-color="'#FFF'"/>
+                    <ContentBlock class="hover-scale-sm" :width="50" :height="102" :unit="'%'" :bg-color="'#09a6f3'"/>
+                </div>
+            </div>
+        </div>        
+    </div>
+</template>
+
+<style>
+
+    .dashboard-top {
+        width: 100%; 
+        height: 60px;
+        display: flex;
+        justify-content: space-between;
+        margin-top: 10px;
+    }
+
+    .dashboard-top-right {
+        display: flex;
+        gap: 1.5rem;
+    }
+
+    .breadcrumbs-wrapper {
+        margin-left: -15px;
+        font-weight: 600;
+    }
+
+    .dashboard-body {
+        gap: 1.25rem;
+    }
+</style>
