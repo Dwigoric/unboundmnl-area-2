@@ -23,6 +23,17 @@ Duplicate `.env.example` and rename it to `.env`.
 The API URL to use for the application, defaults to `http://localhost:3000`.
 This is the URL where the backend is running.
 
+## Optional Development Stuff
+### [Prettier](https://prettier.io/) for Code Formatting
+You can install the [Prettier - Code formatter](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) extension (for VSCode).
+Other editors have their own extensions as well.
+Rules are already set in `.prettierrc.json`.
+
+### [ESLint](https://eslint.org/) for Code Linting
+You can install the [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) extension (for VSCode).
+Other editors have their own extensions as well.
+Rules are already set in `.eslintrc.js`.
+
 ## Project Setup
 
 ```sh
