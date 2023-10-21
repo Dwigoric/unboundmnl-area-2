@@ -251,40 +251,32 @@
 <script>
 import { API_URL } from '../constants/api_url.js'
 
-const form_fields = {
-    username: '',
-    password: '',
-    first_name: '',
-    middle_name: '',
-    last_name: '',
-    birthday: '',
-    birthplace: '',
-    gender: '',
-    tin_number: '',
-    civil_status: '',
-    contact_number: '',
-    address_street: '',
-    address_barangay: '',
-    address_city: '',
-    address_province: '',
-    monthly_income: '',
-    occupation: '',
-    spouse_first_name: '',
-    spouse_last_name: '',
-    spouse_middle_name: '',
-    spouse_contact_number: '',
-    spouse_birthplace: '',
-    spouse_birthday: ''
-}
-
-// const validationRules = {
-//     required:
-// }
-
 export default {
     data: function () {
         return {
-            ...form_fields,
+            username: '',
+            password: '',
+            first_name: '',
+            middle_name: '',
+            last_name: '',
+            birthday: '',
+            birthplace: '',
+            gender: '',
+            tin_number: '',
+            civil_status: '',
+            contact_number: '',
+            address_street: '',
+            address_barangay: '',
+            address_city: '',
+            address_province: '',
+            monthly_income: '',
+            occupation: '',
+            spouse_first_name: '',
+            spouse_last_name: '',
+            spouse_middle_name: '',
+            spouse_contact_number: '',
+            spouse_birthplace: '',
+            spouse_birthday: '',
             rules: {
                 required: (v) => !!v || 'This field is required'
             },
