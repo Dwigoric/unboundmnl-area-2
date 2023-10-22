@@ -7,21 +7,20 @@
 </script>
 
 <template>
-    <div class="officer-profile-btn w-100 d-flex align-center rounded-lg elevation-2 hover-scale-xs pa-2">
+    <div class="officer-profile-btn w-100 d-flex align-center rounded-lg elevation-2 pa-2">
         <!-- Profile Picture -->
         <div class="officer-icon-box">
             <v-icon class="officer-icon w-100" icon="mdi-account-circle"></v-icon>
         </div>
 
         <!-- Information -->
-        <div>
-            <h2>{{ lastName }}, {{ givenName }}</h2>
-            <p>{{ username }}</p>
+        <div class="d-flex flex-column">
+            <h2 class="sm='0'" >{{ lastName }}, {{ givenName }}</h2>
+            <div class="memberdiv">{{ username }}</div>
         </div>
 
         <!-- Actions -->
         <div class="officer-actions-box ml-auto d-flex">
-            
             <button v-hover="{ hover: true }" v-bind:class="{ 'text-disabled' : hover }" type="button">
                 <v-icon  class="officer-action-icon w-100" icon="mdi-square-edit-outline"></v-icon>
             </button>
@@ -34,9 +33,14 @@
 
 <style>
 
+    .memberdiv {
+        margin-top: -7px;
+        padding: 0;
+    }
+
     .officer-profile-btn {
         background-color: rgba(239, 239, 239, 0.525);
-        gap: 1rem;
+        /* border: 1px solid black */
     }
 
     .officer-icon-box {
