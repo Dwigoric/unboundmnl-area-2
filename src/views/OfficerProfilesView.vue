@@ -14,15 +14,6 @@ import OfficerProfileBtn from '../components/OfficerProfileBtn.vue';
 // Important Constants
 import { API_URL } from '../constants';
 
-// Handles pop up action
-const popupTriggers = ref({
-    createOfficerProfile: false
-});
-
-function togglePopup(trigger) {
-    popupTriggers.value[trigger] = !popupTriggers.value[trigger];
-}
-
 // Grab token from cookies
 const { token } = window.$cookies.get('credentials') 
 
@@ -60,7 +51,7 @@ onMounted(async () =>{
 </script>
 
 <template>
-    <div class="d-flex px-4 py-2">
+    <div class="bg-off-white d-flex px-4 py-2">
         <NavigationDrawer />
 
         <div class="d-flex flex-column w-100 pl-8">
@@ -139,7 +130,7 @@ onMounted(async () =>{
                     <h2>cool</h2>
                 </div>
                 -->
-                <ContentBlock :width="100" :height="102" :unit="'%'" :bg-color="'#FFF'">
+                <ContentBlock :width="100" :height="100" :unit="'%'" :bg-color="'#FFF'" >
                     <!-- Render list of officers-->
                     <div v-for="officer in officers" :key="officer._id" class=" officer-list-box d-flex flex-column " >
                         <OfficerProfileBtn :givenName="officer.name.given" :lastName="officer.name.last" :username="officer.username"/>

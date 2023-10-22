@@ -6,7 +6,6 @@ import LoginView from '../views/LoginView.vue'
 import DashboardMain from '../views/DashboardMain.vue'
 import MemberProfilesView from '../views/MemberProfilesView.vue'
 import OfficerProfilesView from '../views/OfficerProfilesView.vue'
-import testUserProfileRegView from '../views/testerPage.vue'
 import NewLoanApplication from '../views/NewLoanAppView.vue'
 
 const router = createRouter({
@@ -56,16 +55,6 @@ const router = createRouter({
             path: '/newLoanApplication',
             name: 'New Loan Application',
             component: NewLoanApplication,
-            beforeEnter: (to, from, next) => {
-                const credentials = window.$cookies.get('credentials')
-                if (!credentials || !credentials.token) next({ name: 'Login' })
-                else next()
-            }
-        },
-        {
-            path: '/testerPage',
-            name: 'testPage',
-            component: testUserProfileRegView,
             beforeEnter: (to, from, next) => {
                 const credentials = window.$cookies.get('credentials')
                 if (!credentials || !credentials.token) next({ name: 'Login' })

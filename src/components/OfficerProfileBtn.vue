@@ -7,28 +7,35 @@
 </script>
 
 <template>
-    <div class="officer-profile-btn w-100 d-flex align-center rounded-lg elevation-2 pa-2">
-        <!-- Profile Picture -->
-        <div class="officer-icon-box">
-            <v-icon class="officer-icon w-100" icon="mdi-account-circle"></v-icon>
-        </div>
+    <v-hover>
+        <template v-slot:default="{ isHovering, props }">
+            <v-card class="officer-profile-btn w-100 d-flex align-center rounded-lg elevation-2 pa-2 mb-3"
+                v-bind="props"
+                :color="isHovering ? 'rgba(239, 239, 239, 20)' : 'rgba(239, 239, 239, 0.525)'">
+                
+                <!-- Profile Picture -->
+                <div class="officer-icon-box">
+                    <v-icon class="officer-icon w-100" icon="mdi-account-circle"></v-icon>
+                </div>
 
-        <!-- Information -->
-        <div class="d-flex flex-column">
-            <h2 class="sm='0'" >{{ lastName }}, {{ givenName }}</h2>
-            <div class="memberdiv">{{ username }}</div>
-        </div>
+                <!-- Information -->
+                <div class="d-flex flex-column">
+                    <h2 class="sm='0'" >{{ lastName }}, {{ givenName }}</h2>
+                    <div class="memberdiv">{{ username }}</div>
+                </div>
 
-        <!-- Actions -->
-        <div class="officer-actions-box ml-auto d-flex">
-            <button v-hover="{ hover: true }" v-bind:class="{ 'text-disabled' : hover }" type="button">
-                <v-icon  class="officer-action-icon w-100" icon="mdi-square-edit-outline"></v-icon>
-            </button>
-            <button type="button">
-                <v-icon class="officer-action-icon w-100" icon="mdi-trash-can-outline"></v-icon>
-            </button>
-        </div>
-    </div>
+                <!-- Actions -->
+                <div class="officer-actions-box ml-auto d-flex">
+                    <button v-hover="{ hover: true }" v-bind:class="{ 'text-disabled' : hover }" type="button">
+                        <v-icon  class="officer-action-icon w-100" icon="mdi-square-edit-outline"></v-icon>
+                    </button>
+                    <button type="button">
+                        <v-icon class="officer-action-icon w-100" icon="mdi-trash-can-outline"></v-icon>
+                    </button>
+                </div>
+            </v-card>
+        </template>
+    </v-hover>
 </template>
 
 <style>
