@@ -1,53 +1,48 @@
 <script setup>
-
 // Import Packages
 import { ref, onMounted } from 'vue'
 
 // Import Components
 import NavigationDrawer from '../components/NavigationDrawer.vue'
 import UserProfile from '../components/UserProfile.vue'
-import NotificationBtn from '../components/NotificationBtn.vue';
-import ContentBlock from '../components/ContentBlock.vue';
+import NotificationBtn from '../components/NotificationBtn.vue'
+import ContentBlock from '../components/ContentBlock.vue'
 import OfficerRegister from '../components/OfficerRegister.vue'
-import OfficerProfileBtn from '../components/OfficerProfileBtn.vue';
+import OfficerProfileBtn from '../components/OfficerProfileBtn.vue'
 
 // Important Constants
-import { API_URL } from '../constants';
+import { API_URL } from '../constants'
 
 // Grab token from cookies
-const { token } = window.$cookies.get('credentials') 
+const { token } = window.$cookies.get('credentials')
 
 /**
  * Grabs all officers registered in the database.
  */
 async function getAllOfficers() {
     // retrieve token
-    const params = new URLSearchParams();
-    params.set('access_token', token);
+    const params = new URLSearchParams()
+    params.set('access_token', token)
 
     try {
-        const response = await fetch(`${API_URL}/officers?${params}`);
-        const officersResponse = await response.json();
-        const officersArray = officersResponse.officers;
-        console.log('Fetched officers:', officersArray);
-        return officersArray;
-    } catch(error) {
-        console.error('Error: ', error);
+        const response = await fetch(`${API_URL}/officers?${params}`)
+        const officersResponse = await response.json()
+        const officersArray = officersResponse.officers
+        console.log('Fetched officers:', officersArray)
+        return officersArray
+    } catch (error) {
+        console.error('Error: ', error)
     }
-
 }
 
-// Create reactive list of officers 
-const officers = ref([]);
+// Create reactive list of officers
+const officers = ref([])
 
 // Upon loading the page
-onMounted(async () =>{
-
+onMounted(async () => {
     // Grab all officers
-    officers.value = await getAllOfficers();
-
+    officers.value = await getAllOfficers()
 })
-
 </script>
 
 <template>
@@ -55,7 +50,6 @@ onMounted(async () =>{
         <NavigationDrawer />
 
         <div class="d-flex flex-column w-100 pl-8">
-
             <!-- Top Bar of Dashboard -->
             <div class="dashboard-top">
                 <div class="breadcrumbs-wrapper">
@@ -75,34 +69,28 @@ onMounted(async () =>{
                 <div class="upper-wrapper">
                     <!-- Search bar -->
                     <div class="search-wrapper">
-                        <v-text-field 
-                            prepend-inner-icon="mdi-magnify" 
-                            label="Search Officer" 
+                        <v-text-field
+                            prepend-inner-icon="mdi-magnify"
+                            label="Search Officer"
                             clearable
-                            />
+                        />
                     </div>
 
                     <div class="btn-wrapper">
                         <v-dialog width="900">
                             <template v-slot:activator="{ props }">
-
                                 <!-- Create Officer Profile Button -->
-                                <v-btn 
+                                <v-btn
                                     class="btn capitalize-text"
-                                    v-bind="props" 
-                                    text="Create Officer Profile"> 
+                                    v-bind="props"
+                                    text="Create Officer Profile"
+                                >
                                 </v-btn>
-                                
                             </template>
 
                             <!-- Form popup -->
                             <template v-slot:default="{ isActive }">
-                                <v-card 
-                                    close-on-back
-                                    contained   
-                                    class="form-wrapper"                                
-                                >
-                                    
+                                <v-card close-on-back contained class="form-wrapper">
                                     <v-container>
                                         <v-row justify="end">
                                             <v-card-actions>
@@ -118,10 +106,8 @@ onMounted(async () =>{
                                     </v-container>
 
                                     <OfficerRegister />
-
                                 </v-card>
                             </template>
-
                         </v-dialog>
                     </div>
                 </div>
@@ -130,23 +116,28 @@ onMounted(async () =>{
                     <h2>cool</h2>
                 </div>
                 -->
-                <ContentBlock :width="100" :height="100" :unit="'%'" :bg-color="'#FFF'" >
+                <ContentBlock :width="100" :height="100" :unit="'%'" :bg-color="'#FFF'">
                     <!-- Render list of officers-->
-                    <div v-for="officer in officers" :key="officer._id" class=" officer-list-box d-flex flex-column " >
-                        <OfficerProfileBtn :givenName="officer.name.given" :lastName="officer.name.last" :username="officer.username"/>
+                    <div
+                        v-for="officer in officers"
+                        :key="officer.uuid"
+                        class="officer-list-box d-flex flex-column"
+                    >
+                        <OfficerProfileBtn
+                            :givenName="officer.name.given"
+                            :lastName="officer.name.last"
+                            :username="officer.username"
+                        />
                     </div>
-
                 </ContentBlock>
             </div>
         </div>
     </div>
 </template>
 
-
-
 <style scoped>
 .dashboard-top {
-    width: 100%; 
+    width: 100%;
     height: 58px;
     display: flex;
     justify-content: space-between;
@@ -169,7 +160,7 @@ onMounted(async () =>{
 
 .upper-wrapper {
     height: 10%;
-    
+
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -204,7 +195,6 @@ onMounted(async () =>{
     text-transform: capitalize;
 }
 
-
 .btn:hover {
     background: var(--vt-c-blue-dark);
 }
@@ -227,5 +217,4 @@ onMounted(async () =>{
 .officer-list-box {
     gap: 0.8rem;
 }
-
 </style>
