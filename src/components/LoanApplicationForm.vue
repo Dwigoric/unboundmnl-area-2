@@ -423,7 +423,7 @@ const registerUser = async function () {
 
                 <div class="btn-wrapper">
                     <VBtn type="submit" class="btn capitalize-text" @click.prevent="registerUser"
-                        >Create User Profile</VBtn
+                        >Create User Profile</VBtn>
                     >
                 </div>
             </VForm>
@@ -448,41 +448,9 @@ const registerUser = async function () {
     background-color: rgba(0, 0, 0, 0.5);
 }
 
-.wrapper {
+.form-wrapper {
     background: var(--vt-c-white);
-    border-radius: 5px;
-
-    width: 60vw;
-    max-height: 80vh;
-
-    display: flex;
-    flex-direction: column;
-    overflow: auto;
 }
-
-.formDiv {
-}
-
-.header {
-    /* border: 1px solid black; */
-    background-color: var(--vt-c-white-off);
-    width: 100%;
-    padding-bottom: 3%;
-    padding-left: 2%;
-    padding-right: 1%;
-    padding-top: 1%;
-
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-
-    font-size: 1.5rem;
-    font-weight: bold;
-
-    text-align: center;
-    margin-bottom: 3%;
-}
-
 .header2 {
     font-size: 1.2rem;
     margin-bottom: 3%;

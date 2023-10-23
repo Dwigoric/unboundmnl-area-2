@@ -1,4 +1,7 @@
 <script setup>
+import OfficerRegister from '../components/OfficerRegister.vue'
+import DeletePrompt from '../components/DeletePrompt.vue'
+
     defineProps({
         givenName: String,
         lastName: String,
@@ -26,12 +29,93 @@
 
                 <!-- Actions -->
                 <div class="officer-actions-box ml-auto d-flex">
-                    <button v-hover="{ hover: true }" v-bind:class="{ 'text-disabled' : hover }" type="button">
-                        <v-icon  class="officer-action-icon w-100" icon="mdi-square-edit-outline"></v-icon>
-                    </button>
-                    <button type="button">
-                        <v-icon class="officer-action-icon w-100" icon="mdi-trash-can-outline"></v-icon>
-                    </button>
+
+                    <!-- Update Officer Profile Button -->
+                    <div class="updatebtn-wrapper">
+                        <v-dialog width="900">
+                                <template v-slot:activator="{ props }">
+                                    <v-btn
+                                        v-bind="props"
+                                        icon="mdi-square-edit-outline"
+                                        variant="plain"
+                                    >
+                                    </v-btn>
+                                </template>
+
+                                <!-- Form popup -->
+                                <template v-slot:default="{ isActive }">
+                                    <v-card close-on-back contained class="form-wrapper">
+                                        <v-container>
+                                            <v-row justify="end">
+                                                <v-card-actions>
+                                                    <v-btn
+                                                        class="ma-2 capitalize-text"
+                                                        color="var(--vt-c-blue)"
+                                                        @click="isActive.value = false"
+                                                        icon="mdi-close"
+                                                    >
+                                                    </v-btn>
+                                                </v-card-actions>
+                                            </v-row>
+                                        </v-container>
+                                        
+                                        <!-- TODO: officerAction must bn 'Update' -->
+                                        <OfficerRegister :officerAction="Update"/>
+                                    </v-card>
+                                </template>
+                            </v-dialog>
+                    </div>
+
+                    <!-- Delete Officer Profile Button -->
+                    <div class="deletebtn-wrapper">
+                        <v-dialog width="600">
+                                <template v-slot:activator="{ props }">
+                                    <v-btn
+                                        v-bind="props"
+                                        icon="mdi-trash-can-outline"
+                                        variant="plain"
+                                    >
+                                    </v-btn>
+                                </template>
+
+                                <!-- Form popup -->
+                                <template v-slot:default="{ isActive }">
+                                    <v-card 
+                                        close-on-back 
+                                        contained
+                                        >
+                                        
+                                        <v-container>
+                                            <div class="d-flex">
+
+                                                <v-icon icon="mdi-trash-can-outline" 
+                                                        size="large" 
+                                                        color="var(--vt-c-red)"
+                                                        class="mt-6 ml-4"/>
+                                                <h1 class="mt-3 ml-2">Delete Profile</h1>
+
+                                            <v-row justify="end">
+
+                                                <v-card-actions>
+                                                    <v-btn
+                                                        class="ma-2 capitalize-text"
+                                                        color="var(--vt-c-blue)"
+                                                        @click="isActive.value = false"
+                                                        icon="mdi-close"
+                                                    >
+                                                    </v-btn>
+                                                </v-card-actions>
+
+                                            </v-row>
+                                            </div>
+
+                                        </v-container>
+                                        <DeletePrompt />
+
+                                    </v-card>
+                                </template>
+                            </v-dialog>
+                    </div>
                 </div>
             </v-card>
         </template>
@@ -39,6 +123,9 @@
 </template>
 
 <style>
+    .form-wrapper {
+        background-color: var(--vt-c-white-off);
+    }
 
     .memberdiv {
         margin-top: -7px;

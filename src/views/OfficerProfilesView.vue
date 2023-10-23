@@ -107,6 +107,7 @@ onMounted(getAllOfficers)
                                         </v-row>
                                     </v-container>
 
+                                    <!-- TODO: officerAction must be 'Register' -->
                                     <OfficerRegister
                                         :add-to-officers="addToOfficers"
                                         :close-dialog="() => (isActive.value = false)"

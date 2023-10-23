@@ -84,10 +84,13 @@ const createOfficer = async () => {
 }
 </script>
 
+<!-- TODO: Fields should have proper data when it is UPDATE -->
 <template>
     <div class="wrapper">
         <div class="header">
-            <div class="header-text">Register Officer</div>
+                
+            <!-- TODO: Have officerAction input Update/Register -->
+            <div class="header-text">{{officerAction}} Officer</div>
         </div>
 
         <div class="info-fields-wrapper">
@@ -183,7 +186,9 @@ const createOfficer = async () => {
                             class="btn capitalize-text"
                             @click.prevent="createOfficer"
                         >
-                            Register Officer
+
+                            <!-- TODO: Have officerAction input Update/Register -->
+                            {{officerAction}} Officer
                         </VBtn>
                     </div>
                 </VForm>
