@@ -20,6 +20,10 @@ const props = defineProps({
     addToOfficers: {
         type: Function,
         required: true
+    },
+    closeDialog: {
+        type: Function,
+        required: true
     }
 })
 
@@ -71,6 +75,9 @@ const createOfficer = async () => {
             last: last_name.value
         }
     })
+
+    // Close dialog
+    props.closeDialog()
 
     // Reset form
     form.value.reset()

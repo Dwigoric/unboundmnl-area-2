@@ -106,7 +106,10 @@ onMounted(getAllOfficers)
                                         </v-row>
                                     </v-container>
 
-                                    <OfficerRegister :add-to-officers="addToOfficers" />
+                                    <OfficerRegister
+                                        :add-to-officers="addToOfficers"
+                                        :close-dialog="() => (isActive.value = false)"
+                                    />
                                 </v-card>
                             </template>
                         </v-dialog>
