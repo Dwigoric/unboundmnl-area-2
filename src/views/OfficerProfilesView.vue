@@ -1,6 +1,7 @@
 <script setup>
 // Import Packages
 import { reactive, onMounted } from 'vue'
+import jwt_decode from 'jwt-decode'
 
 // Import Components
 import NavigationDrawer from '../components/NavigationDrawer.vue'
@@ -18,6 +19,7 @@ const officers = reactive([])
 
 // Grab token from cookies
 const { token } = window.$cookies.get('credentials')
+const { type } = jwt_decode(token)
 
 /**
  * Grabs all officers registered in the database.
@@ -31,7 +33,6 @@ async function getAllOfficers() {
         const response = await fetch(`${API_URL}/officers?${params}`)
         const officersResponse = await response.json()
         const officersArray = officersResponse.officers
-        console.log('Fetched officers:', officersArray)
         addToOfficers(...officersArray)
     } catch (error) {
         console.error('Error: ', error)
@@ -77,7 +78,7 @@ onMounted(getAllOfficers)
                         />
                     </div>
 
-                    <div class="btn-wrapper">
+                    <div class="btn-wrapper" v-if="type === 'admin'">
                         <v-dialog width="900">
                             <template v-slot:activator="{ props }">
                                 <!-- Create Officer Profile Button -->
