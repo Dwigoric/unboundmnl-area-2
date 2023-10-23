@@ -49,6 +49,38 @@ const userData = reactive({
     }
 })
 
+const loanData = reactive({
+    date: '',
+    classification: '',
+    term: '',
+    type: '',
+    amount: 0,
+    minAmount: 0,
+    maxAmount: 0
+});
+
+// Define Loan types
+const loanTypes = reactive([
+    { title: 'Education Loan', value: 'education' },
+    { title: 'Personal Loan', value: 'personal' },
+    { title: 'Micro Loan', value: 'micro' },
+    { title: 'Utilities Services Loan', value: 'utilities' },
+    { title: 'House Construction/Repairs Loan', value: 'construction' },
+    { title: 'Emergency/Medical Loan', value: 'emergency' },
+    { title: 'Commodity/Appliance Loan', value: 'commodity' }
+]);
+
+// Define loan ranges depending on type (TENTATIVE VALUES)
+const loanRanges = {
+    education: {min: 100, max: 5000},
+    personal: {min: 100, max: 2500},
+    micro: {min: 100, max: 1000},
+    utilities: {min: 100, max: 3000},
+    construction: {min: 100, max: 6000},
+    emergency: {min: 100, max: 7000},
+    commodity: {min: 100, max: 2500}
+};
+
 // Define methods
 const registerUser = async function () {
     const { valid } = await form.value.validate()
@@ -73,12 +105,111 @@ const registerUser = async function () {
         }
     }
 }
+
+// Function that changes loan range depending on type of loan selected.
+const changeLoanRange = function() {
+    // Stores a string indicating the loan type selected
+    const loanType = loanData.type;
+
+    // Queries the loanRanges object for the corresponding minimum and maximum amounts.
+    const min = loanRanges[loanType].min;
+    const max = loanRanges[loanType].max;
+    // Then modifies the minimum and maximum amounts accordingly
+    loanData.amount = min;
+    loanData.minAmount = min;
+    loanData.maxAmount = max;
+}
+
 </script>
 
 <template>
     <div class="info-fields">
         <div class="form-wrapper">
             <VForm id="login-form" ref="form">
+
+                <div class="header2">Loan Information</div>
+
+                <!-- Loan Classification -->
+
+                <div class="row-tab">
+                    <div class="label">
+                        <div>* Classification:</div>
+                    </div>
+
+                    <VRadioGroup
+                        v-model="loanData.classification"
+                        id="loan-classification"
+                        :rules="[rules.required]"
+                    >
+                        <VRadio label="New Loan" value="new"></VRadio>
+                        <VRadio label="Renewal" value="two"></VRadio>
+                    </VRadioGroup>
+                </div>
+
+                <div class="row-tab">
+                    <div class="label">
+                        <div>* Term:</div>
+
+                    </div>
+                    <VTextField 
+                        class="username-pw-input"
+                        v-model="loanData.term"
+                        :rules="[rules.required]"
+                        label="Enter Term of Loan"
+                    />
+                </div>
+
+                <!-- Type of Loan -->
+                <div class="row-tab">
+                    <div class="label">
+                        <div>* Type:</div>
+                    </div>
+
+                    <VSelect
+                        class="username-pw-input"
+                        v-model="loanData.type"
+                        :items="loanTypes"
+                        id="loan-type"
+                        :rules="[rules.required]"
+                        label="Select Loan Type"
+                        @update:modelValue="changeLoanRange"
+                    />
+                </div>
+
+                <div v-if="loanData.type !== ''" class="row-tab">
+                    <div class="label">
+                        <div>* Amount:</div>
+                    </div>
+
+                    <div style="width:68%;">
+                        
+                        <VTextField 
+                            v-model="loanData.amount"
+                            id="loan-amount"
+                            :rules="[rules.required]"
+                            label="Enter Loan Amount"
+                            type="number"
+                            :min="loanData.minAmount"
+                            :max="loanData.maxAmount"
+                            :step="100"
+
+                        />
+                        <VSlider 
+                            v-model="loanData.amount"
+                            :min="loanData.minAmount"
+                            :max="loanData.maxAmount"
+                            :step="10"
+                            thumb-label
+                            :thumb-size="20"
+                        >
+
+                            <!-- Only showcase loanRange if a loan type is selected. -->
+                            <template v-if="loanData.type !== ''" #prepend>{{ loanData.minAmount }}</template>
+                            <template v-if="loanData.type !== ''" #append>{{ loanData.maxAmount }}</template>
+                        </VSlider>
+                    </div>
+                </div>
+
                 <div class="header2">Borrower's Information</div>
 
                 <!-- Username -->
@@ -172,10 +303,9 @@ const registerUser = async function () {
                 </div>
 
                 <!-- Gender -->
-                <!-- XXX: Should this be sex? -->
                 <div class="row-tab">
                     <div class="label">
-                        <div>* Gender:</div>
+                        <div>* Sex:</div>
                     </div>
 
                     <VSelect
