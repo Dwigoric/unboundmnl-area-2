@@ -5,10 +5,24 @@ import { ref } from 'vue'
 // Import constants
 import { API_URL } from '../constants'
 
+// Define constants
+const validationRules = {
+    required: (v) => !!v || 'Required',
+    min6: (v) => (v && v.length >= 6) || 'Minimum of 6 characters',
+    min8: (v) => (v && v.length >= 8) || 'Minimum of 8 characters',
+    max20: (v) => (v && v.length <= 20) || 'Maximum of 20 characters',
+    max255: (v) => (v && v.length <= 255) || 'Maximum of 255 characters',
+    username: (v) =>
+        (v && /^[a-zA-Z0-9_]+$/.test(v)) || 'Username can only be alphanumeric and underscore',
+    password: (v) =>
+        (v && !/^(.{0,7}|[^0-9]*|[^A-Z]*|[^a-z]*|[a-zA-Z0-9]*)$/.test(v)) ||
+        'Password must contain at least one uppercase, one lowercase, one number and one special character'
+}
+
 // Define refs
 const given_name = ref('')
 const last_name = ref('')
-const role = ref('')
+const role = ref(null)
 const username = ref('')
 const password = ref('')
 const form = ref(null)
@@ -88,9 +102,8 @@ const createOfficer = async () => {
 <template>
     <div class="wrapper">
         <div class="header">
-                
             <!-- TODO: Have officerAction input Update/Register -->
-            <div class="header-text">{{officerAction}} Officer</div>
+            <div class="header-text">{{ officerAction }} Officer</div>
         </div>
 
         <div class="info-fields-wrapper">
@@ -105,6 +118,7 @@ const createOfficer = async () => {
                         <VTextField
                             class="username-pw-input"
                             v-model="given_name"
+                            :rules="[validationRules.required]"
                             id="login-pw"
                             label="Enter Given Name"
                             required
@@ -119,6 +133,7 @@ const createOfficer = async () => {
                         <VTextField
                             class="username-pw-input"
                             v-model="last_name"
+                            :rules="[validationRules.required]"
                             id="login-pw"
                             label="Enter Last Name"
                             required
@@ -129,9 +144,17 @@ const createOfficer = async () => {
                         <div class="label">
                             <div>* Role:</div>
                         </div>
-                        <VTextField
+                        <VSelect
                             class="username-pw-input"
                             v-model="role"
+                            :rules="[validationRules.required]"
+                            :items="[
+                                { name: 'Manager', value: 'manager' },
+                                { name: 'Treasurer', value: 'treasurer' },
+                                { name: 'Credit Committee', value: 'credit committee' }
+                            ]"
+                            item-title="name"
+                            item-value="value"
                             id="login-pw"
                             label="Enter Role"
                             required
@@ -145,7 +168,14 @@ const createOfficer = async () => {
 
                         <VTextField
                             class="username-pw-input"
+                            name="username"
                             v-model="username"
+                            :rules="[
+                                validationRules.required,
+                                validationRules.min6,
+                                validationRules.max20,
+                                validationRules.username
+                            ]"
                             id="login-username"
                             label="Enter Username"
                             required
@@ -159,7 +189,14 @@ const createOfficer = async () => {
 
                         <VTextField
                             class="username-pw-input"
+                            name="password"
                             v-model="password"
+                            :rules="[
+                                validationRules.required,
+                                validationRules.min8,
+                                validationRules.max255,
+                                validationRules.password
+                            ]"
                             id="login-pw"
                             label="Enter Password"
                             required
@@ -186,9 +223,8 @@ const createOfficer = async () => {
                             class="btn capitalize-text"
                             @click.prevent="createOfficer"
                         >
-
                             <!-- TODO: Have officerAction input Update/Register -->
-                            {{officerAction}} Officer
+                            {{ officerAction }} Officer
                         </VBtn>
                     </div>
                 </VForm>
