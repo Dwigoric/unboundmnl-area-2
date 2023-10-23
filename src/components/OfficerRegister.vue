@@ -28,6 +28,7 @@ const password = ref('')
 const form = ref(null)
 const errorMessage = ref('')
 const errorAlert = ref(false)
+const submitBtnLoading = ref(false)
 
 // Props
 const props = defineProps({
@@ -51,6 +52,9 @@ const createOfficer = async () => {
     const credentials = window.$cookies.get('credentials')
     if (!credentials) return
 
+    // Set submit button to loading
+    submitBtnLoading.value = true
+
     // Send request
     const { uuid, message } = await fetch(`${API_URL}/auth/register-officer`, {
         method: 'POST',
@@ -73,6 +77,7 @@ const createOfficer = async () => {
     if (!uuid) {
         errorMessage.value = message
         errorAlert.value = true
+        submitBtnLoading.value = false
         return
     }
 
@@ -92,6 +97,9 @@ const createOfficer = async () => {
 
     // Close dialog
     props.closeDialog()
+
+    // Set submit button to not loading
+    submitBtnLoading.value = false
 
     // Reset form
     form.value.reset()
@@ -222,6 +230,7 @@ const createOfficer = async () => {
                             type="submit"
                             class="btn capitalize-text"
                             @click.prevent="createOfficer"
+                            :loading="submitBtnLoading"
                         >
                             <!-- TODO: Have officerAction input Update/Register -->
                             {{ officerAction }} Officer
