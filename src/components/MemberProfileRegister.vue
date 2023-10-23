@@ -66,8 +66,10 @@ const registerUser = async function () {
         } else if (result.status === 400) {
             const jsonRes = await result.json()
             errorMessage.value = jsonRes.message
+            errorAlert.value = true
         } else if (result.status === 500) {
             errorMessage.value = 'Internal Server Error'
+            errorAlert.value = true
         }
     }
 }

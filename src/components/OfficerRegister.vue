@@ -2,16 +2,8 @@
 // Import packages
 import { ref } from 'vue'
 
-// Import components
-import CloseButton from '../components/CloseButton.vue'
-
 // Import constants
 import { API_URL } from '../constants'
-
-// Props
-defineProps({
-    togglePopup: Function
-})
 
 // Define refs
 const given_name = ref('')
@@ -21,6 +13,7 @@ const username = ref('')
 const password = ref('')
 const form = ref(null)
 const errorMessage = ref('')
+const errorAlert = ref(false)
 
 // Define methods
 const createOfficer = async () => {
@@ -53,6 +46,7 @@ const createOfficer = async () => {
     // If UUID is not returned, show error message
     if (!uuid) {
         errorMessage.value = message
+        errorAlert.value = true
         return
     }
 
@@ -64,116 +58,114 @@ const createOfficer = async () => {
 
 <template>
     <div class="wrapper">
-            <div class="header">
-                <div class="header-text">Register Officer</div>
-            </div>
-            
-            <div class="info-fields-wrapper">
-                <div class="login">
-                    <VForm id="login-form" ref="form">
-                        
-                        <!-- Username -->
-                        <div class="row-tab">
-                            <div class="label">
-                                <div>* Given Name:</div>
-                            </div>
-        
-                            <VTextField
-                                class="username-pw-input"
-                                v-model="given_name"
-                                id="login-pw"
-                                label="Enter Given Name"
-                                required
-                            />
-                        </div>
-                        
-                        <div class="row-tab">
-                            <div class="label">
-                                <div>* Last Name:</div>
-                            </div>
-                            
-                            <VTextField
-                                class="username-pw-input"
-                                v-model="last_name"
-                                id="login-pw"
-                                label="Enter Last Name"
-                                required
-                            />
+        <div class="header">
+            <div class="header-text">Register Officer</div>
+        </div>
+
+        <div class="info-fields-wrapper">
+            <div class="login">
+                <VForm id="login-form" ref="form">
+                    <!-- Username -->
+                    <div class="row-tab">
+                        <div class="label">
+                            <div>* Given Name:</div>
                         </div>
 
-                        <div class="row-tab">
-                            <div class="label">
-                                <div>* Role:</div>
-                            </div>
-                            <VTextField
-                                class="username-pw-input"
-                                v-model="role"
-                                id="login-pw"
-                                label="Enter Role"
-                                required
-                            />
+                        <VTextField
+                            class="username-pw-input"
+                            v-model="given_name"
+                            id="login-pw"
+                            label="Enter Given Name"
+                            required
+                        />
+                    </div>
+
+                    <div class="row-tab">
+                        <div class="label">
+                            <div>* Last Name:</div>
                         </div>
 
-                        <div class="row-tab">
-                            <div class="label">
-                                <div>* Username:</div>
-                            </div>
-                            
-                            <VTextField
-                                class="username-pw-input"
-                                v-model="username"
-                                id="login-username"
-                                label="Enter Username"
-                                required
-                            />
+                        <VTextField
+                            class="username-pw-input"
+                            v-model="last_name"
+                            id="login-pw"
+                            label="Enter Last Name"
+                            required
+                        />
+                    </div>
+
+                    <div class="row-tab">
+                        <div class="label">
+                            <div>* Role:</div>
+                        </div>
+                        <VTextField
+                            class="username-pw-input"
+                            v-model="role"
+                            id="login-pw"
+                            label="Enter Role"
+                            required
+                        />
+                    </div>
+
+                    <div class="row-tab">
+                        <div class="label">
+                            <div>* Username:</div>
                         </div>
 
-                        <div class="row-tab">
-                            <div class="label">
-                                <div>* Password:</div>
-                            </div>
-    
-                            <VTextField
-                                class="username-pw-input"
-                                v-model="password"
-                                id="login-pw"
-                                label="Enter Password"
-                                required
-                            />
-                        </div>
-                        
+                        <VTextField
+                            class="username-pw-input"
+                            v-model="username"
+                            id="login-username"
+                            label="Enter Username"
+                            required
+                        />
+                    </div>
 
-                        <!-- <div class="rememberMe">
+                    <div class="row-tab">
+                        <div class="label">
+                            <div>* Password:</div>
+                        </div>
+
+                        <VTextField
+                            class="username-pw-input"
+                            v-model="password"
+                            id="login-pw"
+                            label="Enter Password"
+                            required
+                        />
+                    </div>
+
+                    <!-- <div class="rememberMe">
                             <label><input type="checkbox" id="login-rememberMe" />Remember Me </label>
                             </div> -->
 
-                        <VAlert 
-                                v-if="errorMessage"
-                                type="error" 
-                                closable=""
-                                density="comfortable"
-                                elevation="5"
-                                >
-                            {{ errorMessage }}
-                        </VAlert>
-                        <div class="btn-wrapper">
-                            <VBtn
-                                type="submit"
-                                class="btn capitalize-text"
-                                @click.prevent="createOfficer"
-                            >
-                                Register Officer
-                            </VBtn>
-                        </div>
-                    </VForm>
-                </div>
+                    <VAlert
+                        v-if="errorAlert"
+                        v-model="errorAlert"
+                        type="error"
+                        closable=""
+                        density="comfortable"
+                        elevation="5"
+                    >
+                        {{ errorMessage }}
+                    </VAlert>
+                    <div class="btn-wrapper">
+                        <VBtn
+                            type="submit"
+                            class="btn capitalize-text"
+                            @click.prevent="createOfficer"
+                        >
+                            Register Officer
+                        </VBtn>
+                    </div>
+                </VForm>
             </div>
         </div>
+    </div>
 </template>
 
 <!-- Stylesheet -->
 <style scoped>
-
 .wrapper {
     background: var(--vt-c-white);
     overflow: auto;
@@ -195,11 +187,11 @@ const createOfficer = async () => {
     margin-bottom: 3%;
 }
 
-.header-text{
+.header-text {
     margin-bottom: 3%;
 }
 
-.info-fields-wrapper{
+.info-fields-wrapper {
     padding: 3%;
     padding-top: 0%;
     /* border: 1px solid black; */
@@ -211,7 +203,6 @@ const createOfficer = async () => {
     margin-bottom: 1%;
     margin-left: 3%;
     margin-right: 3%;
-
 }
 
 .label {
@@ -241,7 +232,6 @@ const createOfficer = async () => {
 .btn:hover {
     background: var(--vt-c-blue-dark);
 }
-
 
 .btn-wrapper {
     margin-top: 2%;
