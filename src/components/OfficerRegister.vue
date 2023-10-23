@@ -15,6 +15,14 @@ const form = ref(null)
 const errorMessage = ref('')
 const errorAlert = ref(false)
 
+// Props
+const props = defineProps({
+    addToOfficers: {
+        type: Function,
+        required: true
+    }
+})
+
 // Define methods
 const createOfficer = async () => {
     // Validate form
@@ -51,6 +59,19 @@ const createOfficer = async () => {
     }
 
     errorMessage.value = ''
+    errorAlert.value = false
+
+    // Add to officers
+    props.addToOfficers({
+        uuid,
+        username: username.value,
+        role: role.value,
+        name: {
+            given: given_name.value,
+            last: last_name.value
+        }
+    })
+
     // Reset form
     form.value.reset()
 }

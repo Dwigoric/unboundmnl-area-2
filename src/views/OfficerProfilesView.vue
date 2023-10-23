@@ -1,6 +1,6 @@
 <script setup>
 // Import Packages
-import { ref, onMounted } from 'vue'
+import { reactive, onMounted } from 'vue'
 
 // Import Components
 import NavigationDrawer from '../components/NavigationDrawer.vue'
@@ -12,6 +12,9 @@ import OfficerProfileBtn from '../components/OfficerProfileBtn.vue'
 
 // Important Constants
 import { API_URL } from '../constants'
+
+// Define reactive variables
+const officers = reactive([])
 
 // Grab token from cookies
 const { token } = window.$cookies.get('credentials')
@@ -29,20 +32,18 @@ async function getAllOfficers() {
         const officersResponse = await response.json()
         const officersArray = officersResponse.officers
         console.log('Fetched officers:', officersArray)
-        return officersArray
+        addToOfficers(...officersArray)
     } catch (error) {
         console.error('Error: ', error)
     }
 }
 
-// Create reactive list of officers
-const officers = ref([])
+function addToOfficers(...newOfficers) {
+    officers.push(...newOfficers)
+}
 
 // Upon loading the page
-onMounted(async () => {
-    // Grab all officers
-    officers.value = await getAllOfficers()
-})
+onMounted(getAllOfficers)
 </script>
 
 <template>
@@ -72,7 +73,7 @@ onMounted(async () => {
                         <v-text-field
                             prepend-inner-icon="mdi-magnify"
                             label="Search Officer"
-                            clearable
+                            clearable=""
                         />
                     </div>
 
@@ -105,7 +106,7 @@ onMounted(async () => {
                                         </v-row>
                                     </v-container>
 
-                                    <OfficerRegister />
+                                    <OfficerRegister :add-to-officers="addToOfficers" />
                                 </v-card>
                             </template>
                         </v-dialog>
