@@ -1,3 +1,13 @@
+<script setup>
+// Import vue components
+import NavigationDrawer from '../components/NavigationDrawer.vue'
+import UserProfile from '../components/UserProfile.vue'
+import NotificationBtn from '../components/NotificationBtn.vue'
+import ContentBlock from '../components/ContentBlock.vue'
+import MemberProfileRegister from '../components/MemberProfileRegister.vue'
+
+</script>
+
 <template>
     <div class="bg-off-white d-flex px-4 py-2">
         <NavigationDrawer />
@@ -82,15 +92,7 @@
     </div>
 </template>
 
-<script setup>
-// Import vue components
-import NavigationDrawer from '../components/NavigationDrawer.vue'
-import UserProfile from '../components/UserProfile.vue'
-import NotificationBtn from '../components/NotificationBtn.vue'
-import ContentBlock from '../components/ContentBlock.vue'
-import MemberProfileRegister from '../components/MemberProfileRegister.vue'
 
-</script>
 
 <style scoped>
 .dashboard-top {
