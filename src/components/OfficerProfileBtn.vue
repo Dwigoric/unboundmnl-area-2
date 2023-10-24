@@ -83,6 +83,7 @@ import DeletePrompt from '../components/DeletePrompt.vue'
                                     <v-card 
                                         close-on-back 
                                         contained
+                                        class="form-wrapper" 
                                         >
                                         
                                         <v-container>

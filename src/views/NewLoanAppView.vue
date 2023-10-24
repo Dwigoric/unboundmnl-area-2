@@ -4,6 +4,8 @@ import UserProfile from '../components/UserProfile.vue'
 import NotificationBtn from '../components/NotificationBtn.vue';
 import ContentBlock from '../components/ContentBlock.vue';
 import LoanApplicationForm from '../components/LoanApplicationForm.vue'
+import StepCounter from '../components/StepCounter.vue'
+import LoanApplicationSearch from '../components/LoanApplicationSearch.vue'
 </script>
 
 <template>
@@ -27,10 +29,24 @@ import LoanApplicationForm from '../components/LoanApplicationForm.vue'
                 <!-- Main Dashboard Body -->
                 <div class="dashboard-body d-flex flex-column h-100 py-4">
                     <h2>Create a New Loan Application</h2>
+                    <div class="dashboard-body d-flex flex-column h-100 py-4">
+                        <ContentBlock :width="100" :height="100" :unit="'%'" :bg-color="'#FFF'">
+                            <!-- TODO: Change the 'step' to which step the process is in to reflect in the progress bar -->
+                            <StepCounter 
+                                :step="1"
+                            />
+                        </ContentBlock>
 
-                    <ContentBlock :width="100" :height="102" :unit="'%'" :bg-color="'#FFF'">
-                        <LoanApplicationForm />
-                    </ContentBlock>
+                        <!-- TODO: This should only be present in Step 1 -->
+                        <ContentBlock :width="100" :height="100" :unit="'%'" :bg-color="'#FFF'">
+                            <LoanApplicationSearch />
+                        </ContentBlock>
+
+                        <!-- TODO: This should only be present in Step 2 -->
+                        <ContentBlock :width="100" :height="100" :unit="'%'" :bg-color="'#FFF'">
+                            <LoanApplicationForm />
+                        </ContentBlock>
+                    </div>
                 </div>
             </div>
         </div>

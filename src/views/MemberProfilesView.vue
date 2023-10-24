@@ -89,7 +89,6 @@ import UserProfile from '../components/UserProfile.vue'
 import NotificationBtn from '../components/NotificationBtn.vue'
 import ContentBlock from '../components/ContentBlock.vue'
 import MemberProfileRegister from '../components/MemberProfileRegister.vue'
-import { ref } from 'vue'
 
 </script>
 

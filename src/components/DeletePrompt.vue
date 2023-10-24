@@ -19,10 +19,11 @@
 <style scoped>
 
 .wrapper {
-    margin: 6%;
+    padding: 6%;
+    background-color: var(--vt-c-white);
 }
 .header {
-    margin-bottom: 9%;
+    margin-bottom: 7%;
     
 }
 

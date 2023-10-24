@@ -470,6 +470,10 @@ const registerUser = async function () {
     padding-bottom: 2%;
     overflow: auto;
 }
+
+.form-wrapper {
+    background-color: var(--vt-c-white);
+}
 .header {
     background-color: var(--vt-c-white-off);
     width: 100%;

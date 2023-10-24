@@ -552,9 +552,9 @@ const changeLoanRange = function() {
                 </VAlert>
 
                 <div class="btn-wrapper">
-                    <VBtn type="submit" class="btn capitalize-text" @click.prevent="registerUser"
-                        >Create User Profile</VBtn>
-                    >
+                    <VBtn type="submit" class="btn capitalize-text" @click.prevent="registerUser">
+                        Create User Profile
+                    </VBtn>
                 </div>
             </VForm>
         </div>
