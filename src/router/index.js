@@ -32,7 +32,7 @@ const router = createRouter({
             }
         },
         {
-            path: '/memberProfiles',
+            path: '/member-profiles',
             name: 'Member Profiles View',
             component: MemberProfilesView,
             beforeEnter: (to, from, next) => {
@@ -42,7 +42,7 @@ const router = createRouter({
             }
         },
         {
-            path: '/officerProfiles',
+            path: '/officer-profiles',
             name: 'Officer Register',
             component: OfficerProfilesView,
             beforeEnter: (to, from, next) => {
@@ -52,7 +52,7 @@ const router = createRouter({
             }
         },
         {
-            path: '/newLoanApplication',
+            path: '/new-loan-application',
             name: 'New Loan Application',
             component: NewLoanApplication,
             beforeEnter: (to, from, next) => {
