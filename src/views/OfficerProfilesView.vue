@@ -71,22 +71,14 @@ onMounted(getAllOfficers)
                 <div class="upper-wrapper">
                     <!-- Search bar -->
                     <div class="search-wrapper">
-                        <v-text-field
-                            prepend-inner-icon="mdi-magnify"
-                            label="Search Officer"
-                            clearable=""
-                        />
+                        <v-text-field prepend-inner-icon="mdi-magnify" label="Search Officer" clearable="" />
                     </div>
 
                     <div class="btn-wrapper" v-if="type === 'admin'">
                         <v-dialog width="900">
                             <template v-slot:activator="{ props }">
                                 <!-- Create Officer Profile Button -->
-                                <v-btn
-                                    class="btn capitalize-text"
-                                    v-bind="props"
-                                    text="Create Officer Profile"
-                                >
+                                <v-btn class="btn capitalize-text" v-bind="props" text="Create Officer Profile">
                                 </v-btn>
                             </template>
 
@@ -96,22 +88,16 @@ onMounted(getAllOfficers)
                                     <v-container>
                                         <v-row justify="end">
                                             <v-card-actions>
-                                                <v-btn
-                                                    class="ma-2 capitalize-text"
-                                                    color="var(--vt-c-blue)"
-                                                    @click="isActive.value = false"
-                                                    icon="mdi-close"
-                                                >
+                                                <v-btn class="ma-2 capitalize-text" color="var(--vt-c-blue)"
+                                                    @click="isActive.value = false" icon="mdi-close">
                                                 </v-btn>
                                             </v-card-actions>
                                         </v-row>
                                     </v-container>
 
                                     <!-- TODO: officerAction must be 'Register' -->
-                                    <OfficerRegister
-                                        :add-to-officers="addToOfficers"
-                                        :close-dialog="() => (isActive.value = false)"
-                                    />
+                                    <OfficerRegister :add-to-officers="addToOfficers"
+                                        :close-dialog="() => (isActive.value = false)" />
                                 </v-card>
                             </template>
                         </v-dialog>
@@ -124,16 +110,9 @@ onMounted(getAllOfficers)
                 -->
                 <ContentBlock :width="100" :height="100" :unit="'%'" :bg-color="'#FFF'">
                     <!-- Render list of officers-->
-                    <div
-                        v-for="officer in officers"
-                        :key="officer.uuid"
-                        class="officer-list-box d-flex flex-column"
-                    >
-                        <OfficerProfileBtn
-                            :givenName="officer.name.given"
-                            :lastName="officer.name.last"
-                            :username="officer.username"
-                        />
+                    <div v-for="officer in officers" :key="officer.uuid" class="officer-list-box d-flex flex-column">
+                        <OfficerProfileBtn :givenName="officer.name.given" :lastName="officer.name.last"
+                            :username="officer.username" />
                     </div>
                 </ContentBlock>
             </div>
@@ -173,6 +152,7 @@ onMounted(getAllOfficers)
 
     /* border: 1px solid black; */
 }
+
 .search-wrapper {
     display: flex;
     width: 85%;
@@ -204,6 +184,7 @@ onMounted(getAllOfficers)
 .btn:hover {
     background: var(--vt-c-blue-dark);
 }
+
 .form-wrapper {
     background-color: var(--vt-c-white-off);
 }

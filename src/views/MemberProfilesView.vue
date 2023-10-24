@@ -5,7 +5,35 @@ import UserProfile from '../components/UserProfile.vue'
 import NotificationBtn from '../components/NotificationBtn.vue'
 import ContentBlock from '../components/ContentBlock.vue'
 import MemberProfileRegister from '../components/MemberProfileRegister.vue'
+import UserProfileBtn from '../components/UserProfileBtn.vue'
 
+// Import Packages
+import { reactive, onMounted } from 'vue'
+
+import { API_URL } from '../constants'
+
+const reactiveData = reactive({
+    users: []
+})
+
+/**
+ * Grabs all officers registered in the database.
+ */
+async function getAllUsers() {
+    const params = new URLSearchParams();
+    params.set('username', '')
+
+    try {
+        const response = await fetch(`${API_URL}/users/search?${params}`)
+        const jsonResponse = await response.json()
+        reactiveData.users = jsonResponse
+    } catch (e) {
+        console.error(e)
+    }
+}
+
+// Upon loading the page
+onMounted(getAllUsers)
 </script>
 
 <template>
@@ -25,7 +53,7 @@ import MemberProfileRegister from '../components/MemberProfileRegister.vue'
                     <UserProfile />
                 </div>
             </div>
-            
+
             <!-- Main Dashboard Body -->
             <div class="dashboard-body d-flex flex-column h-100 py-3">
                 <h2>Member Profiles</h2>
@@ -33,11 +61,7 @@ import MemberProfileRegister from '../components/MemberProfileRegister.vue'
                 <div class="upper-wrapper">
                     <!-- Search bar -->
                     <div class="search-wrapper">
-                        <v-text-field 
-                            prepend-inner-icon="mdi-magnify" 
-                            label="Search Member" 
-                            clearable
-                            />
+                        <v-text-field prepend-inner-icon="mdi-magnify" label="Search Member" clearable />
                     </div>
 
                     <div class="btn-wrapper">
@@ -45,31 +69,20 @@ import MemberProfileRegister from '../components/MemberProfileRegister.vue'
                             <template v-slot:activator="{ props }">
 
                                 <!-- Create Member Profile Button -->
-                                <v-btn 
-                                    class="btn capitalize-text"
-                                    v-bind="props" 
-                                    text="Create Member Profile"> 
+                                <v-btn class="btn capitalize-text" v-bind="props" text="Create Member Profile">
                                 </v-btn>
-                            
+
                             </template>
 
                             <!-- Form popup -->
                             <template v-slot:default="{ isActive }">
-                                <v-card 
-                                    close-on-back
-                                    contained   
-                                    class="form-wrapper"                                
-                                >
-                                
+                                <v-card close-on-back contained class="form-wrapper">
+
                                     <v-container>
                                         <v-row justify="end">
                                             <v-card-actions>
-                                                <v-btn
-                                                    class="ma-2 capitalize-text"
-                                                    color="var(--vt-c-blue)"
-                                                    @click="isActive.value = false"
-                                                    icon="mdi-close"
-                                                >
+                                                <v-btn class="ma-2 capitalize-text" color="var(--vt-c-blue)"
+                                                    @click="isActive.value = false" icon="mdi-close">
                                                 </v-btn>
                                             </v-card-actions>
                                         </v-row>
@@ -86,6 +99,11 @@ import MemberProfileRegister from '../components/MemberProfileRegister.vue'
 
                 <ContentBlock :width="100" :height="102" :unit="'%'" :bg-color="'#FFF'">
                     <!-- List of members -->
+                    <div v-for="user in reactiveData.users" :key="user.username"
+                        class="officer-list-box d-flex flex-column">
+                        <UserProfileBtn :givenName="user.name.given" :lastName="user.name.last" />
+
+                    </div>
                 </ContentBlock>
             </div>
         </div>
