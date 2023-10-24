@@ -49,7 +49,55 @@ const rules = {
     required: (v) => !!v || 'This field is required'
 }
 
+const props = defineProps({
+    action: {
+        type: String,
+        default: () => 'register',
+        validator: (value) => {
+            return ['register', 'update'].includes(value)
+        }
+    },
+    autofill: {
+        type: Object,
+        default: () => {}
+    }
+})
+
+const submitForm = async function () {
+    console.log(props.action)
+
+    const validationResult = await form.value.validate()
+    const fn = props.action === 'update' ? updateUser : registerUser
+    if (validationResult.valid) {
+        await fn();
+    }
+}
+
 // Define methods
+const updateUser = async function () {
+    const validationResult = await form.value.validate()
+    if (validationResult.valid) {
+        const result = await fetch(API_URL + '/users/update', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(userData)
+        })
+
+        errorMessage.value = ''
+
+        if (result.status === 200) {
+            form.value.reset()
+        } else if (result.status === 400) {
+            const jsonRes = await result.json()
+            errorMessage.value = jsonRes.message
+            errorAlert.value = true
+        } else if (result.status === 500) {
+            errorMessage.value = 'Internal Server Error'
+            errorAlert.value = true
+        }
+    }
+}
+
 const registerUser = async function () {
     const validationResult = await form.value.validate()
     if (validationResult.valid) {
@@ -73,6 +121,9 @@ const registerUser = async function () {
         }
     }
 }
+
+
+
 </script>
 
 <template>
@@ -90,13 +141,8 @@ const registerUser = async function () {
                         <div>* Username:</div>
                     </div>
 
-                    <VTextField
-                        class="username-pw-input"
-                        v-model="userData.username"
-                        id="login-username"
-                        :rules="[rules.required]"
-                        label="Enter Username"
-                    />
+                    <VTextField class="username-pw-input" v-model="userData.username" id="login-username"
+                        :rules="[rules.required]" label="Enter Username" />
                 </div>
 
                 <!-- First Name -->
@@ -105,13 +151,8 @@ const registerUser = async function () {
                         <div>* First name:</div>
                     </div>
 
-                    <VTextField
-                        class="username-pw-input"
-                        v-model="userData.name.given"
-                        id="login-first-name"
-                        :rules="[rules.required]"
-                        label="Enter First Name"
-                    />
+                    <VTextField class="username-pw-input" v-model="userData.name.given" id="login-first-name"
+                        :rules="[rules.required]" label="Enter First Name" />
                 </div>
 
                 <!-- Middle Name -->
@@ -120,12 +161,8 @@ const registerUser = async function () {
                         <div>* Middle name:</div>
                     </div>
 
-                    <VTextField
-                        class="username-pw-input"
-                        v-model="userData.name.middle"
-                        id="login-middle-name"
-                        label="Enter Middle Name"
-                    />
+                    <VTextField class="username-pw-input" v-model="userData.name.middle" id="login-middle-name"
+                        label="Enter Middle Name" />
                 </div>
 
                 <!-- Last Name -->
@@ -134,13 +171,8 @@ const registerUser = async function () {
                         <div>* Last name:</div>
                     </div>
 
-                    <VTextField
-                        class="username-pw-input"
-                        v-model="userData.name.last"
-                        id="login-last-name"
-                        :rules="[rules.required]"
-                        label="Enter Last Name"
-                    />
+                    <VTextField class="username-pw-input" v-model="userData.name.last" id="login-last-name"
+                        :rules="[rules.required]" label="Enter Last Name" />
                 </div>
 
                 <!-- Date of Birth -->
@@ -149,14 +181,8 @@ const registerUser = async function () {
                         <div>* Date of Birth:</div>
                     </div>
 
-                    <VTextField
-                        class="username-pw-input"
-                        v-model="userData.birthday"
-                        id="login-birthday"
-                        type="date"
-                        :rules="[rules.required]"
-                        label="Select Date of Birth"
-                    />
+                    <VTextField class="username-pw-input" v-model="userData.birthday" id="login-birthday" type="date"
+                        :rules="[rules.required]" label="Select Date of Birth" />
                 </div>
 
                 <!-- Place of Birth -->
@@ -165,13 +191,8 @@ const registerUser = async function () {
                         <div>* Place of Birth:</div>
                     </div>
 
-                    <VTextField
-                        class="username-pw-input"
-                        v-model="userData.birthplace"
-                        id="login-birthplace"
-                        :rules="[rules.required]"
-                        label="Enter Place of Birth"
-                    />
+                    <VTextField class="username-pw-input" v-model="userData.birthplace" id="login-birthplace"
+                        :rules="[rules.required]" label="Enter Place of Birth" />
                 </div>
 
                 <!-- Gender -->
@@ -181,14 +202,8 @@ const registerUser = async function () {
                         <div>* Gender:</div>
                     </div>
 
-                    <VSelect
-                        class="username-pw-input"
-                        v-model="userData.gender"
-                        :items="['M', 'F']"
-                        id="login-gender"
-                        :rules="[rules.required]"
-                        label="Select Gender"
-                    />
+                    <VSelect class="username-pw-input" v-model="userData.gender" :items="['M', 'F']" id="login-gender"
+                        :rules="[rules.required]" label="Select Gender" />
                 </div>
 
                 <!-- TIN Number -->
@@ -197,13 +212,8 @@ const registerUser = async function () {
                         <div>* TIN Number:</div>
                     </div>
 
-                    <VTextField
-                        class="username-pw-input"
-                        v-model="userData.tin_no"
-                        id="login-tin-number"
-                        :rules="[rules.required]"
-                        label="Enter TIN Number (XXX-XXX-XXX-XXX)"
-                    />
+                    <VTextField class="username-pw-input" v-model="userData.tin_no" id="login-tin-number"
+                        :rules="[rules.required]" label="Enter TIN Number (XXX-XXX-XXX-XXX)" />
                 </div>
 
                 <!-- Civil Status -->
@@ -212,14 +222,8 @@ const registerUser = async function () {
                         <div>* Civil Status:</div>
                     </div>
 
-                    <VSelect
-                        class="username-pw-input"
-                        v-model="userData.civil_status"
-                        :items="['Single', 'Married']"
-                        id="login-civil-status"
-                        :rules="[rules.required]"
-                        label="Select Civil Status"
-                    />
+                    <VSelect class="username-pw-input" v-model="userData.civil_status" :items="['Single', 'Married']"
+                        id="login-civil-status" :rules="[rules.required]" label="Select Civil Status" />
                 </div>
 
                 <!-- Contact Number -->
@@ -228,13 +232,8 @@ const registerUser = async function () {
                         <div>* Contact Number:</div>
                     </div>
 
-                    <VTextField
-                        class="username-pw-input"
-                        v-model="userData.contact_no"
-                        id="login-contact-number"
-                        :rules="[rules.required]"
-                        label="Enter Contact Number"
-                    />
+                    <VTextField class="username-pw-input" v-model="userData.contact_no" id="login-contact-number"
+                        :rules="[rules.required]" label="Enter Contact Number" />
                 </div>
 
                 <!-- Monthly Income -->
@@ -243,14 +242,8 @@ const registerUser = async function () {
                         <div>* Monthly Income:</div>
                     </div>
 
-                    <VTextField
-                        class="username-pw-input"
-                        v-model="userData.monthly_income"
-                        id="login-monthly-income"
-                        type="number"
-                        :rules="[rules.required]"
-                        label="Enter Monthly Income"
-                    />
+                    <VTextField class="username-pw-input" v-model="userData.monthly_income" id="login-monthly-income"
+                        type="number" :rules="[rules.required]" label="Enter Monthly Income" />
                 </div>
 
                 <div class="row-tab">
@@ -258,13 +251,8 @@ const registerUser = async function () {
                         <div>* Occupation/Source of Income:</div>
                     </div>
 
-                    <VTextField
-                        class="username-pw-input"
-                        v-model="userData.occupation"
-                        id="login-occupation"
-                        :rules="[rules.required]"
-                        label="Enter Occupation/Source of Income"
-                    />
+                    <VTextField class="username-pw-input" v-model="userData.occupation" id="login-occupation"
+                        :rules="[rules.required]" label="Enter Occupation/Source of Income" />
                 </div>
 
                 <!-- Borrower's Residence -->
@@ -275,13 +263,8 @@ const registerUser = async function () {
                         <div>* Street:</div>
                     </div>
 
-                    <VTextField
-                        class="username-pw-input"
-                        v-model="userData.address.street"
-                        id="login-address"
-                        :rules="[rules.required]"
-                        label="Enter Street"
-                    />
+                    <VTextField class="username-pw-input" v-model="userData.address.street" id="login-address"
+                        :rules="[rules.required]" label="Enter Street" />
                 </div>
 
                 <div class="row-tab">
@@ -289,13 +272,8 @@ const registerUser = async function () {
                         <div>* Barangay:</div>
                     </div>
 
-                    <VTextField
-                        class="username-pw-input"
-                        v-model="userData.address.barangay"
-                        id="login-address"
-                        :rules="[rules.required]"
-                        label="Enter Barangay"
-                    />
+                    <VTextField class="username-pw-input" v-model="userData.address.barangay" id="login-address"
+                        :rules="[rules.required]" label="Enter Barangay" />
                 </div>
 
                 <div class="row-tab">
@@ -303,13 +281,8 @@ const registerUser = async function () {
                         <div>* City:</div>
                     </div>
 
-                    <VTextField
-                        class="username-pw-input"
-                        v-model="userData.address.city"
-                        id="login-address"
-                        :rules="[rules.required]"
-                        label="Enter City"
-                    />
+                    <VTextField class="username-pw-input" v-model="userData.address.city" id="login-address"
+                        :rules="[rules.required]" label="Enter City" />
                 </div>
 
                 <div class="row-tab">
@@ -317,13 +290,8 @@ const registerUser = async function () {
                         <div>* Province:</div>
                     </div>
 
-                    <VTextField
-                        class="username-pw-input"
-                        v-model="userData.address.province"
-                        id="login-address"
-                        :rules="[rules.required]"
-                        label="Enter Province"
-                    />
+                    <VTextField class="username-pw-input" v-model="userData.address.province" id="login-address"
+                        :rules="[rules.required]" label="Enter Province" />
                 </div>
 
                 <!-- Spouse's Information -->
@@ -334,13 +302,8 @@ const registerUser = async function () {
                         <div>* Spouse's First Name:</div>
                     </div>
 
-                    <VTextField
-                        class="username-pw-input"
-                        v-model="userData.spouse.name.given"
-                        id="login-spouse-first-name"
-                        :rules="[rules.required]"
-                        label="Enter Spouse's First Name"
-                    />
+                    <VTextField class="username-pw-input" v-model="userData.spouse.name.given" id="login-spouse-first-name"
+                        :rules="[rules.required]" label="Enter Spouse's First Name" />
                 </div>
 
                 <div class="row-tab">
@@ -348,12 +311,8 @@ const registerUser = async function () {
                         <div>* Spouse's Middle Name:</div>
                     </div>
 
-                    <VTextField
-                        class="username-pw-input"
-                        v-model="userData.spouse.name.middle"
-                        id="login-spouse-middle-name"
-                        label="Enter Spouse's Middle Name"
-                    />
+                    <VTextField class="username-pw-input" v-model="userData.spouse.name.middle"
+                        id="login-spouse-middle-name" label="Enter Spouse's Middle Name" />
                 </div>
 
                 <div class="row-tab">
@@ -361,13 +320,8 @@ const registerUser = async function () {
                         <div>* Spouse's Last Name:</div>
                     </div>
 
-                    <VTextField
-                        class="username-pw-input"
-                        v-model="userData.spouse.name.last"
-                        id="login-spouse-last-name"
-                        :rules="[rules.required]"
-                        label="Enter Spouse's Last Name"
-                    />
+                    <VTextField class="username-pw-input" v-model="userData.spouse.name.last" id="login-spouse-last-name"
+                        :rules="[rules.required]" label="Enter Spouse's Last Name" />
                 </div>
 
                 <div class="row-tab">
@@ -375,14 +329,8 @@ const registerUser = async function () {
                         <div>* Spouse's Date of Birth:</div>
                     </div>
 
-                    <VTextField
-                        class="username-pw-input"
-                        v-model="userData.spouse.birthday"
-                        id="login-spouse-birthday"
-                        :rules="[rules.required]"
-                        type="date"
-                        label="Select Spouse's Date of Birth"
-                    />
+                    <VTextField class="username-pw-input" v-model="userData.spouse.birthday" id="login-spouse-birthday"
+                        :rules="[rules.required]" type="date" label="Select Spouse's Date of Birth" />
                 </div>
 
                 <div class="row-tab">
@@ -390,13 +338,8 @@ const registerUser = async function () {
                         <div>* Spouse's Place of Birth:</div>
                     </div>
 
-                    <VTextField
-                        class="username-pw-input"
-                        v-model="userData.spouse.birthplace"
-                        id="login-spouse-birthplace"
-                        :rules="[rules.required]"
-                        label="Enter Spouse's Place of Birth"
-                    />
+                    <VTextField class="username-pw-input" v-model="userData.spouse.birthplace" id="login-spouse-birthplace"
+                        :rules="[rules.required]" label="Enter Spouse's Place of Birth" />
                 </div>
 
                 <div class="row-tab">
@@ -404,30 +347,17 @@ const registerUser = async function () {
                         <div>* Spouse's Contact Number:</div>
                     </div>
 
-                    <VTextField
-                        class="username-pw-input"
-                        v-model="userData.spouse.contact_no"
-                        id="login-spouse-contact-number"
-                        :rules="[rules.required]"
-                        label="Enter Spouse's Contact Number"
-                    />
+                    <VTextField class="username-pw-input" v-model="userData.spouse.contact_no"
+                        id="login-spouse-contact-number" :rules="[rules.required]" label="Enter Spouse's Contact Number" />
                 </div>
 
-                <VAlert
-                    v-if="errorAlert"
-                    v-model="errorAlert"
-                    type="error"
-                    closable=""
-                    density="comfortable"
-                    elevation="5"
-                >
+                <VAlert v-if="errorAlert" v-model="errorAlert" type="error" closable="" density="comfortable" elevation="5">
                     {{ errorMessage }}
                 </VAlert>
 
                 <div class="btn-wrapper">
-                    <VBtn type="submit" class="btn capitalize-text" @click.prevent="registerUser"
-                        >Create Member Profile</VBtn
-                    >
+                    <VBtn type="submit" class="btn capitalize-text" @click.prevent="submitForm">Create Member Profile
+                    </VBtn>
                 </div>
             </VForm>
         </div>
@@ -474,6 +404,7 @@ const registerUser = async function () {
 .form-wrapper {
     background-color: var(--vt-c-white);
 }
+
 .header {
     background-color: var(--vt-c-white-off);
     width: 100%;
@@ -489,14 +420,14 @@ const registerUser = async function () {
     text-align: center;
 }
 
-.header-text {
-}
+.header-text {}
 
 .header2 {
     font-size: 1.2rem;
     margin-bottom: 3%;
     font-weight: bold;
 }
+
 .row-tab {
     /* border: 1px solid black; */
     display: flex;

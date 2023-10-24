@@ -1,10 +1,11 @@
 <script setup>
-import OfficerRegister from '../components/OfficerRegister.vue'
+import MemberProfileRegister from '../components/MemberProfileRegister.vue'
 import DeletePrompt from '../components/DeletePrompt.vue'
 
 defineProps({
     givenName: String,
-    lastName: String
+    lastName: String,
+    username: String
 });
 </script>
 
@@ -22,6 +23,7 @@ defineProps({
                 <!-- Information -->
                 <div class="d-flex flex-column">
                     <h2 class="sm='0'">{{ lastName }}, {{ givenName }}</h2>
+                    <div class="memberdiv">{{ username }}</div>
                 </div>
 
                 <!-- Actions -->
@@ -48,8 +50,7 @@ defineProps({
                                         </v-row>
                                     </v-container>
 
-                                    <!-- TODO: officerAction must bn 'Update' -->
-                                    <!-- <OfficerRegister :officerAction="Update"/> -->
+                                    <MemberProfileRegister :action="`update`" />
                                 </v-card>
                             </template>
                         </v-dialog>
