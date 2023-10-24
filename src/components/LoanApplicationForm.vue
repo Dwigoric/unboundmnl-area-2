@@ -57,7 +57,7 @@ const loanData = reactive({
     amount: 0,
     minAmount: 0,
     maxAmount: 0
-});
+})
 
 // Define Loan types
 const loanTypes = reactive([
@@ -68,21 +68,21 @@ const loanTypes = reactive([
     { title: 'House Construction/Repairs Loan', value: 'construction' },
     { title: 'Emergency/Medical Loan', value: 'emergency' },
     { title: 'Commodity/Appliance Loan', value: 'commodity' }
-]);
+])
 
 // Define loan ranges depending on type (TENTATIVE VALUES)
 const loanRanges = {
-    education: {min: 100, max: 5000},
-    personal: {min: 100, max: 2500},
-    micro: {min: 100, max: 1000},
-    utilities: {min: 100, max: 3000},
-    construction: {min: 100, max: 6000},
-    emergency: {min: 100, max: 7000},
-    commodity: {min: 100, max: 2500}
-};
+    education: { min: 100, max: 5000 },
+    personal: { min: 100, max: 2500 },
+    micro: { min: 100, max: 1000 },
+    utilities: { min: 100, max: 3000 },
+    construction: { min: 100, max: 6000 },
+    emergency: { min: 100, max: 7000 },
+    commodity: { min: 100, max: 2500 }
+}
 
 // Define methods
-const registerUser = async function () {
+const prefillForm = async function () {
     const { valid } = await form.value.validate()
     if (valid) {
         const result = await fetch(API_URL + '/users/add', {
@@ -107,26 +107,24 @@ const registerUser = async function () {
 }
 
 // Function that changes loan range depending on type of loan selected.
-const changeLoanRange = function() {
+const changeLoanRange = function () {
     // Stores a string indicating the loan type selected
-    const loanType = loanData.type;
+    const loanType = loanData.type
 
     // Queries the loanRanges object for the corresponding minimum and maximum amounts.
-    const min = loanRanges[loanType].min;
-    const max = loanRanges[loanType].max;
+    const min = loanRanges[loanType].min
+    const max = loanRanges[loanType].max
     // Then modifies the minimum and maximum amounts accordingly
-    loanData.amount = min;
-    loanData.minAmount = min;
-    loanData.maxAmount = max;
+    loanData.amount = min
+    loanData.minAmount = min
+    loanData.maxAmount = max
 }
-
 </script>
 
 <template>
     <div class="info-fields">
         <div class="form-wrapper">
             <VForm id="login-form" ref="form">
-
                 <div class="header2">Loan Information</div>
 
                 <!-- Loan Classification -->
@@ -149,9 +147,8 @@ const changeLoanRange = function() {
                 <div class="row-tab">
                     <div class="label">
                         <div>* Term:</div>
-
                     </div>
-                    <VTextField 
+                    <VTextField
                         class="username-pw-input"
                         v-model="loanData.term"
                         :rules="[rules.required]"
@@ -181,9 +178,8 @@ const changeLoanRange = function() {
                         <div>* Amount:</div>
                     </div>
 
-                    <div style="width:68%;">
-                        
-                        <VTextField 
+                    <div style="width: 68%">
+                        <VTextField
                             v-model="loanData.amount"
                             id="loan-amount"
                             :rules="[rules.required]"
@@ -192,9 +188,8 @@ const changeLoanRange = function() {
                             :min="loanData.minAmount"
                             :max="loanData.maxAmount"
                             :step="100"
-
                         />
-                        <VSlider 
+                        <VSlider
                             v-model="loanData.amount"
                             :min="loanData.minAmount"
                             :max="loanData.maxAmount"
@@ -202,10 +197,13 @@ const changeLoanRange = function() {
                             thumb-label
                             :thumb-size="20"
                         >
-
                             <!-- Only showcase loanRange if a loan type is selected. -->
-                            <template v-if="loanData.type !== ''" #prepend>{{ loanData.minAmount }}</template>
-                            <template v-if="loanData.type !== ''" #append>{{ loanData.maxAmount }}</template>
+                            <template v-if="loanData.type !== ''" #prepend>{{
+                                loanData.minAmount
+                            }}</template>
+                            <template v-if="loanData.type !== ''" #append>{{
+                                loanData.maxAmount
+                            }}</template>
                         </VSlider>
                     </div>
                 </div>
@@ -552,8 +550,8 @@ const changeLoanRange = function() {
                 </VAlert>
 
                 <div class="btn-wrapper">
-                    <VBtn type="submit" class="btn capitalize-text" @click.prevent="registerUser">
-                        Create User Profile
+                    <VBtn type="submit" class="btn capitalize-text" @click.prevent="prefillForm">
+                        Create Loan Application
                     </VBtn>
                 </div>
             </VForm>

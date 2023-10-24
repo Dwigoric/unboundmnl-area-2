@@ -53,7 +53,7 @@ const logout = () => {
                     >
 
                     <v-list-item
-                        to="/new-loan-application"
+                        to="/new-loan-application/member-input"
                         link=""
                         prepend-icon="mdi-file-document-edit-outline"
                         rounded="lg"

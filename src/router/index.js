@@ -7,6 +7,8 @@ import DashboardMain from '../views/DashboardMain.vue'
 import MemberProfilesView from '../views/MemberProfilesView.vue'
 import OfficerProfilesView from '../views/OfficerProfilesView.vue'
 import NewLoanApplication from '../views/NewLoanAppView.vue'
+import LoanApplicationSearch from '../components/LoanApplicationSearch.vue'
+import LoanApplicationForm from '../components/LoanApplicationForm.vue'
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -55,6 +57,18 @@ const router = createRouter({
             path: '/new-loan-application',
             name: 'New Loan Application',
             component: NewLoanApplication,
+            children: [
+                {
+                    path: 'member-input',
+                    name: 'Member Input',
+                    component: LoanApplicationSearch
+                },
+                {
+                    path: 'application-details',
+                    name: 'Application Details',
+                    component: LoanApplicationForm
+                }
+            ],
             beforeEnter: (to, from, next) => {
                 const credentials = window.$cookies.get('credentials')
                 if (!credentials || !credentials.token) next({ name: 'Login' })

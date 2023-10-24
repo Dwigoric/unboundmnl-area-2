@@ -1,6 +1,14 @@
 <script setup>
+// Import router
+import router from '../router'
+
+// Import components
 import MemberProfileRegister from '../components/MemberProfileRegister.vue'
 
+// Define methods
+const sendToAppDetails = () => {
+    router.push({ name: 'Application Details' })
+}
 </script>
 
 <template>
@@ -19,26 +27,20 @@ import MemberProfileRegister from '../components/MemberProfileRegister.vue'
         <div class="create-member">
             <v-dialog width="1200">
                 <template v-slot:activator="{ props }">
-
                     <!-- Create Member Profile Button -->
-                    <v-btn 
+                    <v-btn
                         class="capitalize-text mt-2"
-                        v-bind="props" 
+                        v-bind="props"
                         variant="plain"
                         text="New Member? Click here to create Member Profile instead"
-                        flat> 
+                        flat=""
+                    >
                     </v-btn>
-            
                 </template>
 
                 <!-- Form popup -->
                 <template v-slot:default="{ isActive }">
-                    <v-card 
-                        close-on-back
-                        contained   
-                        class="form-wrapper"                                
-                    >
-                
+                    <v-card close-on-back contained class="form-wrapper">
                         <v-container>
                             <v-row justify="end">
                                 <v-card-actions>
@@ -54,24 +56,20 @@ import MemberProfileRegister from '../components/MemberProfileRegister.vue'
                         </v-container>
 
                         <MemberProfileRegister />
-
                     </v-card>
                 </template>
-
             </v-dialog>
         </div>
 
         <div class="btn-wrapper">
-            <VBtn type="submit" class="btn capitalize-text" @click.prevent="registerUser">
+            <VBtn type="submit" class="btn capitalize-text" @click.prevent="sendToAppDetails">
                 Next
             </VBtn>
         </div>
     </div>
-
 </template>
 
 <style scoped>
-
 .wrapper {
     padding: 5%;
     padding-top: 2%;
@@ -116,5 +114,4 @@ import MemberProfileRegister from '../components/MemberProfileRegister.vue'
     background: var(--vt-c-blue-dark);
     text-decoration: underline;
 }
-
 </style>
