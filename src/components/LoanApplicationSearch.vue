@@ -5,6 +5,10 @@ import router from '../router'
 // Import components
 import MemberProfileRegister from '../components/MemberProfileRegister.vue'
 
+// Import stores
+import { useApplicationFormStore } from '../stores/applicationForm'
+const { setLoaneeId } = useApplicationFormStore() // Use the setLoaneeId method to set the loanee UUID
+
 // Define methods
 const sendToAppDetails = () => {
     router.push({ name: 'Application Details' })

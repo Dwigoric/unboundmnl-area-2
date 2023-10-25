@@ -9,6 +9,7 @@ import OfficerProfilesView from '../views/OfficerProfilesView.vue'
 import NewLoanApplication from '../views/NewLoanAppView.vue'
 import LoanApplicationSearch from '../components/LoanApplicationSearch.vue'
 import LoanApplicationForm from '../components/LoanApplicationForm.vue'
+import LoanApplicationFormExport from '../components/LoanApplicationFormExport.vue'
 
 // Import path name constants
 import { PATH_NAMES } from '../constants'
@@ -70,6 +71,11 @@ const router = createRouter({
                     path: PATH_NAMES.APP_FORM.APPLICATION_DETAILS,
                     name: 'Application Details',
                     component: LoanApplicationForm
+                },
+                {
+                    path: PATH_NAMES.APP_FORM.EXPORT_FORM,
+                    name: 'Export Application Form',
+                    component: LoanApplicationFormExport
                 }
             ],
             beforeEnter: (to, from, next) => {
