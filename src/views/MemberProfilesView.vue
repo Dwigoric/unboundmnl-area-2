@@ -20,6 +20,10 @@ const users = ref([])
  */
 async function getAllUsers() {
     const params = new URLSearchParams();
+
+    if (searchQuery.value === null) {
+        searchQuery.value = ''
+    }
     params.set('username', searchQuery.value)
 
     try {
