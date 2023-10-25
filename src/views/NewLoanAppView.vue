@@ -56,19 +56,12 @@ watch(
                 <h2>Create a New Loan Application</h2>
                 <div class="dashboard-body d-flex flex-column h-100 py-4">
                     <ContentBlock :width="100" :height="100" :unit="'%'" :bg-color="'#FFF'">
-                        <!-- TODO: Change the 'step' to which step the process is in to reflect in the progress bar -->
                         <StepCounter :step="step" />
                     </ContentBlock>
 
-                    <!-- TODO: This should only be present in Step 1 -->
                     <ContentBlock :width="100" :height="100" :unit="'%'" :bg-color="'#FFF'">
                         <RouterView />
                     </ContentBlock>
-
-                    <!-- TODO: This should only be present in Step 2 -->
-                    <!--<ContentBlock :width="100" :height="100" :unit="'%'" :bg-color="'#FFF'">-->
-                    <!--    <LoanApplicationForm />-->
-                    <!--</ContentBlock>-->
                 </div>
             </div>
         </div>
