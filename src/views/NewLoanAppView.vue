@@ -1,10 +1,35 @@
 <script setup>
+// Import packages
+import { ref, watch } from 'vue'
+import { useRoute } from 'vue-router'
+
 // Import components
 import NavigationDrawer from '../components/NavigationDrawer.vue'
 import UserProfile from '../components/UserProfile.vue'
 import NotificationBtn from '../components/NotificationBtn.vue'
 import ContentBlock from '../components/ContentBlock.vue'
 import StepCounter from '../components/StepCounter.vue'
+
+// Import path name constants
+import { PATH_NAMES } from '../constants'
+
+// Define reactive variables
+const step = ref('1')
+
+// Watch for route changes then change the step accordingly
+const route = useRoute()
+watch(
+    () => route.path,
+    (to) => {
+        if (to.endsWith(PATH_NAMES.APP_FORM.MEMBER_INPUT)) {
+            step.value = '1'
+        } else if (to.endsWith(PATH_NAMES.APP_FORM.APPLICATION_DETAILS)) {
+            step.value = '2'
+        } else if (to.endsWith(PATH_NAMES.APP_FORM.EXPORT_FORM)) {
+            step.value = '3'
+        }
+    }
+)
 </script>
 
 <template>
@@ -32,7 +57,7 @@ import StepCounter from '../components/StepCounter.vue'
                 <div class="dashboard-body d-flex flex-column h-100 py-4">
                     <ContentBlock :width="100" :height="100" :unit="'%'" :bg-color="'#FFF'">
                         <!-- TODO: Change the 'step' to which step the process is in to reflect in the progress bar -->
-                        <StepCounter :step="1" />
+                        <StepCounter :step="step" />
                     </ContentBlock>
 
                     <!-- TODO: This should only be present in Step 1 -->

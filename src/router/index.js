@@ -10,6 +10,9 @@ import NewLoanApplication from '../views/NewLoanAppView.vue'
 import LoanApplicationSearch from '../components/LoanApplicationSearch.vue'
 import LoanApplicationForm from '../components/LoanApplicationForm.vue'
 
+// Import path name constants
+import { PATH_NAMES } from '../constants'
+
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes: [
@@ -59,12 +62,12 @@ const router = createRouter({
             component: NewLoanApplication,
             children: [
                 {
-                    path: 'member-input',
+                    path: PATH_NAMES.APP_FORM.MEMBER_INPUT,
                     name: 'Member Input',
                     component: LoanApplicationSearch
                 },
                 {
-                    path: 'application-details',
+                    path: PATH_NAMES.APP_FORM.APPLICATION_DETAILS,
                     name: 'Application Details',
                     component: LoanApplicationForm
                 }
