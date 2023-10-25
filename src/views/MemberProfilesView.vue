@@ -8,31 +8,31 @@ import MemberProfileRegister from '../components/MemberProfileRegister.vue'
 import UserProfileBtn from '../components/UserProfileBtn.vue'
 
 // Import Packages
-import { reactive, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 
 import { API_URL } from '../constants'
 
-const reactiveData = reactive({
-    users: []
-})
+const searchQuery = ref('')
+const users = ref([])
 
 /**
  * Grabs all officers registered in the database.
  */
 async function getAllUsers() {
-    console.log("called")
-
     const params = new URLSearchParams();
-    params.set('username', '')
+    params.set('username', searchQuery.value)
 
     try {
         const response = await fetch(`${API_URL}/users/search?${params}`)
         const jsonResponse = await response.json()
-        reactiveData.users = jsonResponse
+        users.value = jsonResponse
     } catch (e) {
         console.error(e)
     }
 }
+
+// Refresh users listing when there is a change in the searchbar
+watch(searchQuery, getAllUsers)
 
 // Upon loading the page
 onMounted(getAllUsers)
@@ -63,7 +63,8 @@ onMounted(getAllUsers)
                 <div class="upper-wrapper">
                     <!-- Search bar -->
                     <div class="search-wrapper">
-                        <v-text-field prepend-inner-icon="mdi-magnify" label="Search Member" clearable />
+                        <v-text-field v-model="searchQuery" prepend-inner-icon="mdi-magnify" label="Search Member"
+                            clearable />
                     </div>
 
                     <div class="btn-wrapper">
@@ -101,9 +102,8 @@ onMounted(getAllUsers)
 
                 <ContentBlock :width="100" :height="102" :unit="'%'" :bg-color="'#FFF'">
                     <!-- List of members -->
-                    <div v-for="user in reactiveData.users" :key="user.username"
-                        class="officer-list-box d-flex flex-column">
-                        <UserProfileBtn :user="user" :onsubmit="getAllUsers"/>
+                    <div v-for="user in users" :key="user.username" class="officer-list-box d-flex flex-column">
+                        <UserProfileBtn :user="user" :onsubmit="getAllUsers" />
                     </div>
                 </ContentBlock>
             </div>
