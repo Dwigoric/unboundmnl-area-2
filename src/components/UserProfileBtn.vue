@@ -3,9 +3,7 @@ import MemberProfileRegister from '../components/MemberProfileRegister.vue'
 import DeletePrompt from '../components/DeletePrompt.vue'
 
 defineProps({
-    givenName: String,
-    lastName: String,
-    username: String
+    user: Object
 });
 </script>
 
@@ -22,8 +20,8 @@ defineProps({
 
                 <!-- Information -->
                 <div class="d-flex flex-column">
-                    <h2 class="sm='0'">{{ lastName }}, {{ givenName }}</h2>
-                    <div class="memberdiv">{{ username }}</div>
+                    <h2 class="sm='0'">{{ user.name.last }}, {{ user.name.given }}</h2>
+                    <div class="memberdiv">{{ user.username }}</div>
                 </div>
 
                 <!-- Actions -->
@@ -50,7 +48,7 @@ defineProps({
                                         </v-row>
                                     </v-container>
 
-                                    <MemberProfileRegister :action="`update`" />
+                                    <MemberProfileRegister :action="`update`" :autofill="user" />
                                 </v-card>
                             </template>
                         </v-dialog>

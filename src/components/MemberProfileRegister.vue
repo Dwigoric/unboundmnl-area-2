@@ -1,6 +1,6 @@
 <script setup>
 // Import packages
-import { ref, reactive } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
 
 // Import constants
 import { API_URL } from '../constants'
@@ -59,7 +59,7 @@ const props = defineProps({
     },
     autofill: {
         type: Object,
-        default: () => {}
+        default: () => null
     }
 })
 
@@ -73,11 +73,20 @@ const submitForm = async function () {
     }
 }
 
+const autofillFormIfPossible = function () {
+    if (props.autofill) {
+        let autofillData = { ...props.autofill }
+        autofillData.birthday = autofillData.birthday.substring(0, 10);
+        autofillData.spouse.birthday = autofillData.spouse.birthday.substring(0, 10);
+        Object.assign(userData, autofillData)
+    }
+}
+
 // Define methods
 const updateUser = async function () {
     const validationResult = await form.value.validate()
     if (validationResult.valid) {
-        const result = await fetch(API_URL + '/users/update', {
+        const result = await fetch(API_URL + '/users/edit', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(userData)
@@ -85,9 +94,9 @@ const updateUser = async function () {
 
         errorMessage.value = ''
 
-        if (result.status === 200) {
-            form.value.reset()
-        } else if (result.status === 400) {
+        // TODO: should alert the user on a successful edit
+
+        if (result.status === 400) {
             const jsonRes = await result.json()
             errorMessage.value = jsonRes.message
             errorAlert.value = true
@@ -122,13 +131,12 @@ const registerUser = async function () {
     }
 }
 
-
-
+onMounted(autofillFormIfPossible)
 </script>
 
 <template>
     <div class="header">
-        <div class="header-text">Create Member Profile</div>
+        <div class="header-text">{{ props.action === 'update' ? "Edit" : "Create" }} Member Profile</div>
     </div>
     <div class="info-fields">
         <div class="form-wrapper">
@@ -142,7 +150,7 @@ const registerUser = async function () {
                     </div>
 
                     <VTextField class="username-pw-input" v-model="userData.username" id="login-username"
-                        :rules="[rules.required]" label="Enter Username" />
+                        :rules="[rules.required]" label="Enter Username" :disabled="props.action === 'update'" />
                 </div>
 
                 <!-- First Name -->
@@ -263,7 +271,7 @@ const registerUser = async function () {
                         <div>* Street:</div>
                     </div>
 
-                    <VTextField class="username-pw-input" v-model="userData.address.street" id="login-address"
+                    <VTextField class="username-pw-input" v-model="userData.address.street" id="login-address-street"
                         :rules="[rules.required]" label="Enter Street" />
                 </div>
 
@@ -272,7 +280,7 @@ const registerUser = async function () {
                         <div>* Barangay:</div>
                     </div>
 
-                    <VTextField class="username-pw-input" v-model="userData.address.barangay" id="login-address"
+                    <VTextField class="username-pw-input" v-model="userData.address.barangay" id="login-address-barangay"
                         :rules="[rules.required]" label="Enter Barangay" />
                 </div>
 
@@ -281,7 +289,7 @@ const registerUser = async function () {
                         <div>* City:</div>
                     </div>
 
-                    <VTextField class="username-pw-input" v-model="userData.address.city" id="login-address"
+                    <VTextField class="username-pw-input" v-model="userData.address.city" id="login-address-city"
                         :rules="[rules.required]" label="Enter City" />
                 </div>
 
@@ -356,7 +364,8 @@ const registerUser = async function () {
                 </VAlert>
 
                 <div class="btn-wrapper">
-                    <VBtn type="submit" class="btn capitalize-text" @click.prevent="submitForm">Create Member Profile
+                    <VBtn type="submit" class="btn capitalize-text" @click.prevent="submitForm">{{ props.action === 'update'
+                        ? "Edit" : "Create" }} Member Profile
                     </VBtn>
                 </div>
             </VForm>

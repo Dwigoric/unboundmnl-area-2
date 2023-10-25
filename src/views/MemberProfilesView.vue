@@ -101,7 +101,7 @@ onMounted(getAllUsers)
                     <!-- List of members -->
                     <div v-for="user in reactiveData.users" :key="user.username"
                         class="officer-list-box d-flex flex-column">
-                        <UserProfileBtn :givenName="user.name.given" :lastName="user.name.last" :username="user.username" />
+                        <UserProfileBtn :user="user" />
                     </div>
                 </ContentBlock>
             </div>
