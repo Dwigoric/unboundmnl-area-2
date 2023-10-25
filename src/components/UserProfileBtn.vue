@@ -85,7 +85,8 @@ defineProps({
                                         </div>
 
                                     </v-container>
-                                    <DeletePrompt />
+                                    <DeletePrompt profileType="Member" :name="`${user.name.last}, ${user.name.given}`"
+                                        :identifier="user.username" :closeDialog="() => isActive.value = false" />
 
                                 </v-card>
                             </template>

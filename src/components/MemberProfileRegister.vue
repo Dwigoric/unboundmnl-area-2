@@ -64,8 +64,6 @@ const props = defineProps({
 })
 
 const submitForm = async function () {
-    console.log(props.action)
-
     const validationResult = await form.value.validate()
     const fn = props.action === 'update' ? updateUser : registerUser
     if (validationResult.valid) {
@@ -84,50 +82,44 @@ const autofillFormIfPossible = function () {
 
 // Define methods
 const updateUser = async function () {
-    const validationResult = await form.value.validate()
-    if (validationResult.valid) {
-        const result = await fetch(API_URL + '/users/edit', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(userData)
-        })
+    const result = await fetch(API_URL + '/users/edit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(userData)
+    })
 
-        errorMessage.value = ''
+    errorMessage.value = ''
 
-        // TODO: should alert the user on a successful edit
+    // TODO: should alert the user on a successful edit
 
-        if (result.status === 400) {
-            const jsonRes = await result.json()
-            errorMessage.value = jsonRes.message
-            errorAlert.value = true
-        } else if (result.status === 500) {
-            errorMessage.value = 'Internal Server Error'
-            errorAlert.value = true
-        }
+    if (result.status === 400) {
+        const jsonRes = await result.json()
+        errorMessage.value = jsonRes.message
+        errorAlert.value = true
+    } else if (result.status === 500) {
+        errorMessage.value = 'Internal Server Error'
+        errorAlert.value = true
     }
 }
 
 const registerUser = async function () {
-    const validationResult = await form.value.validate()
-    if (validationResult.valid) {
-        const result = await fetch(API_URL + '/users/add', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(userData)
-        })
+    const result = await fetch(API_URL + '/users/add', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(userData)
+    })
 
-        errorMessage.value = ''
+    errorMessage.value = ''
 
-        if (result.status === 200) {
-            form.value.reset()
-        } else if (result.status === 400) {
-            const jsonRes = await result.json()
-            errorMessage.value = jsonRes.message
-            errorAlert.value = true
-        } else if (result.status === 500) {
-            errorMessage.value = 'Internal Server Error'
-            errorAlert.value = true
-        }
+    if (result.status === 200) {
+        form.value.reset()
+    } else if (result.status === 400) {
+        const jsonRes = await result.json()
+        errorMessage.value = jsonRes.message
+        errorAlert.value = true
+    } else if (result.status === 500) {
+        errorMessage.value = 'Internal Server Error'
+        errorAlert.value = true
     }
 }
 
