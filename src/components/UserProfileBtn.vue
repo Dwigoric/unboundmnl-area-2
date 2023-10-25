@@ -3,7 +3,14 @@ import MemberProfileRegister from '../components/MemberProfileRegister.vue'
 import DeletePrompt from '../components/DeletePrompt.vue'
 
 defineProps({
-    user: Object
+    user: {
+        type: Object,
+        required: true
+    },
+    onsubmit: {
+        type: Function,
+        default: () => (() => null)
+    }
 });
 </script>
 
@@ -48,7 +55,10 @@ defineProps({
                                         </v-row>
                                     </v-container>
 
-                                    <MemberProfileRegister :action="`update`" :autofill="user" />
+                                    <MemberProfileRegister :action="`update`" :autofill="user" :onsubmit="() => {
+                                        onsubmit()
+                                        isActive.value = false
+                                    }" />
                                 </v-card>
                             </template>
                         </v-dialog>
@@ -86,7 +96,10 @@ defineProps({
 
                                     </v-container>
                                     <DeletePrompt profileType="Member" :name="`${user.name.last}, ${user.name.given}`"
-                                        :identifier="user.username" :closeDialog="() => isActive.value = false" />
+                                        :identifier="user.username" :onsubmit="() => {
+                                            onsubmit()
+                                            isActive.value = false
+                                        }" />
 
                                 </v-card>
                             </template>

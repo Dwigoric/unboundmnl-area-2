@@ -20,6 +20,8 @@ const reactiveData = reactive({
  * Grabs all officers registered in the database.
  */
 async function getAllUsers() {
+    console.log("called")
+
     const params = new URLSearchParams();
     params.set('username', '')
 
@@ -88,7 +90,7 @@ onMounted(getAllUsers)
                                         </v-row>
                                     </v-container>
 
-                                    <MemberProfileRegister />
+                                    <MemberProfileRegister :onsubmit="getAllUsers" />
 
                                 </v-card>
                             </template>
@@ -101,7 +103,7 @@ onMounted(getAllUsers)
                     <!-- List of members -->
                     <div v-for="user in reactiveData.users" :key="user.username"
                         class="officer-list-box d-flex flex-column">
-                        <UserProfileBtn :user="user" />
+                        <UserProfileBtn :user="user" :onsubmit="getAllUsers"/>
                     </div>
                 </ContentBlock>
             </div>

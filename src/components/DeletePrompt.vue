@@ -32,7 +32,7 @@ const props = defineProps({
         default: () => ''
     },
 
-    closeDialog: {
+    onsubmit: {
         type: String,
         // TODO: change default factory to required: true once deletion is implemented for officers
         default: () => (() => null)
@@ -58,7 +58,7 @@ const deleteMember = async function () {
     errorMessage.value = ''
 
     if (result.status === 200) {
-        props.closeDialog()
+        props.onsubmit()
     } else if (result.status === 400) {
         const jsonRes = await result.json()
         errorMessage.value = jsonRes.message

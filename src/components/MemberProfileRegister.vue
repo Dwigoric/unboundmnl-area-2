@@ -60,6 +60,10 @@ const props = defineProps({
     autofill: {
         type: Object,
         default: () => null
+    },
+    onsubmit: {
+        type: Function,
+        default: () => (() => null)
     }
 })
 
@@ -67,7 +71,10 @@ const submitForm = async function () {
     const validationResult = await form.value.validate()
     const fn = props.action === 'update' ? updateUser : registerUser
     if (validationResult.valid) {
-        await fn();
+        const res = await fn();
+        if (res) {
+            props.onsubmit()
+        }
     }
 }
 
@@ -92,7 +99,9 @@ const updateUser = async function () {
 
     // TODO: should alert the user on a successful edit
 
-    if (result.status === 400) {
+    if (result.status === 200) {
+        return true
+    } else if (result.status === 400) {
         const jsonRes = await result.json()
         errorMessage.value = jsonRes.message
         errorAlert.value = true
@@ -100,6 +109,8 @@ const updateUser = async function () {
         errorMessage.value = 'Internal Server Error'
         errorAlert.value = true
     }
+
+    return false
 }
 
 const registerUser = async function () {
@@ -113,6 +124,7 @@ const registerUser = async function () {
 
     if (result.status === 200) {
         form.value.reset()
+        return true
     } else if (result.status === 400) {
         const jsonRes = await result.json()
         errorMessage.value = jsonRes.message
@@ -121,6 +133,8 @@ const registerUser = async function () {
         errorMessage.value = 'Internal Server Error'
         errorAlert.value = true
     }
+
+    return false
 }
 
 onMounted(autofillFormIfPossible)
