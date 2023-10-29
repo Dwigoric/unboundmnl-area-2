@@ -1,6 +1,6 @@
 // Import packages
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { ref, reactive } from 'vue'
 
 export const useApplicationFormStore = defineStore('applicationForm', () => {
     const loaneeId = ref('')
@@ -11,6 +11,7 @@ export const useApplicationFormStore = defineStore('applicationForm', () => {
     const renewal = ref(false)
     const type = ref('')
     const status = ref('')
+    const userData = reactive({})
 
     const reset = () => {
         loaneeId.value = ''
@@ -39,6 +40,10 @@ export const useApplicationFormStore = defineStore('applicationForm', () => {
         loaneeId.value = id
     }
 
+    const setUserData = (data) => {
+        Object.assign(userData, data)
+    }
+
     const setLoanData = (loan) => {
         date.value = loan.date
         amount.value = loan.amount
@@ -55,5 +60,5 @@ export const useApplicationFormStore = defineStore('applicationForm', () => {
         }
     }
 
-    return { getLoanData, setLoaneeId, setLoanData, reset }
+    return { userData, getLoanData, setLoaneeId, setUserData, setLoanData, reset }
 })
