@@ -3,7 +3,6 @@ import { defineStore } from 'pinia'
 import { ref, reactive } from 'vue'
 
 export const useApplicationFormStore = defineStore('applicationForm', () => {
-    const loaneeId = ref('')
     const date = ref('')
     const amount = ref(0)
     const term = ref(0)
@@ -14,7 +13,6 @@ export const useApplicationFormStore = defineStore('applicationForm', () => {
     const userData = reactive({})
 
     const reset = () => {
-        loaneeId.value = ''
         amount.value = 0
         term.value = 0
         newLoan.value = false
@@ -25,7 +23,6 @@ export const useApplicationFormStore = defineStore('applicationForm', () => {
 
     const getLoanData = () => {
         return {
-            loaneeId: loaneeId.value,
             date: date.value,
             amount: amount.value,
             term: term.value,
@@ -34,10 +31,6 @@ export const useApplicationFormStore = defineStore('applicationForm', () => {
             type: type.value,
             status: status.value
         }
-    }
-
-    const setLoaneeId = (id) => {
-        loaneeId.value = id
     }
 
     const setUserData = (data) => {
@@ -60,5 +53,5 @@ export const useApplicationFormStore = defineStore('applicationForm', () => {
         }
     }
 
-    return { userData, getLoanData, setLoaneeId, setUserData, setLoanData, reset }
+    return { userData, getLoanData, setUserData, setLoanData, reset }
 })

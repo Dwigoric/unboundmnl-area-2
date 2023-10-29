@@ -12,6 +12,31 @@ const appFormStore = useApplicationFormStore()
 
 // Define reactive variables
 const pdfUrl = ref('')
+const errorAlert = ref(false)
+const errorMessage = ref('')
+
+// Submit loan application
+const submit = async () => {
+    const { error, message } = await fetch(
+        `${API_URL}/loan-applications/${appFormStore.userData.username}`,
+        {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${window.$cookies.get('credentials').token}`
+            },
+            body: JSON.stringify(appFormStore.getLoanData())
+        }
+    ).then((res) => res.json())
+
+    if (error) {
+        errorAlert.value = true
+        errorMessage.value = message
+    } else {
+        errorAlert.value = false
+        errorMessage.value = ''
+    }
+}
 
 // Fetch PDF file from API
 const fetchPDF = async () => {
@@ -142,6 +167,19 @@ onMounted(fetchPDF)
     <VBtn :href="pdfUrl" download="Loan Application Form.pdf" class="bg-purple-darken-3">
         Download application form as PDF
     </VBtn>
+    <VBtn type="submit" class="bg-orange-darken-4" @click.prevent="submit">
+        Submit application form
+    </VBtn>
+    <VAlert
+        v-if="errorAlert"
+        v-model="errorAlert"
+        type="error"
+        closable=""
+        density="comfortable"
+        elevation="5"
+    >
+        {{ errorMessage }}
+    </VAlert>
 </template>
 
 <style scoped></style>

@@ -32,7 +32,6 @@ const getUserData = async () => {
     } else {
         errorAlert.value = false
         errorMessage.value = ''
-        appFormStore.setLoaneeId(loanees[0].id)
         appFormStore.setUserData(loanees[0])
     }
 }
