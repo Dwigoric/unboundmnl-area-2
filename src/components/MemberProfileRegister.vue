@@ -1,14 +1,150 @@
 <script setup>
+// Import packages
+import { ref, reactive, onMounted } from 'vue'
 
+// Import constants
+import { API_URL } from '../constants'
+
+// Define reactive variables
+const errorMessage = ref('')
+const errorAlert = ref(false)
+const form = ref(null)
+
+// Define form fields
+const userData = reactive({
+    username: '',
+    name: {
+        given: '',
+        middle: '',
+        last: ''
+    },
+    birthday: '',
+    birthplace: '',
+    gender: '',
+    civil_status: '',
+    tin_no: '',
+    monthly_income: '',
+    contact_no: '',
+    address: {
+        street: '',
+        barangay: '',
+        city: '',
+        province: ''
+    },
+    occupation: '',
+    spouse: {
+        name: {
+            given: '',
+            middle: '',
+            last: ''
+        },
+        birthday: '',
+        birthplace: '',
+        contact_no: ''
+    }
+})
+
+// Define constants
+const rules = {
+    required: (v) => !!v || 'This field is required'
+}
+
+const props = defineProps({
+    action: {
+        type: String,
+        default: () => 'register',
+        validator: (value) => {
+            return ['register', 'update'].includes(value)
+        }
+    },
+    autofill: {
+        type: Object,
+        default: () => null
+    },
+    onsubmit: {
+        type: Function,
+        default: () => (() => null)
+    }
+})
+
+const submitForm = async function () {
+    const validationResult = await form.value.validate()
+    const fn = props.action === 'update' ? updateUser : registerUser
+    if (validationResult.valid) {
+        const res = await fn();
+        if (res) {
+            props.onsubmit()
+        }
+    }
+}
+
+const autofillFormIfPossible = function () {
+    if (props.autofill) {
+        let autofillData = { ...props.autofill }
+        autofillData.birthday = autofillData.birthday.substring(0, 10);
+        autofillData.spouse.birthday = autofillData.spouse.birthday.substring(0, 10);
+        Object.assign(userData, autofillData)
+    }
+}
+
+// Define methods
+const updateUser = async function () {
+    const result = await fetch(API_URL + '/users/edit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(userData)
+    })
+
+    errorMessage.value = ''
+
+    // TODO: should alert the user on a successful edit
+
+    if (result.status === 200) {
+        return true
+    } else if (result.status === 400) {
+        const jsonRes = await result.json()
+        errorMessage.value = jsonRes.message
+        errorAlert.value = true
+    } else if (result.status === 500) {
+        errorMessage.value = 'Internal Server Error'
+        errorAlert.value = true
+    }
+
+    return false
+}
+
+const registerUser = async function () {
+    const result = await fetch(API_URL + '/users/add', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(userData)
+    })
+
+    errorMessage.value = ''
+
+    if (result.status === 200) {
+        form.value.reset()
+        return true
+    } else if (result.status === 400) {
+        const jsonRes = await result.json()
+        errorMessage.value = jsonRes.message
+        errorAlert.value = true
+    } else if (result.status === 500) {
+        errorMessage.value = 'Internal Server Error'
+        errorAlert.value = true
+    }
+
+    return false
+}
+
+onMounted(autofillFormIfPossible)
 </script>
 
 <template>
     <div class="header">
-        <div class="header-text">Create Member Profile</div>
+        <div class="header-text">{{ props.action === 'update' ? "Edit" : "Create" }} Member Profile</div>
     </div>
     <div class="info-fields">
-        
-
         <div class="form-wrapper">
             <VForm id="login-form" ref="form">
                 <div class="header2">Borrower's Information</div>
@@ -19,8 +155,8 @@
                         <div>* Username:</div>
                     </div>
 
-                    <VTextField class="username-pw-input" v-model="username" id="login-username" :rules="[rules.required]"
-                        label="Enter Username" />
+                    <VTextField class="username-pw-input" v-model="userData.username" id="login-username"
+                        :rules="[rules.required]" label="Enter Username" :disabled="props.action === 'update'" />
                 </div>
 
                 <!-- First Name -->
@@ -29,7 +165,7 @@
                         <div>* First name:</div>
                     </div>
 
-                    <VTextField class="username-pw-input" v-model="first_name" id="login-first-name"
+                    <VTextField class="username-pw-input" v-model="userData.name.given" id="login-first-name"
                         :rules="[rules.required]" label="Enter First Name" />
                 </div>
 
@@ -39,7 +175,7 @@
                         <div>* Middle name:</div>
                     </div>
 
-                    <VTextField class="username-pw-input" v-model="middle_name" id="login-middle-name"
+                    <VTextField class="username-pw-input" v-model="userData.name.middle" id="login-middle-name"
                         label="Enter Middle Name" />
                 </div>
 
@@ -49,8 +185,8 @@
                         <div>* Last name:</div>
                     </div>
 
-                    <VTextField class="username-pw-input" v-model="last_name" id="login-last-name" :rules="[rules.required]"
-                        label="Enter Last Name" />
+                    <VTextField class="username-pw-input" v-model="userData.name.last" id="login-last-name"
+                        :rules="[rules.required]" label="Enter Last Name" />
                 </div>
 
                 <!-- Date of Birth -->
@@ -59,7 +195,7 @@
                         <div>* Date of Birth:</div>
                     </div>
 
-                    <VTextField class="username-pw-input" v-model="birthday" id="login-birthday" type="date"
+                    <VTextField class="username-pw-input" v-model="userData.birthday" id="login-birthday" type="date"
                         :rules="[rules.required]" label="Select Date of Birth" />
                 </div>
 
@@ -69,7 +205,7 @@
                         <div>* Place of Birth:</div>
                     </div>
 
-                    <VTextField class="username-pw-input" v-model="birthplace" id="login-birthplace"
+                    <VTextField class="username-pw-input" v-model="userData.birthplace" id="login-birthplace"
                         :rules="[rules.required]" label="Enter Place of Birth" />
                 </div>
 
@@ -80,7 +216,7 @@
                         <div>* Gender:</div>
                     </div>
 
-                    <VSelect class="username-pw-input" v-model="gender" :items="['M', 'F']" id="login-gender"
+                    <VSelect class="username-pw-input" v-model="userData.gender" :items="['M', 'F']" id="login-gender"
                         :rules="[rules.required]" label="Select Gender" />
                 </div>
 
@@ -90,7 +226,7 @@
                         <div>* TIN Number:</div>
                     </div>
 
-                    <VTextField class="username-pw-input" v-model="tin_number" id="login-tin-number"
+                    <VTextField class="username-pw-input" v-model="userData.tin_no" id="login-tin-number"
                         :rules="[rules.required]" label="Enter TIN Number (XXX-XXX-XXX-XXX)" />
                 </div>
 
@@ -100,7 +236,7 @@
                         <div>* Civil Status:</div>
                     </div>
 
-                    <VSelect class="username-pw-input" v-model="civil_status" :items="['Single', 'Married']"
+                    <VSelect class="username-pw-input" v-model="userData.civil_status" :items="['Single', 'Married']"
                         id="login-civil-status" :rules="[rules.required]" label="Select Civil Status" />
                 </div>
 
@@ -110,7 +246,7 @@
                         <div>* Contact Number:</div>
                     </div>
 
-                    <VTextField class="username-pw-input" v-model="contact_number" id="login-contact-number"
+                    <VTextField class="username-pw-input" v-model="userData.contact_no" id="login-contact-number"
                         :rules="[rules.required]" label="Enter Contact Number" />
                 </div>
 
@@ -120,16 +256,16 @@
                         <div>* Monthly Income:</div>
                     </div>
 
-                    <VTextField class="username-pw-input" v-model="monthly_income" id="login-monthly-income" type="number"
-                        :rules="[rules.required]" label="Enter Monthly Income" />
+                    <VTextField class="username-pw-input" v-model="userData.monthly_income" id="login-monthly-income"
+                        type="number" :rules="[rules.required]" label="Enter Monthly Income" />
                 </div>
 
                 <div class="row-tab">
                     <div class="label">
                         <div>* Occupation/Source of Income:</div>
-                    </div> 
+                    </div>
 
-                    <VTextField class="username-pw-input" v-model="occupation" id="login-occupation"
+                    <VTextField class="username-pw-input" v-model="userData.occupation" id="login-occupation"
                         :rules="[rules.required]" label="Enter Occupation/Source of Income" />
                 </div>
 
@@ -141,7 +277,7 @@
                         <div>* Street:</div>
                     </div>
 
-                    <VTextField class="username-pw-input" v-model="address_street" id="login-address"
+                    <VTextField class="username-pw-input" v-model="userData.address.street" id="login-address-street"
                         :rules="[rules.required]" label="Enter Street" />
                 </div>
 
@@ -150,7 +286,7 @@
                         <div>* Barangay:</div>
                     </div>
 
-                    <VTextField class="username-pw-input" v-model="address_barangay" id="login-address"
+                    <VTextField class="username-pw-input" v-model="userData.address.barangay" id="login-address-barangay"
                         :rules="[rules.required]" label="Enter Barangay" />
                 </div>
 
@@ -159,7 +295,7 @@
                         <div>* City:</div>
                     </div>
 
-                    <VTextField class="username-pw-input" v-model="address_city" id="login-address"
+                    <VTextField class="username-pw-input" v-model="userData.address.city" id="login-address-city"
                         :rules="[rules.required]" label="Enter City" />
                 </div>
 
@@ -168,20 +304,19 @@
                         <div>* Province:</div>
                     </div>
 
-                    <VTextField class="username-pw-input" v-model="address_province" id="login-address"
+                    <VTextField class="username-pw-input" v-model="userData.address.province" id="login-address"
                         :rules="[rules.required]" label="Enter Province" />
                 </div>
 
                 <!-- Spouse's Information -->
                 <div class="header2">Spouse's Information</div>
 
-
                 <div class="row-tab">
                     <div class="label">
                         <div>* Spouse's First Name:</div>
                     </div>
 
-                    <VTextField class="username-pw-input" v-model="spouse_first_name" id="login-spouse-first-name"
+                    <VTextField class="username-pw-input" v-model="userData.spouse.name.given" id="login-spouse-first-name"
                         :rules="[rules.required]" label="Enter Spouse's First Name" />
                 </div>
 
@@ -190,8 +325,8 @@
                         <div>* Spouse's Middle Name:</div>
                     </div>
 
-                    <VTextField class="username-pw-input" v-model="spouse_middle_name" id="login-spouse-middle-name"
-                        label="Enter Spouse's Middle Name" />
+                    <VTextField class="username-pw-input" v-model="userData.spouse.name.middle"
+                        id="login-spouse-middle-name" label="Enter Spouse's Middle Name" />
                 </div>
 
                 <div class="row-tab">
@@ -199,7 +334,7 @@
                         <div>* Spouse's Last Name:</div>
                     </div>
 
-                    <VTextField class="username-pw-input" v-model="spouse_last_name" id="login-spouse-last-name"
+                    <VTextField class="username-pw-input" v-model="userData.spouse.name.last" id="login-spouse-last-name"
                         :rules="[rules.required]" label="Enter Spouse's Last Name" />
                 </div>
 
@@ -208,7 +343,7 @@
                         <div>* Spouse's Date of Birth:</div>
                     </div>
 
-                    <VTextField class="username-pw-input" v-model="spouse_birthday" id="login-spouse-birthday"
+                    <VTextField class="username-pw-input" v-model="userData.spouse.birthday" id="login-spouse-birthday"
                         :rules="[rules.required]" type="date" label="Select Spouse's Date of Birth" />
                 </div>
 
@@ -217,7 +352,7 @@
                         <div>* Spouse's Place of Birth:</div>
                     </div>
 
-                    <VTextField class="username-pw-input" v-model="spouse_birthplace" id="login-spouse-birthplace"
+                    <VTextField class="username-pw-input" v-model="userData.spouse.birthplace" id="login-spouse-birthplace"
                         :rules="[rules.required]" label="Enter Spouse's Place of Birth" />
                 </div>
 
@@ -226,128 +361,23 @@
                         <div>* Spouse's Contact Number:</div>
                     </div>
 
-                    <VTextField class="username-pw-input" v-model="spouse_contact_number" id="login-spouse-contact-number"
-                        :rules="[rules.required]" label="Enter Spouse's Contact Number" />
+                    <VTextField class="username-pw-input" v-model="userData.spouse.contact_no"
+                        id="login-spouse-contact-number" :rules="[rules.required]" label="Enter Spouse's Contact Number" />
                 </div>
 
-                <VAlert v-if="errorMessage"
-                        type="error" 
-                        closable=""
-                        density="comfortable"
-                        elevation="5"
-                        >
+                <VAlert v-if="errorAlert" v-model="errorAlert" type="error" closable="" density="comfortable" elevation="5">
                     {{ errorMessage }}
                 </VAlert>
 
                 <div class="btn-wrapper">
-                    <VBtn type="submit" class="btn capitalize-text" @click.prevent="registerUser">Create Member Profile</VBtn>
+                    <VBtn type="submit" class="btn capitalize-text" @click.prevent="submitForm">{{ props.action === 'update'
+                        ? "Edit" : "Create" }} Member Profile
+                    </VBtn>
                 </div>
-
             </VForm>
         </div>
     </div>
 </template>
-
-<script>
-import { API_URL } from '../constants/api_url.js'
-
-export default {
-    data: function () {
-        return {
-            username: '',
-            password: '',
-            first_name: '',
-            middle_name: '',
-            last_name: '',
-            birthday: '',
-            birthplace: '',
-            gender: '',
-            tin_number: '',
-            civil_status: '',
-            contact_number: '',
-            address_street: '',
-            address_barangay: '',
-            address_city: '',
-            address_province: '',
-            monthly_income: '',
-            occupation: '',
-            spouse_first_name: '',
-            spouse_last_name: '',
-            spouse_middle_name: '',
-            spouse_contact_number: '',
-            spouse_birthplace: '',
-            spouse_birthday: '',
-            rules: {
-                required: (v) => !!v || 'This field is required'
-            },
-            errorMessage: ''
-        }
-    },
-    props: {
-        togglePopup: Function
-    },
-    methods: {
-        closePopup() {
-            this.togglePopup('createMemberProfile')
-        },
-        registerUser: async function () {
-            const validationResult = await this.$refs.form.validate()
-            if (validationResult.valid) {
-                const result = await fetch(API_URL + '/users/add', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(this.preprocessData())
-                })
-
-                this.errorMessage = ''
-
-                if (result.status === 200) {
-                    this.$refs.form.reset()
-                } else if (result.status === 400) {
-                    const jsonRes = await result.json()
-                    this.errorMessage = jsonRes.message
-                } else if (result.status === 500) {
-                    this.errorMessage = 'Internal Server Error'
-                }
-            }
-        },
-        preprocessData: function () {
-            return {
-                username: this.username,
-                name: {
-                    given: this.first_name,
-                    middle: this.middle_name,
-                    last: this.last_name
-                },
-                birthday: this.birthday,
-                birthplace: this.birthplace,
-                gender: this.gender,
-                tin_no: this.tin_number,
-                civil_status: this.civil_status,
-                contact_no: this.contact_number,
-                address: {
-                    street: this.address_street,
-                    barangay: this.address_barangay,
-                    city: this.address_city,
-                    province: this.address_province
-                },
-                monthly_income: this.monthly_income,
-                occupation: this.occupation,
-                spouse: {
-                    name: {
-                        given: this.spouse_first_name,
-                        middle: this.spouse_middle_name,
-                        last: this.spouse_last_name
-                    },
-                    contact_no: this.spouse_contact_number,
-                    birthplace: this.spouse_birthplace,
-                    birthday: this.spouse_birthday
-                }
-            }
-        }
-    }
-}
-</script>
 
 <!-- Stylesheet -->
 <style scoped>
@@ -385,6 +415,11 @@ export default {
     padding-bottom: 2%;
     overflow: auto;
 }
+
+.form-wrapper {
+    background-color: var(--vt-c-white);
+}
+
 .header {
     background-color: var(--vt-c-white-off);
     width: 100%;
@@ -398,17 +433,16 @@ export default {
     font-weight: bold;
 
     text-align: center;
-    
 }
 
-.header-text {
-}
+.header-text {}
 
 .header2 {
     font-size: 1.2rem;
     margin-bottom: 3%;
     font-weight: bold;
 }
+
 .row-tab {
     /* border: 1px solid black; */
     display: flex;

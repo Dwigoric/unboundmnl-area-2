@@ -13,7 +13,7 @@ const currentUserStore = useCurrentUserStore()
                 <v-icon icon="mdi-account"></v-icon>
             </v-avatar>
         </div>
-        <div class="d-flex flex-column px-3">
+        <div class="d-flex flex-column px-2">
             <p class="font-weight-bold name-text">
                 {{ currentUserStore.name.given }} {{ currentUserStore.name.last }}
             </p>

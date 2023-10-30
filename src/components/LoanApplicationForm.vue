@@ -1,472 +1,196 @@
 <script setup>
+// Import packages
+import { ref, reactive } from 'vue'
 
+// Import router
+import router from '../router'
+
+// Import stores
+import { useApplicationFormStore } from '../stores/applicationForm'
+const appFormStore = useApplicationFormStore()
+
+// Define constants
+const rules = {
+    required: (v) => !!v || 'This field is required'
+}
+
+// Define reactive variables
+const errorAlert = ref(false)
+const errorMessage = ref('')
+const form = ref(null)
+
+// Define form fields
+const loanData = reactive({
+    date: '',
+    classification: '',
+    term: '',
+    type: '',
+    amount: 0,
+    minAmount: 0,
+    maxAmount: 0
+})
+
+// Define Loan types
+const loanTypes = reactive([
+    { title: 'Education Loan', value: 'education' },
+    { title: 'Personal Loan', value: 'personal' },
+    { title: 'Micro Loan', value: 'micro' },
+    { title: 'Utilities Services Loan', value: 'utilities' },
+    { title: 'House Construction/Repairs Loan', value: 'construction' },
+    { title: 'Emergency/Medical Loan', value: 'emergency' },
+    { title: 'Commodity/Appliance Loan', value: 'commodity' }
+])
+
+// Define loan ranges depending on type (TENTATIVE VALUES)
+const loanRanges = {
+    education: { min: 100, max: 5000 },
+    personal: { min: 100, max: 2500 },
+    micro: { min: 100, max: 1000 },
+    utilities: { min: 100, max: 3000 },
+    construction: { min: 100, max: 6000 },
+    emergency: { min: 100, max: 7000 },
+    commodity: { min: 100, max: 2500 }
+}
+
+// Define methods
+/**
+ * Saves form data to the application form store.
+ * @returns {Promise<void>}
+ */
+const prefillForm = async function () {
+    // Check if form is valid
+    const { valid } = await form.value.validate()
+    if (!valid) return
+
+    // Save data to store
+    appFormStore.setLoanData(loanData)
+
+    // Send to application details page
+    await router.push({ name: 'Export Application Form' })
+}
+
+// Function that changes loan range depending on type of loan selected.
+const changeLoanRange = function () {
+    // Stores a string indicating the loan type selected
+    const loanType = loanData.type
+
+    // Queries the loanRanges object for the corresponding minimum and maximum amounts.
+    const min = loanRanges[loanType].min
+    const max = loanRanges[loanType].max
+    // Then modifies the minimum and maximum amounts accordingly
+    loanData.amount = min
+    loanData.minAmount = min
+    loanData.maxAmount = max
+}
 </script>
 
 <template>
-
     <div class="info-fields">
         <div class="form-wrapper">
             <VForm id="login-form" ref="form">
-                <div class="header2">Borrower's Information</div>
+                <div class="header2">Loan Information</div>
 
-                <!-- Username -->
+                <!-- Loan Classification -->
+
                 <div class="row-tab">
                     <div class="label">
-                        <div>* Username:</div>
+                        <div>* Classification:</div>
                     </div>
-    
-                    <VTextField
-                        class="username-pw-input"
-                        v-model="username"
-                        id="login-username"
+
+                    <VRadioGroup
+                        v-model="loanData.classification"
+                        id="loan-classification"
                         :rules="[rules.required]"
-                        label="Enter Username"
-                    />
+                    >
+                        <VRadio label="New Loan" value="new"></VRadio>
+                        <VRadio label="Renewal" value="renewal"></VRadio>
+                    </VRadioGroup>
                 </div>
 
-                <!-- First Name -->
                 <div class="row-tab">
                     <div class="label">
-                        <div>* First name:</div>
+                        <div>* Term:</div>
                     </div>
-
                     <VTextField
                         class="username-pw-input"
-                        v-model="first_name"
-                        id="login-first-name"
+                        v-model="loanData.term"
                         :rules="[rules.required]"
-                        label="Enter First Name"
+                        label="Enter Term of Loan"
                     />
                 </div>
 
-                <!-- Middle Name -->
+                <!-- Type of Loan -->
                 <div class="row-tab">
                     <div class="label">
-                        <div>* Middle name:</div>
-                    </div>
-
-                    <VTextField
-                        class="username-pw-input"
-                        v-model="middle_name"
-                        id="login-middle-name"
-                        label="Enter Middle Name"
-                    />
-                </div>
-
-                <!-- Last Name -->
-                <div class="row-tab">
-                    <div class="label">
-                        <div>* Last name:</div>
-                    </div>
-
-                    <VTextField
-                        class="username-pw-input"
-                        v-model="last_name"
-                        id="login-last-name"
-                        :rules="[rules.required]"
-                        label="Enter Last Name"
-                    />
-                </div>
-
-                <!-- Date of Birth -->
-                <div class="row-tab">
-                    <div class="label">
-                        <div>* Date of Birth:</div>
-                    </div>
-
-                    <VTextField
-                        class="username-pw-input"
-                        v-model="birthday"
-                        id="login-birthday"
-                        type="date"
-                        :rules="[rules.required]"
-                        label="Select Date of Birth"
-                    />
-                </div>
-
-                <!-- Place of Birth -->
-                <div class="row-tab">
-                    <div class="label">
-                        <div>* Place of Birth:</div>
-                    </div>
-
-                    <VTextField
-                        class="username-pw-input"
-                        v-model="birthplace"
-                        id="login-birthplace"
-                        :rules="[rules.required]"
-                        label="Enter Place of Birth"
-                    />
-                </div>
-
-                <!-- Gender -->
-                <!-- XXX: Should this be sex? -->
-                <div class="row-tab">
-                    <div class="label">
-                        <div>* Gender:</div>
+                        <div>* Type:</div>
                     </div>
 
                     <VSelect
                         class="username-pw-input"
-                        v-model="gender"
-                        :items="['M', 'F']"
-                        id="login-gender"
+                        v-model="loanData.type"
+                        :items="loanTypes"
+                        id="loan-type"
                         :rules="[rules.required]"
-                        label="Select Gender"
-                    /> 
-                </div>
-                
-                <!-- TIN Number -->
-                <div class="row-tab">
-                    <div class="label">
-                        <div>* TIN Number:</div>
-                    </div>
-
-                    <VTextField
-                        class="username-pw-input"
-                        v-model="tin_number"
-                        id="login-tin-number"
-                        :rules="[rules.required]"
-                        label="Enter TIN Number (XXX-XXX-XXX-XXX)"
+                        label="Select Loan Type"
+                        @update:modelValue="changeLoanRange"
                     />
                 </div>
 
-                <!-- Civil Status -->
-                <div class="row-tab">
+                <div v-if="loanData.type !== ''" class="row-tab">
                     <div class="label">
-                        <div>* Civil Status:</div>
+                        <div>* Amount:</div>
                     </div>
 
-                    <VSelect
-                        class="username-pw-input"
-                        v-model="civil_status"
-                        :items="['Single', 'Married']"
-                        id="login-civil-status"
-                        :rules="[rules.required]"
-                        label="Select Civil Status"
-                    />
-                </div>
-
-                <!-- Contact Number -->
-                <div class="row-tab">
-                    <div class="label">
-                        <div>* Contact Number:</div>
-                    </div>
-
-                    <VTextField
-                        class="username-pw-input"
-                        v-model="contact_number"
-                        id="login-contact-number"
-                        :rules="[rules.required]"
-                        label="Enter Contact Number"
-                    />  
-                </div>
-
-                <!-- Monthly Income -->
-                <div class="row-tab">
-                                    <div class="label">
-                                        <div>* Monthly Income:</div>
-                                    </div>
-
-                                    <VTextField
-                                        class="username-pw-input"
-                                        v-model="monthly_income"
-                                        id="login-monthly-income"
-                                        type="number"
-                                        :rules="[rules.required]"
-                                        label="Enter Monthly Income"
-                                    />
-                                </div>
-
-                <div class="row-tab">
-                    <div class="label">
-                        <div>* Occupation/Source of Income:</div>
-                    </div>
-
-                    <VTextField
-                        class="username-pw-input"
-                        v-model="occupation"
-                        id="login-occupation"
-                        :rules="[rules.required]"
-                        label="Enter Occupation/Source of Income"
-                    />
-                </div>
-
-                <!-- Borrower's Residence -->
-                <div class="header2">Borrower's Residence</div>
-
-                <div class="row-tab">
-                    <div class="label">
-                        <div>* Street:</div>
-                    </div>
-
-                    <VTextField
-                        class="username-pw-input"
-                        v-model="address_street"
-                        id="login-address"
-                        :rules="[rules.required]"
-                        label="Enter Street"
-                    />
-                </div>
-
-                <div class="row-tab">
-                    <div class="label">
-                        <div>* Barangay:</div>
-                    </div>
-
-                    <VTextField
-                        class="username-pw-input"
-                        v-model="address_barangay"
-                        id="login-address"
-                        :rules="[rules.required]"
-                        label="Enter Barangay"
-                    />  
-                </div>
-
-                <div class="row-tab">
-                    <div class="label">
-                        <div>* City:</div>
-                    </div>
-
-                    <VTextField
-                        class="username-pw-input"
-                        v-model="address_city"
-                        id="login-address"
-                        :rules="[rules.required]"
-                        label="Enter City"
-                    />  
-                </div>
-            
-                <div class="row-tab">
-                    <div class="label">
-                        <div>* Province:</div>
-                    </div>
-
-                    <VTextField
-                        class="username-pw-input"
-                        v-model="address_province"
-                        id="login-address"
-                        :rules="[rules.required]"
-                        label="Enter Province"
-                    />    
-                </div>
-                
-                <!-- Spouse's Information -->
-                <div class="header2">Spouse's Information</div>
-
-
-                <div class="row-tab">
-                    <div class="label">
-                        <div>* Spouse's First Name:</div>
-                    </div>
-
-                    <VTextField
-                        class="username-pw-input"
-                        v-model="spouse_first_name"
-                        id="login-spouse-first-name"
-                        :rules="[rules.required]"
-                        label="Enter Spouse's First Name"
-                    />
-                </div>
-                
-                <div class="row-tab">
-                    <div class="label">
-                        <div>* Spouse's Middle Name:</div>
-                    </div>
-
-                    <VTextField
-                        class="username-pw-input"
-                        v-model="spouse_middle_name"
-                        id="login-spouse-middle-name"
-                        label="Enter Spouse's Middle Name"
-                    />
-                </div>
-
-                <div class="row-tab">
-                    <div class="label">
-                        <div>* Spouse's Last Name:</div>
-                    </div>
-
-                    <VTextField
-                        class="username-pw-input"
-                        v-model="spouse_last_name"
-                        id="login-spouse-last-name"
-                        :rules="[rules.required]"
-                        label="Enter Spouse's Last Name"
-                    />
-                </div>
-
-                <div class="row-tab">
-                    <div class="label">
-                        <div>* Spouse's Date of Birth:</div>
-                    </div>
-    
-                    <VTextField
-                        class="username-pw-input"
-                        v-model="spouse_birthday"
-                        id="login-spouse-birthday"
-                        :rules="[rules.required]"
-                        type="date"
-                        label="Select Spouse's Date of Birth"
-                    />
-                </div>
-
-                <div class="row-tab">
-                    <div class="label">
-                        <div>* Spouse's Place of Birth:</div>
-                    </div>
-
-                    <VTextField
-                        class="username-pw-input"
-                        v-model="spouse_birthplace"
-                        id="login-spouse-birthplace"
-                        :rules="[rules.required]"
-                        label="Enter Spouse's Place of Birth"
-                    />
-                </div>
-
-                <div class="row-tab">
-                    <div class="label">
-                        <div>* Spouse's Contact Number:</div>
-                    </div>
-                        
-                    <VTextField
-                        class="username-pw-input"
-                        v-model="spouse_contact_number"
-                        id="login-spouse-contact-number"
-                        :rules="[rules.required]"
-                        label="Enter Spouse's Contact Number"
-                    />
-                </div>
-                
-                <VAlert v-if="errorMessage"
-                        type="error" 
-                        closable=""
-                        density="comfortable"
-                        elevation="5"
+                    <div style="width: 68%">
+                        <VTextField
+                            v-model="loanData.amount"
+                            id="loan-amount"
+                            :rules="[rules.required]"
+                            label="Enter Loan Amount"
+                            type="number"
+                            :min="loanData.minAmount"
+                            :max="loanData.maxAmount"
+                            :step="100"
+                        />
+                        <VSlider
+                            v-model="loanData.amount"
+                            :min="loanData.minAmount"
+                            :max="loanData.maxAmount"
+                            :step="10"
+                            thumb-label
+                            :thumb-size="20"
                         >
+                            <!-- Only showcase loanRange if a loan type is selected. -->
+                            <template v-if="loanData.type !== ''" #prepend>
+                                {{ loanData.minAmount }}
+                            </template>
+                            <template v-if="loanData.type !== ''" #append>
+                                {{ loanData.maxAmount }}
+                            </template>
+                        </VSlider>
+                    </div>
+                </div>
+
+                <VAlert
+                    v-if="errorAlert"
+                    v-model="errorAlert"
+                    type="error"
+                    closable=""
+                    density="comfortable"
+                    elevation="5"
+                >
                     {{ errorMessage }}
                 </VAlert>
 
                 <div class="btn-wrapper">
-                    <VBtn type="submit" class="btn capitalize-text" @click.prevent="registerUser"
-                        >Create User Profile</VBtn
-                    >
+                    <VBtn type="submit" class="btn capitalize-text" @click.prevent="prefillForm">
+                        Generate Form
+                    </VBtn>
                 </div>
-                
             </VForm>
         </div>
     </div>
 </template>
-
-<script>
-import { API_URL } from '../constants/api_url.js'
-
-const form_fields = {
-    username: '',
-    password: '',
-    first_name: '',
-    middle_name: '',
-    last_name: '',
-    birthday: '',
-    birthplace: '',
-    gender: '',
-    tin_number: '',
-    civil_status: '',
-    contact_number: '',
-    address_street: '',
-    address_barangay: '',
-    address_city: '',
-    address_province: '',
-    monthly_income: '',
-    occupation: '',
-    spouse_first_name: '',
-    spouse_last_name: '',
-    spouse_middle_name: '',
-    spouse_contact_number: '',
-    spouse_birthplace: '',
-    spouse_birthday: ''
-}
-
-// const validationRules = {
-//     required:
-// }
-
-export default {
-    data: function () {
-        return {
-            ...form_fields,
-            rules: {
-                required: (v) => !!v || 'This field is required'
-            },
-            errorMessage: ''
-        }
-    },
-    props: {
-        togglePopup: Function
-    },
-    methods: {
-        closePopup() {
-            this.togglePopup('createMemberProfile')
-        },
-        registerUser: async function () {
-            const validationResult = await this.$refs.form.validate()
-            if (validationResult.valid) {
-                const result = await fetch(API_URL + '/users/add', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(this.preprocessData())
-                })
-
-                this.errorMessage = ''
-
-                if (result.status === 200) {
-                    this.$refs.form.reset()
-                } else if (result.status === 400) {
-                    const jsonRes = await result.json()
-                    this.errorMessage = jsonRes.message
-                } else if (result.status === 500) {
-                    this.errorMessage = 'Internal Server Error'
-                }
-            }
-        },
-        preprocessData: function () {
-            return {
-                username: this.username,
-                name: {
-                    given: this.first_name,
-                    middle: this.middle_name,
-                    last: this.last_name
-                },
-                birthday: this.birthday,
-                birthplace: this.birthplace,
-                gender: this.gender,
-                tin_no: this.tin_number,
-                civil_status: this.civil_status,
-                contact_no: this.contact_number,
-                address: {
-                    street: this.address_street,
-                    barangay: this.address_barangay,
-                    city: this.address_city,
-                    province: this.address_province
-                },
-                monthly_income: this.monthly_income,
-                occupation: this.occupation,
-                spouse: {
-                    name: {
-                        given: this.spouse_first_name,
-                        middle: this.spouse_middle_name,
-                        last: this.spouse_last_name
-                    },
-                    contact_no: this.spouse_contact_number,
-                    birthplace: this.spouse_birthplace,
-                    birthday: this.spouse_birthday
-                }
-            }
-        }
-    }
-}
-</script>
 
 <!-- Stylesheet -->
 <style scoped>
@@ -485,39 +209,8 @@ export default {
     background-color: rgba(0, 0, 0, 0.5);
 }
 
-.wrapper {
+.form-wrapper {
     background: var(--vt-c-white);
-    border-radius: 5px;
-
-    width: 60vw;
-    max-height: 80vh;
-
-    display: flex;
-    flex-direction: column;
-    overflow: auto;
-}
-
-.formDiv {
-}
-
-.header {
-    /* border: 1px solid black; */
-    background-color: var(--vt-c-white-off);
-    width: 100%;
-    padding-bottom: 3%;
-    padding-left: 2%;
-    padding-right: 1%;
-    padding-top: 1%;
-
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-
-    font-size: 1.5rem;
-    font-weight: bold;
-
-    text-align: center;
-    margin-bottom: 3%;
 }
 
 .header2 {

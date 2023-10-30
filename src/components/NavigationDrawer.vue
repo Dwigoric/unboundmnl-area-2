@@ -31,15 +31,21 @@ const logout = () => {
 <template>
     <v-card class="mx-auto pa-5">
         <v-layout>
-            <v-navigation-drawer :width="330" :margin="20"
-                class="navigation-drawer pa-md-4 elevation-9" theme="dark" permanent>
+            <v-navigation-drawer
+                :width="330"
+                :margin="20"
+                class="navigation-drawer pa-md-4 elevation-9"
+                theme="dark"
+                permanent=""
+            >
                 <div class="navigation-title-box">
                     <h1>CSVMC</h1>
                 </div>
 
                 <v-list>
-                    <v-list-item to="/dashboard" 
-                        link 
+                    <v-list-item
+                        to="/dashboard"
+                        link=""
                         prepend-icon="mdi-home-account"
                         rounded="lg"
                         class="mt-2"
@@ -47,35 +53,36 @@ const logout = () => {
                     >
 
                     <v-list-item
-                        to="/newLoanApplication"
-                        link
+                        to="/new-loan-application/member-input"
+                        link=""
                         prepend-icon="mdi-file-document-edit-outline"
                         rounded="lg"
                         class="mt-2"
                         >Create New Loan Application</v-list-item
                     >
 
-                    <v-list-item to="/officerProfiles" 
-                        link 
+                    <v-list-item
+                        to="/officer-profiles"
+                        link=""
                         prepend-icon="mdi-account-box"
                         rounded="lg"
                         class="mt-2"
                         >Officer Profiles</v-list-item
                     >
 
-                    <v-list-item to="/memberProfiles" 
-                        link 
+                    <v-list-item
+                        to="/member-profiles"
+                        link=""
                         prepend-icon="mdi-magnify"
                         rounded="lg"
                         class="mt-2"
                         >Member Profiles</v-list-item
                     >
-
                 </v-list>
 
                 <template v-slot:append>
                     <div class="pa-3">
-                        <v-btn class="logout-btn" block @click.prevent="logout"> Logout </v-btn>
+                        <v-btn class="logout-btn" block="" @click.prevent="logout"> Logout </v-btn>
                     </div>
                 </template>
             </v-navigation-drawer>

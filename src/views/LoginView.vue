@@ -20,6 +20,7 @@ const username = ref('')
 const password = ref('')
 const form = ref(null)
 const errorMessage = ref('')
+const errorAlert = ref(false)
 const remember = ref(false)
 
 // Define methods
@@ -35,6 +36,7 @@ const logIn = async () => {
 
     if (!token) {
         errorMessage.value = message
+        errorAlert.value = true
         return
     }
 
@@ -66,7 +68,13 @@ const logIn = async () => {
                 <div class="header">CSVMC</div>
 
                 <div class="error-msg-wrapper">
-                    <VAlert v-if="errorMessage" type="error" variant="tonal" closable="">
+                    <VAlert
+                        v-if="errorAlert"
+                        v-model="errorAlert"
+                        type="error"
+                        variant="tonal"
+                        closable=""
+                    >
                         {{ errorMessage }}
                     </VAlert>
                 </div>
