@@ -2318,6 +2318,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"gridjs@npm:^6.0.6":
+  version: 6.0.6
+  resolution: "gridjs@npm:6.0.6"
+  dependencies:
+    preact: "npm:^10.11.3"
+  checksum: 60089b49a4648216985d9efc09ef25e520a0fce43f7397f2a47d84826911227713a18575b2ca030582286d562c79fea5b3022c39b178db797e430aa0089d0f1f
+  languageName: node
+  linkType: hard
+
 "has-flag@npm:^3.0.0":
   version: 3.0.0
   resolution: "has-flag@npm:3.0.0"
@@ -3457,6 +3466,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"preact@npm:^10.11.3":
+  version: 10.18.1
+  resolution: "preact@npm:10.18.1"
+  checksum: 587c4634b310efc306ef9315f849b8e4ff538435087a1dca626e1394b98570af1ecdc254b7f0bb3060fc7ab87456c5f891f9b8a167d5c34dbbcfcf60b6e993f4
+  languageName: node
+  linkType: hard
+
 "prelude-ls@npm:^1.2.1":
   version: 1.2.1
   resolution: "prelude-ls@npm:1.2.1"
@@ -4042,6 +4058,7 @@ __metadata:
     "@vue/test-utils": "npm:^2.4.1"
     eslint: "npm:^8.49.0"
     eslint-plugin-vue: "npm:^9.17.0"
+    gridjs: "npm:^6.0.6"
     jsdom: "npm:^22.1.0"
     jwt-decode: "npm:^3.1.2"
     pdf-lib: "npm:^1.17.1"
