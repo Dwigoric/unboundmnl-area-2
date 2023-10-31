@@ -59,7 +59,7 @@ import DeletePrompt from '../components/DeletePrompt.vue'
                                             </v-row>
                                         </v-container>
                                         
-                                        <!-- TODO: officerAction must bn 'Update' -->
+                                        ><!-- TODO: officerAction must bn 'Update' -->
                                         <OfficerRegister :officerAction="Update"/>
                                     </v-card>
                                 </template>

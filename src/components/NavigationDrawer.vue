@@ -42,42 +42,85 @@ const logout = () => {
                     <h1>CSVMC</h1>
                 </div>
 
-                <v-list>
-                    <v-list-item
-                        to="/dashboard"
-                        link=""
-                        prepend-icon="mdi-home-account"
-                        rounded="lg"
-                        class="mt-2"
-                        >Dashboard</v-list-item
-                    >
+                <v-list v-model:opened="open">
+                    <v-list-subheader 
+                        class="mt-4 mb-n3 ml-n3"
+                        >
+                        LOANS
+                    </v-list-subheader>
 
-                    <v-list-item
-                        to="/new-loan-application/member-input"
-                        link=""
-                        prepend-icon="mdi-file-document-edit-outline"
-                        rounded="lg"
-                        class="mt-2"
-                        >Create New Loan Application</v-list-item
-                    >
+                        <v-list-item
+                            to="/dashboard"
+                            link=""
+                            prepend-icon="mdi-home-account"
+                            rounded="lg"
+                            class="mt-1"
+                            >Loan Dashboard</v-list-item
+                        >
 
-                    <v-list-item
-                        to="/officer-profiles"
-                        link=""
-                        prepend-icon="mdi-account-box"
-                        rounded="lg"
-                        class="mt-2"
-                        >Officer Profiles</v-list-item
-                    >
+                        <v-list-item
+                            to="/new-loan-application/member-input"
+                            link=""
+                            prepend-icon="mdi-file-document-edit-outline"
+                            rounded="lg"
+                            class="mt-1"
+                            >New Loan Application</v-list-item
+                        >
 
-                    <v-list-item
-                        to="/member-profiles"
-                        link=""
-                        prepend-icon="mdi-magnify"
-                        rounded="lg"
-                        class="mt-2"
-                        >Member Profiles</v-list-item
-                    >
+                        <v-list-item
+                            to="/dashboard"
+                            link=""
+                            prepend-icon="mdi-home-account"
+                            rounded="lg"
+                            class="mt-1"
+                            >Loan Status</v-list-item
+                        >
+
+                    <v-list-subheader
+                        class="mt-4 mb-n3 ml-n3">
+                        SHARED CAPITAL
+                    </v-list-subheader>
+
+                        <v-list-item
+                            to="/dashboard"
+                            link=""
+                            prepend-icon="mdi-home-account"
+                            rounded="lg"
+                            class="mt-1"
+                            >Shared Capital Dashboard</v-list-item
+                        >
+
+                        <v-list-item
+                            to="/new-loan-application/member-input"
+                            link=""
+                            prepend-icon="mdi-file-document-edit-outline"
+                            rounded="lg"
+                            class="mt-1"
+                            >Enter deposit</v-list-item
+                        >
+
+                    <v-list-subheader
+                            class="mt-4 mb-n3 ml-n3">
+                            PROFILES
+                    </v-list-subheader>
+
+                        <v-list-item
+                            to="/officer-profiles"
+                            link=""
+                            prepend-icon="mdi-account-box"
+                            rounded="lg"
+                            class="mt-1"
+                            >Officer Profiles</v-list-item
+                        >
+
+                        <v-list-item
+                            to="/member-profiles"
+                            link=""
+                            prepend-icon="mdi-magnify"
+                            rounded="lg"
+                            class="mt-1"
+                            >Member Profiles</v-list-item
+                        >
                 </v-list>
 
                 <template v-slot:append>

@@ -26,28 +26,14 @@ import ContentBlock from '../components/ContentBlock.vue'
             <!-- Main Dashboard Body -->
             <div class="dashboard-body d-flex flex-column h-100 py-4">
                 <ContentBlock
-                    class="hover-scale-sm"
                     :width="100"
-                    :height="50"
+                    :height="100"
                     :unit="'%'"
                     :bg-color="'#FFF'"
-                />
-                <div class="d-flex h-50 gap-1_25">
-                    <ContentBlock
-                        class="hover-scale-sm"
-                        :width="50"
-                        :height="102"
-                        :unit="'%'"
-                        :bg-color="'#FFF'"
-                    />
-                    <ContentBlock
-                        class="hover-scale-sm"
-                        :width="50"
-                        :height="102"
-                        :unit="'%'"
-                        :bg-color="'#09a6f3'"
-                    />
-                </div>
+                >
+            
+                </ContentBlock>
+                
             </div>
         </div>
     </div>
