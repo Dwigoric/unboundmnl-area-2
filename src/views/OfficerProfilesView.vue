@@ -111,7 +111,9 @@ onMounted(getAllOfficers)
                 <ContentBlock :width="100" :height="100" :unit="'%'" :bg-color="'#FFF'">
                     <!-- Render list of officers-->
                     <div v-for="officer in officers" :key="officer.uuid" class="officer-list-box d-flex flex-column">
-                        <OfficerProfileBtn :givenName="officer.name.given" :lastName="officer.name.last"
+                        <OfficerProfileBtn 
+                            :givenName="officer.name.given" 
+                            :lastName="officer.name.last"
                             :username="officer.username" />
                     </div>
                 </ContentBlock>

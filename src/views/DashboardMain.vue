@@ -4,6 +4,8 @@ import NavigationDrawer from '../components/NavigationDrawer.vue'
 import UserProfile from '../components/UserProfile.vue'
 import NotificationBtn from '../components/NotificationBtn.vue'
 import ContentBlock from '../components/ContentBlock.vue'
+import LoanStatusItem from '../components/LoanStatusItem.vue'
+
 </script>
 
 <template>
@@ -31,9 +33,14 @@ import ContentBlock from '../components/ContentBlock.vue'
                     :unit="'%'"
                     :bg-color="'#FFF'"
                 >
-            
-                </ContentBlock>
                 
+                <LoanStatusItem 
+                    :givenName='Mama'
+                    :lastName='Mo'
+                    :username='Panot'
+                    />
+
+                </ContentBlock>
             </div>
         </div>
     </div>
