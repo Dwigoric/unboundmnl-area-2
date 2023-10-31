@@ -1,4 +1,5 @@
 <script setup>
+
     // Dynamically define the width and height of the block.
     defineProps({
         width: Number,
@@ -14,7 +15,7 @@
         },
         padding: {
             type: String,
-            default: '1' // Default padding value
+            default: '0.5' // Default padding value
         }
     });
 </script>
