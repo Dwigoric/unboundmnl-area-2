@@ -5,6 +5,23 @@ import UserProfile from '../components/UserProfile.vue'
 import NotificationBtn from '../components/NotificationBtn.vue'
 import ContentBlock from '../components/ContentBlock.vue'
 import LoanStatusItem from '../components/LoanStatusItem.vue'
+import { Grid } from 'gridjs'
+import "gridjs/dist/theme/mermaid.css";
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    new Grid({
+        columns: ["Type of Loan", "Amount of Loan", "Loanee", "Processor", "Status"],
+        data: [
+            ["John", "john@example.com", "(353) 01 222 3333"],
+            ["Mark", "mark@gmail.com", "(01) 22 888 4444"],
+            ["Eoin", "eoin@gmail.com", "0097 22 654 00033"],
+            ["Sarah", "sarahcdd@gmail.com", "+322 876 1233"],
+            ["Afshin", "afshin@mail.com", "(353) 22 87 8356"]
+        ]
+    }).render(document.getElementById("wrapper"));
+});
+
 
 </script>
 
@@ -39,7 +56,7 @@ import LoanStatusItem from '../components/LoanStatusItem.vue'
                     :lastName='Mo'
                     :username='Panot'
                     />
-
+                <div id="wrapper"></div>
                 </ContentBlock>
             </div>
         </div>
