@@ -71,3 +71,7 @@ body {
 .hover-scale-md:hover {
     transform: scale(1.05);
 }
+
+.w-30 {
+    width: 30%;
+}

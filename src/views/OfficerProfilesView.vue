@@ -10,6 +10,7 @@ import NotificationBtn from '../components/NotificationBtn.vue'
 import ContentBlock from '../components/ContentBlock.vue'
 import OfficerRegister from '../components/OfficerRegister.vue'
 import OfficerProfileBtn from '../components/OfficerProfileBtn.vue'
+import DashboardTopBar from '../components/DashboardTopBar.vue'
 
 // Important Constants
 import { API_URL } from '../constants'
@@ -53,16 +54,8 @@ onMounted(getAllOfficers)
 
         <div class="d-flex flex-column w-100 pl-8">
             <!-- Top Bar of Dashboard -->
-            <div class="dashboard-top">
-                <div class="breadcrumbs-wrapper">
-                    <v-breadcrumbs :items="['Home', 'Officer Profiles']"></v-breadcrumbs>
-                </div>
+            <DashboardTopBar :breadcrumbs="['Home', 'Officer Profiles']"/>
 
-                <div class="dashboard-top-right">
-                    <NotificationBtn />
-                    <UserProfile />
-                </div>
-            </div>
 
             <!-- Main Dashboard Body -->
             <div class="dashboard-body d-flex flex-column h-100 py-3">

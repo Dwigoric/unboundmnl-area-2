@@ -1,11 +1,10 @@
 <script setup>
 // Import vue components
 import NavigationDrawer from '../components/NavigationDrawer.vue'
-import UserProfile from '../components/UserProfile.vue'
-import NotificationBtn from '../components/NotificationBtn.vue'
 import ContentBlock from '../components/ContentBlock.vue'
 import MemberProfileRegister from '../components/MemberProfileRegister.vue'
 import UserProfileBtn from '../components/UserProfileBtn.vue'
+import DashboardTopBar from '../components/DashboardTopBar.vue'
 
 // Import Packages
 import { ref, onMounted, watch } from 'vue'
@@ -49,16 +48,7 @@ onMounted(getAllUsers)
         <div class="d-flex flex-column w-100 pl-8">
 
             <!-- Top Bar of Dashboard -->
-            <div class="dashboard-top">
-                <div class="breadcrumbs-wrapper">
-                    <v-breadcrumbs :items="['Home', 'Member Profiles']"></v-breadcrumbs>
-                </div>
-
-                <div class="dashboard-top-right">
-                    <NotificationBtn />
-                    <UserProfile />
-                </div>
-            </div>
+            <DashboardTopBar :breadcrumbs="['Home', 'Member Profiles']"/>
 
             <!-- Main Dashboard Body -->
             <div class="dashboard-body d-flex flex-column h-100 py-3">
