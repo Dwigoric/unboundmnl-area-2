@@ -6,7 +6,6 @@ import { ref } from 'vue'
 // Import constants
 import { API_URL } from '../constants'
 
-// TODO: add visible error messages
 const errorMessage = ref('')
 const errorAlert = ref(false)
 
@@ -21,20 +20,17 @@ const props = defineProps({
     },
     name: {
         type: String,
-        // TODO: change default factory to required: true once deletion is implemented for officers
-        default: () => ''
+        required: true
     },
 
     // unique identifier for profile to be deleted 
     identifier: {
         type: String,
-        // TODO: change default factory to required: true once deletion is implemented for officers
-        default: () => ''
+        required: true
     },
 
     onsubmit: {
-        type: String,
-        // TODO: change default factory to required: true once deletion is implemented for officers
+        type: Function,
         default: () => (() => null)
     }
 })
@@ -84,9 +80,13 @@ const deleteOfficer = async function () {
 
         <div class="btn-wrapper">
             <VBtn type="submit" class="btn capitalize-text" @click.prevent="deleteProfile">
-                Delete Officer Profile
+                Delete {{ profileType }} Profile
             </VBtn>
         </div>
+
+        <VAlert v-if="errorAlert" v-model="errorAlert" type="error" closable="" density="comfortable" elevation="5">
+            {{ errorMessage }}
+        </VAlert>
     </div>
 </template>
 

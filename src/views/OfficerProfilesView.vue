@@ -69,11 +69,6 @@ onMounted(getAllOfficers)
                 <h2>Officer Profiles</h2>
 
                 <div class="upper-wrapper">
-                    <!-- Search bar -->
-                    <div class="search-wrapper">
-                        <v-text-field prepend-inner-icon="mdi-magnify" label="Search Officer" clearable="" />
-                    </div>
-
                     <div class="btn-wrapper" v-if="type === 'admin'">
                         <v-dialog width="900">
                             <template v-slot:activator="{ props }">
@@ -111,10 +106,7 @@ onMounted(getAllOfficers)
                 <ContentBlock :width="100" :height="100" :unit="'%'" :bg-color="'#FFF'">
                     <!-- Render list of officers-->
                     <div v-for="officer in officers" :key="officer.uuid" class="officer-list-box d-flex flex-column">
-                        <OfficerProfileBtn 
-                            :givenName="officer.name.given" 
-                            :lastName="officer.name.last"
-                            :username="officer.username" />
+                        <OfficerProfileBtn :officer="officer" :onsubmit="getAllOfficers" />
                     </div>
                 </ContentBlock>
             </div>
