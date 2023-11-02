@@ -6,8 +6,7 @@ export const useApplicationFormStore = defineStore('applicationForm', () => {
     const date = ref('')
     const amount = ref(0)
     const term = ref(0)
-    const newLoan = ref(false)
-    const renewal = ref(false)
+    const classification = ref('')
     const type = ref('')
     const status = ref('')
     const userData = reactive({})
@@ -15,8 +14,7 @@ export const useApplicationFormStore = defineStore('applicationForm', () => {
     const reset = () => {
         amount.value = 0
         term.value = 0
-        newLoan.value = false
-        renewal.value = false
+        classification.value = false
         type.value = ''
         status.value = ''
     }
@@ -26,8 +24,7 @@ export const useApplicationFormStore = defineStore('applicationForm', () => {
             date: date.value,
             amount: amount.value,
             term: term.value,
-            new: newLoan.value,
-            renewal: renewal.value,
+            classification: classification.value,
             type: type.value,
             status: status.value
         }
@@ -43,14 +40,7 @@ export const useApplicationFormStore = defineStore('applicationForm', () => {
         term.value = loan.term
         type.value = loan.type
         status.value = loan.status || 'pending'
-
-        if (loan.classification === 'new') {
-            newLoan.value = true
-            renewal.value = false
-        } else {
-            newLoan.value = false
-            renewal.value = true
-        }
+        classification.value = loan.classification
     }
 
     return { userData, getLoanData, setUserData, setLoanData, reset }

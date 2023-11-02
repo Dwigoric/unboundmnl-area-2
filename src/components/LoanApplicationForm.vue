@@ -35,7 +35,7 @@ const loanTypes = reactive([
     { title: 'Education Loan', value: 'education' },
     { title: 'Personal Loan', value: 'personal' },
     { title: 'Micro Loan', value: 'micro' },
-    { title: 'Utilities Services Loan', value: 'utilities' },
+    { title: 'Utilities Services Loan', value: 'utility' },
     { title: 'House Construction/Repairs Loan', value: 'construction' },
     { title: 'Emergency/Medical Loan', value: 'emergency' },
     { title: 'Commodity/Appliance Loan', value: 'commodity' }
