@@ -1,7 +1,7 @@
 <script setup>
 // Import packages
-import { ref, onMounted } from 'vue'
-import { PDFDocument } from 'pdf-lib'
+import { ref, onMounted, onUnmounted } from 'vue'
+import { PDFDocument, TextAlignment } from 'pdf-lib'
 
 // Import constants
 import { API_URL, FILENAMES } from '../constants'
@@ -61,60 +61,49 @@ const fetchPDF = async () => {
     form.getTextField('Date').setText(new Date().toLocaleDateString('en-PH', { dateStyle: 'long' }))
 
     // Set classification
-    if (loanData.classification === 'new') {
-        form.getCheckBox('New').check()
-    } else {
-        form.getCheckBox('Renewal').check()
-    }
+    form.getCheckBox({ new: 'New', renewal: 'Renewal' }[loanData.classification]).check()
 
     // Set term
-    form.getTextField('Term').setText(loanData.term)
+    const termTextField = form.getTextField('Term of Loan')
+    termTextField.setAlignment(TextAlignment.Center)
+    termTextField.setText(loanData.term)
 
     // Set amount
     form.getTextField('Amount').setText(loanData.amount.toLocaleString())
 
     // Set type of loan
-    switch (loanData.type) {
-        case 'education':
-            form.getCheckBox('Education').check()
-            break
-        case 'personal':
-            form.getCheckBox('Personal').check()
-            break
-        case 'micro':
-            form.getCheckBox('Micro').check()
-            break
-        case 'utilities':
-            form.getCheckBox('Utility').check()
-            break
-        case 'construction':
-            form.getCheckBox('House').check()
-            break
-        case 'emergency':
-            form.getCheckBox('Emergency').check()
-            break
-        case 'commodity':
-            form.getCheckBox('Commodity').check()
-            break
-    }
+    const loanTypes = Object.freeze({
+        emergency: 'Emergency',
+        'multi-purpose': 'Multi-Purpose',
+        educational: 'Educational',
+        'petty cash': 'Petty Cash',
+        commercial: 'Commercial',
+        livelihood: 'Livelihood'
+    })
+    form.getCheckBox(loanTypes[loanData.type]).check()
 
     // Set borrower's information
-    form.getTextField('Last Name').setText(appFormStore.userData.name.last)
-    form.getTextField('First Name').setText(appFormStore.userData.name.given)
+    form.getTextField('Surname').setText(appFormStore.userData.name.last)
+    form.getTextField('Given Name').setText(appFormStore.userData.name.given)
     form.getTextField('Middle Name').setText(appFormStore.userData.name.middle)
     const birthday = new Date(appFormStore.userData.birthday)
     form.getTextField('Date of Birth').setText(
         birthday.toLocaleDateString('en-PH', { dateStyle: 'long' })
     )
-    form.getTextField('Age').setText(
+    const ageTextField = form.getTextField('Age')
+    ageTextField.setAlignment(TextAlignment.Center)
+    ageTextField.setText(
         Math.abs(birthday.getUTCFullYear() - new Date().getUTCFullYear()).toLocaleString()
     )
     form.getTextField('Place of Birth').setText(appFormStore.userData.birthplace)
-    if (appFormStore.userData.gender === 'M') form.getCheckBox('Male').check()
-    else form.getCheckBox('Female').check()
-    form.getTextField('Tin No').setText(appFormStore.userData.tin_no)
-    form.getTextField('Civil Status').setText(appFormStore.userData.civil_status)
-    form.getTextField('Contact No').setText(appFormStore.userData.contact_no)
+    form.getCheckBox({ M: 'Male', F: 'Female' }[appFormStore.userData.gender]).check()
+    const civilStatusTextField = form.getTextField('Civil Status')
+    civilStatusTextField.setAlignment(TextAlignment.Center)
+    civilStatusTextField.setText(appFormStore.userData.civil_status)
+    form.getTextField('TIN').setText(appFormStore.userData.tin_no)
+    const contactNumberTextField = form.getTextField('Contact No')
+    contactNumberTextField.setAlignment(TextAlignment.Center)
+    contactNumberTextField.setText(appFormStore.userData.contact_no)
     form.getTextField('Address').setText(
         [
             appFormStore.userData.address.street,
@@ -137,14 +126,18 @@ const fetchPDF = async () => {
         form.getTextField('Spouse Date of Birth').setText(
             spouseBirthday.toLocaleDateString('en-PH', { dateStyle: 'long' })
         )
-        form.getTextField('Spouse Age').setText(
+        const spouseAgeTextField = form.getTextField('Spouse Age')
+        spouseAgeTextField.setAlignment(TextAlignment.Center)
+        spouseAgeTextField.setText(
             Math.abs(spouseBirthday.getUTCFullYear() - new Date().getUTCFullYear()).toLocaleString()
         )
         form.getTextField('Spouse Place of Birth').setText(appFormStore.userData.spouse.birthplace)
         form.getTextField('Spouse Source of Income').setText(
             appFormStore.userData.spouse.source_of_income
         )
-        form.getTextField('Spouse Contact No').setText(appFormStore.userData.spouse.contact_no)
+        const spouseContactNumberTextField = form.getTextField('Spouse Contact No')
+        spouseContactNumberTextField.setAlignment(TextAlignment.Center)
+        spouseContactNumberTextField.setText(appFormStore.userData.spouse.contact_no)
     }
 
     // TODO: Coborrower section
@@ -160,6 +153,7 @@ const fetchPDF = async () => {
 
 // Define lifecycle hooks
 onMounted(fetchPDF)
+onUnmounted(() => URL.revokeObjectURL(pdfUrl.value))
 </script>
 
 <template>
