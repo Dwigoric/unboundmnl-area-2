@@ -68,7 +68,7 @@ const logout = () => {
                         >
 
                         <v-list-item
-                            to="/dashboard"
+                            to="/loan-status"
                             link=""
                             prepend-icon="mdi-home-account"
                             rounded="lg"
@@ -82,7 +82,7 @@ const logout = () => {
                     </v-list-subheader>
 
                         <v-list-item
-                            to="/dashboard"
+                            to="/cap-dashboard"
                             link=""
                             prepend-icon="mdi-home-account"
                             rounded="lg"
@@ -91,7 +91,7 @@ const logout = () => {
                         >
 
                         <v-list-item
-                            to="/new-loan-application/member-input"
+                            to="/new-deposit"
                             link=""
                             prepend-icon="mdi-file-document-edit-outline"
                             rounded="lg"

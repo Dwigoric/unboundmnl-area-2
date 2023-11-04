@@ -5,8 +5,6 @@ import ContentBlock from '../components/ContentBlock.vue'
 import LoanLedger from '../components/LoanLedger.vue'
 import DashboardTopBar from '../components/DashboardTopBar.vue'
 
-import LoanStatusItem from '../components/LoanStatusItem.vue'
-
 </script>
 
 <template>
@@ -15,25 +13,18 @@ import LoanStatusItem from '../components/LoanStatusItem.vue'
 
         <div class="d-flex flex-column w-100 pl-8">
             <!-- Top Bar of Dashboard -->
-            <DashboardTopBar :breadcrumbs="['Home', 'Dashboard']"/>
+            <DashboardTopBar :breadcrumbs="['Home', 'Dashboard']" />
 
             <!-- Main Dashboard Body -->
             <div class="dashboard-body d-flex flex-column h-100 py-4">
-                
-                <ContentBlock
-                :width="100"
-                :height="100"
-                :maxWidth="1600"
-                :unit="'%'"
-                :maxUnit="'px'"
-                :bg-color="'#FFF'"
-                >
-                    <!-- TODO: Do this last -->
+
+                <ContentBlock :width="100" :height="100" :maxWidth="1600" :unit="'%'" :maxUnit="'px'" :bg-color="'#FFF'">
+                    <!-- <LoanStatusItem/> -->
+                    <LoanLedger />
                 </ContentBlock>
             </div>
         </div>
     </div>
 </template>
 
-<style>
-</style>
+<style></style>

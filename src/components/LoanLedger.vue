@@ -2,6 +2,8 @@
 // Import packages
 import { ref, onMounted } from 'vue'
 import { Grid } from 'gridjs';
+import "gridjs/dist/theme/mermaid.css";
+
 
 // Fetch loan properties from the database
 const loanAmount = 3000.15;
@@ -40,15 +42,15 @@ onMounted(() => {
         fixedHeader: true,
         pagination: true,
         className: {
-            th: 'rounded-t-lg text-left text-grey-darken-3 bg-blue-grey-lighten-4 pa-2',
-            td: 'pa-2 grid-right-border',
-            tr: 'my-16 py-3'
+            // th: 'rounded-t-lg text-left text-grey-darken-3 bg-blue-grey-lighten-4 pa-2',
+            // td: 'pa-2 grid-right-border',
+            // tr: 'my-16 py-3'
         },
         style: {
             table: {
                 'width': '100%',
-                'border-collapse': 'separate',
-                'border-spacing': '0.2rem 1.25rem'
+                // 'border-collapse': 'separate',
+                // 'border-spacing': '0.2rem 1.25rem'
             },
             tr: {
                 'margin-bottom': '1rem'
@@ -69,20 +71,19 @@ onMounted(() => {
             <p class="loan-amount">{{ formattedLoanAmount }}</p>
         </div>
         <div class="d-flex justify-space-evenly align-center h-75 pa-2">
-
-            <div class="d-flex flex-column loan-info-cell grid-left-border h-100 px-2">
+            <div class="d-flex flex-column loan-info-cell grid-left-border h-100 px-4">
                 <p class="font-weight-bold">Loanee: </p>
                 <p class="loan-properties"> {{ loanee }} </p>
             </div>
-            <div class="d-flex flex-column loan-info-cell grid-left-border h-100 px-2">
+            <div class="d-flex flex-column loan-info-cell grid-left-border h-100 px-4">
                 <p class="font-weight-bold">Loan ID: </p>
                 <p class="loan-properties"> {{ loanID }} </p>
             </div>
-            <div class="d-flex flex-column loan-info-cell grid-left-border h-100 px-2">
+            <div class="d-flex flex-column loan-info-cell grid-left-border h-100 px-4">
                 <p class="font-weight-bold">Type of Loan: </p>
                 <p class="loan-properties"> {{ loanType }} </p>
             </div>
-            <div class="d-flex flex-column loan-info-cell grid-left-border h-100 px-2">
+            <div class="d-flex flex-column loan-info-cell grid-left-border h-100 px-4">
                 <p class="font-weight-bold">Term of Loan: </p>
                 <p class="loan-properties"> {{ loanTerm }} </p>
             </div>

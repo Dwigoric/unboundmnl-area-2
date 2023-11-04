@@ -10,6 +10,7 @@ import NewLoanApplication from '../views/NewLoanAppView.vue'
 import LoanApplicationSearch from '../components/LoanApplicationSearch.vue'
 import LoanApplicationForm from '../components/LoanApplicationForm.vue'
 import LoanApplicationFormExport from '../components/LoanApplicationFormExport.vue'
+import LoanStatus from '../views/LoanStatus.vue'
 
 // Import path name constants
 import { PATH_NAMES } from '../constants'
@@ -83,7 +84,18 @@ const router = createRouter({
                 if (!credentials || !credentials.token) next({ name: 'Login' })
                 else next()
             }
-        }
+        },
+        {
+            path: '/loan-status',
+            name: 'Loan Status',
+            component: LoanStatus,
+            // TODO: this - jana uwu
+            // beforeEnter: (to, from, next) => {
+            //     const credentials = window.$cookies.get('credentials')
+            //     if (!credentials || !credentials.token) next({ name: 'Login' })
+            //     else next()
+            // }
+        },
     ]
 })
 

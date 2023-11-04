@@ -1,49 +1,87 @@
 <script setup>
+import { ref, onMounted } from 'vue'
+import { Grid, h, i } from 'gridjs';
+import "gridjs/dist/theme/mermaid.css";
+
 // TODO: Create proper vars
-defineProps({
-    givenName: String,
-    lastName: String,
-    username: String
-});
+// defineProps({
+//     givenName: String,
+//     lastName: String,
+//     username: String
+// });
+
+const loanStatusTable = ref();
+
+const loanStatus = ref();
+
+onMounted(() => {
+
+    loanStatus.value = new Grid({
+        columns: [
+            'Type of Loan',
+            'Amount of Loan',
+            'Loanee',
+            {
+                name: 'Change Status',
+                formatter: (cell, row) => {
+                    return h('v-btn', {
+                        className: 'py-2 mb-4 px-4 border rounded-md',
+                        onClick: () => alert(`Editing "${row.cells[0].data}" "${row.cells[1].data}"`)
+                    }, 'Edit');
+                    
+                }
+            },
+            
+            // <div class="officer-actions-box ml-auto d-flex">
+            //     <!-- Reject Loan -->
+            //     <v-btn
+            //         icon="mdi-check-bold"
+            //         variant="plain"
+            //         color="green">
+            //     </v-btn>
+
+            //     <!-- Approve Loan -->
+            //     <v-btn
+            //         icon="mdi-close-thick"
+            //         variant="plain"
+            //         color="red">
+            //     </v-btn>
+
+            // </div>
+        ],
+        data: [
+            {
+                'Type of Loan': 'Personal Loan',
+                'Amount of Loan': '$10,000',
+                'Loanee': 'John Doe',
+            },
+        ],
+        className: {
+            // Define your class names here
+        },
+        style: {
+            table: {
+                // Define your table styles here
+            },
+            tr: {
+                // Define row styles here
+            },
+        },
+    });
+
+
+    // Render loanStatus in corresponding reference
+    loanStatus.value.render(loanStatusTable.value);
+})
 </script>
 
 <template>
-    <v-hover>
-        <template v-slot:default="{ isHovering, props }">
-            <v-card class="officer-profile-btn w-100 d-flex align-center rounded-lg elevation-2 pa-2 mb-3" v-bind="props"
-                :color="isHovering ? 'rgba(239, 239, 239, 20)' : 'rgba(239, 239, 239, 0.525)'">
+    <div id="loan-status-wrapper" ref="loanStatusTable" class="w-100 px-4 "></div>
 
-                <!-- Information -->
-                <div class="d-flex flex-row">
-                    <h2 class="ml-2">Type of Loan</h2>
-                    <div class="memberdiv mt-2 ml-5">Amount of Loan</div>
-                    <div class="memberdiv mt-2 ml-5">Loanee</div>
-                </div>
-
-                <!-- Actions -->
-
-                <div class="officer-actions-box ml-auto d-flex">
-                    <!-- Reject Loan -->
-                    <v-btn 
-                        icon="mdi-check-bold" 
-                        variant="plain"
-                        color="green">
-                    </v-btn>
-
-                    <!-- Approve Loan -->
-                    <v-btn 
-                        icon="mdi-close-thick" 
-                        variant="plain"
-                        color="red">
-                    </v-btn>
-                    
-                </div>
-            </v-card>
-        </template>
-    </v-hover>
 </template>
 
 <style>
+
 .form-wrapper {
     background-color: var(--vt-c-white-off);
 }
