@@ -18,7 +18,7 @@ const errorMessage = ref('')
 // Submit loan application
 const submit = async () => {
     const { error, message } = await fetch(
-        `${API_URL}/loan-applications/${appFormStore.userData.username}`,
+        `${API_URL}/loans/new/${appFormStore.userData.username}`,
         {
             method: 'PUT',
             headers: {
