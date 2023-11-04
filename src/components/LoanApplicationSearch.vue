@@ -32,6 +32,7 @@ const getUserData = async () => {
     } else {
         errorAlert.value = false
         errorMessage.value = ''
+        console.log(loanees[0])
         appFormStore.setUserData(loanees[0])
     }
 }
@@ -51,21 +52,9 @@ const sendToAppDetails = async () => {
 
         <!-- Search bar -->
         <div class="search-wrapper">
-            <v-text-field
-                v-model="searchUsername"
-                prepend-inner-icon="mdi-magnify"
-                label="Search Member by Username"
-                clearable=""
-                hide-details
-            />
-            <VAlert
-                v-if="errorAlert"
-                v-model="errorAlert"
-                type="error"
-                closable=""
-                density="comfortable"
-                elevation="5"
-            >
+            <v-text-field v-model="searchUsername" prepend-inner-icon="mdi-magnify" label="Search Member by Username"
+                clearable="" hide-details />
+            <VAlert v-if="errorAlert" v-model="errorAlert" type="error" closable="" density="comfortable" elevation="5">
                 {{ errorMessage }}
             </VAlert>
         </div>
@@ -73,13 +62,8 @@ const sendToAppDetails = async () => {
             <v-dialog width="1200">
                 <template v-slot:activator="{ props }">
                     <!-- Create Member Profile Button -->
-                    <v-btn
-                        class="capitalize-text mt-2"
-                        v-bind="props"
-                        variant="plain"
-                        text="New Member? Click here to create Member Profile instead"
-                        flat=""
-                    >
+                    <v-btn class="capitalize-text mt-2" v-bind="props" variant="plain"
+                        text="New Member? Click here to create Member Profile instead" flat="">
                     </v-btn>
                 </template>
 
@@ -89,12 +73,8 @@ const sendToAppDetails = async () => {
                         <v-container>
                             <v-row justify="end">
                                 <v-card-actions>
-                                    <v-btn
-                                        class="ma-2 capitalize-text"
-                                        color="var(--vt-c-blue)"
-                                        @click="isActive.value = false"
-                                        icon="mdi-close"
-                                    >
+                                    <v-btn class="ma-2 capitalize-text" color="var(--vt-c-blue)"
+                                        @click="isActive.value = false" icon="mdi-close">
                                     </v-btn>
                                 </v-card-actions>
                             </v-row>

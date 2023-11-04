@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted } from 'vue'
-import { Grid, h, i } from 'gridjs';
+import { Grid, h } from 'gridjs';
 import "gridjs/dist/theme/mermaid.css";
 
 // TODO: Create proper vars
@@ -28,10 +28,10 @@ onMounted(() => {
                         className: 'py-2 mb-4 px-4 border rounded-md',
                         onClick: () => alert(`Editing "${row.cells[0].data}" "${row.cells[1].data}"`)
                     }, 'Edit');
-                    
+
                 }
             },
-            
+
             // <div class="officer-actions-box ml-auto d-flex">
             //     <!-- Reject Loan -->
             //     <v-btn
@@ -77,11 +77,9 @@ onMounted(() => {
 
 <template>
     <div id="loan-status-wrapper" ref="loanStatusTable" class="w-100 px-4 "></div>
-
 </template>
 
 <style>
-
 .form-wrapper {
     background-color: var(--vt-c-white-off);
 }
