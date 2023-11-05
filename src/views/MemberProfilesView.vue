@@ -34,7 +34,7 @@ async function getAllUsers() {
 }
 
 // Refresh users listing when there is a change in the searchbar
-watch(() => searchQuery.value, getAllUsers)
+watch(searchQuery, getAllUsers)
 
 // Upon loading the page
 onMounted(getAllUsers)
