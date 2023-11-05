@@ -18,24 +18,23 @@ const users = ref([])
  * Grabs all officers registered in the database.
  */
 async function getAllUsers() {
-    const params = new URLSearchParams();
-
-    if (searchQuery.value === null) {
-        searchQuery.value = ''
+    let url = ''
+    if (searchQuery.value !== '') {
+        const params = new URLSearchParams()
+        params.set('username', searchQuery.value)
+        url += `search?${params}`
     }
-    params.set('username', searchQuery.value)
 
     try {
-        const response = await fetch(`${API_URL}/users/search?${params}`)
-        const jsonResponse = await response.json()
-        users.value = jsonResponse
+        const response = await fetch(`${API_URL}/users/${url}`)
+        users.value = await response.json()
     } catch (e) {
         console.error(e)
     }
 }
 
 // Refresh users listing when there is a change in the searchbar
-watch(searchQuery, getAllUsers)
+watch(() => searchQuery.value, getAllUsers)
 
 // Upon loading the page
 onMounted(getAllUsers)
@@ -46,9 +45,8 @@ onMounted(getAllUsers)
         <NavigationDrawer />
 
         <div class="d-flex flex-column w-100 pl-8">
-
             <!-- Top Bar of Dashboard -->
-            <DashboardTopBar :breadcrumbs="['Home', 'Member Profiles']"/>
+            <DashboardTopBar :breadcrumbs="['Home', 'Member Profiles']" />
 
             <!-- Main Dashboard Body -->
             <div class="dashboard-body d-flex flex-column h-100 py-3">
@@ -57,46 +55,57 @@ onMounted(getAllUsers)
                 <div class="upper-wrapper">
                     <!-- Search bar -->
                     <div class="search-wrapper">
-                        <v-text-field v-model="searchQuery" prepend-inner-icon="mdi-magnify" label="Search Member"
-                            clearable />
+                        <v-text-field
+                            v-model="searchQuery"
+                            prepend-inner-icon="mdi-magnify"
+                            label="Search Member"
+                            clearable=""
+                        />
                     </div>
 
                     <div class="btn-wrapper">
                         <v-dialog width="1200">
                             <template v-slot:activator="{ props }">
-
                                 <!-- Create Member Profile Button -->
-                                <v-btn class="btn capitalize-text" v-bind="props" text="Create Member Profile">
+                                <v-btn
+                                    class="btn capitalize-text"
+                                    v-bind="props"
+                                    text="Create Member Profile"
+                                >
                                 </v-btn>
-
                             </template>
 
                             <!-- Form popup -->
                             <template v-slot:default="{ isActive }">
                                 <v-card close-on-back contained class="form-wrapper">
-
                                     <v-container>
                                         <v-row justify="end">
                                             <v-card-actions>
-                                                <v-btn class="ma-2 capitalize-text" color="var(--vt-c-blue)"
-                                                    @click="isActive.value = false" icon="mdi-close">
+                                                <v-btn
+                                                    class="ma-2 capitalize-text"
+                                                    color="var(--vt-c-blue)"
+                                                    @click="isActive.value = false"
+                                                    icon="mdi-close"
+                                                >
                                                 </v-btn>
                                             </v-card-actions>
                                         </v-row>
                                     </v-container>
 
                                     <MemberProfileRegister :onsubmit="getAllUsers" />
-
                                 </v-card>
                             </template>
-
                         </v-dialog>
                     </div>
                 </div>
 
                 <ContentBlock :width="100" :height="102" :unit="'%'" :bg-color="'#FFF'">
                     <!-- List of members -->
-                    <div v-for="user in users" :key="user.username" class="officer-list-box d-flex flex-column">
+                    <div
+                        v-for="user in users"
+                        :key="user.username"
+                        class="officer-list-box d-flex flex-column"
+                    >
                         <UserProfileBtn :user="user" :onsubmit="getAllUsers" />
                     </div>
                 </ContentBlock>
@@ -104,8 +113,6 @@ onMounted(getAllUsers)
         </div>
     </div>
 </template>
-
-
 
 <style scoped>
 .dashboard-top {
@@ -167,7 +174,6 @@ onMounted(getAllUsers)
     cursor: pointer;
     text-transform: capitalize;
 }
-
 
 .btn:hover {
     background: var(--vt-c-blue-dark);
