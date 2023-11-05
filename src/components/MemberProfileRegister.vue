@@ -82,7 +82,12 @@ const autofillFormIfPossible = function () {
     if (props.autofill) {
         let autofillData = { ...props.autofill }
         autofillData.birthday = autofillData.birthday.substring(0, 10);
-        autofillData.spouse.birthday = autofillData.spouse.birthday.substring(0, 10);
+        if (autofillData.spouse) {
+            autofillData.spouse.birthday = autofillData.spouse.birthday.substring(0, 10);
+        } else {
+            delete autofillData.spouse
+        }
+        console.log(autofillData)
         Object.assign(userData, autofillData)
     }
 }
@@ -96,6 +101,7 @@ const updateUser = async function () {
     })
 
     errorMessage.value = ''
+    errorAlert.value = false
 
     // TODO: should alert the user on a successful edit
 
@@ -121,6 +127,7 @@ const registerUser = async function () {
     })
 
     errorMessage.value = ''
+    errorAlert.value = false
 
     if (result.status === 200) {
         form.value.reset()
@@ -309,20 +316,20 @@ onMounted(autofillFormIfPossible)
                 </div>
 
                 <!-- Spouse's Information -->
-                <div class="header2">Spouse's Information</div>
+                <div class="header2">Spouse's Information (Leave blank if no spouse) </div>
 
                 <div class="row-tab">
                     <div class="label">
-                        <div>* Spouse's First Name:</div>
+                        <div> Spouse's First Name:</div>
                     </div>
 
                     <VTextField class="username-pw-input" v-model="userData.spouse.name.given" id="login-spouse-first-name"
-                        :rules="[rules.required]" label="Enter Spouse's First Name" />
+                        label="Enter Spouse's First Name" />
                 </div>
 
                 <div class="row-tab">
                     <div class="label">
-                        <div>* Spouse's Middle Name:</div>
+                        <div> Spouse's Middle Name:</div>
                     </div>
 
                     <VTextField class="username-pw-input" v-model="userData.spouse.name.middle"
@@ -331,38 +338,38 @@ onMounted(autofillFormIfPossible)
 
                 <div class="row-tab">
                     <div class="label">
-                        <div>* Spouse's Last Name:</div>
+                        <div> Spouse's Last Name:</div>
                     </div>
 
                     <VTextField class="username-pw-input" v-model="userData.spouse.name.last" id="login-spouse-last-name"
-                        :rules="[rules.required]" label="Enter Spouse's Last Name" />
+                        label="Enter Spouse's Last Name" />
                 </div>
 
                 <div class="row-tab">
                     <div class="label">
-                        <div>* Spouse's Date of Birth:</div>
+                        <div> Spouse's Date of Birth:</div>
                     </div>
 
                     <VTextField class="username-pw-input" v-model="userData.spouse.birthday" id="login-spouse-birthday"
-                        :rules="[rules.required]" type="date" label="Select Spouse's Date of Birth" />
+                        type="date" label="Select Spouse's Date of Birth" />
                 </div>
 
                 <div class="row-tab">
                     <div class="label">
-                        <div>* Spouse's Place of Birth:</div>
+                        <div> Spouse's Place of Birth:</div>
                     </div>
 
                     <VTextField class="username-pw-input" v-model="userData.spouse.birthplace" id="login-spouse-birthplace"
-                        :rules="[rules.required]" label="Enter Spouse's Place of Birth" />
+                        label="Enter Spouse's Place of Birth" />
                 </div>
 
                 <div class="row-tab">
                     <div class="label">
-                        <div>* Spouse's Contact Number:</div>
+                        <div> Spouse's Contact Number:</div>
                     </div>
 
                     <VTextField class="username-pw-input" v-model="userData.spouse.contact_no"
-                        id="login-spouse-contact-number" :rules="[rules.required]" label="Enter Spouse's Contact Number" />
+                        id="login-spouse-contact-number" label="Enter Spouse's Contact Number" />
                 </div>
 
                 <VAlert v-if="errorAlert" v-model="errorAlert" type="error" closable="" density="comfortable" elevation="5">
