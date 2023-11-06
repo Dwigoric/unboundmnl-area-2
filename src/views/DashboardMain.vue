@@ -15,7 +15,8 @@ import LoanStatusItem from '../components/LoanStatusItem.vue'
 
         <div class="d-flex flex-column w-100 pl-8">
             <!-- Top Bar of Dashboard -->
-            <DashboardTopBar :breadcrumbs="['Home', 'Dashboard']"/>
+            <DashboardTopBar :breadcrumbs="['Home', 'Loans', 'Loan Dashboard']"/>
+            <h2>Loan Dashboard</h2>
 
             <!-- Main Dashboard Body -->
             <div class="dashboard-body d-flex flex-column h-100 py-4">
@@ -28,7 +29,7 @@ import LoanStatusItem from '../components/LoanStatusItem.vue'
                 :maxUnit="'px'"
                 :bg-color="'#FFF'"
                 >
-                    <!-- TODO: Do this last -->
+                    <LoanLedger />
                 </ContentBlock>
             </div>
         </div>

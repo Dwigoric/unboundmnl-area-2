@@ -15,10 +15,12 @@ import LoanStatusItem from '../components/LoanStatusItem.vue'
 
         <div class="d-flex flex-column w-100 pl-8">
             <!-- Top Bar of Dashboard -->
-            <DashboardTopBar :breadcrumbs="['Home', 'Dashboard']" />
+            <DashboardTopBar :breadcrumbs="['Home', 'Loans', 'Loan Status']" />
 
             <!-- Main Dashboard Body -->
             <div class="dashboard-body d-flex flex-column h-100 py-4">
+                <h2>All Pending Loans</h2>
+
 
                 <ContentBlock :width="100" :height="100" :maxWidth="1600" :unit="'%'" :maxUnit="'px'" :bg-color="'#FFF'">
                 <LoanStatusItem/>

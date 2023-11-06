@@ -1,7 +1,10 @@
 <script setup>
 import { ref, onMounted } from 'vue'
-import { Grid, h, i } from 'gridjs';
+import { Grid, h } from 'gridjs';
 import "gridjs/dist/theme/mermaid.css";
+
+import LoanStatusItemPopup from '../components/LoanStatusItemPopup.vue'
+
 
 // TODO: Create proper vars
 // defineProps({
@@ -23,31 +26,15 @@ onMounted(() => {
             'Loanee',
             {
                 name: 'Change Status',
+                // HELPME: Make it a way so that when you press the 'Change Status' btn, LoanStatusItemPopup pops up
                 formatter: (cell, row) => {
-                    return h('v-btn', {
+                    return h('v-hover', {
                         className: 'py-2 mb-4 px-4 border rounded-md',
-                        onClick: () => alert(`Editing "${row.cells[0].data}" "${row.cells[1].data}"`)
-                    }, 'Edit');
+                        onClick: () => alert(`Wow popup`)
+                    }, 'Change Status');
                     
                 }
             },
-            
-            // <div class="officer-actions-box ml-auto d-flex">
-            //     <!-- Reject Loan -->
-            //     <v-btn
-            //         icon="mdi-check-bold"
-            //         variant="plain"
-            //         color="green">
-            //     </v-btn>
-
-            //     <!-- Approve Loan -->
-            //     <v-btn
-            //         icon="mdi-close-thick"
-            //         variant="plain"
-            //         color="red">
-            //     </v-btn>
-
-            // </div>
         ],
         data: [
             {
@@ -76,8 +63,11 @@ onMounted(() => {
 </script>
 
 <template>
-    <div id="loan-status-wrapper" ref="loanStatusTable" class="w-100 px-4 "></div>
+    <div id="loan-status-wrapper" ref="loanStatusTable" class="w-100 px-4 ">
 
+        
+    </div>
+    <LoanStatusItemPopup />
 </template>
 
 <style>

@@ -75,3 +75,7 @@ body {
 .w-30 {
     width: 30%;
 }
+
+.capitalize {
+    text-transform: capitalize;
+}

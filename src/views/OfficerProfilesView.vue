@@ -154,7 +154,7 @@ onMounted(getAllOfficers)
 
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-end;
 
     /* border: 1px solid black; */
 }
