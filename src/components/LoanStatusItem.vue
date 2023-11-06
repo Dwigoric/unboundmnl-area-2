@@ -71,7 +71,6 @@ onMounted(() => {
 </template>
 
 <style>
-
 .form-wrapper {
     background-color: var(--vt-c-white-off);
 }

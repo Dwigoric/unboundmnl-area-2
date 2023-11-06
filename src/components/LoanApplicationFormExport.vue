@@ -18,7 +18,7 @@ const errorMessage = ref('')
 // Submit loan application
 const submit = async () => {
     const { error, message } = await fetch(
-        `${API_URL}/loan-applications/${appFormStore.userData.username}`,
+        `${API_URL}/loans/new/${appFormStore.userData.username}`,
         {
             method: 'PUT',
             headers: {
@@ -104,7 +104,7 @@ const fetchPDF = async () => {
     const contactNumberTextField = form.getTextField('Contact No')
     contactNumberTextField.setAlignment(TextAlignment.Center)
     contactNumberTextField.setText(appFormStore.userData.contact_no)
-    form.getTextField('Address').setText(
+    form.getTextField('Residence Address').setText(
         [
             appFormStore.userData.address.street,
             appFormStore.userData.address.barangay,
@@ -164,14 +164,7 @@ onUnmounted(() => URL.revokeObjectURL(pdfUrl.value))
     <VBtn type="submit" class="bg-orange-darken-4" @click.prevent="submit">
         Submit application form
     </VBtn>
-    <VAlert
-        v-if="errorAlert"
-        v-model="errorAlert"
-        type="error"
-        closable=""
-        density="comfortable"
-        elevation="5"
-    >
+    <VAlert v-if="errorAlert" v-model="errorAlert" type="error" closable="" density="comfortable" elevation="5">
         {{ errorMessage }}
     </VAlert>
 </template>
