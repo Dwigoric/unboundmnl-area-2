@@ -32,9 +32,9 @@ const logout = () => {
     <v-card class="mx-auto pa-5">
         <v-layout>
             <v-navigation-drawer
-                :width="330"
+                :width="300"
                 :margin="20"
-                class="navigation-drawer pa-md-4 elevation-9"
+                class="navigation-drawer pa-md-4"
                 theme="dark"
                 permanent=""
             >

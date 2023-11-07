@@ -39,17 +39,22 @@ onMounted(() => {
             'Officer in Charge',
         ],
         data: data,
+        pagination: {
+            limit: 10
+        },
+        search: true,
+        sort: true,
+        resizable: true,
         fixedHeader: true,
-        pagination: true,
         className: {
-            // th: 'rounded-t-lg text-left text-grey-darken-3 bg-blue-grey-lighten-4 pa-2',
+            th: 'pa-3',
             // td: 'pa-2 grid-right-border',
             // tr: 'my-16 py-3'
         },
         style: {
             table: {
-                'width': '100%',
-                // 'border-collapse': 'separate',
+                // 'width': '100%',
+                'border-collapse': 'separate',
                 // 'border-spacing': '0.2rem 1.25rem'
             },
             tr: {
@@ -64,9 +69,9 @@ onMounted(() => {
 </script>
 
 <template>
-    <div id="loan-info-wrapper" class="d-flex justify-space-between align-center w-100 px-4">
+    <div id="loan-info-wrapper" class="d-flex justify-space-between align-center">
         
-        <div id="loan-amount-cell" class="h-75 w-30 pa-2" style="max-width: 350px;">
+        <div id="loan-amount-cell" class="h-75 w-30 pa-2">
             <p class="font-weight-bold">Loan Amount: </p>
             <p class="loan-amount">{{ formattedLoanAmount }}</p>
         </div>
@@ -95,7 +100,7 @@ onMounted(() => {
 <style>
 
     #loan-info-wrapper {
-        height: 150px;
+        /* height: 150px; */
     }
 
     .grid-right-border {
