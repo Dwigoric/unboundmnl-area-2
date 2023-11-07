@@ -1,10 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
-import { Grid, h } from 'gridjs';
-import "gridjs/dist/theme/mermaid.css";
-
-import LoanStatusItemPopup from '../components/LoanStatusItemPopup.vue'
-
+import { Grid, h } from 'gridjs'
+import 'gridjs/dist/theme/mermaid.css'
 
 // TODO: Create proper vars
 // defineProps({
@@ -13,63 +10,25 @@ import LoanStatusItemPopup from '../components/LoanStatusItemPopup.vue'
 //     username: String
 // });
 
-const data = [
-    [
-        'John Doe', 'Personal Loan', '$10,000'
-    ],
-    [
-        'John Doe', 'Personal Loan', '$10,000'
+const props = defineProps({
+    data: {
+        type: Array,
+        required: true
+    },
+    setPopupLoan: {
+        type: Function,
+        required: true
+    }
+})
 
-    ],
-    [
-        'John Doe', 'Personal Loan', '$10,000'
-    ],
-    [
-        'John Doe', 'Personal Loan', '$10,000'
-    ],
-    [
-        'John Doe', 'Personal Loan', '$10,000'
-    ],
-    [
-        'John Doe', 'Personal Loan', '$10,000'
-    ],
-    [
-        'John Doe', 'Personal Loan', '$10,000'
-    ],
-    [
-        'John Doe', 'Personal Loan', '$10,000'
-    ],
-    [
-        'John Doe', 'Personal Loan', '$10,000'
-    ],
-    [
-        'John Doe', 'Personal Loan', '$10,000'
-    ],
-    [
-        'John Doe', 'Wow Loan', '$10,000'
-    ],
-    [
-        'John Doe', 'Personal Loan', '$10,000'
-    ],
-    [
-        'Jana', 'Personal Loan', '$10,000'
-    ],
-    [
-        'Mama mo', 'Panootie', '$10,000'
-    ],
-    [
-        'Jana', 'Personal Loan', '$10,000'
-    ],
-]
+const loanStatusTable = ref()
 
-const loanStatusTable = ref();
-
-const loanStatus = ref();
+const loanStatus = ref()
 
 onMounted(() => {
-
     loanStatus.value = new Grid({
         columns: [
+            { name: 'Loan ID', hidden: true },
             'Type of Loan',
             'Amount of Loan',
             'Loanee',
@@ -77,13 +36,16 @@ onMounted(() => {
                 name: 'Change Status',
                 // HELPME: Make it a way so that when you press the 'Change Status' btn, LoanStatusItemPopup pops up
                 formatter: (cell, row) => {
-                    return h('v-hover', {
-                        className: 'py-2 mb-4 px-4 border rounded-md',
-                        onClick: () => alert(`Wow popup`)
-                    }, 'Change Status');
-                    
+                    return h(
+                        'v-hover',
+                        {
+                            className: 'py-2 mb-4 px-4 border rounded-md',
+                            onClick: () => props.setPopupLoan(row.cells[0].data)
+                        },
+                        'Change Status'
+                    )
                 }
-            },
+            }
         ],
         pagination: {
             limit: 10
@@ -92,7 +54,7 @@ onMounted(() => {
         sort: true,
         resizable: true,
         fixedHeader: true,
-        data: data,
+        data: props.data,
         className: {
             // Define your class names here
         },
@@ -102,21 +64,17 @@ onMounted(() => {
             },
             tr: {
                 // Define row styles here
-            },
-        },
-    });
-
+            }
+        }
+    })
 
     // Render loanStatus in corresponding reference
-    loanStatus.value.render(loanStatusTable.value);
+    loanStatus.value.render(loanStatusTable.value)
 })
 </script>
 
 <template>
-    <div id="loan-status-wrapper" ref="loanStatusTable" class="w-100 px-4 ">
-
-        
-    </div>
+    <div id="loan-status-wrapper" ref="loanStatusTable" class="w-100 px-4"></div>
     <!-- <LoanStatusItemPopup /> -->
 </template>
 
