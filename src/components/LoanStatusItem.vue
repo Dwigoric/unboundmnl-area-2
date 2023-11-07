@@ -1,7 +1,9 @@
 <script setup>
+// Packages
 import { ref, onMounted } from 'vue'
 import { Grid, h } from 'gridjs'
 import 'gridjs/dist/theme/mermaid.css'
+import LoanStatusItemPopup from './LoanStatusItemPopup.vue'
 
 // TODO: Create proper vars
 // defineProps({
@@ -10,28 +12,47 @@ import 'gridjs/dist/theme/mermaid.css'
 //     username: String
 // });
 
-const props = defineProps({
-    data: {
-        type: Array,
-        required: true
-    },
-    setPopupLoan: {
-        type: Function,
-        required: true
-    }
-})
+// Constant variables
+const data = [
+    ['id1', 'John Doe', 'Personal Loan', '$10,000'],
+    ['id2', 'John Doe', 'Personal Loan', '$10,000'],
+    ['id3', 'John Doe', 'Personal Loan', '$10,000'],
+    ['id4', 'John Doe', 'Personal Loan', '$10,000'],
+    ['id5', 'John Doe', 'Personal Loan', '$10,000'],
+    ['id6', 'John Doe', 'Personal Loan', '$10,000'],
+    ['id7', 'John Doe', 'Personal Loan', '$10,000'],
+    ['id8', 'John Doe', 'Personal Loan', '$10,000'],
+    ['id9', 'John Doe', 'Personal Loan', '$10,000'],
+    ['id10', 'John Doe', 'Personal Loan', '$10,000'],
+    ['id11', 'John Doe', 'Wow Loan', '$10,000'],
+    ['id12', 'John Doe', 'Personal Loan', '$10,000'],
+    ['id13', 'Jana', 'Personal Loan', '$10,000'],
+    ['id14', 'Mama mo', 'Panootie', '$10,000'],
+    ['id15', 'Jana', 'Personal Loan', '$10,000']
+]
 
+// Reactive variables
 const loanStatusTable = ref()
-
 const loanStatus = ref()
+const isPopupActive = ref(false)
 
+// Methods
+const setPopupLoan = (loanId) => {
+    isPopupActive.value = true
+
+    const loan = data.find((loan) => loan[0] === loanId)
+
+    // TODO: Use the loan data to populate the popup
+}
+
+// Lifecycle hooks
 onMounted(() => {
     loanStatus.value = new Grid({
         columns: [
             { name: 'Loan ID', hidden: true },
+            'Loanee',
             'Type of Loan',
             'Amount of Loan',
-            'Loanee',
             {
                 name: 'Change Status',
                 formatter: (cell, row) => {
@@ -39,7 +60,7 @@ onMounted(() => {
                         'v-hover',
                         {
                             className: 'py-2 mb-4 px-4 border rounded-md',
-                            onClick: () => props.setPopupLoan(row.cells[0].data)
+                            onClick: () => setPopupLoan(row.cells[0].data)
                         },
                         'Change Status'
                     )
@@ -53,7 +74,7 @@ onMounted(() => {
         sort: true,
         resizable: true,
         fixedHeader: true,
-        data: props.data,
+        data,
         className: {
             // Define your class names here
         },
@@ -74,6 +95,28 @@ onMounted(() => {
 
 <template>
     <div id="loan-status-wrapper" ref="loanStatusTable" class="w-100 px-4"></div>
+    <VDialog width="1200" v-model="isPopupActive">
+        <!-- Form popup -->
+        <template #default="{ isActive }">
+            <VCard close-on-back contained class="form-wrapper">
+                <VContainer>
+                    <VRow justify="end">
+                        <VCardActions>
+                            <VBtn
+                                class="ma-2 capitalize-text"
+                                color="var(--vt-c-blue)"
+                                @click="isActive.value = false"
+                                icon="mdi-close"
+                            >
+                            </VBtn>
+                        </VCardActions>
+                    </VRow>
+                </VContainer>
+
+                <LoanStatusItemPopup />
+            </VCard>
+        </template>
+    </VDialog>
 </template>
 
 <style>
