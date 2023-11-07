@@ -56,7 +56,7 @@ const logIn = async () => {
     await currentUserStore.fetchUser()
 
     // Redirect to dashboard
-    return router.replace({ name: 'Dashboard' })
+    return router.replace({ name: 'Loan Dashboard' })
 }
 </script>
 
