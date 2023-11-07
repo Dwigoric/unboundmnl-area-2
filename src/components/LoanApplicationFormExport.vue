@@ -115,7 +115,7 @@ const fetchPDF = async () => {
     form.getTextField('Monthly Income').setText(
         appFormStore.userData.monthly_income.toLocaleString()
     )
-    form.getTextField('Source of Income').setText(appFormStore.userData.source_of_income)
+    form.getTextField('Source of Income').setText(appFormStore.userData.occupation)
 
     // Set spouse's information
     if (appFormStore.userData.civil_status === 'Married') {
@@ -133,7 +133,7 @@ const fetchPDF = async () => {
         )
         form.getTextField('Spouse Place of Birth').setText(appFormStore.userData.spouse.birthplace)
         form.getTextField('Spouse Source of Income').setText(
-            appFormStore.userData.spouse.source_of_income
+            appFormStore.userData.spouse.occupation
         )
         const spouseContactNumberTextField = form.getTextField('Spouse Contact No')
         spouseContactNumberTextField.setAlignment(TextAlignment.Center)
@@ -164,7 +164,14 @@ onUnmounted(() => URL.revokeObjectURL(pdfUrl.value))
     <VBtn type="submit" class="bg-orange-darken-4" @click.prevent="submit">
         Submit application form
     </VBtn>
-    <VAlert v-if="errorAlert" v-model="errorAlert" type="error" closable="" density="comfortable" elevation="5">
+    <VAlert
+        v-if="errorAlert"
+        v-model="errorAlert"
+        type="error"
+        closable=""
+        density="comfortable"
+        elevation="5"
+    >
         {{ errorMessage }}
     </VAlert>
 </template>
