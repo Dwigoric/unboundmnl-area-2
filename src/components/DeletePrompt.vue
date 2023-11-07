@@ -86,7 +86,7 @@ const deleteOfficer = async function () {
 <template>
     <div class="wrapper">
         <div class="header">
-            <div class="header-text">
+            <div class="header-text ">
                 Are you sure you want to delete this {{ profileType }} Profile {{ name }}?
             </div>
         </div>

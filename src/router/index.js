@@ -25,7 +25,7 @@ const router = createRouter({
             component: LoginView,
             beforeEnter: (to, from, next) => {
                 const credentials = window.$cookies.get('credentials')
-                if (credentials && credentials.token) next({ name: 'Dashboard' })
+                if (credentials && credentials.token) next({ name: 'Loan Dashboard' })
                 else next()
             }
         },

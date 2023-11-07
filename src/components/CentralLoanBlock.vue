@@ -3,8 +3,6 @@ import { ref, onMounted } from 'vue'
 import { Grid, h } from 'gridjs';
 import "gridjs/dist/theme/mermaid.css";
 
-import LoanStatusItemPopup from '../components/LoanStatusItemPopup.vue'
-
 
 // TODO: Create proper vars
 // defineProps({

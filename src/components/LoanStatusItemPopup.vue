@@ -43,26 +43,45 @@ onMounted(() => {
 
 
 <template>
-    <h2> Change the status of the loan below</h2>
-    <div id="loan-status-wrapper" ref="loanStatusTableUser" class="w-100 px-4 "></div>
-    <div class="officer-actions-box ml-auto d-flex">
-         <!-- Reject Loan -->
-        <v-btn
-            class="capitalize"
-            prepend-icon="mdi-check-bold"
-            variant="plain"
-            color="green">
-            Accept Loan
-        </v-btn>
+    <h2 class="header-wrapper"> Change the status of the loan below</h2>
+    <div class="wrapper">
+        <div id="loan-status-wrapper" ref="loanStatusTableUser" class="w-100 px-4 "></div>
+        <div class="ml-auto d-flex justify-end pt-4">
+            <!-- Reject Loan -->
+            <v-btn
+                class="capitalize"
+                prepend-icon="mdi-check-bold"
+                variant="plain"
+                color="green">
+                Accept Loan
+            </v-btn>
 
-         <!-- Approve Loan -->
-        <v-btn
-            class="capitalize"
-            prepend-icon="mdi-close-thick"
-            variant="plain"
-            color="red">
-            Reject Loan
-        </v-btn>
+            <!-- Approve Loan -->
+            <v-btn
+                class="capitalize"
+                prepend-icon="mdi-close-thick"
+                variant="plain"
+                color="red">
+                Reject Loan
+            </v-btn>
 
-     </div>
+        </div>
+    </div>
 </template>
+
+<style scoped>
+
+.header-wrapper {
+    padding-left: 7%;
+    padding-bottom: 2%;
+}
+.wrapper {
+    padding: 6%;
+    padding-top: 2%;
+    padding-bottom: 3%;
+    background-color: var(--vt-c-white);
+}
+
+
+
+</style>

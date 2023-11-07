@@ -34,7 +34,6 @@ onMounted(() => {
             'Loanee',
             {
                 name: 'Change Status',
-                // HELPME: Make it a way so that when you press the 'Change Status' btn, LoanStatusItemPopup pops up
                 formatter: (cell, row) => {
                     return h(
                         'v-hover',
@@ -75,7 +74,6 @@ onMounted(() => {
 
 <template>
     <div id="loan-status-wrapper" ref="loanStatusTable" class="w-100 px-4"></div>
-    <!-- <LoanStatusItemPopup /> -->
 </template>
 
 <style>
