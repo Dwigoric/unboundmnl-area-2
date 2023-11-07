@@ -22,6 +22,12 @@ const errorMessage = ref('')
 
 // Define methods
 const getUserData = async () => {
+    if (!searchUsername.value) {
+        errorAlert.value = true
+        errorMessage.value = 'Please enter a username'
+        return
+    }
+
     const params = new URLSearchParams()
     params.set('username', searchUsername.value)
     const loanees = await fetch(`${API_URL}/users/search?${params}`).then((res) => res.json())
@@ -52,9 +58,21 @@ const sendToAppDetails = async () => {
 
         <!-- Search bar -->
         <div class="search-wrapper">
-            <v-text-field v-model="searchUsername" prepend-inner-icon="mdi-magnify" label="Search Member by Username"
-                clearable="" hide-details />
-            <VAlert v-if="errorAlert" v-model="errorAlert" type="error" closable="" density="comfortable" elevation="5">
+            <v-text-field
+                v-model="searchUsername"
+                prepend-inner-icon="mdi-magnify"
+                label="Search Member by Username"
+                clearable=""
+                hide-details
+            />
+            <VAlert
+                v-if="errorAlert"
+                v-model="errorAlert"
+                type="error"
+                closable=""
+                density="comfortable"
+                elevation="5"
+            >
                 {{ errorMessage }}
             </VAlert>
         </div>
@@ -62,8 +80,13 @@ const sendToAppDetails = async () => {
             <v-dialog width="1200">
                 <template v-slot:activator="{ props }">
                     <!-- Create Member Profile Button -->
-                    <v-btn class="capitalize-text mt-2" v-bind="props" variant="plain"
-                        text="New Member? Click here to create Member Profile instead" flat="">
+                    <v-btn
+                        class="capitalize-text mt-2"
+                        v-bind="props"
+                        variant="plain"
+                        text="New Member? Click here to create Member Profile instead"
+                        flat=""
+                    >
                     </v-btn>
                 </template>
 
@@ -73,8 +96,12 @@ const sendToAppDetails = async () => {
                         <v-container>
                             <v-row justify="end">
                                 <v-card-actions>
-                                    <v-btn class="ma-2 capitalize-text" color="var(--vt-c-blue)"
-                                        @click="isActive.value = false" icon="mdi-close">
+                                    <v-btn
+                                        class="ma-2 capitalize-text"
+                                        color="var(--vt-c-blue)"
+                                        @click="isActive.value = false"
+                                        icon="mdi-close"
+                                    >
                                     </v-btn>
                                 </v-card-actions>
                             </v-row>
