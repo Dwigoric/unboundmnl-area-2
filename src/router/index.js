@@ -11,6 +11,7 @@ import LoanApplicationSearch from '../components/LoanApplicationSearch.vue'
 import LoanApplicationForm from '../components/LoanApplicationForm.vue'
 import LoanApplicationFormExport from '../components/LoanApplicationFormExport.vue'
 import LoanStatus from '../views/LoanStatus.vue'
+import DashboardCapital from '../views/DashboardCapital.vue'
 
 // Import path name constants
 import { PATH_NAMES } from '../constants'
@@ -30,7 +31,7 @@ const router = createRouter({
         },
         {
             path: '/dashboard',
-            name: 'Dashboard',
+            name: 'Loan Dashboard',
             component: DashboardMain,
             beforeEnter: (to, from, next) => {
                 const credentials = window.$cookies.get('credentials')
@@ -89,6 +90,17 @@ const router = createRouter({
             path: '/loan-status',
             name: 'Loan Status',
             component: LoanStatus,
+            // TODO: this - jana uwu
+            // beforeEnter: (to, from, next) => {
+            //     const credentials = window.$cookies.get('credentials')
+            //     if (!credentials || !credentials.token) next({ name: 'Login' })
+            //     else next()
+            // }
+        },
+        {
+            path: '/cap-dashboard',
+            name: 'Shared Capital Dashboard',
+            component: DashboardCapital,
             // TODO: this - jana uwu
             // beforeEnter: (to, from, next) => {
             //     const credentials = window.$cookies.get('credentials')
