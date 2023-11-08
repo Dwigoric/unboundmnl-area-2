@@ -164,14 +164,7 @@ onUnmounted(() => URL.revokeObjectURL(pdfUrl.value))
     <VBtn type="submit" class="bg-orange-darken-4" @click.prevent="submit">
         Submit application form
     </VBtn>
-    <VAlert
-        v-if="errorAlert"
-        v-model="errorAlert"
-        type="error"
-        closable=""
-        density="comfortable"
-        elevation="5"
-    >
+    <VAlert v-if="errorAlert" v-model="errorAlert" type="error" closable="" density="comfortable" elevation="5">
         {{ errorMessage }}
     </VAlert>
 </template>

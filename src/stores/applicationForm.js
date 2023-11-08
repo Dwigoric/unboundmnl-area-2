@@ -10,6 +10,11 @@ export const useApplicationFormStore = defineStore('applicationForm', () => {
     const type = ref('')
     const status = ref('')
     const userData = reactive({})
+    const coborrowerName = reactive({
+        given: '',
+        middle: '',
+        last: ''
+    })
 
     const reset = () => {
         amount.value = 0
@@ -26,7 +31,8 @@ export const useApplicationFormStore = defineStore('applicationForm', () => {
             term: term.value,
             classification: classification.value,
             type: type.value,
-            status: status.value
+            status: status.value,
+            coborrowerName: coborrowerName
         }
     }
 
@@ -41,6 +47,7 @@ export const useApplicationFormStore = defineStore('applicationForm', () => {
         type.value = loan.type
         status.value = loan.status || 'pending'
         classification.value = loan.classification
+        Object.assign(coborrowerName, loan.coborrowerName)
     }
 
     return { userData, getLoanData, setUserData, setLoanData, reset }

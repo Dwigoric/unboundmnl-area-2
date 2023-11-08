@@ -27,7 +27,12 @@ const loanData = reactive({
     type: '',
     amount: 0,
     minAmount: 0,
-    maxAmount: 0
+    maxAmount: 0,
+    coborrowerName: {
+        given: '',
+        middle: '',
+        last: ''
+    }
 })
 
 // Define Loan types
@@ -111,26 +116,42 @@ const changeLoanRange = function () {
                         <div>* Classification:</div>
                     </div>
 
-                    <VRadioGroup
-                        v-model="loanData.classification"
-                        id="loan-classification"
-                        :rules="[rules.required]"
-                    >
+                    <VRadioGroup v-model="loanData.classification" id="loan-classification" :rules="[rules.required]">
                         <VRadio label="New Loan" value="new"></VRadio>
                         <VRadio label="Renewal" value="renewal"></VRadio>
                     </VRadioGroup>
                 </div>
 
+                <!-- Term of Loan -->
                 <div class="row-tab">
                     <div class="label">
                         <div>* Term:</div>
                     </div>
-                    <VTextField
-                        class="username-pw-input"
-                        v-model="loanData.term"
-                        :rules="[rules.required]"
-                        label="Enter Term of Loan"
-                    />
+                    <VTextField class="username-pw-input" v-model="loanData.term" :rules="[rules.required]"
+                        label="Enter Term of Loan" />
+                </div>
+
+                <!-- Coborrower Information -->
+                <div class="row-tab">
+                    <div class="label">
+                        <div>* Coborrower First Name:</div>
+                    </div>
+                    <VTextField class="username-pw-input" v-model="loanData.coborrowerName.given" :rules="[rules.required]"
+                        label="Enter Coborrower First Name" />
+                </div>
+                <div class="row-tab">
+                    <div class="label">
+                        <div>Coborrower Middle Name:</div>
+                    </div>
+                    <VTextField class="username-pw-input" v-model="loanData.coborrowerName.middle"
+                        label="Enter Coborrower Middle Name" />
+                </div>
+                <div class="row-tab">
+                    <div class="label">
+                        <div>* Coborrower Last Name:</div>
+                    </div>
+                    <VTextField class="username-pw-input" v-model="loanData.coborrowerName.last" :rules="[rules.required]"
+                        label="Enter Coborrower Last Name" />
                 </div>
 
                 <!-- Type of Loan -->
@@ -139,15 +160,8 @@ const changeLoanRange = function () {
                         <div>* Type:</div>
                     </div>
 
-                    <VSelect
-                        class="username-pw-input"
-                        v-model="loanData.type"
-                        :items="loanTypes"
-                        id="loan-type"
-                        :rules="[rules.required]"
-                        label="Select Loan Type"
-                        @update:modelValue="changeLoanRange"
-                    />
+                    <VSelect class="username-pw-input" v-model="loanData.type" :items="loanTypes" id="loan-type"
+                        :rules="[rules.required]" label="Select Loan Type" @update:modelValue="changeLoanRange" />
                 </div>
 
                 <div v-if="loanData.type !== ''" class="row-tab">
@@ -156,37 +170,23 @@ const changeLoanRange = function () {
                     </div>
 
                     <div style="width: 68%">
-                        <VTextField
-                            v-model="loanData.amount"
-                            id="loan-amount"
-                            :rules="[
-                                rules.required,
-                                (v) => {
-                                    if (v < loanData.minAmount || v > loanData.maxAmount) {
-                                        return (
-                                            'Amount must be between ' +
-                                            loanData.minAmount +
-                                            ' and ' +
-                                            loanData.maxAmount
-                                        )
-                                    }
-                                    return true
+                        <VTextField v-model="loanData.amount" id="loan-amount" :rules="[
+                            rules.required,
+                            (v) => {
+                                if (v < loanData.minAmount || v > loanData.maxAmount) {
+                                    return (
+                                        'Amount must be between ' +
+                                        loanData.minAmount +
+                                        ' and ' +
+                                        loanData.maxAmount
+                                    )
                                 }
-                            ]"
-                            label="Enter Loan Amount"
-                            type="number"
-                            :min="loanData.minAmount"
-                            :max="loanData.maxAmount"
-                            :step="100"
-                        />
-                        <VSlider
-                            v-model="loanData.amount"
-                            :min="loanData.minAmount"
-                            :max="loanData.maxAmount"
-                            :step="10"
-                            thumb-label
-                            :thumb-size="20"
-                        >
+                                return true
+                            }
+                        ]" label="Enter Loan Amount" type="number" :min="loanData.minAmount" :max="loanData.maxAmount"
+                            :step="100" />
+                        <VSlider v-model="loanData.amount" :min="loanData.minAmount" :max="loanData.maxAmount" :step="10"
+                            thumb-label :thumb-size="20">
                             <!-- Only showcase loanRange if a loan type is selected. -->
                             <template v-if="loanData.type !== ''" #prepend>
                                 {{ loanData.minAmount }}
@@ -198,14 +198,7 @@ const changeLoanRange = function () {
                     </div>
                 </div>
 
-                <VAlert
-                    v-if="errorAlert"
-                    v-model="errorAlert"
-                    type="error"
-                    closable=""
-                    density="comfortable"
-                    elevation="5"
-                >
+                <VAlert v-if="errorAlert" v-model="errorAlert" type="error" closable="" density="comfortable" elevation="5">
                     {{ errorMessage }}
                 </VAlert>
 
@@ -278,8 +271,7 @@ const changeLoanRange = function () {
     vertical-align: top;
 }
 
-.username-pw-input {
-}
+.username-pw-input {}
 
 .btn {
     color: var(--vt-c-white-off);
