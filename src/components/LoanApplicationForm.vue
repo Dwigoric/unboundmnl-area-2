@@ -5,6 +5,9 @@ import { ref, reactive } from 'vue'
 // Import router
 import router from '../router'
 
+// Import constants
+import { API_URL } from '../constants'
+
 // Import stores
 import { useApplicationFormStore } from '../stores/applicationForm'
 const appFormStore = useApplicationFormStore()
@@ -84,8 +87,13 @@ const prefillForm = async function () {
     // Save data to store
     appFormStore.setLoanData(loanData)
 
+    // Upload stored data to the database
+    const success = await submit()
+
     // Send to application details page
-    await router.push({ name: 'Export Application Form' })
+    if (success) {
+        await router.push({ name: 'Export Application Form' })
+    }
 }
 
 // Function that changes loan range depending on type of loan selected.
@@ -100,6 +108,31 @@ const changeLoanRange = function () {
     loanData.amount = min
     loanData.minAmount = min
     loanData.maxAmount = max
+}
+
+// Submit loan application
+const submit = async () => {
+    const { error, message } = await fetch(
+        `${API_URL}/loans/new/${appFormStore.userData.username}`,
+        {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${window.$cookies.get('credentials').token}`
+            },
+            body: JSON.stringify(appFormStore.getLoanData())
+        }
+    ).then((res) => res.json())
+
+    if (error) {
+        errorAlert.value = true
+        errorMessage.value = message
+        return false
+    } else {
+        errorAlert.value = false
+        errorMessage.value = ''
+        return true
+    }
 }
 </script>
 
@@ -204,7 +237,7 @@ const changeLoanRange = function () {
 
                 <div class="btn-wrapper">
                     <VBtn type="submit" class="btn capitalize-text" @click.prevent="prefillForm">
-                        Generate Form
+                        Submit and Generate PDF
                     </VBtn>
                 </div>
             </VForm>

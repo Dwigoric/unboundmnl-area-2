@@ -43,32 +43,16 @@ watch(
 <template>
     <!-- TODO: Make this much more skinnier -->
     <div class="step-wrapper">
-        <v-timeline
-            direction="horizontal"
-            line-thickness="3"
-            truncate-line="both"
-            line-inset="5"
-            side="end"
-        >
-            <StepCounterTimelineItem
-                :dotColor="step1DotColor"
-                :icon="step1Icon"
-                :def="'Search Existing Member or Create Member Profile'"
-            >
+        <v-timeline direction="horizontal" line-thickness="3" truncate-line="both" line-inset="5" side="end">
+            <StepCounterTimelineItem :dotColor="step1DotColor" :icon="step1Icon"
+                :def="'Search Existing Member or Create Member Profile'">
             </StepCounterTimelineItem>
 
-            <StepCounterTimelineItem
-                :dotColor="step2DotColor"
-                :icon="step2Icon"
-                :def="'Fill up Loan Application Form'"
-            >
+            <StepCounterTimelineItem :dotColor="step2DotColor" :icon="step2Icon"
+                :def="'Fill up and Save Loan Application Form'">
             </StepCounterTimelineItem>
 
-            <StepCounterTimelineItem
-                :dotColor="step3DotColor"
-                :icon="step3Icon"
-                :def="'Save and export form as PDF'"
-            >
+            <StepCounterTimelineItem :dotColor="step3DotColor" :icon="step3Icon" :def="'Export Saved Form as PDF'">
             </StepCounterTimelineItem>
         </v-timeline>
     </div>
