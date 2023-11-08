@@ -1,6 +1,6 @@
 <script setup>
 // Import packages
-import { ref, watch } from 'vue'
+import { ref, watch, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 
 // Import components
@@ -15,20 +15,24 @@ import { PATH_NAMES } from '../constants'
 // Define reactive variables
 const step = ref('1')
 
+function updateStepCounter(to) {
+    if (to.endsWith(PATH_NAMES.APP_FORM.MEMBER_INPUT)) {
+        step.value = '1'
+    } else if (to.endsWith(PATH_NAMES.APP_FORM.APPLICATION_DETAILS)) {
+        step.value = '2'
+    } else if (to.endsWith(PATH_NAMES.APP_FORM.EXPORT_FORM)) {
+        step.value = '3'
+    }
+}
+
 // Watch for route changes then change the step accordingly
 const route = useRoute()
 watch(
     () => route.path,
-    (to) => {
-        if (to.endsWith(PATH_NAMES.APP_FORM.MEMBER_INPUT)) {
-            step.value = '1'
-        } else if (to.endsWith(PATH_NAMES.APP_FORM.APPLICATION_DETAILS)) {
-            step.value = '2'
-        } else if (to.endsWith(PATH_NAMES.APP_FORM.EXPORT_FORM)) {
-            step.value = '3'
-        }
-    }
+    (to) => updateStepCounter(to)
 )
+
+onMounted(() => updateStepCounter(route.path))
 </script>
 
 <template>
@@ -37,7 +41,7 @@ watch(
 
         <div class="d-flex flex-column w-100 pl-8">
             <!-- Top Bar of Dashboard -->
-            <DashboardTopBar :breadcrumbs="['Home', 'Create a New Loan Application']"/>
+            <DashboardTopBar :breadcrumbs="['Home', 'Create a New Loan Application']" />
 
             <!-- Main Dashboard Body -->
             <div class="dashboard-body d-flex flex-column h-100 py-4">
