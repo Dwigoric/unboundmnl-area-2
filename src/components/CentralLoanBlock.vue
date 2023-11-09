@@ -3,6 +3,8 @@ import { ref, onMounted } from 'vue'
 import { Grid, h } from 'gridjs';
 import "gridjs/dist/theme/mermaid.css";
 
+// Import router
+import router from '../router'
 
 // TODO: Create proper vars
 // defineProps({
@@ -11,67 +13,60 @@ import "gridjs/dist/theme/mermaid.css";
 //     username: String
 // });
 
+// Constant variables
 const data = [
-    [
-        'John Doe', 'Personal Loan', '$10,000'
-    ],
-    [
-        'John Doe', 'Personal Loan', '$10,000'
-
-    ],
-    [
-        'John Doe', 'Personal Loan', '$10,000'
-    ],
-    [
-        'John Doe', 'Personal Loan', '$10,000'
-    ],
-    [
-        'John Doe', 'Personal Loan', '$10,000'
-    ],
-    [
-        'John Doe', 'Personal Loan', '$10,000'
-    ],
-    [
-        'John Doe', 'Personal Loan', '$10,000'
-    ],
-    [
-        'John Doe', 'Personal Loan', '$10,000'
-    ],
-    [
-        'John Doe', 'Personal Loan', '$10,000'
-    ],
-    [
-        'John Doe', 'Personal Loan', '$10,000'
-    ],  
-    [
-        'John Doe', 'Wow Loan', '$10,000'
-    ],
-    [
-        'John Doe', 'Personal Loan', '$10,000'
-    ],
-    [
-        'Jana', 'Personal Loan', '$10,000'
-    ],
-    [
-        'Mama mo', 'Panootie', '$10,000'
-    ],
-    [
-        'Jana', 'Personal Loan', '$10,000'
-    ],
+    ['id1', 'John Doe', 'Personal Loan', '$10,000'],
+    ['id2', 'John Doe', 'Personal Loan', '$10,000'],
+    ['id3', 'John Doe', 'Personal Loan', '$10,000'],
+    ['id4', 'John Doe', 'Personal Loan', '$10,000'],
+    ['id5', 'John Doe', 'Personal Loan', '$10,000'],
+    ['id6', 'John Doe', 'Personal Loan', '$10,000'],
+    ['id7', 'John Doe', 'Personal Loan', '$10,000'],
+    ['id8', 'John Doe', 'Personal Loan', '$10,000'],
+    ['id9', 'John Doe', 'Personal Loan', '$10,000'],
+    ['id10', 'John Doe', 'Personal Loan', '$10,000'],
+    ['id11', 'John Doe', 'Wow Loan', '$10,000'],
+    ['id12', 'John Doe', 'Personal Loan', '$10,000'],
+    ['id13', 'Jana', 'Personal Loan', '$10,000'],
+    ['id14', 'Mama mo', 'Panootie', '$10,000'],
+    ['id15', 'Jana', 'Personal Loan', '$10,000']
 ]
-
-
 const loan = ref();
 
 const loansTable = ref();
+
+// Methods
+
+/**
+ * Visits individual loan ledger based on its ID
+ * @param {*} loanID - ID of individual loan
+ */
+const visitLoanLedger = async (loanID) => {
+    router.push({name: 'Loan Ledger', params: {id: loanID}});
+};
+
 
 onMounted(() => {
 
     loan.value = new Grid({
         columns: [
+            {name: 'LoanID', hidden: false},
             'Loanee',
             'Type of Loan',
             'Amount of Loan',
+            {
+                name: 'View Loan Ledger',
+                formatter: (cell, row) => {
+                    return h(
+                        'v-hover',
+                        {
+                            className: 'cursor-pointer hover-scale-md py-2 mb-4 px-4 border rounded-md',
+                            onClick: () => visitLoanLedger(row.cells[0].data) // grabs the row's Loan ID and passes it to the function.
+                        },
+                        'View Loan Ledger'
+                    )
+                }
+            },
         ],
         pagination: {
             limit: 10
@@ -102,6 +97,10 @@ onMounted(() => {
 
 <template>
     <div id="loan-status-wrapper" ref="loansTable" class="w-100 px-4 " />
-
-
 </template>
+
+<style>
+    .cursor-pointer {
+        cursor: pointer;
+    }
+</style>

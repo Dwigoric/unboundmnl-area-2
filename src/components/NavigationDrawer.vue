@@ -29,7 +29,6 @@ const logout = () => {
 </script>
 
 <template>
-    <v-card class="mx-auto pa-5">
         <v-layout>
             <v-navigation-drawer
                 :width="300"
@@ -131,7 +130,6 @@ const logout = () => {
             </v-navigation-drawer>
             <v-main style="height: 94vh"></v-main>
         </v-layout>
-    </v-card>
 </template>
 
 <style scoped>
