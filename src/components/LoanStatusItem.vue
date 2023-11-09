@@ -5,6 +5,9 @@ import { Grid, h } from 'gridjs'
 import 'gridjs/dist/theme/mermaid.css'
 import LoanStatusItemPopup from './LoanStatusItemPopup.vue'
 
+// Project constants
+import { API_URL, LOAN_TYPES } from '../constants'
+
 // TODO: Create proper vars
 // defineProps({
 //     givenName: String,
@@ -12,46 +15,68 @@ import LoanStatusItemPopup from './LoanStatusItemPopup.vue'
 //     username: String
 // });
 
-// Constant variables
-const data = [
-    ['id1', 'John Doe', 'Personal Loan', '$10,000'],
-    ['id2', 'John Doe', 'Personal Loan', '$10,000'],
-    ['id3', 'John Doe', 'Personal Loan', '$10,000'],
-    ['id4', 'John Doe', 'Personal Loan', '$10,000'],
-    ['id5', 'John Doe', 'Personal Loan', '$10,000'],
-    ['id6', 'John Doe', 'Personal Loan', '$10,000'],
-    ['id7', 'John Doe', 'Personal Loan', '$10,000'],
-    ['id8', 'John Doe', 'Personal Loan', '$10,000'],
-    ['id9', 'John Doe', 'Personal Loan', '$10,000'],
-    ['id10', 'John Doe', 'Personal Loan', '$10,000'],
-    ['id11', 'John Doe', 'Wow Loan', '$10,000'],
-    ['id12', 'John Doe', 'Personal Loan', '$10,000'],
-    ['id13', 'Jana', 'Personal Loan', '$10,000'],
-    ['id14', 'Mama mo', 'Panootie', '$10,000'],
-    ['id15', 'Jana', 'Personal Loan', '$10,000']
-]
-
 // Reactive variables
 const loanStatusTable = ref()
 const loanStatus = ref()
 const isPopupActive = ref(false)
+const data = ref([])
+const popupData = ref([])
 
 // Methods
+const fetchLoans = async () => {
+    const credentials = window.$cookies.get('credentials')
+
+    if (!credentials) {
+        console.error('No credentials found')
+        return
+    }
+
+    const { token } = credentials
+
+    if (!token) {
+        console.error('No token found')
+        return
+    }
+
+    const params = new URLSearchParams()
+    params.set('access_token', token)
+    const { error, message, loans } = await fetch(`${API_URL}/loans?${params}`).then((res) =>
+        res.json()
+    )
+
+    if (error) {
+        console.error(message)
+        return
+    }
+
+    data.value = loans.map((loan) => [
+        loan.id,
+        loan.username,
+        loan.loanType,
+        loan.originalLoanAmount,
+        loan.status
+    ])
+}
+
 const setPopupLoan = (loanId) => {
+    if (data.value.length === 0) return
+
+    popupData.value = data.value.find((loan) => loan[0] === loanId)
     isPopupActive.value = true
-
-    const loan = data.find((loan) => loan[0] === loanId)
-
-    // TODO: Use the loan data to populate the popup
 }
 
 // Lifecycle hooks
-onMounted(() => {
+onMounted(async () => {
+    await fetchLoans()
+
     loanStatus.value = new Grid({
         columns: [
             { name: 'Loan ID', hidden: true },
             'Loanee',
-            'Type of Loan',
+            {
+                name: 'Type of Loan',
+                formatter: (cell) => LOAN_TYPES[cell]
+            },
             'Amount of Loan',
             {
                 name: 'Change Status',
@@ -74,7 +99,7 @@ onMounted(() => {
         sort: true,
         resizable: true,
         fixedHeader: true,
-        data,
+        data: data.value,
         className: {
             // Define your class names here
         },
@@ -113,7 +138,7 @@ onMounted(() => {
                     </VRow>
                 </VContainer>
 
-                <LoanStatusItemPopup />
+                <LoanStatusItemPopup :data="popupData" />
             </VCard>
         </template>
     </VDialog>
