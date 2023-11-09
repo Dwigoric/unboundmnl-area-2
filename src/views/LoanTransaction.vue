@@ -15,20 +15,13 @@ import MemberProfileRegister from '../components/MemberProfileRegister.vue'
 
         <div class="d-flex flex-column w-100 pl-8">
             <!-- Top Bar of Dashboard -->
-            <DashboardTopBar :breadcrumbs="['Home', 'Loans', 'Loan Status']" />
+            <DashboardTopBar :breadcrumbs="['Home', 'Loans', 'Enter Loan Transaction']" />
 
             <!-- Main Dashboard Body -->
             <div class="dashboard-body d-flex flex-column h-100 py-4">
-                <h2>All Pending Loans</h2>
+                <h2>Enter Loan Transaction</h2>
 
-                <ContentBlock
-                    :width="100"
-                    :height="100"
-                    :maxWidth="80"
-                    :unit="'%'"
-                    :maxUnit="'vw'"
-                    :bg-color="'#FFF'"
-                >
+                <ContentBlock :width="100" :height="100" :maxWidth="80" :unit="'%'" :maxUnit="'vw'" :bg-color="'#FFF'">
                     <LoanStatusItem />
                 </ContentBlock>
             </div>

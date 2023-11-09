@@ -51,7 +51,7 @@ const logout = () => {
                         <v-list-item
                             to="/dashboard"
                             link=""
-                            prepend-icon="mdi-home-account"
+                            prepend-icon="mdi-bank-transfer-out"
                             rounded="lg"
                             class="mt-1"
                             >Loan Dashboard</v-list-item
@@ -60,16 +60,25 @@ const logout = () => {
                         <v-list-item
                             to="/new-loan-application/member-input"
                             link=""
-                            prepend-icon="mdi-file-document-edit-outline"
+                            prepend-icon="mdi-file-sign"
                             rounded="lg"
                             class="mt-1"
                             >New Loan Application</v-list-item
                         >
 
                         <v-list-item
+                            to="/loan-transaction"
+                            link=""
+                            prepend-icon="mdi-checkbook"
+                            rounded="lg"
+                            class="mt-1"
+                            >Enter Loan Transaction</v-list-item
+                        >
+
+                        <v-list-item
                             to="/loan-status"
                             link=""
-                            prepend-icon="mdi-home-account"
+                            prepend-icon="mdi-list-status"
                             rounded="lg"
                             class="mt-1"
                             >Loan Status</v-list-item
@@ -83,7 +92,7 @@ const logout = () => {
                         <v-list-item
                             to="/cap-dashboard"
                             link=""
-                            prepend-icon="mdi-home-account"
+                            prepend-icon="mdi-bank-transfer-in"
                             rounded="lg"
                             class="mt-1"
                             >Shared Capital Dashboard</v-list-item
@@ -92,7 +101,7 @@ const logout = () => {
                         <v-list-item
                             to="/new-deposit"
                             link=""
-                            prepend-icon="mdi-file-document-edit-outline"
+                            prepend-icon="mdi-wallet-plus"
                             rounded="lg"
                             class="mt-1"
                             >Enter deposit</v-list-item
@@ -115,7 +124,7 @@ const logout = () => {
                         <v-list-item
                             to="/member-profiles"
                             link=""
-                            prepend-icon="mdi-magnify"
+                            prepend-icon="mdi-account-supervisor-circle"
                             rounded="lg"
                             class="mt-1"
                             >Member Profiles</v-list-item

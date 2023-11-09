@@ -1,8 +1,11 @@
 <script setup>
 // Import packages
 import { ref, onMounted } from 'vue'
-import { Grid } from 'gridjs';
+import { Grid, h } from 'gridjs';
 import "gridjs/dist/theme/mermaid.css";
+
+import LoanLedgerEdit from '../components/LoanLedgerEdit.vue'
+
 
 // Define props for the component
 defineProps({
@@ -11,6 +14,17 @@ defineProps({
         default: null
     }
 })
+
+const data = ref([])
+const popupData = ref([])
+const isPopupActive = ref(false)
+
+const setPopupEdit = () => {
+    // if (data.value.length === 0) return
+
+    // popupData.value = data.value.find((loan) => loan[0] === loanId)
+    isPopupActive.value = true
+}
 
 // Fetch loan properties from the database by using the loanID property!
 
@@ -30,7 +44,21 @@ const loanTransactionColumns = [
     {name: 'Fines Paid'},
     {name: 'Term of Loan'},
     {name: 'Date of Entry'},
-    {name: 'Officer in Charge'}
+    {name: 'Officer in Charge'},
+    {
+        name: 'Edit Row',
+        formatter: (cell, row) => {
+            return h(
+                'v-hover',
+                {
+                    className: 'py-2 mb-4 px-4 border rounded-md',
+                    onClick: () => setPopupEdit(row.cells[0].data)
+                    
+                },
+                'Edit Row'
+            )
+        }
+    }
 ]
 
 loanTransactionColumns.forEach(obj => {obj['width'] = '18%'});
@@ -65,7 +93,7 @@ onMounted(() => {
         style: {
             table: {
                 //'width': '100%',
-                'border-collapse': 'separate',
+                // 'border-collapse': 'separate',
             },
             th: {
                 'min-width': '250px'
@@ -107,9 +135,41 @@ onMounted(() => {
                     <p class="loan-properties"> {{ loanTerm }} </p>
                 </div>
             </div>
+
         </div>
+
+        <v-divider 
+            :thickness="1"
+            class="mt-3 mb-3 border-opacity-70" />
+
         <div id="loan-payments-wrapper" ref="loanPaymentsTable" class="w-100"></div>
+
+    
+        <VDialog width="1600" v-model="isPopupActive">
+            <!-- Form popup -->
+            <template #default="{ isActive }">
+                <VCard close-on-back contained class="form-wrapper">
+                    <VContainer 
+                        fluid>
+                        <VRow justify="end">
+                            <VCardActions>
+                                <VBtn
+                                    class="ma-2 capitalize-text"
+                                    color="var(--vt-c-blue)"
+                                    @click="isActive.value = false"
+                                    icon="mdi-close"
+                                >
+                                </VBtn>
+                            </VCardActions>
+                        </VRow>
+                    </VContainer>
+
+                    <LoanLedgerEdit />
+                </VCard>
+            </template>
+        </VDialog>
     </div>
+
 </template>
 
 <style>
@@ -131,6 +191,10 @@ onMounted(() => {
     .loan-info-cell {
         min-width: 150px;
         gap: 0.75rem;
+    }
+
+    .loan-info-wrapper {
+        background-color: var(--vt-c-white-off);
     }
 
     .loan-amount {

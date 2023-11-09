@@ -36,7 +36,7 @@ const loanID = ref(route.params.id);
                 <ContentBlock
                     :width="100"
                     :height="100"
-                    :maxWidth="75"
+                    :maxWidth="80"
                     :unit="'%'"
                     :maxUnit="'vw'"
                     :bg-color="'#FFF'"

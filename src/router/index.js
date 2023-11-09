@@ -13,6 +13,8 @@ import LoanApplicationFormExport from '../components/LoanApplicationFormExport.v
 import LoanStatus from '../views/LoanStatus.vue'
 import DashboardCapital from '../views/DashboardCapital.vue'
 import LoanLedgerView from '../views/LoanLedgerView.vue'
+import LoanTransaction from '../views/LoanTransaction.vue'
+
 
 // Import path name constants
 import { PATH_NAMES } from '../constants'
@@ -102,6 +104,17 @@ const router = createRouter({
             path: '/loan-status',
             name: 'Loan Status',
             component: LoanStatus,
+            // TODO: this - jana uwu
+            // beforeEnter: (to, from, next) => {
+            //     const credentials = window.$cookies.get('credentials')
+            //     if (!credentials || !credentials.token) next({ name: 'Login' })
+            //     else next()
+            // }
+        },
+        {
+            path: '/loan-transaction',
+            name: 'Loan Transaction',
+            component: LoanTransaction,
             // TODO: this - jana uwu
             // beforeEnter: (to, from, next) => {
             //     const credentials = window.$cookies.get('credentials')
