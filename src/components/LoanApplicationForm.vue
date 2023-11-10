@@ -159,9 +159,9 @@ const submit = async () => {
                 <!-- Coborrower Information -->
                 <div class="row-tab">
                     <div class="label">
-                        <div>* Coborrower First Name:</div>
+                        <div>Coborrower First Name:</div>
                     </div>
-                    <VTextField class="username-pw-input" v-model="loanData.coborrowerName.given" :rules="[rules.required]"
+                    <VTextField class="username-pw-input" v-model="loanData.coborrowerName.given"
                         label="Enter Coborrower First Name" />
                 </div>
                 <div class="row-tab">
@@ -173,9 +173,9 @@ const submit = async () => {
                 </div>
                 <div class="row-tab">
                     <div class="label">
-                        <div>* Coborrower Last Name:</div>
+                        <div>Coborrower Last Name:</div>
                     </div>
-                    <VTextField class="username-pw-input" v-model="loanData.coborrowerName.last" :rules="[rules.required]"
+                    <VTextField class="username-pw-input" v-model="loanData.coborrowerName.last"
                         label="Enter Coborrower Last Name" />
                 </div>
 
