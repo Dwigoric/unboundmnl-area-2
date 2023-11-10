@@ -2,7 +2,11 @@
 // Packages
 import { ref, onMounted } from 'vue'
 import { Grid, h } from 'gridjs'
+
+// Stylesheets
 import 'gridjs/dist/theme/mermaid.css'
+
+// Vue components
 import LoanStatusItemPopup from './LoanStatusItemPopup.vue'
 
 // Project constants
@@ -50,7 +54,7 @@ const fetchLoans = async () => {
     }
 
     data.value = loans.map((loan) => [
-        loan.id,
+        loan.loanID,
         loan.username,
         loan.loanType,
         loan.originalLoanAmount,
@@ -63,6 +67,10 @@ const setPopupLoan = (loanId) => {
 
     popupData.value = data.value.find((loan) => loan[0] === loanId)
     isPopupActive.value = true
+}
+
+const closePopup = () => {
+    isPopupActive.value = false
 }
 
 // Lifecycle hooks
@@ -138,7 +146,7 @@ onMounted(async () => {
                     </VRow>
                 </VContainer>
 
-                <LoanStatusItemPopup :data="popupData" />
+                <LoanStatusItemPopup :data="popupData" :close-popup="closePopup" />
             </VCard>
         </template>
     </VDialog>

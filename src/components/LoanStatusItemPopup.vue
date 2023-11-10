@@ -1,27 +1,92 @@
 <script setup>
+// Packages
 import { ref, onMounted } from 'vue'
-import { Grid } from 'gridjs';
-import "gridjs/dist/theme/mermaid.css";
+import { Grid } from 'gridjs'
 
-const loanStatusTableUser = ref();
+// Project constants
+import { API_URL } from '../constants'
 
-const loanStatusUser = ref();
+// Stylesheets
+import 'gridjs/dist/theme/mermaid.css'
 
+// Reactive variables
+const loanStatusTableUser = ref()
+const loanStatusUser = ref()
+const errorAlert = ref(false)
+const errorMessage = ref('')
+const processing = ref(false)
+
+// Props
+const props = defineProps({
+    data: {
+        type: Array,
+        required: true
+    },
+    closePopup: {
+        type: Function,
+        required: true
+    }
+})
+
+// Methods
+const decide = async (toApprove) => {
+    processing.value = true
+
+    const credentials = window.$cookies.get('credentials')
+
+    if (!credentials) {
+        errorAlert.value = true
+        errorMessage.value = 'No credentials found'
+        return
+    }
+
+    const { token } = credentials
+
+    if (!token) {
+        errorAlert.value = true
+        errorMessage.value = 'No token found'
+        return
+    }
+
+    const { error, message } = await fetch(`${API_URL}/loans/review-application/${props.data[0]}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({
+            approved: toApprove
+        })
+    }).then((res) => res.json())
+
+    processing.value = false
+
+    // Reset error alert
+    errorAlert.value = false
+    errorMessage.value = ''
+
+    if (error) {
+        errorAlert.value = true
+        errorMessage.value = message
+        return
+    }
+
+    props.closePopup()
+}
+
+// Lifecycle hooks
 onMounted(() => {
-
     loanStatusUser.value = new Grid({
         columns: [
+            {
+                name: 'Loan ID',
+                hidden: true
+            },
             'Type of Loan',
             'Amount of Loan',
-            'Loanee',
+            'Loanee'
         ],
-        data: [
-            {
-                'Type of Loan': 'Personal Loan',
-                'Amount of Loan': '$10,000',
-                'Loanee': 'John Doe',
-            },
-        ],
+        data: [props.data],
         className: {
             // Define your class names here
         },
@@ -31,28 +96,39 @@ onMounted(() => {
             },
             tr: {
                 // Define row styles here
-            },
-        },
-    });
-
+            }
+        }
+    })
 
     // Render loanStatus in corresponding reference
-    loanStatusUser.value.render(loanStatusTableUser.value);
+    loanStatusUser.value.render(loanStatusTableUser.value)
 })
 </script>
 
-
 <template>
-    <h2 class="header-wrapper"> Change the status of the loan below</h2>
+    <h2 class="header-wrapper">Change the status of the loan below</h2>
     <div class="wrapper">
-        <div id="loan-status-wrapper" ref="loanStatusTableUser" class="w-100 px-4 "></div>
+        <div id="loan-status-wrapper" ref="loanStatusTableUser" class="w-100 px-4"></div>
+        <VAlert
+            v-if="errorAlert"
+            v-model="errorAlert"
+            type="error"
+            closable=""
+            density="comfortable"
+            elevation="5"
+        >
+            {{ errorMessage }}
+        </VAlert>
         <div class="ml-auto d-flex justify-end pt-4">
             <!-- Reject Loan -->
             <v-btn
                 class="capitalize"
                 prepend-icon="mdi-check-bold"
                 variant="plain"
-                color="green">
+                color="green"
+                :loading="processing"
+                @click.prevent="decide(true)"
+            >
                 Accept Loan
             </v-btn>
 
@@ -61,16 +137,17 @@ onMounted(() => {
                 class="capitalize"
                 prepend-icon="mdi-close-thick"
                 variant="plain"
-                color="red">
+                color="red"
+                :loading="processing"
+                @click.prevent="decide(false)"
+            >
                 Reject Loan
             </v-btn>
-
         </div>
     </div>
 </template>
 
 <style scoped>
-
 .header-wrapper {
     padding-left: 7%;
     padding-bottom: 2%;
@@ -81,7 +158,4 @@ onMounted(() => {
     padding-bottom: 3%;
     background-color: var(--vt-c-white);
 }
-
-
-
 </style>
