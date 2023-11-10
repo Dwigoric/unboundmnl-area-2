@@ -6,6 +6,7 @@ export const useApplicationFormStore = defineStore('applicationForm', () => {
     const date = ref('')
     const amount = ref(0)
     const term = ref(0)
+    const paymentFrequency = ref('')
     const classification = ref('')
     const type = ref('')
     const status = ref('')
@@ -29,6 +30,7 @@ export const useApplicationFormStore = defineStore('applicationForm', () => {
             date: date.value,
             amount: amount.value,
             term: term.value,
+            paymentFrequency: paymentFrequency.value,
             classification: classification.value,
             type: type.value,
             status: status.value,
@@ -46,6 +48,7 @@ export const useApplicationFormStore = defineStore('applicationForm', () => {
         term.value = loan.term
         type.value = loan.type
         status.value = loan.status || 'pending'
+        paymentFrequency.value = loan.paymentFrequency
         classification.value = loan.classification
         Object.assign(coborrowerName, loan.coborrowerName)
     }

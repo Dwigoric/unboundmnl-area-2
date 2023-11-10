@@ -28,6 +28,7 @@ const loanData = reactive({
     classification: '',
     term: '',
     type: '',
+    paymentFrequency: '',
     amount: 0,
     minAmount: 0,
     maxAmount: 0,
@@ -65,6 +66,13 @@ const loanRanges = {
     // emergency: { min: 100, max: 7000 },
     // commodity: { min: 100, max: 2500 }
 }
+
+// Define payment frequencies
+const paymentFrequencies = [
+    { title: 'Daily', value: 'daily' },
+    { title: 'Weekly', value: 'weekly' },
+    { title: 'Monthly', value: 'monthly' }
+]
 
 // Define methods
 /**
@@ -154,6 +162,15 @@ const submit = async () => {
                     </div>
                     <VTextField class="username-pw-input" v-model="loanData.term" :rules="[rules.required]"
                         label="Enter Term of Loan" />
+                </div>
+
+                <!-- Mode of Repayment -->
+                <div class="row-tab">
+                    <div class="label">
+                        <div>* Mode of Repayment:</div>
+                    </div>
+                    <VSelect class="username-pw-input" v-model="loanData.paymentFrequency" :items="paymentFrequencies"
+                        id="payment-frequency" :rules="[rules.required]" label="Mode of Repayment" />
                 </div>
 
                 <!-- Coborrower Information -->
