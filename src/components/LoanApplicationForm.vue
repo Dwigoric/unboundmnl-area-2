@@ -87,13 +87,8 @@ const prefillForm = async function () {
     // Save data to store
     appFormStore.setLoanData(loanData)
 
-    // Upload stored data to the database
-    const success = await submit()
-
     // Send to application details page
-    if (success) {
-        await router.push({ name: 'Export Application Form' })
-    }
+    await router.push({ name: 'Export Application Form' })
 }
 
 // Function that changes loan range depending on type of loan selected.
@@ -108,31 +103,6 @@ const changeLoanRange = function () {
     loanData.amount = min
     loanData.minAmount = min
     loanData.maxAmount = max
-}
-
-// Submit loan application
-const submit = async () => {
-    const { error, message } = await fetch(
-        `${API_URL}/loans/new/${appFormStore.userData.username}`,
-        {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${window.$cookies.get('credentials').token}`
-            },
-            body: JSON.stringify(appFormStore.getLoanData())
-        }
-    ).then((res) => res.json())
-
-    if (error) {
-        errorAlert.value = true
-        errorMessage.value = message
-        return false
-    } else {
-        errorAlert.value = false
-        errorMessage.value = ''
-        return true
-    }
 }
 </script>
 
@@ -149,7 +119,11 @@ const submit = async () => {
                         <div>* Classification:</div>
                     </div>
 
-                    <VRadioGroup v-model="loanData.classification" id="loan-classification" :rules="[rules.required]">
+                    <VRadioGroup
+                        v-model="loanData.classification"
+                        id="loan-classification"
+                        :rules="[rules.required]"
+                    >
                         <VRadio label="New Loan" value="new"></VRadio>
                         <VRadio label="Renewal" value="renewal"></VRadio>
                     </VRadioGroup>
@@ -160,8 +134,12 @@ const submit = async () => {
                     <div class="label">
                         <div>* Term:</div>
                     </div>
-                    <VTextField class="username-pw-input" v-model="loanData.term" :rules="[rules.required]"
-                        label="Enter Term of Loan" />
+                    <VTextField
+                        class="username-pw-input"
+                        v-model="loanData.term"
+                        :rules="[rules.required]"
+                        label="Enter Term of Loan"
+                    />
                 </div>
 
                 <!-- Mode of Repayment -->
@@ -169,8 +147,14 @@ const submit = async () => {
                     <div class="label">
                         <div>* Mode of Repayment:</div>
                     </div>
-                    <VSelect class="username-pw-input" v-model="loanData.paymentFrequency" :items="paymentFrequencies"
-                        id="payment-frequency" :rules="[rules.required]" label="Mode of Repayment" />
+                    <VSelect
+                        class="username-pw-input"
+                        v-model="loanData.paymentFrequency"
+                        :items="paymentFrequencies"
+                        id="payment-frequency"
+                        :rules="[rules.required]"
+                        label="Mode of Repayment"
+                    />
                 </div>
 
                 <!-- Coborrower Information -->
@@ -178,22 +162,31 @@ const submit = async () => {
                     <div class="label">
                         <div>Coborrower First Name:</div>
                     </div>
-                    <VTextField class="username-pw-input" v-model="loanData.coborrowerName.given"
-                        label="Enter Coborrower First Name" />
+                    <VTextField
+                        class="username-pw-input"
+                        v-model="loanData.coborrowerName.given"
+                        label="Enter Coborrower First Name"
+                    />
                 </div>
                 <div class="row-tab">
                     <div class="label">
                         <div>Coborrower Middle Name:</div>
                     </div>
-                    <VTextField class="username-pw-input" v-model="loanData.coborrowerName.middle"
-                        label="Enter Coborrower Middle Name" />
+                    <VTextField
+                        class="username-pw-input"
+                        v-model="loanData.coborrowerName.middle"
+                        label="Enter Coborrower Middle Name"
+                    />
                 </div>
                 <div class="row-tab">
                     <div class="label">
                         <div>Coborrower Last Name:</div>
                     </div>
-                    <VTextField class="username-pw-input" v-model="loanData.coborrowerName.last"
-                        label="Enter Coborrower Last Name" />
+                    <VTextField
+                        class="username-pw-input"
+                        v-model="loanData.coborrowerName.last"
+                        label="Enter Coborrower Last Name"
+                    />
                 </div>
 
                 <!-- Type of Loan -->
@@ -202,8 +195,15 @@ const submit = async () => {
                         <div>* Type:</div>
                     </div>
 
-                    <VSelect class="username-pw-input" v-model="loanData.type" :items="loanTypes" id="loan-type"
-                        :rules="[rules.required]" label="Select Loan Type" @update:modelValue="changeLoanRange" />
+                    <VSelect
+                        class="username-pw-input"
+                        v-model="loanData.type"
+                        :items="loanTypes"
+                        id="loan-type"
+                        :rules="[rules.required]"
+                        label="Select Loan Type"
+                        @update:modelValue="changeLoanRange"
+                    />
                 </div>
 
                 <div v-if="loanData.type !== ''" class="row-tab">
@@ -212,23 +212,37 @@ const submit = async () => {
                     </div>
 
                     <div style="width: 68%">
-                        <VTextField v-model="loanData.amount" id="loan-amount" :rules="[
-                            rules.required,
-                            (v) => {
-                                if (v < loanData.minAmount || v > loanData.maxAmount) {
-                                    return (
-                                        'Amount must be between ' +
-                                        loanData.minAmount +
-                                        ' and ' +
-                                        loanData.maxAmount
-                                    )
+                        <VTextField
+                            v-model="loanData.amount"
+                            id="loan-amount"
+                            :rules="[
+                                rules.required,
+                                (v) => {
+                                    if (v < loanData.minAmount || v > loanData.maxAmount) {
+                                        return (
+                                            'Amount must be between ' +
+                                            loanData.minAmount +
+                                            ' and ' +
+                                            loanData.maxAmount
+                                        )
+                                    }
+                                    return true
                                 }
-                                return true
-                            }
-                        ]" label="Enter Loan Amount" type="number" :min="loanData.minAmount" :max="loanData.maxAmount"
-                            :step="100" />
-                        <VSlider v-model="loanData.amount" :min="loanData.minAmount" :max="loanData.maxAmount" :step="10"
-                            thumb-label :thumb-size="20">
+                            ]"
+                            label="Enter Loan Amount"
+                            type="number"
+                            :min="loanData.minAmount"
+                            :max="loanData.maxAmount"
+                            :step="100"
+                        />
+                        <VSlider
+                            v-model="loanData.amount"
+                            :min="loanData.minAmount"
+                            :max="loanData.maxAmount"
+                            :step="10"
+                            thumb-label
+                            :thumb-size="20"
+                        >
                             <!-- Only showcase loanRange if a loan type is selected. -->
                             <template v-if="loanData.type !== ''" #prepend>
                                 {{ loanData.minAmount }}
@@ -240,7 +254,14 @@ const submit = async () => {
                     </div>
                 </div>
 
-                <VAlert v-if="errorAlert" v-model="errorAlert" type="error" closable="" density="comfortable" elevation="5">
+                <VAlert
+                    v-if="errorAlert"
+                    v-model="errorAlert"
+                    type="error"
+                    closable=""
+                    density="comfortable"
+                    elevation="5"
+                >
                     {{ errorMessage }}
                 </VAlert>
 
@@ -313,7 +334,8 @@ const submit = async () => {
     vertical-align: top;
 }
 
-.username-pw-input {}
+.username-pw-input {
+}
 
 .btn {
     color: var(--vt-c-white-off);
