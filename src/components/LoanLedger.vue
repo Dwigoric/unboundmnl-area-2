@@ -1,14 +1,14 @@
 <script setup>
 // Import packages
-import { ref, onMounted } from 'vue'
-import { Grid, h } from 'gridjs';
-import "gridjs/dist/theme/mermaid.css";
+import { ref, onMounted, computed } from 'vue'
+import { Grid, h } from 'gridjs'
+import 'gridjs/dist/theme/mermaid.css'
 
 import LoanLedgerEdit from '../components/LoanLedgerEdit.vue'
-
+import { API_URL } from '../constants/api_url.js'
 
 // Define props for the component
-defineProps({
+const props = defineProps({
     loanID: {
         type: [Number, String],
         default: null
@@ -26,25 +26,35 @@ const setPopupEdit = () => {
     isPopupActive.value = true
 }
 
-// Fetch loan properties from the database by using the loanID property!
+const loanAmount = ref(0)
+const loanee = ref('')
+const loanType = ref('')
+const loanTerm = ref(0)
+const loanPaymentFrequency = ref('')
 
-const loanAmount = 3000.15;
 // Format the loan amount to PHP standard
-const formattedLoanAmount = ref(new Intl.NumberFormat('en-US', { style: 'currency', currency: 'PHP' }).format(loanAmount));
-const loanee = 'Juan Dela Cruz'
-const loanType = 'Education';
-const loanTerm = 2;
+const formattedLoanAmount = computed(() => {
+    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'PHP' }).format(
+        loanAmount.value
+    )
+})
+
+// const formattedLoanAmount = ref(
+//     new Intl.NumberFormat('en-US', { style: 'currency', currency: 'PHP' }).format(loanAmount)
+// )
+
+// TODO: loan mode of payment
 
 const loanTransactionColumns = [
-    {name: 'Date of Payment'},
-    {name: 'GV/OR Number'},
-    {name: 'Amount Paid'},
-    {name: 'Balance'},
-    {name: 'Interest Paid'},
-    {name: 'Fines Paid'},
-    {name: 'Term of Loan'},
-    {name: 'Date of Entry'},
-    {name: 'Officer in Charge'},
+    { name: 'Date of Payment' },
+    { name: 'GV/OR Number' },
+    { name: 'Amount Paid' },
+    { name: 'Balance' },
+    { name: 'Interest Paid' },
+    { name: 'Fines Paid' },
+    { name: 'Term of Loan' },
+    { name: 'Date of Entry' },
+    { name: 'Officer in Charge' },
     {
         name: 'Edit Row',
         formatter: (cell, row) => {
@@ -53,7 +63,6 @@ const loanTransactionColumns = [
                 {
                     className: 'py-2 mb-4 px-4 border rounded-md',
                     onClick: () => setPopupEdit(row.cells[0].data)
-                    
                 },
                 'Edit Row'
             )
@@ -61,19 +70,44 @@ const loanTransactionColumns = [
     }
 ]
 
-loanTransactionColumns.forEach(obj => {obj['width'] = '18%'});
+loanTransactionColumns.forEach((obj) => {
+    obj['width'] = '18%'
+})
 
 // Create a ref to hold new loanPaymentsTable template
-const loanPaymentsTable = ref();
+const loanPaymentsTable = ref()
 
 // Create a ref to hold new grid instance
-const loanPayments = ref();
+const loanPayments = ref()
 
 // Ideally, we do a fetch request to the database to grab the data.
-onMounted(() => {
+onMounted(async () => {
+    // Fetch loan properties from the database by using the loanID property!
+    const jsonRes = await fetch(`${API_URL}/loans/get/${props.loanID}`, {
+        method: 'GET',
+        headers: {
+            Authorization: `Bearer ${window.$cookies.get('credentials').token}`
+        }
+    }).then((res) => res.json())
+
+    console.log(jsonRes)
+
+    if (jsonRes) {
+        const loanData = jsonRes.loan
+        loanAmount.value = loanData.originalLoanAmount
+        loanee.value = loanData.username
+        loanType.value = loanData.loanType
+        loanTerm.value = loanData.term
+        loanPaymentFrequency.value = loanData.paymentFrequency
+    }
+
     // IN THE FUTURE: DATA WILL DYNAMICALLY BE PASSED INTO THIS COMPONENT SOMEHOW
-    const data = Array.from({ length: 20 }, () => Array(9).fill(null).map(() => `Element`));
-    
+    const data = Array.from({ length: 20 }, () =>
+        Array(9)
+            .fill(null)
+            .map(() => `Element`)
+    )
+
     // Grid for all the loan's payments
     loanPayments.value = new Grid({
         columns: loanTransactionColumns,
@@ -102,10 +136,10 @@ onMounted(() => {
                 'margin-bottom': '1rem'
             }
         }
-    });
-    
+    })
+
     // Render loanPayments in corresponding reference
-    loanPayments.value.render(loanPaymentsTable.value);
+    loanPayments.value.render(loanPaymentsTable.value)
 })
 </script>
 
@@ -114,43 +148,38 @@ onMounted(() => {
     <div class="w-100">
         <div id="loan-info-wrapper" class="d-flex justify-space-between align-center">
             <div id="loan-amount-cell" class="h-75 w-30 pa-2">
-                <p class="font-weight-bold">Loan Amount: </p>
+                <p class="font-weight-bold">Loan Amount:</p>
                 <p class="loan-amount">{{ formattedLoanAmount }}</p>
             </div>
             <div class="d-flex justify-space-evenly align-center gap-1 h-75 pa-2">
                 <div class="d-flex flex-column loan-info-cell grid-left-border h-100 px-2">
-                    <p class="font-weight-bold">Loanee: </p>
-                    <p class="loan-properties"> {{ loanee }} </p>
+                    <p class="font-weight-bold">Loanee:</p>
+                    <p class="loan-properties">{{ loanee }}</p>
                 </div>
                 <div class="d-flex flex-column loan-info-cell grid-left-border h-100 px-4">
-                    <p class="font-weight-bold">Loan ID: </p>
-                    <p class="loan-properties"> {{ loanID }} </p>
+                    <p class="font-weight-bold">Loan ID:</p>
+                    <p class="loan-properties">{{ loanID }}</p>
                 </div>
                 <div class="d-flex flex-column loan-info-cell grid-left-border h-100 px-4">
-                    <p class="font-weight-bold">Type of Loan: </p>
-                    <p class="loan-properties"> {{ loanType }} </p>
+                    <p class="font-weight-bold">Type of Loan:</p>
+                    <p class="loan-properties">{{ loanType }}</p>
                 </div>
                 <div class="d-flex flex-column loan-info-cell grid-left-border h-100 px-4">
-                    <p class="font-weight-bold">Term of Loan: </p>
-                    <p class="loan-properties"> {{ loanTerm }} </p>
+                    <p class="font-weight-bold">Term of Loan:</p>
+                    <p class="loan-properties">{{ loanTerm }}</p>
                 </div>
             </div>
-
         </div>
 
-        <v-divider 
-            :thickness="1"
-            class="mt-3 mb-3 border-opacity-70" />
+        <v-divider :thickness="1" class="mt-3 mb-3 border-opacity-70" />
 
         <div id="loan-payments-wrapper" ref="loanPaymentsTable" class="w-100"></div>
 
-    
         <VDialog width="1600" v-model="isPopupActive">
             <!-- Form popup -->
             <template #default="{ isActive }">
                 <VCard close-on-back contained class="form-wrapper">
-                    <VContainer 
-                        fluid>
+                    <VContainer fluid>
                         <VRow justify="end">
                             <VCardActions>
                                 <VBtn
@@ -169,48 +198,46 @@ onMounted(() => {
             </template>
         </VDialog>
     </div>
-
 </template>
 
 <style>
-    .grid-x-borders {
-        border-top: none;
-        border-bottom: none;
-        border-right: solid 1px solid #e5e7eb;
-        border-left: solid 1px solid #e5e7eb;
-    }
+.grid-x-borders {
+    border-top: none;
+    border-bottom: none;
+    border-right: solid 1px solid #e5e7eb;
+    border-left: solid 1px solid #e5e7eb;
+}
 
-    .grid-left-border {
-        border-left: solid 1px #e5e7eb;
-    }
+.grid-left-border {
+    border-left: solid 1px #e5e7eb;
+}
 
-    .grid-right-border {
-        border-right: solid 1px #e5e7eb;
-    }
+.grid-right-border {
+    border-right: solid 1px #e5e7eb;
+}
 
-    .loan-info-cell {
-        min-width: 150px;
-        gap: 0.75rem;
-    }
+.loan-info-cell {
+    min-width: 150px;
+    gap: 0.75rem;
+}
 
-    .loan-info-wrapper {
-        background-color: var(--vt-c-white-off);
-    }
+.loan-info-wrapper {
+    background-color: var(--vt-c-white-off);
+}
 
-    .loan-amount {
-        font-size: 2.5rem;
-    }
+.loan-amount {
+    font-size: 2.5rem;
+}
 
-    .loan-properties {
-        font-size: 1.25rem;
-    }
+.loan-properties {
+    font-size: 1.25rem;
+}
 
-    .gap-1 {
-        gap: 1rem;
-    }
+.gap-1 {
+    gap: 1rem;
+}
 
-    .gridjs-th {
-        white-space: normal;
-    }
-
+.gridjs-th {
+    white-space: normal;
+}
 </style>
