@@ -21,15 +21,15 @@ const depositsTable = ref()
 // Methods
 
 /**
- * Visits individual loan ledger based on its ID
- * @param {*} loanID - ID of individual loan
+ * Visits individual deposit ledger based on its ID
+ * @param {*} depositID - ID of individual deposit
  */
-const visitLoanLedger = async (loanID) => {
-    router.push({ name: 'Loan Ledger', params: { id: loanID } })
+const visitDepositLedger = async (depositID) => {
+    router.push({ name: 'Deposit Ledger', params: { id: depositID } })
 }
 
 onMounted(async () => {
-    const res = await fetch(`${API_URL}/loans`, {
+    const res = await fetch(`${API_URL}/deposits`, {
         method: 'GET',
         headers: {
             Authorization: `Bearer ${window.$cookies.get('credentials').token}`
@@ -38,28 +38,30 @@ onMounted(async () => {
 
     if (res.status === 200) {
         const resJson = await res.json()
-        const rawLoanData = resJson.loans
-        const loanData = rawLoanData.map((row) => {
-            return [row.loanID, row.username, row.loanType, row.originalLoanAmount]
+        const rawDepositData = resJson.deposits
+        console.log(resJson)
+
+        const depositData = rawDepositData.map((row) => {
+            return [row.depositID, row.username, row.category, row.originalDepositAmount]
         })
 
         deposit.value = new Grid({
             columns: [
-                { name: 'LoanID', hidden: true },
-                'Loanee',
-                'Type of Loan',
-                'Amount of Loan',
+                { name: 'DepositID', hidden: true },
+                'Deposit Holder',
+                'Deposit Category',
+                'Original Deposit Amount',
                 {
-                    name: 'View Loan Ledger',
+                    name: 'View Deposit Ledger',
                     formatter: (cell, row) => {
                         return h(
                             'v-hover',
                             {
                                 className:
                                     'cursor-pointer hover-scale-md py-2 mb-4 px-4 border rounded-md',
-                                onClick: () => visitLoanLedger(row.cells[0].data) // grabs the row's Loan ID and passes it to the function.
+                                onClick: () => visitDepositLedger(row.cells[0].data) // grabs the row's Loan ID and passes it to the function.
                             },
-                            'View Loan Ledger'
+                            'View Deposit Ledger'
                         )
                     }
                 }
@@ -71,7 +73,7 @@ onMounted(async () => {
             sort: true,
             resizable: true,
             fixedHeader: true,
-            data: loanData,
+            data: depositData,
             className: {
                 // Define your class names here
             },
