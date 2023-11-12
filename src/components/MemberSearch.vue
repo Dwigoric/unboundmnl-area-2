@@ -20,6 +20,10 @@ const props = defineProps({
     to: {
         type: String,
         required: true
+    },
+    canCreateNewMember: {
+        type: Boolean,
+        default: true
     }
 })
 
@@ -101,7 +105,7 @@ const sendToAppDetails = async () => {
                 {{ errorMessage }}
             </VAlert>
         </div>
-        <div class="create-member">
+        <div class="create-member" v-if="canCreateNewMember">
             <v-dialog width="1200">
                 <template v-slot:activator="{ props }">
                     <!-- Create Member Profile Button -->

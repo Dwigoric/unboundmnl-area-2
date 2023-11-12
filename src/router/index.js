@@ -130,7 +130,7 @@ const router = createRouter({
                     path: PATH_NAMES.LOAN_TRANSACTIONS.MEMBER_INPUT,
                     name: 'Loan Transaction Member Input',
                     component: MemberSearch,
-                    props: { to: 'Loan Transaction Details' }
+                    props: { to: 'Loan Transaction Details', canCreateNewMember: false }
                 },
                 {
                     path: PATH_NAMES.LOAN_TRANSACTIONS.TRANSACTION_DETAILS,
