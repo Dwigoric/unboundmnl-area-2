@@ -101,7 +101,11 @@ onMounted(getAllUsers)
                                         </v-row>
                                     </v-container>
 
-                                    <MemberProfileRegister :onsubmit="getAllUsers" />
+                                    <MemberProfileRegister
+                                        :onsubmit="
+                                            () => getAllUsers().then(() => (isActive.value = false))
+                                        "
+                                    />
                                 </v-card>
                             </template>
                         </v-dialog>

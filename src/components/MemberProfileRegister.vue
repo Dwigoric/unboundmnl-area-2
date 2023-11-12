@@ -9,6 +9,7 @@ import { API_URL } from '../constants'
 const errorMessage = ref('')
 const errorAlert = ref(false)
 const form = ref(null)
+const loading = ref(false)
 
 // Define form fields
 const userData = reactive({
@@ -49,6 +50,7 @@ const rules = {
     required: (v) => !!v || 'This field is required'
 }
 
+// Props
 const props = defineProps({
     action: {
         type: String,
@@ -67,15 +69,17 @@ const props = defineProps({
     }
 })
 
+// Methods
 const submitForm = async function () {
-    const validationResult = await form.value.validate()
+    const { valid } = await form.value.validate()
+    if (!valid) return
+
+    loading.value = true
+
     const fn = props.action === 'update' ? updateUser : registerUser
-    if (validationResult.valid) {
-        const res = await fn()
-        if (res) {
-            props.onsubmit()
-        }
-    }
+    const res = await fn()
+    loading.value = false
+    if (res) props.onsubmit()
 }
 
 const autofillFormIfPossible = function () {
@@ -92,14 +96,13 @@ const autofillFormIfPossible = function () {
     }
 }
 
-// Define methods
 const updateUser = async function () {
     const credentials = window.$cookies.get('credentials')
 
     if (!credentials) {
         errorAlert.value = true
         errorMessage.value = 'Please log in as officer to continue'
-        return
+        return false
     }
 
     const { token } = credentials
@@ -107,7 +110,7 @@ const updateUser = async function () {
     if (!token) {
         errorAlert.value = true
         errorMessage.value = 'Please log in as officer to continue'
-        return
+        return false
     }
 
     const result = await fetch(`${API_URL}/users/edit`, {
@@ -144,7 +147,7 @@ const registerUser = async function () {
     if (!credentials) {
         errorAlert.value = true
         errorMessage.value = 'Please log in as officer to continue'
-        return
+        return false
     }
 
     const { token } = credentials
@@ -152,7 +155,7 @@ const registerUser = async function () {
     if (!token) {
         errorAlert.value = true
         errorMessage.value = 'Please log in as officer to continue'
-        return
+        return false
     }
 
     const result = await fetch(`${API_URL}/users/add`, {
@@ -533,7 +536,11 @@ onMounted(autofillFormIfPossible)
                 </VAlert>
 
                 <div class="btn-wrapper">
-                    <VBtn type="submit" class="btn capitalize-text" @click.prevent="submitForm"
+                    <VBtn
+                        type="submit"
+                        class="btn capitalize-text"
+                        @click.prevent="submitForm"
+                        :loading="loading"
                         >{{ props.action === 'update' ? 'Edit' : 'Create' }} Member Profile
                     </VBtn>
                 </div>
