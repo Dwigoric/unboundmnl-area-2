@@ -16,6 +16,7 @@ import LoanLedgerView from '../views/LoanLedgerView.vue'
 import LoanTransaction from '../views/LoanTransaction.vue'
 import LoanLedgerAdd from '../components/LoanLedgerAdd.vue'
 import EnterDeposit from '../views/EnterDeposit.vue'
+import DepositAdd from '../components/DepositAdd.vue'
 
 // Import path name constants
 import { PATH_NAMES } from '../constants'
@@ -159,7 +160,24 @@ const router = createRouter({
         {
             path: '/enter-deposit',
             name: 'Enter Deposit',
-            component: EnterDeposit
+            component: EnterDeposit,
+            children: [
+                {
+                    path: '',
+                    redirect: '/enter-deposit/' + PATH_NAMES.DEPOSIT_TRANSACTIONS.MEMBER_INPUT
+                },
+                {
+                    path: PATH_NAMES.DEPOSIT_TRANSACTIONS.MEMBER_INPUT,
+                    name: 'Deposit Transaction Member Input',
+                    component: MemberSearch,
+                    props: { to: 'Deposit Transaction Details', canCreateNewMember: false }
+                },
+                {
+                    path: PATH_NAMES.DEPOSIT_TRANSACTIONS.TRANSACTION_DETAILS,
+                    name: 'Deposit Transaction Details',
+                    component: DepositAdd
+                }
+            ]
             // TODO: this - jana uwu
             // beforeEnter: (to, from, next) => {
             //     const credentials = window.$cookies.get('credentials')

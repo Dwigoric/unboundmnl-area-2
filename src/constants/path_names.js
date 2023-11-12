@@ -7,5 +7,9 @@ export const PATH_NAMES = Object.freeze({
     LOAN_TRANSACTIONS: {
         MEMBER_INPUT: 'member-input',
         TRANSACTION_DETAILS: 'transaction-details'
+    },
+    DEPOSIT_TRANSACTIONS: {
+        MEMBER_INPUT: 'member-input',
+        TRANSACTION_DETAILS: 'transaction-details'
     }
 })
