@@ -72,7 +72,7 @@ const getUserData = async () => {
     }
 }
 
-const sendToAppDetails = async () => {
+const sendToNext = async () => {
     await getUserData()
 
     if (errorAlert.value) return
@@ -143,7 +143,7 @@ const sendToAppDetails = async () => {
         </div>
 
         <div class="btn-wrapper">
-            <VBtn type="submit" class="btn capitalize-text" @click.prevent="sendToAppDetails">
+            <VBtn type="submit" class="btn capitalize-text" @click.prevent="sendToNext">
                 Next
             </VBtn>
         </div>
