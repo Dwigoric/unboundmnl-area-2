@@ -27,10 +27,7 @@ function updateStepCounter(to) {
 
 // Watch for route changes then change the step accordingly
 const route = useRoute()
-watch(
-    () => route.path,
-    (to) => updateStepCounter(to)
-)
+watch(() => route.path, updateStepCounter)
 
 onMounted(() => updateStepCounter(route.path))
 </script>
