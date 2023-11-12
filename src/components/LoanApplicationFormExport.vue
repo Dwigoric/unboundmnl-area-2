@@ -123,8 +123,8 @@ const fetchPDF = async () => {
 
     // Set spouse's information
     if (appFormStore.userData.civil_status === 'Married') {
-        form.getTextField('Spouse Last Name').setText(appFormStore.userData.spouse.name.last)
-        form.getTextField('Spouse First Name').setText(appFormStore.userData.spouse.name.given)
+        form.getTextField('Spouse Surname').setText(appFormStore.userData.spouse.name.last)
+        form.getTextField('Spouse Given Name').setText(appFormStore.userData.spouse.name.given)
         form.getTextField('Spouse Middle Name').setText(appFormStore.userData.spouse.name.middle)
         const spouseBirthday = new Date(appFormStore.userData.spouse.birthday)
         form.getTextField('Spouse Date of Birth').setText(
