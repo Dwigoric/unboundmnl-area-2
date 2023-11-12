@@ -4,8 +4,12 @@ import { ref, onMounted, computed } from 'vue'
 import { Grid, h } from 'gridjs'
 import 'gridjs/dist/theme/mermaid.css'
 
-import LoanLedgerEdit from '../components/LoanLedgerEdit.vue'
+// Import constants
 import { API_URL } from '../constants/api_url.js'
+
+// Import components
+import LoanLedgerEdit from '../components/LoanLedgerEdit.vue'
+import LoanLedgerAdd from '../components/LoanLedgerAdd.vue'
 
 // Define props for the component
 const props = defineProps({
@@ -17,13 +21,19 @@ const props = defineProps({
 
 const data = ref([])
 const popupData = ref([])
-const isPopupActive = ref(false)
+const isAddPopupActive = ref(false) // for add transaction pop up
+const isPopupActive = ref(false) // for edit transaction pop up
+
+const setPopupAdd = () => {
+    // database connection stuff
+    isAddPopupActive.value = true;
+}
 
 const setPopupEdit = () => {
     // if (data.value.length === 0) return
 
     // popupData.value = data.value.find((loan) => loan[0] === loanId)
-    isPopupActive.value = true
+    isPopupActive.value = true;
 }
 
 const loanAmount = ref(0)
@@ -61,7 +71,7 @@ const loanTransactionColumns = [
             return h(
                 'v-hover',
                 {
-                    className: 'py-2 mb-4 px-4 border rounded-md',
+                    className: 'py-2 mb-4 px-4 border rounded-md cursor-pointer rounded-lg bg-blue-lighten-1',
                     onClick: () => setPopupEdit(row.cells[0].data)
                 },
                 'Edit Row'
@@ -125,10 +135,6 @@ onMounted(async () => {
             tr: 'my-16 py-3'
         },
         style: {
-            table: {
-                //'width': '100%',
-                // 'border-collapse': 'separate',
-            },
             th: {
                 'min-width': '250px'
             },
@@ -144,7 +150,6 @@ onMounted(async () => {
 </script>
 
 <template>
-    <!-- TODO: REMOVE INLINE STYLING -enrique -->
     <div class="w-100">
         <div id="loan-info-wrapper" class="d-flex justify-space-between align-center">
             <div id="loan-amount-cell" class="h-75 w-30 pa-2">
@@ -172,11 +177,35 @@ onMounted(async () => {
         </div>
 
         <v-divider :thickness="1" class="mt-3 mb-3 border-opacity-70" />
-
+        <VBtn @click="setPopupAdd" block size="large" rounded="lg" prepend-icon="mdi-plus-circle" color="green-darken-1" class="hover-scale-sm">ADD NEW TRANSACTION</VBtn>
         <div id="loan-payments-wrapper" ref="loanPaymentsTable" class="w-100"></div>
 
+        <!-- Form popup for ADD TRANSACTION -->
+        <VDialog width="1600" v-model="isAddPopupActive">
+            <template #default="{ isActive }">
+                <VCard close-on-back contained class="form-wrapper">
+                    <VContainer fluid>
+                        <VRow justify="end">
+                            <VCardActions>
+                                <VBtn
+                                    class="ma-2 capitalize-text"
+                                    color="var(--vt-c-blue)"
+                                    @click="isActive.value = false"
+                                    icon="mdi-close"
+                                >
+                                </VBtn>
+                            </VCardActions>
+                        </VRow>
+                    </VContainer>
+
+                    <LoanLedgerAdd/>
+                </VCard>
+            </template>
+        </VDialog>
+
+
+        <!-- Form popup for EDIT TRANSACTION-->
         <VDialog width="1600" v-model="isPopupActive">
-            <!-- Form popup -->
             <template #default="{ isActive }">
                 <VCard close-on-back contained class="form-wrapper">
                     <VContainer fluid>

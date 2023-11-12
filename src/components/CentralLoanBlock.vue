@@ -15,6 +15,7 @@ import router from '../router'
 // });
 
 // Constant variables
+/*
 const data = [
     ['id1', 'John Doe', 'Personal Loan', '$10,000'],
     ['id2', 'John Doe', 'Personal Loan', '$10,000'],
@@ -32,6 +33,7 @@ const data = [
     ['id14', 'Mama mo', 'Panootie', '$10,000'],
     ['id15', 'Jana', 'Personal Loan', '$10,000']
 ]
+*/
 const loan = ref()
 
 const loansTable = ref()
@@ -63,7 +65,7 @@ onMounted(async () => {
 
         loan.value = new Grid({
             columns: [
-                { name: 'LoanID', hidden: false },
+                { name: 'LoanID', hidden: true },
                 'Loanee',
                 'Type of Loan',
                 'Amount of Loan',
@@ -89,7 +91,7 @@ onMounted(async () => {
             sort: true,
             resizable: true,
             fixedHeader: true,
-            data: loanData,
+            data: loanData, 
             className: {
                 // Define your class names here
             },

@@ -29,14 +29,13 @@ const loanID = ref(route.params.id);
         <NavigationDrawer />
         <div class="d-flex flex-column w-100 pl-8">
             <!-- Top Bar of Dashboard -->
-            <DashboardTopBar :breadcrumbs="['Home', 'Loans', `Loan ${loanID}`]" />
+            <DashboardTopBar :breadcrumbs="['Home', 'Loans', `Loan Ledger`]" />
 
             <div class="dashboard-body d-flex flex-column h-100 py-4">
-                <h2>Loan {{ loanID }}</h2>
                 <ContentBlock
                     :width="100"
                     :height="100"
-                    :maxWidth="80"
+                    :maxWidth="75"
                     :unit="'%'"
                     :maxUnit="'vw'"
                     :bg-color="'#FFF'"

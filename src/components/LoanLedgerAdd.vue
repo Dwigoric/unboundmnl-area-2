@@ -3,52 +3,12 @@ import { ref, onMounted } from 'vue'
 import { Grid} from 'gridjs';
 import "gridjs/dist/theme/mermaid.css";
 
-
-const loanLedgerRefTable = ref();
-const loanLedgerRef = ref();
-
-onMounted(() => {
-
-    loanLedgerRef.value = new Grid({
-        columns: [
-            'Date of Payment',
-            'GV/OR Number',
-            'Amount Paid',
-            'Balance',
-            'Interest Paid',
-            'Fines Paid',
-            'Term of Loan',
-            'Date of Entry',
-            'Officer in Charge',
-        ],
-        data: [
-            {
-                'Type of Loan': 'Personal Loan',
-                'Amount of Loan': '$10,000',
-                'Loanee': 'John Doe',
-            },
-        ],
-        className: {
-            // Define your class names here
-        },
-        style: {
-            table: {
-                // Define your table styles here
-            },
-            tr: {
-                // Define row styles here
-            },
-        },
-    });
-
-    // Render loanStatus in corresponding reference
-    loanLedgerRef.value.render(loanLedgerRefTable.value);
-})
+//const loanLedgerRefTable = ref();
+//const loanLedgerRef = ref();
 </script>
 
-
 <template>
-    <h2 class="header-wrapper"> Edit Loan Transaction</h2>
+    <h2 class="header-wrapper">Add New Transaction</h2>
     <div class="wrapper">
         <h3 class="w-100 px-4 mb-3">Current Loan Data</h3>
         <div id="loan-ledger-wrapper" ref="loanLedgerRefTable" class="w-100 px-4"></div>
@@ -68,6 +28,8 @@ onMounted(() => {
             label="Officer in Charge"
             :items="['Capy', 'Booboo', 'Baabaa']"
         ></v-select>
+        <!-- TODO: Connect this button to a method to add to the database -->
+        <VBtn block size="large" rounded="lg" prepend-icon="mdi-check" color="green-darken-1" class="hover-scale-sm">SUBMIT</VBtn>
     </div>
 </template>
 
