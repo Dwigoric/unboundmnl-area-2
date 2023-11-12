@@ -11,6 +11,7 @@ import MemberProfileRegister from '../components/MemberProfileRegister.vue'
 // Import constants
 import { API_URL } from '../constants'
 
+// TODO: Create a new store for this, or refactor how search member works
 // Import stores
 import { useApplicationFormStore } from '../stores/applicationForm'
 const appFormStore = useApplicationFormStore() // Use the setLoaneeId method to set the loanee UUID
@@ -65,7 +66,7 @@ const sendToAppDetails = async () => {
 
     if (errorAlert.value) return
 
-    router.push({ name: 'Loan Application Details' })
+    router.push({ name: 'Loan Transaction Details' })
 }
 </script>
 

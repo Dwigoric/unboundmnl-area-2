@@ -1,12 +1,35 @@
 <script setup>
-// Import vue components
+// Packages
+import { ref, watch, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
+
+// Vue components
 import NavigationDrawer from '../components/NavigationDrawer.vue'
 import ContentBlock from '../components/ContentBlock.vue'
-import LoanLedgerAdd from '../components/LoanLedgerAdd.vue'
 import DashboardTopBar from '../components/DashboardTopBar.vue'
-import LoanApplicationSearch from '../components/LoanApplicationSearch.vue'
 import StepCounterLoanTransaction from '../components/StepCounterLoanTransaction.vue'
 
+// Project constants needed
+import { PATH_NAMES } from '../constants'
+
+const step = ref('1')
+
+function updateStepCounter(to) {
+    if (to.endsWith(PATH_NAMES.LOAN_TRANSACTIONS.MEMBER_INPUT)) {
+        step.value = '1'
+    } else if (to.endsWith(PATH_NAMES.LOAN_TRANSACTIONS.TRANSACTION_DETAILS)) {
+        step.value = '2'
+    }
+}
+
+// Watch for route changes then change the step accordingly
+const route = useRoute()
+watch(
+    () => route.path,
+    (to) => updateStepCounter(to)
+)
+
+onMounted(() => updateStepCounter(route.path))
 </script>
 
 <template>
@@ -20,24 +43,27 @@ import StepCounterLoanTransaction from '../components/StepCounterLoanTransaction
             <!-- Main Dashboard Body -->
             <div class="dashboard-body d-flex flex-column h-100 py-4">
                 <h2>Enter Loan Transaction</h2>
-
-                <!-- Step 1 -->
-                <ContentBlock :width="100" :height="100" :maxWidth="80" :unit="'%'" :maxUnit="'vw'" :bg-color="'#FFF'">
-                    <StepCounterLoanTransaction />
+                <ContentBlock
+                    :width="100"
+                    :height="100"
+                    :maxWidth="80"
+                    :unit="'%'"
+                    :maxUnit="'vw'"
+                    :bg-color="'#FFF'"
+                >
+                    <StepCounterLoanTransaction :step="step" />
                 </ContentBlock>
 
-                <ContentBlock :width="100" :height="100" :maxWidth="80" :unit="'%'" :maxUnit="'vw'" :bg-color="'#FFF'">
-                    <LoanApplicationSearch />
+                <ContentBlock
+                    :width="100"
+                    :height="100"
+                    :maxWidth="80"
+                    :unit="'%'"
+                    :maxUnit="'vw'"
+                    :bg-color="'#FFF'"
+                >
+                    <RouterView />
                 </ContentBlock>
-
-                <!-- Step 2 -->
-                <ContentBlock :width="100" :height="100" :maxWidth="80" :unit="'%'" :maxUnit="'vw'" :bg-color="'#FFF'">
-                    <StepCounterLoanTransaction />
-                </ContentBlock>
-
-                <ContentBlock :width="100" :height="100" :maxWidth="80" :unit="'%'" :maxUnit="'vw'" :bg-color="'#FFF'">
-                        <LoanLedgerAdd/>
-                    </ContentBlock>
             </div>
         </div>
     </div>

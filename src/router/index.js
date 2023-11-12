@@ -14,9 +14,9 @@ import LoanStatus from '../views/LoanStatus.vue'
 import DashboardCapital from '../views/DashboardCapital.vue'
 import LoanLedgerView from '../views/LoanLedgerView.vue'
 import LoanTransaction from '../views/LoanTransaction.vue'
+import LoanTransactionSearch from '../components/LoanTransactionSearch.vue'
+import LoanLedgerAdd from '../components/LoanLedgerAdd.vue'
 import EnterDeposit from '../views/EnterDeposit.vue'
-
-
 
 // Import path name constants
 import { PATH_NAMES } from '../constants'
@@ -70,13 +70,17 @@ const router = createRouter({
             component: NewLoanApplication,
             children: [
                 {
+                    path: '',
+                    redirect: '/new-loan-application/' + PATH_NAMES.APP_FORM.MEMBER_INPUT
+                },
+                {
                     path: PATH_NAMES.APP_FORM.MEMBER_INPUT,
-                    name: 'Member Input',
+                    name: 'Loan Application Member Input',
                     component: LoanApplicationSearch
                 },
                 {
                     path: PATH_NAMES.APP_FORM.APPLICATION_DETAILS,
-                    name: 'Application Details',
+                    name: 'Loan Application Details',
                     component: LoanApplicationForm
                 },
                 {
@@ -95,7 +99,7 @@ const router = createRouter({
             path: '/loan-ledger/:id',
             name: 'Loan Ledger',
             component: LoanLedgerView,
-            props: true, // allows props to be passed 
+            props: true, // allows props to be passed
             beforeEnter: (to, from, next) => {
                 const credentials = window.$cookies.get('credentials')
                 if (!credentials || !credentials.token) next({ name: 'Login' })
@@ -105,7 +109,7 @@ const router = createRouter({
         {
             path: '/loan-status',
             name: 'Loan Status',
-            component: LoanStatus,
+            component: LoanStatus
             // TODO: this - jana uwu
             // beforeEnter: (to, from, next) => {
             //     const credentials = window.$cookies.get('credentials')
@@ -117,6 +121,22 @@ const router = createRouter({
             path: '/loan-transaction',
             name: 'Loan Transaction',
             component: LoanTransaction,
+            children: [
+                {
+                    path: '',
+                    redirect: '/loan-transaction/' + PATH_NAMES.LOAN_TRANSACTIONS.MEMBER_INPUT
+                },
+                {
+                    path: PATH_NAMES.LOAN_TRANSACTIONS.MEMBER_INPUT,
+                    name: 'Loan Transaction Member Input',
+                    component: LoanTransactionSearch
+                },
+                {
+                    path: PATH_NAMES.LOAN_TRANSACTIONS.TRANSACTION_DETAILS,
+                    name: 'Loan Transaction Details',
+                    component: LoanLedgerAdd
+                }
+            ]
             // TODO: this - jana uwu
             // beforeEnter: (to, from, next) => {
             //     const credentials = window.$cookies.get('credentials')
@@ -127,7 +147,7 @@ const router = createRouter({
         {
             path: '/cap-dashboard',
             name: 'Shared Capital Dashboard',
-            component: DashboardCapital,
+            component: DashboardCapital
             // TODO: this - jana uwu
             // beforeEnter: (to, from, next) => {
             //     const credentials = window.$cookies.get('credentials')
@@ -138,14 +158,14 @@ const router = createRouter({
         {
             path: '/enter-deposit',
             name: 'Enter Deposit',
-            component: EnterDeposit,
+            component: EnterDeposit
             // TODO: this - jana uwu
             // beforeEnter: (to, from, next) => {
             //     const credentials = window.$cookies.get('credentials')
             //     if (!credentials || !credentials.token) next({ name: 'Login' })
             //     else next()
             // }
-        },
+        }
     ]
 })
 

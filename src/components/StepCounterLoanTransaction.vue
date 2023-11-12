@@ -16,8 +16,6 @@ let step1DotColor = 'var(--vt-c-blue-dark)'
 let step1Icon = 1
 let step2DotColor = 'var(--vt-c-blue)'
 let step2Icon = 2
-let step3DotColor = 'var(--vt-c-blue)'
-let step3Icon = 3
 
 // Watch props.step and change accordingly
 watch(
@@ -28,16 +26,12 @@ watch(
             step1Icon = 1
             step2DotColor = 'var(--vt-c-blue)'
             step2Icon = 2
-            step3DotColor = 'var(--vt-c-blue)'
-            step3Icon = 3
         } else if (step === '2') {
             step2DotColor = 'var(--vt-c-blue-dark)'
             step1DotColor = 'var(--vt-c-green)'
             step1Icon = 0
             step2Icon = 2
-            step3DotColor = 'var(--vt-c-blue)'
-            step3Icon = 3
-        } 
+        }
     }
 )
 </script>
@@ -45,19 +39,26 @@ watch(
 <template>
     <!-- TODO: Make this much more skinnier -->
     <div class="step-wrapper">
-        <v-timeline direction="horizontal" line-thickness="3" truncate-line="both" line-inset="5" side="end">
-            <StepCounterTimelineItem 
-                :dotColor="step1DotColor" 
+        <v-timeline
+            direction="horizontal"
+            line-thickness="3"
+            truncate-line="both"
+            line-inset="5"
+            side="end"
+        >
+            <StepCounterTimelineItem
+                :dotColor="step1DotColor"
                 :icon="step1Icon"
-                :def="'Search Member'">
+                :def="'Search Member'"
+            >
             </StepCounterTimelineItem>
 
-            <StepCounterTimelineItem 
-                :dotColor="step2DotColor" 
-                :icon="step2Icon" 
-                :def="'Fill up form'">
+            <StepCounterTimelineItem
+                :dotColor="step2DotColor"
+                :icon="step2Icon"
+                :def="'Fill up form'"
+            >
             </StepCounterTimelineItem>
-
         </v-timeline>
     </div>
 </template>
