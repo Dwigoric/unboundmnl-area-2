@@ -12,8 +12,16 @@ import MemberProfileRegister from '../components/MemberProfileRegister.vue'
 import { API_URL } from '../constants'
 
 // Import stores
-import { useApplicationFormStore } from '../stores/applicationForm'
-const appFormStore = useApplicationFormStore() // Use the setLoaneeId method to set the loanee UUID
+import { useMemberSearchStore } from '../stores/memberSearch'
+const memberSearchStore = useMemberSearchStore()
+
+// Props
+const props = defineProps({
+    to: {
+        type: String,
+        required: true
+    }
+})
 
 // Define reactive variables
 const searchUsername = ref(null)
@@ -56,7 +64,7 @@ const getUserData = async () => {
         errorAlert.value = false
         errorMessage.value = ''
         console.log(loanees[0])
-        appFormStore.setUserData(loanees[0])
+        memberSearchStore.setData(loanees[0])
     }
 }
 
@@ -65,7 +73,7 @@ const sendToAppDetails = async () => {
 
     if (errorAlert.value) return
 
-    router.push({ name: 'Loan Application Details' })
+    router.push({ name: props.to })
 }
 </script>
 

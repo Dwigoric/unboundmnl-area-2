@@ -4,9 +4,8 @@ import NavigationDrawer from '../components/NavigationDrawer.vue'
 import ContentBlock from '../components/ContentBlock.vue'
 import DepositAdd from '../components/DepositAdd.vue'
 import DashboardTopBar from '../components/DashboardTopBar.vue'
-import LoanApplicationSearch from '../components/LoanApplicationSearch.vue'
+import LoanApplicationSearch from '../components/MemberSearch.vue'
 import StepCounterLoanTransaction from '../components/StepCounterLoanTransaction.vue'
-
 </script>
 
 <template>
@@ -22,20 +21,48 @@ import StepCounterLoanTransaction from '../components/StepCounterLoanTransaction
                 <h2>Enter Deposit</h2>
 
                 <!-- Step 1 -->
-                <ContentBlock :width="100" :height="100" :maxWidth="80" :unit="'%'" :maxUnit="'vw'" :bg-color="'#FFF'">
+                <ContentBlock
+                    :width="100"
+                    :height="100"
+                    :maxWidth="80"
+                    :unit="'%'"
+                    :maxUnit="'vw'"
+                    :bg-color="'#FFF'"
+                >
                     <StepCounterLoanTransaction />
                 </ContentBlock>
 
-                <ContentBlock :width="100" :height="100" :maxWidth="80" :unit="'%'" :maxUnit="'vw'" :bg-color="'#FFF'">
+                <ContentBlock
+                    :width="100"
+                    :height="100"
+                    :maxWidth="80"
+                    :unit="'%'"
+                    :maxUnit="'vw'"
+                    :bg-color="'#FFF'"
+                >
                     <LoanApplicationSearch />
                 </ContentBlock>
 
                 <!-- Step 2 -->
-                <ContentBlock :width="100" :height="100" :maxWidth="80" :unit="'%'" :maxUnit="'vw'" :bg-color="'#FFF'">
+                <ContentBlock
+                    :width="100"
+                    :height="100"
+                    :maxWidth="80"
+                    :unit="'%'"
+                    :maxUnit="'vw'"
+                    :bg-color="'#FFF'"
+                >
                     <StepCounterLoanTransaction />
                 </ContentBlock>
 
-                <ContentBlock :width="100" :height="100" :maxWidth="80" :unit="'%'" :maxUnit="'vw'" :bg-color="'#FFF'">
+                <ContentBlock
+                    :width="100"
+                    :height="100"
+                    :maxWidth="80"
+                    :unit="'%'"
+                    :maxUnit="'vw'"
+                    :bg-color="'#FFF'"
+                >
                     <DepositAdd />
                 </ContentBlock>
             </div>

@@ -8,7 +8,9 @@ import { API_URL, FILENAMES } from '../constants'
 
 // Import stores
 import { useApplicationFormStore } from '../stores/applicationForm'
+import { useMemberSearchStore } from '../stores/memberSearch'
 const appFormStore = useApplicationFormStore()
+const memberSearchStore = useMemberSearchStore()
 
 // Define reactive variables
 const pdfUrl = ref('')
@@ -19,7 +21,7 @@ const disableSubmit = ref(false)
 // Submit loan application
 const submit = async () => {
     const { error, message } = await fetch(
-        `${API_URL}/loans/new/${appFormStore.userData.username}`,
+        `${API_URL}/loans/new/${memberSearchStore.data.username}`,
         {
             method: 'PUT',
             headers: {
@@ -87,10 +89,10 @@ const fetchPDF = async () => {
     form.getCheckBox(loanTypes[loanData.type]).check()
 
     // Set borrower's information
-    form.getTextField('Surname').setText(appFormStore.userData.name.last)
-    form.getTextField('Given Name').setText(appFormStore.userData.name.given)
-    form.getTextField('Middle Name').setText(appFormStore.userData.name.middle)
-    const birthday = new Date(appFormStore.userData.birthday)
+    form.getTextField('Surname').setText(memberSearchStore.data.name.last)
+    form.getTextField('Given Name').setText(memberSearchStore.data.name.given)
+    form.getTextField('Middle Name').setText(memberSearchStore.data.name.middle)
+    const birthday = new Date(memberSearchStore.data.birthday)
     form.getTextField('Date of Birth').setText(
         birthday.toLocaleDateString('en-PH', { dateStyle: 'long' })
     )
@@ -99,34 +101,34 @@ const fetchPDF = async () => {
     ageTextField.setText(
         Math.abs(birthday.getUTCFullYear() - new Date().getUTCFullYear()).toLocaleString()
     )
-    form.getTextField('Place of Birth').setText(appFormStore.userData.birthplace)
-    form.getCheckBox({ M: 'Male', F: 'Female' }[appFormStore.userData.gender]).check()
+    form.getTextField('Place of Birth').setText(memberSearchStore.data.birthplace)
+    form.getCheckBox({ M: 'Male', F: 'Female' }[memberSearchStore.data.gender]).check()
     const civilStatusTextField = form.getTextField('Civil Status')
     civilStatusTextField.setAlignment(TextAlignment.Center)
-    civilStatusTextField.setText(appFormStore.userData.civil_status)
-    form.getTextField('TIN').setText(appFormStore.userData.tin_no)
+    civilStatusTextField.setText(memberSearchStore.data.civil_status)
+    form.getTextField('TIN').setText(memberSearchStore.data.tin_no)
     const contactNumberTextField = form.getTextField('Contact No')
     contactNumberTextField.setAlignment(TextAlignment.Center)
-    contactNumberTextField.setText(appFormStore.userData.contact_no)
+    contactNumberTextField.setText(memberSearchStore.data.contact_no)
     form.getTextField('Residence Address').setText(
         [
-            appFormStore.userData.address.street,
-            appFormStore.userData.address.barangay,
-            appFormStore.userData.address.city,
-            appFormStore.userData.address.province
+            memberSearchStore.data.address.street,
+            memberSearchStore.data.address.barangay,
+            memberSearchStore.data.address.city,
+            memberSearchStore.data.address.province
         ].join(', ')
     )
     form.getTextField('Monthly Income').setText(
-        appFormStore.userData.monthly_income.toLocaleString()
+        memberSearchStore.data.monthly_income.toLocaleString()
     )
-    form.getTextField('Source of Income').setText(appFormStore.userData.occupation)
+    form.getTextField('Source of Income').setText(memberSearchStore.data.occupation)
 
     // Set spouse's information
-    if (appFormStore.userData.civil_status === 'Married') {
-        form.getTextField('Spouse Surname').setText(appFormStore.userData.spouse.name.last)
-        form.getTextField('Spouse Given Name').setText(appFormStore.userData.spouse.name.given)
-        form.getTextField('Spouse Middle Name').setText(appFormStore.userData.spouse.name.middle)
-        const spouseBirthday = new Date(appFormStore.userData.spouse.birthday)
+    if (memberSearchStore.data.civil_status === 'Married') {
+        form.getTextField('Spouse Surname').setText(memberSearchStore.data.spouse.name.last)
+        form.getTextField('Spouse Given Name').setText(memberSearchStore.data.spouse.name.given)
+        form.getTextField('Spouse Middle Name').setText(memberSearchStore.data.spouse.name.middle)
+        const spouseBirthday = new Date(memberSearchStore.data.spouse.birthday)
         form.getTextField('Spouse Date of Birth').setText(
             spouseBirthday.toLocaleDateString('en-PH', { dateStyle: 'long' })
         )
@@ -135,13 +137,13 @@ const fetchPDF = async () => {
         spouseAgeTextField.setText(
             Math.abs(spouseBirthday.getUTCFullYear() - new Date().getUTCFullYear()).toLocaleString()
         )
-        form.getTextField('Spouse Place of Birth').setText(appFormStore.userData.spouse.birthplace)
+        form.getTextField('Spouse Place of Birth').setText(memberSearchStore.data.spouse.birthplace)
         form.getTextField('Spouse Source of Income').setText(
-            appFormStore.userData.spouse.occupation
+            memberSearchStore.data.spouse.occupation
         )
         const spouseContactNumberTextField = form.getTextField('Spouse Contact No')
         spouseContactNumberTextField.setAlignment(TextAlignment.Center)
-        spouseContactNumberTextField.setText(appFormStore.userData.spouse.contact_no)
+        spouseContactNumberTextField.setText(memberSearchStore.data.spouse.contact_no)
     }
 
     // TODO: Coborrower section

@@ -7,14 +7,13 @@ import DashboardMain from '../views/DashboardMain.vue'
 import MemberProfilesView from '../views/MemberProfilesView.vue'
 import OfficerProfilesView from '../views/OfficerProfilesView.vue'
 import NewLoanApplication from '../views/NewLoanAppView.vue'
-import LoanApplicationSearch from '../components/LoanApplicationSearch.vue'
+import MemberSearch from '../components/MemberSearch.vue'
 import LoanApplicationForm from '../components/LoanApplicationForm.vue'
 import LoanApplicationFormExport from '../components/LoanApplicationFormExport.vue'
 import LoanStatus from '../views/LoanStatus.vue'
 import DashboardCapital from '../views/DashboardCapital.vue'
 import LoanLedgerView from '../views/LoanLedgerView.vue'
 import LoanTransaction from '../views/LoanTransaction.vue'
-import LoanTransactionSearch from '../components/LoanTransactionSearch.vue'
 import LoanLedgerAdd from '../components/LoanLedgerAdd.vue'
 import EnterDeposit from '../views/EnterDeposit.vue'
 
@@ -76,7 +75,8 @@ const router = createRouter({
                 {
                     path: PATH_NAMES.APP_FORM.MEMBER_INPUT,
                     name: 'Loan Application Member Input',
-                    component: LoanApplicationSearch
+                    component: MemberSearch,
+                    props: { to: 'Loan Application Details' }
                 },
                 {
                     path: PATH_NAMES.APP_FORM.APPLICATION_DETAILS,
@@ -129,7 +129,8 @@ const router = createRouter({
                 {
                     path: PATH_NAMES.LOAN_TRANSACTIONS.MEMBER_INPUT,
                     name: 'Loan Transaction Member Input',
-                    component: LoanTransactionSearch
+                    component: MemberSearch,
+                    props: { to: 'Loan Transaction Details' }
                 },
                 {
                     path: PATH_NAMES.LOAN_TRANSACTIONS.TRANSACTION_DETAILS,
