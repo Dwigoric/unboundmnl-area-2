@@ -205,7 +205,7 @@ onMounted(async () => {
 
 
         <!-- Form popup for EDIT TRANSACTION-->
-        <VDialog width="1600" v-model="isPopupActive">
+        <VDialog width="1000" v-model="isPopupActive">
             <template #default="{ isActive }">
                 <VCard close-on-back contained class="form-wrapper">
                     <VContainer fluid>

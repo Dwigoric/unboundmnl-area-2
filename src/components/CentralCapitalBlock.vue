@@ -3,7 +3,7 @@ import { ref, onMounted } from 'vue'
 import { Grid, h } from 'gridjs'
 import { API_URL } from '../constants/api_url.js'
 import 'gridjs/dist/theme/mermaid.css'
-import CapitalLedger from '../components/CapitalLedger.vue'
+import DepositLedger from '../components/DepositLedger.vue'
 
 
 // Import router
@@ -97,9 +97,6 @@ onMounted(async () => {
 
 <template>
     <div id="loan-status-wrapper" ref="depositsTable" class="w-90 px-4" />
-
-    <!-- TODO: Forward to this page when pressed 'View Deposit Ledger' -->
-    <CapitalLedger />
 </template>
 
 <style>

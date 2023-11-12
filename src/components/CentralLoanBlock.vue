@@ -1,4 +1,4 @@
-<script setup>
+z<script setup>
 import { ref, onMounted } from 'vue'
 import { Grid, h } from 'gridjs'
 import { API_URL } from '../constants/api_url.js'
