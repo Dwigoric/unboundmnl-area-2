@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted, watch } from 'vue'
-import { Grid } from 'gridjs';
-import "gridjs/dist/theme/mermaid.css";
+import { Grid } from 'gridjs'
+import 'gridjs/dist/theme/mermaid.css'
 
 //const loanLedgerRefTable = ref();
 //const loanLedgerRef = ref();
@@ -10,11 +10,10 @@ import "gridjs/dist/theme/mermaid.css";
 <template>
     <h2 class="header-wrapper pt-3">Add New Transaction</h2>
     <div class="wrapper">
-
         <!-- Add transaction form -->
         <div class="d-flex flex-row">
             <VTextField class="ml-3" type="date" label="Date of Payment" />
-            <VTextField class="ml-3" label="GV/OR Number" /> 
+            <VTextField class="ml-3" label="GV/OR Number" />
         </div>
         <VTextField class="ml-3" label="Amount Paid" />
         <VTextField class="ml-3" label="Balance" />
@@ -30,15 +29,11 @@ import "gridjs/dist/theme/mermaid.css";
                 :items="['Capy', 'Booboo', 'Baabaa']"
             ></v-select>
         </div>
-        
+
         <!-- TODO: Connect this button to a method to add to the database -->
         <div class="btn-wrapper">
-            <VBtn 
-                    prepend-icon="mdi-check" 
-                    class="capitalize btn">
-                    Submit
-                </VBtn>
-        </div>    
+            <VBtn prepend-icon="mdi-check" class="capitalize btn"> Submit </VBtn>
+        </div>
     </div>
 </template>
 

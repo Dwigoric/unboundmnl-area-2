@@ -3,9 +3,7 @@
 import NavigationDrawer from '../components/NavigationDrawer.vue'
 import ContentBlock from '../components/ContentBlock.vue'
 import DashboardTopBar from '../components/DashboardTopBar.vue'
-import CentralLoanBlock from '../components/CentralLoanBlock.vue'
-
-
+import CentralCapitalBlock from '../components/CentralCapitalBlock.vue'
 </script>
 
 <template>
@@ -14,15 +12,22 @@ import CentralLoanBlock from '../components/CentralLoanBlock.vue'
 
         <div class="d-flex flex-column w-100 pl-8">
             <!-- Top Bar of Dashboard -->
-            <DashboardTopBar :breadcrumbs="['Home', 'Shared Capital', 'Shared Capital Dashboard']" />
+            <DashboardTopBar
+                :breadcrumbs="['Home', 'Shared Capital', 'Shared Capital Dashboard']"
+            />
             <h2>Shared Capital Dashboard</h2>
 
             <!-- Main Dashboard Body -->
             <div class="dashboard-body d-flex flex-column h-100 py-4">
-
-                <ContentBlock :width="100" :height="100" :maxWidth="1600" :unit="'%'" :maxUnit="'px'" :bg-color="'#FFF'">
-
-                    <CentralLoanBlock />
+                <ContentBlock
+                    :width="100"
+                    :height="100"
+                    :maxWidth="1600"
+                    :unit="'%'"
+                    :maxUnit="'px'"
+                    :bg-color="'#FFF'"
+                >
+                    <CentralCapitalBlock />
                 </ContentBlock>
             </div>
         </div>
