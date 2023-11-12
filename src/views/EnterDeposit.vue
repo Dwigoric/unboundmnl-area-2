@@ -36,7 +36,7 @@ onMounted(() => updateStepCounter(route.path))
 
         <div class="d-flex flex-column w-100 pl-8">
             <!-- Top Bar of Dashboard -->
-            <DashboardTopBar :breadcrumbs="['Home', 'Shared Capital', 'Enter Deposit']" />
+            <DashboardTopBar :breadcrumbs="['Deposits', 'Enter Deposit']" />
 
             <!-- Main Dashboard Body -->
             <div class="dashboard-body d-flex flex-column h-100 py-4">

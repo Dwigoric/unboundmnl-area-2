@@ -153,7 +153,7 @@ onMounted(async () => {
                 <p class="font-weight-bold">Running Amount:</p>
                 <p class="amount">{{ formattedLoanAmount }}</p>
             </div>
-            <div class="d-flex justify-space-evenly align-center gap-1 h-75 pa-2">
+            <div class="d-flex justify-space-evenly align-center h-75 pa-2">
                 <div class="d-flex flex-column loan-info-cell grid-left-border h-100 px-2">
                     <p class="font-weight-bold">Deposit ID:</p>
                     <p class="loan-properties">{{ loanee }}</p>
@@ -255,7 +255,6 @@ onMounted(async () => {
 
 .loan-info-cell {
     min-width: 150px;
-    gap: 0.75rem;
 }
 
 .loan-info-wrapper {

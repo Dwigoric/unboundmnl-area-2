@@ -80,7 +80,7 @@ const logout = () => {
                     >Loan Status</v-list-item
                 >
 
-                <v-list-subheader class="mt-4 mb-n3 ml-n3"> SHARED CAPITAL </v-list-subheader>
+                <v-list-subheader class="mt-4 mb-n3 ml-n3"> DEPOSITS </v-list-subheader>
 
                 <v-list-item
                     to="/deposit-dashboard"

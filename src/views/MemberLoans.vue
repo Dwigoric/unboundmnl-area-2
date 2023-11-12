@@ -13,7 +13,7 @@ import DashboardTopBar from '../components/DashboardTopBar.vue'
 
         <div class="d-flex flex-column w-100 pl-8">
             <!-- Top Bar of Dashboard -->
-            <DashboardTopBar :breadcrumbs="['Home', 'Dashboard']" />
+            <DashboardTopBar :breadcrumbs="['Loans', 'Dashboard']" />
 
             <!-- Main Dashboard Body -->
             <div class="dashboard-body d-flex flex-column h-100 py-4">

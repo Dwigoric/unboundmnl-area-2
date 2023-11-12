@@ -105,6 +105,12 @@ defineProps({
                             </template>
                         </v-dialog>
                     </div>
+
+                    <v-btn
+                        icon="mdi-arrow-right-circle-outline"
+                        variant="plain"
+                        href="/member-profiles/profile-view"> 
+                    </v-btn>
                 </div>
             </v-card>
         </template>

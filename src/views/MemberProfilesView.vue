@@ -55,7 +55,7 @@ onMounted(getAllUsers)
 
         <div class="d-flex flex-column w-100 pl-8">
             <!-- Top Bar of Dashboard -->
-            <DashboardTopBar :breadcrumbs="['Home', 'Member Profiles']" />
+            <DashboardTopBar :breadcrumbs="['Profiles', 'Member Profiles']" />
 
             <!-- Main Dashboard Body -->
             <div class="dashboard-body d-flex flex-column h-100 py-3">

@@ -18,6 +18,7 @@ import LoanLedgerAdd from '../components/LoanLedgerAdd.vue'
 import EnterDeposit from '../views/EnterDeposit.vue'
 import DepositAdd from '../components/DepositAdd.vue'
 import DepositLedgerView from '../views/DepositLedgerView.vue'
+import MemberView from '../views/MemberView.vue'
 
 
 // Import path name constants
@@ -191,6 +192,17 @@ const router = createRouter({
             path: '/deposit-ledger/:id',
             name: 'Deposit Ledger',
             component: DepositLedgerView,
+            props: true, // allows props to be passed
+            beforeEnter: (to, from, next) => {
+                const credentials = window.$cookies.get('credentials')
+                if (!credentials || !credentials.token) next({ name: 'Login' })
+                else next()
+            }
+        },
+        {
+            path: '/member-profiles/profile-view',
+            name: 'Profile View',
+            component: MemberView,
             props: true, // allows props to be passed
             beforeEnter: (to, from, next) => {
                 const credentials = window.$cookies.get('credentials')

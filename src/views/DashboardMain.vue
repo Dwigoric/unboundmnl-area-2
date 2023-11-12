@@ -14,7 +14,7 @@ import CentralLoanBlock from '../components/CentralLoanBlock.vue'
 
         <div class="d-flex flex-column w-100 pl-8">
             <!-- Top Bar of Dashboard -->
-            <DashboardTopBar :breadcrumbs="['Home', 'Loans', 'Loan Dashboard']"/>
+            <DashboardTopBar :breadcrumbs="['Loans', 'Loan Dashboard']"/>
             <h2>Loan Dashboard</h2>
 
             <!-- Main Dashboard Body -->

@@ -57,7 +57,7 @@ onMounted(getAllOfficers)
 
         <div class="d-flex flex-column w-100 pl-8">
             <!-- Top Bar of Dashboard -->
-            <DashboardTopBar :breadcrumbs="['Home', 'Officer Profiles']" />
+            <DashboardTopBar :breadcrumbs="['Profiles', 'Officer Profiles']" />
 
             <!-- Main Dashboard Body -->
             <div class="dashboard-body d-flex flex-column h-100 py-3">

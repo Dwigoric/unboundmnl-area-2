@@ -13,7 +13,7 @@ import CentralCapitalBlock from '../components/CentralCapitalBlock.vue'
         <div class="d-flex flex-column w-100 pl-8">
             <!-- Top Bar of Dashboard -->
             <DashboardTopBar
-                :breadcrumbs="['Home', 'Shared Capital', 'Shared Capital Dashboard']"
+                :breadcrumbs="['Deposits', 'Deposit Dashboard']"
             />
             <h2>Shared Capital Dashboard</h2>
 

@@ -15,7 +15,7 @@ import MemberProfileRegister from '../components/MemberProfileRegister.vue'
 
         <div class="d-flex flex-column w-100 pl-8">
             <!-- Top Bar of Dashboard -->
-            <DashboardTopBar :breadcrumbs="['Home', 'Loans', 'Loan Status']" />
+            <DashboardTopBar :breadcrumbs="['Loans', 'Loan Status']" />
 
             <!-- Main Dashboard Body -->
             <div class="dashboard-body d-flex flex-column h-100 py-4">
