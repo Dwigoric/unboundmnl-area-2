@@ -8,8 +8,8 @@ import 'gridjs/dist/theme/mermaid.css'
 import { API_URL } from '../constants/api_url.js'
 
 // Import components
-import LoanLedgerEdit from '../components/LoanLedgerEdit.vue'
-import LoanLedgerAdd from '../components/LoanLedgerAdd.vue'
+import DepositEdit from '../components/DepositEdit.vue'
+import DepositAdd from '../components/DepositAdd.vue'
 
 // Define props for the component
 const props = defineProps({
@@ -19,7 +19,7 @@ const props = defineProps({
     }
 })
 
-const data = ref([])
+// const data = ref([])
 const popupData = ref([])
 const isAddPopupActive = ref(false) // for add transaction pop up
 const isPopupActive = ref(false) // for edit transaction pop up
@@ -36,33 +36,30 @@ const setPopupEdit = () => {
     isPopupActive.value = true;
 }
 
-const loanAmount = ref(0)
-const loanee = ref('')
-const loanType = ref('')
-const loanTerm = ref(0)
-const loanPaymentFrequency = ref('')
+// const loanAmount = ref(0)
+// const loanee = ref('')
+// const loanType = ref('')
+// const loanTerm = ref(0)
+// const loanPaymentFrequency = ref('')
 
-// Format the loan amount to PHP standard
-const formattedLoanAmount = computed(() => {
-    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'PHP' }).format(
-        loanAmount.value
-    )
-})
+// // Format the loan amount to PHP standard
+// const formattedLoanAmount = computed(() => {
+//     return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'PHP' }).format(
+//         loanAmount.value
+//     )
+// })
 
 // const formattedLoanAmount = ref(
 //     new Intl.NumberFormat('en-US', { style: 'currency', currency: 'PHP' }).format(loanAmount)
 // )
 
-// TODO: loan mode of payment
-
-const loanTransactionColumns = [
+const capitalLedgerColumns = [
     { name: 'Date of Payment' },
     { name: 'GV/OR Number' },
-    { name: 'Amount Paid' },
+    { name: 'Transaction Type' },
+    { name: 'Amount' },
+    { name: 'Interest' },
     { name: 'Balance' },
-    { name: 'Interest Paid' },
-    { name: 'Fines Paid' },
-    { name: 'Term of Loan' },
     { name: 'Date of Entry' },
     { name: 'Officer in Charge' },
     {
@@ -80,36 +77,36 @@ const loanTransactionColumns = [
     }
 ]
 
-loanTransactionColumns.forEach((obj) => {
-    obj['width'] = '18%'
-})
+// capitalLedgerColumns.forEach((obj) => {
+//     obj['width'] = '18%'
+// })
 
 // Create a ref to hold new loanPaymentsTable template
-const loanPaymentsTable = ref()
+const capitalLedgerTable = ref()
 
 // Create a ref to hold new grid instance
-const loanPayments = ref()
+const capital = ref()
 
 // Ideally, we do a fetch request to the database to grab the data.
 onMounted(async () => {
-    // Fetch loan properties from the database by using the loanID property!
-    const jsonRes = await fetch(`${API_URL}/loans/get/${props.loanID}`, {
-        method: 'GET',
-        headers: {
-            Authorization: `Bearer ${window.$cookies.get('credentials').token}`
-        }
-    }).then((res) => res.json())
+//     // Fetch loan properties from the database by using the loanID property!
+//     const jsonRes = await fetch(`${API_URL}/loans/get/${props.loanID}`, {
+//         method: 'GET',
+//         headers: {
+//             Authorization: `Bearer ${window.$cookies.get('credentials').token}`
+//         }
+//     }).then((res) => res.json())
 
-    console.log(jsonRes)
+//     console.log(jsonRes)
 
-    if (jsonRes) {
-        const loanData = jsonRes.loan
-        loanAmount.value = loanData.originalLoanAmount
-        loanee.value = loanData.username
-        loanType.value = loanData.loanType
-        loanTerm.value = loanData.term
-        loanPaymentFrequency.value = loanData.paymentFrequency
-    }
+//     if (jsonRes) {
+//         const loanData = jsonRes.loan
+//         loanAmount.value = loanData.originalLoanAmount
+//         loanee.value = loanData.username
+//         loanType.value = loanData.loanType
+//         loanTerm.value = loanData.term
+//         loanPaymentFrequency.value = loanData.paymentFrequency
+//     }
 
     // IN THE FUTURE: DATA WILL DYNAMICALLY BE PASSED INTO THIS COMPONENT SOMEHOW
     const data = Array.from({ length: 20 }, () =>
@@ -119,8 +116,8 @@ onMounted(async () => {
     )
 
     // Grid for all the loan's payments
-    loanPayments.value = new Grid({
-        columns: loanTransactionColumns,
+    capital.value = new Grid({
+        columns: capitalLedgerColumns,
         data: data,
         pagination: {
             limit: 10
@@ -145,7 +142,7 @@ onMounted(async () => {
     })
 
     // Render loanPayments in corresponding reference
-    loanPayments.value.render(loanPaymentsTable.value)
+    capital.value.render(capitalLedgerTable.value)
 })
 </script>
 
@@ -153,43 +150,38 @@ onMounted(async () => {
     <div class="w-100">
         <div id="loan-info-wrapper" class="d-flex justify-space-between align-center">
             <div id="loan-amount-cell" class="h-75 w-30 pa-2">
-                <p class="font-weight-bold">Loan Amount:</p>
-                <p class="loan-amount">{{ formattedLoanAmount }}</p>
+                <p class="font-weight-bold">Running Amount:</p>
+                <p class="amount">{{ formattedLoanAmount }}</p>
             </div>
             <div class="d-flex justify-space-evenly align-center gap-1 h-75 pa-2">
                 <div class="d-flex flex-column loan-info-cell grid-left-border h-100 px-2">
-                    <p class="font-weight-bold">Loanee:</p>
+                    <p class="font-weight-bold">Deposit ID:</p>
+                    <p class="loan-properties">{{ loanee }}</p>
+                </div>
+                <div class="d-flex flex-column loan-info-cell grid-left-border h-100 px-2">
+                    <p class="font-weight-bold">Type of Deposit:</p>
                     <p class="loan-properties">{{ loanee }}</p>
                 </div>
                 <div class="d-flex flex-column loan-info-cell grid-left-border h-100 px-4">
-                    <p class="font-weight-bold">Loan ID:</p>
+                    <p class="font-weight-bold">Date: </p>
                     <p class="loan-properties">{{ loanID }}</p>
                 </div>
                 <div class="d-flex flex-column loan-info-cell grid-left-border h-100 px-4">
-                    <p class="font-weight-bold">Type of Loan:</p>
+                    <p class="font-weight-bold">Interest Rate:</p>
                     <p class="loan-properties">{{ loanType }}</p>
                 </div>
-                <div class="d-flex flex-column loan-info-cell grid-left-border h-100 px-4">
-                    <p class="font-weight-bold">Term of Loan:</p>
-                    <p class="loan-properties">{{ loanTerm }}</p>
-                </div>
 
-                <!-- TODO: Add Loan Approval Date -->
-                <!-- TODO: Add Coborrower Name -->
-                <!-- TODO: Add Mode of Payment -->
+
             </div>
         </div>
 
         <v-divider :thickness="1" class="mt-3 mb-3 border-opacity-70" />
+
+        <div id="capital-ledger-wrapper" ref="capitalLedgerTable" class="w-100"></div>
         
-        <div id="loan-payments-wrapper" ref="loanPaymentsTable" class="w-100"></div>
-        <VBtn @click="setPopupAdd" 
-                block size="large" 
-                density="compact"
-                rounded="lg" 
-                prepend-icon="mdi-plus-circle" 
-                class="capitalize btn">
-                Add New Transaction
+        <VBtn @click="setPopupAdd" block size="large" density="compact" rounded="lg" prepend-icon="mdi-plus-circle"
+            class="capitalize btn">
+            Add New Transaction
         </VBtn>
 
         <!-- Form popup for ADD TRANSACTION -->
@@ -199,18 +191,14 @@ onMounted(async () => {
                     <VContainer fluid>
                         <VRow justify="end">
                             <VCardActions>
-                                <VBtn
-                                    class="ma-2 capitalize-text"
-                                    color="var(--vt-c-blue)"
-                                    @click="isActive.value = false"
-                                    icon="mdi-close"
-                                >
+                                <VBtn class="ma-2 capitalize-text" color="var(--vt-c-blue)" @click="isActive.value = false"
+                                    icon="mdi-close">
                                 </VBtn>
                             </VCardActions>
                         </VRow>
                     </VContainer>
 
-                    <LoanLedgerAdd/>
+                    <DepositAdd />
                 </VCard>
             </template>
         </VDialog>
@@ -223,18 +211,14 @@ onMounted(async () => {
                     <VContainer fluid>
                         <VRow justify="end">
                             <VCardActions>
-                                    <VBtn
-                                        class="ma-2 capitalize-text"
-                                        color="var(--vt-c-blue)"
-                                        @click="isActive.value = false"
-                                        icon="mdi-close"
-                                    >
-                                    </VBtn>
+                                <VBtn class="ma-2 capitalize-text" color="var(--vt-c-blue)" @click="isActive.value = false"
+                                    icon="mdi-close">
+                                </VBtn>
                             </VCardActions>
                         </VRow>
                     </VContainer>
 
-                    <LoanLedgerEdit />
+                    <DepositEdit />
                 </VCard>
             </template>
         </VDialog>
@@ -242,7 +226,6 @@ onMounted(async () => {
 </template>
 
 <style scoped>
-
 .btn {
     padding: 1.2%;
     color: var(--vt-c-white-off);
@@ -279,7 +262,7 @@ onMounted(async () => {
     background-color: var(--vt-c-white-off);
 }
 
-.loan-amount {
+.amount {
     font-size: 2.5rem;
 }
 

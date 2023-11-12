@@ -11,7 +11,7 @@ import MemberSearch from '../components/MemberSearch.vue'
 import LoanApplicationForm from '../components/LoanApplicationForm.vue'
 import LoanApplicationFormExport from '../components/LoanApplicationFormExport.vue'
 import LoanStatus from '../views/LoanStatus.vue'
-import DashboardCapital from '../views/DashboardCapital.vue'
+import DashboardDeposit from '../views/DashboardDeposit.vue'
 import LoanLedgerView from '../views/LoanLedgerView.vue'
 import LoanTransaction from '../views/LoanTransaction.vue'
 import LoanLedgerAdd from '../components/LoanLedgerAdd.vue'
@@ -147,9 +147,9 @@ const router = createRouter({
             // }
         },
         {
-            path: '/cap-dashboard',
-            name: 'Shared Capital Dashboard',
-            component: DashboardCapital
+            path: '/deposit-dashboard',
+            name: 'Deposit Dashboard',
+            component: DashboardDeposit
             // TODO: this - jana uwu
             // beforeEnter: (to, from, next) => {
             //     const credentials = window.$cookies.get('credentials')

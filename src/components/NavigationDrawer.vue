@@ -83,12 +83,12 @@ const logout = () => {
                 <v-list-subheader class="mt-4 mb-n3 ml-n3"> SHARED CAPITAL </v-list-subheader>
 
                 <v-list-item
-                    to="/cap-dashboard"
+                    to="/deposit-dashboard"
                     link=""
                     prepend-icon="mdi-bank-transfer-in"
                     rounded="lg"
                     class="mt-1"
-                    >Shared Capital Dashboard</v-list-item
+                    >Deposit Dashboard</v-list-item
                 >
 
                 <v-list-item
