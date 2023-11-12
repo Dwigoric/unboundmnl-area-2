@@ -28,7 +28,24 @@ const getUserData = async () => {
         return
     }
 
+    const credentials = window.$cookies.get('credentials')
+
+    if (!credentials) {
+        errorAlert.value = true
+        errorMessage.value = 'Please log in as officer to continue'
+        return
+    }
+
+    const { token } = credentials
+
+    if (!token) {
+        errorAlert.value = true
+        errorMessage.value = 'Please log in as officer to continue'
+        return
+    }
+
     const params = new URLSearchParams()
+    params.set('access_token', token)
     params.set('username', searchUsername.value)
     const loanees = await fetch(`${API_URL}/users/search?${params}`).then((res) => res.json())
 

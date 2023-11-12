@@ -18,11 +18,20 @@ const users = ref([])
  * Grabs all officers registered in the database.
  */
 async function getAllUsers() {
+    const credentials = window.$cookies.get('credentials')
+    if (!credentials) return
+
+    const { token } = credentials
+    if (!token) return
+
     let url = ''
+    const params = new URLSearchParams()
+    params.set('access_token', token)
     if (searchQuery.value !== '') {
-        const params = new URLSearchParams()
         params.set('username', searchQuery.value)
         url += `search?${params}`
+    } else {
+        url += `?${params}`
     }
 
     try {

@@ -35,9 +35,28 @@ const props = defineProps({
 
 // Define methods
 const deleteMember = async function () {
-    const result = await fetch(API_URL + '/users/delete', {
+    const credentials = window.$cookies.get('credentials')
+
+    if (!credentials) {
+        errorAlert.value = true
+        errorMessage.value = 'Please log in as officer to continue'
+        return
+    }
+
+    const { token } = credentials
+
+    if (!token) {
+        errorAlert.value = true
+        errorMessage.value = 'Please log in as officer to continue'
+        return
+    }
+
+    const result = await fetch(`${API_URL}/users/delete`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`
+        },
         body: JSON.stringify({ username: props.identifier })
     })
 
@@ -86,7 +105,7 @@ const deleteOfficer = async function () {
 <template>
     <div class="wrapper">
         <div class="header">
-            <div class="header-text ">
+            <div class="header-text">
                 Are you sure you want to delete this {{ profileType }} Profile {{ name }}?
             </div>
         </div>

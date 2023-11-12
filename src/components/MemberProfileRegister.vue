@@ -63,7 +63,7 @@ const props = defineProps({
     },
     onsubmit: {
         type: Function,
-        default: () => (() => null)
+        default: () => () => null
     }
 })
 
@@ -71,7 +71,7 @@ const submitForm = async function () {
     const validationResult = await form.value.validate()
     const fn = props.action === 'update' ? updateUser : registerUser
     if (validationResult.valid) {
-        const res = await fn();
+        const res = await fn()
         if (res) {
             props.onsubmit()
         }
@@ -81,9 +81,9 @@ const submitForm = async function () {
 const autofillFormIfPossible = function () {
     if (props.autofill) {
         let autofillData = { ...props.autofill }
-        autofillData.birthday = autofillData.birthday.substring(0, 10);
+        autofillData.birthday = autofillData.birthday.substring(0, 10)
         if (autofillData.spouse) {
-            autofillData.spouse.birthday = autofillData.spouse.birthday.substring(0, 10);
+            autofillData.spouse.birthday = autofillData.spouse.birthday.substring(0, 10)
         } else {
             delete autofillData.spouse
         }
@@ -94,9 +94,28 @@ const autofillFormIfPossible = function () {
 
 // Define methods
 const updateUser = async function () {
-    const result = await fetch(API_URL + '/users/edit', {
+    const credentials = window.$cookies.get('credentials')
+
+    if (!credentials) {
+        errorAlert.value = true
+        errorMessage.value = 'Please log in as officer to continue'
+        return
+    }
+
+    const { token } = credentials
+
+    if (!token) {
+        errorAlert.value = true
+        errorMessage.value = 'Please log in as officer to continue'
+        return
+    }
+
+    const result = await fetch(`${API_URL}/users/edit`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`
+        },
         body: JSON.stringify(userData)
     })
 
@@ -120,9 +139,28 @@ const updateUser = async function () {
 }
 
 const registerUser = async function () {
-    const result = await fetch(API_URL + '/users/add', {
+    const credentials = window.$cookies.get('credentials')
+
+    if (!credentials) {
+        errorAlert.value = true
+        errorMessage.value = 'Please log in as officer to continue'
+        return
+    }
+
+    const { token } = credentials
+
+    if (!token) {
+        errorAlert.value = true
+        errorMessage.value = 'Please log in as officer to continue'
+        return
+    }
+
+    const result = await fetch(`${API_URL}/users/add`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`
+        },
         body: JSON.stringify(userData)
     })
 
@@ -149,7 +187,9 @@ onMounted(autofillFormIfPossible)
 
 <template>
     <div class="header">
-        <div class="header-text">{{ props.action === 'update' ? "Edit" : "Create" }} Member Profile</div>
+        <div class="header-text">
+            {{ props.action === 'update' ? 'Edit' : 'Create' }} Member Profile
+        </div>
     </div>
     <div class="info-fields">
         <div class="form-wrapper">
@@ -162,8 +202,14 @@ onMounted(autofillFormIfPossible)
                         <div>* Username:</div>
                     </div>
 
-                    <VTextField class="username-pw-input" v-model="userData.username" id="login-username"
-                        :rules="[rules.required]" label="Enter Username" :disabled="props.action === 'update'" />
+                    <VTextField
+                        class="username-pw-input"
+                        v-model="userData.username"
+                        id="login-username"
+                        :rules="[rules.required]"
+                        label="Enter Username"
+                        :disabled="props.action === 'update'"
+                    />
                 </div>
 
                 <!-- First Name -->
@@ -172,8 +218,13 @@ onMounted(autofillFormIfPossible)
                         <div>* First name:</div>
                     </div>
 
-                    <VTextField class="username-pw-input" v-model="userData.name.given" id="login-first-name"
-                        :rules="[rules.required]" label="Enter First Name" />
+                    <VTextField
+                        class="username-pw-input"
+                        v-model="userData.name.given"
+                        id="login-first-name"
+                        :rules="[rules.required]"
+                        label="Enter First Name"
+                    />
                 </div>
 
                 <!-- Middle Name -->
@@ -182,8 +233,12 @@ onMounted(autofillFormIfPossible)
                         <div>* Middle name:</div>
                     </div>
 
-                    <VTextField class="username-pw-input" v-model="userData.name.middle" id="login-middle-name"
-                        label="Enter Middle Name" />
+                    <VTextField
+                        class="username-pw-input"
+                        v-model="userData.name.middle"
+                        id="login-middle-name"
+                        label="Enter Middle Name"
+                    />
                 </div>
 
                 <!-- Last Name -->
@@ -192,8 +247,13 @@ onMounted(autofillFormIfPossible)
                         <div>* Last name:</div>
                     </div>
 
-                    <VTextField class="username-pw-input" v-model="userData.name.last" id="login-last-name"
-                        :rules="[rules.required]" label="Enter Last Name" />
+                    <VTextField
+                        class="username-pw-input"
+                        v-model="userData.name.last"
+                        id="login-last-name"
+                        :rules="[rules.required]"
+                        label="Enter Last Name"
+                    />
                 </div>
 
                 <!-- Date of Birth -->
@@ -202,8 +262,14 @@ onMounted(autofillFormIfPossible)
                         <div>* Date of Birth:</div>
                     </div>
 
-                    <VTextField class="username-pw-input" v-model="userData.birthday" id="login-birthday" type="date"
-                        :rules="[rules.required]" label="Select Date of Birth" />
+                    <VTextField
+                        class="username-pw-input"
+                        v-model="userData.birthday"
+                        id="login-birthday"
+                        type="date"
+                        :rules="[rules.required]"
+                        label="Select Date of Birth"
+                    />
                 </div>
 
                 <!-- Place of Birth -->
@@ -212,8 +278,13 @@ onMounted(autofillFormIfPossible)
                         <div>* Place of Birth:</div>
                     </div>
 
-                    <VTextField class="username-pw-input" v-model="userData.birthplace" id="login-birthplace"
-                        :rules="[rules.required]" label="Enter Place of Birth" />
+                    <VTextField
+                        class="username-pw-input"
+                        v-model="userData.birthplace"
+                        id="login-birthplace"
+                        :rules="[rules.required]"
+                        label="Enter Place of Birth"
+                    />
                 </div>
 
                 <!-- Gender -->
@@ -223,8 +294,14 @@ onMounted(autofillFormIfPossible)
                         <div>* Gender:</div>
                     </div>
 
-                    <VSelect class="username-pw-input" v-model="userData.gender" :items="['M', 'F']" id="login-gender"
-                        :rules="[rules.required]" label="Select Gender" />
+                    <VSelect
+                        class="username-pw-input"
+                        v-model="userData.gender"
+                        :items="['M', 'F']"
+                        id="login-gender"
+                        :rules="[rules.required]"
+                        label="Select Gender"
+                    />
                 </div>
 
                 <!-- TIN Number -->
@@ -233,8 +310,13 @@ onMounted(autofillFormIfPossible)
                         <div>* TIN Number:</div>
                     </div>
 
-                    <VTextField class="username-pw-input" v-model="userData.tin_no" id="login-tin-number"
-                        :rules="[rules.required]" label="Enter TIN Number (XXX-XXX-XXX-XXX)" />
+                    <VTextField
+                        class="username-pw-input"
+                        v-model="userData.tin_no"
+                        id="login-tin-number"
+                        :rules="[rules.required]"
+                        label="Enter TIN Number (XXX-XXX-XXX-XXX)"
+                    />
                 </div>
 
                 <!-- Civil Status -->
@@ -243,8 +325,14 @@ onMounted(autofillFormIfPossible)
                         <div>* Civil Status:</div>
                     </div>
 
-                    <VSelect class="username-pw-input" v-model="userData.civil_status" :items="['Single', 'Married']"
-                        id="login-civil-status" :rules="[rules.required]" label="Select Civil Status" />
+                    <VSelect
+                        class="username-pw-input"
+                        v-model="userData.civil_status"
+                        :items="['Single', 'Married']"
+                        id="login-civil-status"
+                        :rules="[rules.required]"
+                        label="Select Civil Status"
+                    />
                 </div>
 
                 <!-- Contact Number -->
@@ -253,8 +341,13 @@ onMounted(autofillFormIfPossible)
                         <div>* Contact Number:</div>
                     </div>
 
-                    <VTextField class="username-pw-input" v-model="userData.contact_no" id="login-contact-number"
-                        :rules="[rules.required]" label="Enter Contact Number" />
+                    <VTextField
+                        class="username-pw-input"
+                        v-model="userData.contact_no"
+                        id="login-contact-number"
+                        :rules="[rules.required]"
+                        label="Enter Contact Number"
+                    />
                 </div>
 
                 <!-- Monthly Income -->
@@ -263,8 +356,14 @@ onMounted(autofillFormIfPossible)
                         <div>* Monthly Income:</div>
                     </div>
 
-                    <VTextField class="username-pw-input" v-model="userData.monthly_income" id="login-monthly-income"
-                        type="number" :rules="[rules.required]" label="Enter Monthly Income" />
+                    <VTextField
+                        class="username-pw-input"
+                        v-model="userData.monthly_income"
+                        id="login-monthly-income"
+                        type="number"
+                        :rules="[rules.required]"
+                        label="Enter Monthly Income"
+                    />
                 </div>
 
                 <div class="row-tab">
@@ -272,8 +371,13 @@ onMounted(autofillFormIfPossible)
                         <div>* Occupation/Source of Income:</div>
                     </div>
 
-                    <VTextField class="username-pw-input" v-model="userData.occupation" id="login-occupation"
-                        :rules="[rules.required]" label="Enter Occupation/Source of Income" />
+                    <VTextField
+                        class="username-pw-input"
+                        v-model="userData.occupation"
+                        id="login-occupation"
+                        :rules="[rules.required]"
+                        label="Enter Occupation/Source of Income"
+                    />
                 </div>
 
                 <!-- Borrower's Residence -->
@@ -284,8 +388,13 @@ onMounted(autofillFormIfPossible)
                         <div>* Street:</div>
                     </div>
 
-                    <VTextField class="username-pw-input" v-model="userData.address.street" id="login-address-street"
-                        :rules="[rules.required]" label="Enter Street" />
+                    <VTextField
+                        class="username-pw-input"
+                        v-model="userData.address.street"
+                        id="login-address-street"
+                        :rules="[rules.required]"
+                        label="Enter Street"
+                    />
                 </div>
 
                 <div class="row-tab">
@@ -293,8 +402,13 @@ onMounted(autofillFormIfPossible)
                         <div>* Barangay:</div>
                     </div>
 
-                    <VTextField class="username-pw-input" v-model="userData.address.barangay" id="login-address-barangay"
-                        :rules="[rules.required]" label="Enter Barangay" />
+                    <VTextField
+                        class="username-pw-input"
+                        v-model="userData.address.barangay"
+                        id="login-address-barangay"
+                        :rules="[rules.required]"
+                        label="Enter Barangay"
+                    />
                 </div>
 
                 <div class="row-tab">
@@ -302,8 +416,13 @@ onMounted(autofillFormIfPossible)
                         <div>* City:</div>
                     </div>
 
-                    <VTextField class="username-pw-input" v-model="userData.address.city" id="login-address-city"
-                        :rules="[rules.required]" label="Enter City" />
+                    <VTextField
+                        class="username-pw-input"
+                        v-model="userData.address.city"
+                        id="login-address-city"
+                        :rules="[rules.required]"
+                        label="Enter City"
+                    />
                 </div>
 
                 <div class="row-tab">
@@ -311,74 +430,111 @@ onMounted(autofillFormIfPossible)
                         <div>* Province:</div>
                     </div>
 
-                    <VTextField class="username-pw-input" v-model="userData.address.province" id="login-address"
-                        :rules="[rules.required]" label="Enter Province" />
+                    <VTextField
+                        class="username-pw-input"
+                        v-model="userData.address.province"
+                        id="login-address"
+                        :rules="[rules.required]"
+                        label="Enter Province"
+                    />
                 </div>
 
                 <!-- Spouse's Information -->
-                <div class="header2">Spouse's Information (Leave blank if no spouse) </div>
+                <div class="header2">Spouse's Information (Leave blank if no spouse)</div>
 
                 <div class="row-tab">
                     <div class="label">
-                        <div> Spouse's First Name:</div>
+                        <div>Spouse's First Name:</div>
                     </div>
 
-                    <VTextField class="username-pw-input" v-model="userData.spouse.name.given" id="login-spouse-first-name"
-                        label="Enter Spouse's First Name" />
+                    <VTextField
+                        class="username-pw-input"
+                        v-model="userData.spouse.name.given"
+                        id="login-spouse-first-name"
+                        label="Enter Spouse's First Name"
+                    />
                 </div>
 
                 <div class="row-tab">
                     <div class="label">
-                        <div> Spouse's Middle Name:</div>
+                        <div>Spouse's Middle Name:</div>
                     </div>
 
-                    <VTextField class="username-pw-input" v-model="userData.spouse.name.middle"
-                        id="login-spouse-middle-name" label="Enter Spouse's Middle Name" />
+                    <VTextField
+                        class="username-pw-input"
+                        v-model="userData.spouse.name.middle"
+                        id="login-spouse-middle-name"
+                        label="Enter Spouse's Middle Name"
+                    />
                 </div>
 
                 <div class="row-tab">
                     <div class="label">
-                        <div> Spouse's Last Name:</div>
+                        <div>Spouse's Last Name:</div>
                     </div>
 
-                    <VTextField class="username-pw-input" v-model="userData.spouse.name.last" id="login-spouse-last-name"
-                        label="Enter Spouse's Last Name" />
+                    <VTextField
+                        class="username-pw-input"
+                        v-model="userData.spouse.name.last"
+                        id="login-spouse-last-name"
+                        label="Enter Spouse's Last Name"
+                    />
                 </div>
 
                 <div class="row-tab">
                     <div class="label">
-                        <div> Spouse's Date of Birth:</div>
+                        <div>Spouse's Date of Birth:</div>
                     </div>
 
-                    <VTextField class="username-pw-input" v-model="userData.spouse.birthday" id="login-spouse-birthday"
-                        type="date" label="Select Spouse's Date of Birth" />
+                    <VTextField
+                        class="username-pw-input"
+                        v-model="userData.spouse.birthday"
+                        id="login-spouse-birthday"
+                        type="date"
+                        label="Select Spouse's Date of Birth"
+                    />
                 </div>
 
                 <div class="row-tab">
                     <div class="label">
-                        <div> Spouse's Place of Birth:</div>
+                        <div>Spouse's Place of Birth:</div>
                     </div>
 
-                    <VTextField class="username-pw-input" v-model="userData.spouse.birthplace" id="login-spouse-birthplace"
-                        label="Enter Spouse's Place of Birth" />
+                    <VTextField
+                        class="username-pw-input"
+                        v-model="userData.spouse.birthplace"
+                        id="login-spouse-birthplace"
+                        label="Enter Spouse's Place of Birth"
+                    />
                 </div>
 
                 <div class="row-tab">
                     <div class="label">
-                        <div> Spouse's Contact Number:</div>
+                        <div>Spouse's Contact Number:</div>
                     </div>
 
-                    <VTextField class="username-pw-input" v-model="userData.spouse.contact_no"
-                        id="login-spouse-contact-number" label="Enter Spouse's Contact Number" />
+                    <VTextField
+                        class="username-pw-input"
+                        v-model="userData.spouse.contact_no"
+                        id="login-spouse-contact-number"
+                        label="Enter Spouse's Contact Number"
+                    />
                 </div>
 
-                <VAlert v-if="errorAlert" v-model="errorAlert" type="error" closable="" density="comfortable" elevation="5">
+                <VAlert
+                    v-if="errorAlert"
+                    v-model="errorAlert"
+                    type="error"
+                    closable=""
+                    density="comfortable"
+                    elevation="5"
+                >
                     {{ errorMessage }}
                 </VAlert>
 
                 <div class="btn-wrapper">
-                    <VBtn type="submit" class="btn capitalize-text" @click.prevent="submitForm">{{ props.action === 'update'
-                        ? "Edit" : "Create" }} Member Profile
+                    <VBtn type="submit" class="btn capitalize-text" @click.prevent="submitForm"
+                        >{{ props.action === 'update' ? 'Edit' : 'Create' }} Member Profile
                     </VBtn>
                 </div>
             </VForm>
@@ -442,7 +598,8 @@ onMounted(autofillFormIfPossible)
     text-align: center;
 }
 
-.header-text {}
+.header-text {
+}
 
 .header2 {
     font-size: 1.2rem;
