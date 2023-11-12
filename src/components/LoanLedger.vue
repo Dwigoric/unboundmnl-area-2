@@ -66,15 +66,15 @@ const loanTransactionColumns = [
     { name: 'Date of Entry' },
     { name: 'Officer in Charge' },
     {
-        name: 'Edit Row',
+        name: 'Actions',
         formatter: (cell, row) => {
             return h(
                 'v-hover',
                 {
-                    className: 'py-2 mb-4 px-4 border rounded-md cursor-pointer rounded-lg bg-blue-lighten-1',
+                    className: 'py-2 mb-4 px-4 border rounded-md cursor-pointer rounded-lg btn',
                     onClick: () => setPopupEdit(row.cells[0].data)
                 },
-                'Edit Row'
+                'Edit row'
             )
         }
     }
@@ -177,11 +177,19 @@ onMounted(async () => {
         </div>
 
         <v-divider :thickness="1" class="mt-3 mb-3 border-opacity-70" />
-        <VBtn @click="setPopupAdd" block size="large" rounded="lg" prepend-icon="mdi-plus-circle" color="green-darken-1" class="hover-scale-sm">ADD NEW TRANSACTION</VBtn>
+        
         <div id="loan-payments-wrapper" ref="loanPaymentsTable" class="w-100"></div>
+        <VBtn @click="setPopupAdd" 
+                block size="large" 
+                density="compact"
+                rounded="lg" 
+                prepend-icon="mdi-plus-circle" 
+                class="capitalize btn">
+                Add New Transaction
+        </VBtn>
 
         <!-- Form popup for ADD TRANSACTION -->
-        <VDialog width="1600" v-model="isAddPopupActive">
+        <VDialog width="1000" v-model="isAddPopupActive">
             <template #default="{ isActive }">
                 <VCard close-on-back contained class="form-wrapper">
                     <VContainer fluid>
@@ -211,13 +219,13 @@ onMounted(async () => {
                     <VContainer fluid>
                         <VRow justify="end">
                             <VCardActions>
-                                <VBtn
-                                    class="ma-2 capitalize-text"
-                                    color="var(--vt-c-blue)"
-                                    @click="isActive.value = false"
-                                    icon="mdi-close"
-                                >
-                                </VBtn>
+                                    <VBtn
+                                        class="ma-2 capitalize-text"
+                                        color="var(--vt-c-blue)"
+                                        @click="isActive.value = false"
+                                        icon="mdi-close"
+                                    >
+                                    </VBtn>
                             </VCardActions>
                         </VRow>
                     </VContainer>
@@ -229,7 +237,20 @@ onMounted(async () => {
     </div>
 </template>
 
-<style>
+<style scoped>
+
+.btn {
+    padding: 1.2%;
+    color: var(--vt-c-white-off);
+    background: var(--vt-c-blue);
+    border-radius: 5px;
+    text-transform: capitalize;
+}
+
+.btn:hover {
+    background: var(--vt-c-blue-dark);
+}
+
 .grid-x-borders {
     border-top: none;
     border-bottom: none;

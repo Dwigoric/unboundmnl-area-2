@@ -99,12 +99,12 @@ const logout = () => {
                         >
 
                         <v-list-item
-                            to="/new-deposit"
+                            to="/enter-deposit"
                             link=""
                             prepend-icon="mdi-wallet-plus"
                             rounded="lg"
                             class="mt-1"
-                            >Enter deposit</v-list-item
+                            >Enter Deposit</v-list-item
                         >
 
                     <v-list-subheader

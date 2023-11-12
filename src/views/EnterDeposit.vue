@@ -2,7 +2,7 @@
 // Import vue components
 import NavigationDrawer from '../components/NavigationDrawer.vue'
 import ContentBlock from '../components/ContentBlock.vue'
-import LoanLedgerAdd from '../components/LoanLedgerAdd.vue'
+import DepositAdd from '../components/DepositAdd.vue'
 import DashboardTopBar from '../components/DashboardTopBar.vue'
 import LoanApplicationSearch from '../components/LoanApplicationSearch.vue'
 import StepCounterLoanTransaction from '../components/StepCounterLoanTransaction.vue'
@@ -15,11 +15,11 @@ import StepCounterLoanTransaction from '../components/StepCounterLoanTransaction
 
         <div class="d-flex flex-column w-100 pl-8">
             <!-- Top Bar of Dashboard -->
-            <DashboardTopBar :breadcrumbs="['Home', 'Loans', 'Enter Loan Transaction']" />
+            <DashboardTopBar :breadcrumbs="['Home', 'Shared Capital', 'Enter Deposit']" />
 
             <!-- Main Dashboard Body -->
             <div class="dashboard-body d-flex flex-column h-100 py-4">
-                <h2>Enter Loan Transaction</h2>
+                <h2>Enter Deposit</h2>
 
                 <!-- Step 1 -->
                 <ContentBlock :width="100" :height="100" :maxWidth="80" :unit="'%'" :maxUnit="'vw'" :bg-color="'#FFF'">
@@ -36,8 +36,8 @@ import StepCounterLoanTransaction from '../components/StepCounterLoanTransaction
                 </ContentBlock>
 
                 <ContentBlock :width="100" :height="100" :maxWidth="80" :unit="'%'" :maxUnit="'vw'" :bg-color="'#FFF'">
-                        <LoanLedgerAdd/>
-                    </ContentBlock>
+                    <DepositAdd />
+                </ContentBlock>
             </div>
         </div>
     </div>

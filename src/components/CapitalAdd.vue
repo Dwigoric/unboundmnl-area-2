@@ -14,7 +14,7 @@ import "gridjs/dist/theme/mermaid.css";
         <!-- Add transaction form -->
         <div class="d-flex flex-row">
             <VTextField class="ml-3" type="date" label="Date of Payment" />
-            <VTextField class="ml-3" label="GV/OR Number" /> 
+            <VTextField class="ml-3" label="GV/OR Number" />
         </div>
         <VTextField class="ml-3" label="Amount Paid" />
         <VTextField class="ml-3" label="Balance" />
@@ -24,21 +24,15 @@ import "gridjs/dist/theme/mermaid.css";
         <div class="d-flex flex-row">
             <VTextField class="ml-3" type="date" label="Date of Entry" />
             <!-- TODO: Retrieve list of officers from the database -->
-            <v-select
-                class="ml-3"
-                label="Officer in Charge"
-                :items="['Capy', 'Booboo', 'Baabaa']"
-            ></v-select>
+            <v-select class="ml-3" label="Officer in Charge" :items="['Capy', 'Booboo', 'Baabaa']"></v-select>
         </div>
-        
+
         <!-- TODO: Connect this button to a method to add to the database -->
         <div class="btn-wrapper">
-            <VBtn 
-                    prepend-icon="mdi-check" 
-                    class="capitalize btn">
-                    Submit
-                </VBtn>
-        </div>    
+            <VBtn prepend-icon="mdi-check" class="capitalize btn">
+                Submit
+            </VBtn>
+        </div>
     </div>
 </template>
 
@@ -61,9 +55,11 @@ import "gridjs/dist/theme/mermaid.css";
     display: flex;
     justify-content: flex-end;
 }
+
 .btn:hover {
     background: var(--vt-c-blue-dark);
 }
+
 .header-wrapper {
     padding-left: 7%;
     padding-bottom: 2%;

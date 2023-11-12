@@ -14,6 +14,8 @@ import LoanStatus from '../views/LoanStatus.vue'
 import DashboardCapital from '../views/DashboardCapital.vue'
 import LoanLedgerView from '../views/LoanLedgerView.vue'
 import LoanTransaction from '../views/LoanTransaction.vue'
+import EnterDeposit from '../views/EnterDeposit.vue'
+
 
 
 // Import path name constants
@@ -126,6 +128,17 @@ const router = createRouter({
             path: '/cap-dashboard',
             name: 'Shared Capital Dashboard',
             component: DashboardCapital,
+            // TODO: this - jana uwu
+            // beforeEnter: (to, from, next) => {
+            //     const credentials = window.$cookies.get('credentials')
+            //     if (!credentials || !credentials.token) next({ name: 'Login' })
+            //     else next()
+            // }
+        },
+        {
+            path: '/enter-deposit',
+            name: 'Enter Deposit',
+            component: EnterDeposit,
             // TODO: this - jana uwu
             // beforeEnter: (to, from, next) => {
             //     const credentials = window.$cookies.get('credentials')

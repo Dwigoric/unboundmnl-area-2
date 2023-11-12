@@ -14,26 +14,7 @@ import router from '../router'
 //     username: String
 // });
 
-// Constant variables
-/*
-const data = [
-    ['id1', 'John Doe', 'Personal Loan', '$10,000'],
-    ['id2', 'John Doe', 'Personal Loan', '$10,000'],
-    ['id3', 'John Doe', 'Personal Loan', '$10,000'],
-    ['id4', 'John Doe', 'Personal Loan', '$10,000'],
-    ['id5', 'John Doe', 'Personal Loan', '$10,000'],
-    ['id6', 'John Doe', 'Personal Loan', '$10,000'],
-    ['id7', 'John Doe', 'Personal Loan', '$10,000'],
-    ['id8', 'John Doe', 'Personal Loan', '$10,000'],
-    ['id9', 'John Doe', 'Personal Loan', '$10,000'],
-    ['id10', 'John Doe', 'Personal Loan', '$10,000'],
-    ['id11', 'John Doe', 'Wow Loan', '$10,000'],
-    ['id12', 'John Doe', 'Personal Loan', '$10,000'],
-    ['id13', 'Jana', 'Personal Loan', '$10,000'],
-    ['id14', 'Mama mo', 'Panootie', '$10,000'],
-    ['id15', 'Jana', 'Personal Loan', '$10,000']
-]
-*/
+
 const loan = ref()
 
 const loansTable = ref()
