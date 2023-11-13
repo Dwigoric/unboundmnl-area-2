@@ -11,6 +11,7 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "@vueuse/core": "^10.6.0",
     "gridjs": "^6.0.6",
     "jwt-decode": "^3.1.2",
     "pdf-lib": "^1.17.1",
