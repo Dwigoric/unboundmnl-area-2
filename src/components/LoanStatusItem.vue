@@ -44,7 +44,7 @@ const fetchLoans = async () => {
 
     const params = new URLSearchParams()
     params.set('access_token', token)
-    params.set('pending', String(true))
+    params.set('status', 'pending')
     const { error, message, loans } = await fetch(`${API_URL}/loans?${params}`).then((res) =>
         res.json()
     )
