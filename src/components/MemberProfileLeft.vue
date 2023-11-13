@@ -110,115 +110,122 @@ const changeLoanRange = function () {
 </script>
 
 <template>
-    <div class="info-fields">
-        <div class="form-wrapper">
+    <!-- Details -->
+    <ContentBlock :width="100" :height="100" :unit="'%'" :padding="3">
+        <div class="d-flex">
+            <v-icon icon="mdi-account-circle" size="large" class="mt-1 mr-2"/>
             <h2>Nootnoot</h2>
-
-                <!-- Details -->
-                <ContentBlock :width="100" :height="100" :unit="'%'" :padding="3">
-                    <div class="row-tab">
-                        <div class="label">
-                            <div>Name</div>
-                        </div>
-                    </div>
-                    <div class="row-tab">
-                        <div class="sub-label">Last</div>
-                        <div class="field">Bantolino</div>
-                    </div>
-                    <div class="row-tab">
-                        <div class="sub-label">First</div>
-                        <div class="field">Jana Marie</div>
-                    </div>
-                    <div class="row-tab">
-                        <div class="sub-label">Middle</div>
-                        <div class="field">Salud</div>
-                    </div>
-
-                    <div class="row-tab pt-2">
-                        <div class="label">Birthday</div>
-                        <div class="field">09-05-2022</div>
-                        <div class="ml-3">(MM-DD-YYYY)</div>
-                    </div>
-
-                    <div class="row-tab pt-2">
-                        <div class="label">Birthplace</div>
-                        <div class="field">Manila</div>
-                    </div>
-
-                    <div class="row-tab pt-2">
-                        <div class="label">Gender</div>
-                        <div class="field">F</div>
-                    </div>
-
-                    <div class="row-tab pt-2">
-                        <div class="label">Civil Status</div>
-                        <div class="field">Widowed</div>
-                    </div>
-
-                    <div class="row-tab pt-2">
-                        <div class="label">Tin Number</div>
-                        <div class="field">123-456-789</div>
-                    </div>
-
-                    <div class="row-tab pt-2">
-                        <div class="label">Occupation</div>
-                        <div class="field">Penguin</div>
-                    </div>
-
-                    <div class="row-tab pt-2">
-                        <div class="label">
-                            <div>Address</div>
-                        </div>
-                    </div>
-                    <div class="row-tab">
-                        <div class="sub-label">Street</div>
-                        <div class="field">304</div>
-                    </div>
-                    <div class="row-tab">
-                        <div class="sub-label">Barangay</div>
-                        <div class="field">Gov. A Santos Avenue</div>
-                    </div>
-                    <div class="row-tab">
-                        <div class="sub-label">City</div>
-                        <div class="field">Paranaque</div>
-                    </div>
-                    <div class="row-tab">
-                        <div class="sub-label">Province</div>
-                        <div class="field">NCR</div>
-                    </div>
-
-                    <div class="row-tab pt-2">
-                        <div class="label">Spouse</div>
-                        <div class="field">Secret</div>
-                    </div>
-                    
-                </ContentBlock>
-                
-                
         </div>
-    </div>
+
+        <div class="row-tab">
+            <div class="label">
+                <h3>Name</h3>
+            </div>
+        </div>
+        <div class="row-tab">
+            <div class="sub-label">Last</div>
+            <div class="field">Bantolino</div>
+        </div>
+        <div class="row-tab">
+            <div class="sub-label">First</div>
+            <div class="field">Jana Marie</div>
+        </div>
+        <div class="row-tab">
+            <div class="sub-label">Middle</div>
+            <div class="field">Salud</div>
+        </div>
+
+        <v-divider class="mt-2"></v-divider>
+
+        <div class="row-tab pt-2">
+            <div class="sub-label">Birthday</div>
+            <div class="field">09-05-2022</div>
+            <div class="ml-3">(MM-DD-YYYY)</div>
+        </div>
+
+        <div class="row-tab pt-2">
+            <div class="sub-label">Birthplace</div>
+            <div class="field">Manila</div>
+        </div>
+
+        <div class="row-tab pt-2">
+            <div class="sub-label">Gender</div>
+            <div class="field">F</div>
+        </div>
+
+        <div class="row-tab pt-2">
+            <div class="sub-label">Civil Status</div>
+            <div class="field">Widowed</div>
+        </div>
+
+        <div class="row-tab pt-2">
+            <div class="sub-label">Tin Number</div>
+            <div class="field">123-456-789</div>
+        </div>
+
+        <div class="row-tab pt-2">
+            <div class="sub-label">Occupation</div>
+            <div class="field">Penguin</div>
+        </div>
+
+        <v-divider class="mt-2"></v-divider>
+
+        <div class="row-tab pt-2">
+            <div class="label">
+                <h3>Address</h3>
+            </div>
+        </div>
+        <div class="row-tab">
+            <div class="sub-label">Street</div>
+            <div class="field">304</div>
+        </div>
+        <div class="row-tab">
+            <div class="sub-label">Barangay</div>
+            <div class="field">Gov. A Santos Avenue</div>
+        </div>
+        <div class="row-tab">
+            <div class="sub-label">City</div>
+            <div class="field">Paranaque</div>
+        </div>
+        <div class="row-tab">
+            <div class="sub-label">Province</div>
+            <div class="field">NCR</div>
+        </div>
+
+        <v-divider class="mt-2"></v-divider>
+
+        <div class="row-tab pt-2">
+            <h3 class="label">Spouse</h3>
+        </div>
+        <div class="row-tab">
+            <div class="sub-label">Last</div>
+            <div class="field">Bantolino</div>
+        </div>
+        <div class="row-tab">
+            <div class="sub-label">First</div>
+            <div class="field">Jana Marie</div>
+        </div>
+        <div class="row-tab">
+            <div class="sub-label">Middle</div>
+            <div class="field">Salud</div>
+        </div>
+        
+    </ContentBlock>
 </template>
 
 <!-- Stylesheet -->
 <style scoped>
 .bborder {
+    border: 1px solid black;
 }
 .form-wrapper {
     background: var(--vt-c-white);
 }
 
-.info-fields {
-    padding: 5%;
-    padding-top: 2%;
-    padding-bottom: 2%;
-    overflow: auto;
-    /* border: 1px solid black; */
-}
-
 .row-tab {
     /* border: 1px solid black; */
     display: flex;
-    margin-bottom: 1%;
+    /* margin-bottom: 1%; */
 }
 
 .label {
@@ -230,12 +237,18 @@ const changeLoanRange = function () {
 }
 
 .sub-label {
+    color: var(--vt-c-gray-dark);
     margin-right: 2%;
     margin-left: 10%;
     width: 30%;
     
     display: inline-block;
     vertical-align: top;
+}
+
+.field {
+    text-align: right;
+    font-weight: 500;
 }
 
 .btn {

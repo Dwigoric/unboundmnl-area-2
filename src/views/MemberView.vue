@@ -3,6 +3,7 @@
 import NavigationDrawer from '../components/NavigationDrawer.vue'
 import ContentBlock from '../components/ContentBlock.vue'
 import MemberProfileLeft from '../components/MemberProfileLeft.vue'
+import MemberProfileRight from '../components/MemberProfileRight.vue'
 import DashboardTopBar from '../components/DashboardTopBar.vue'
 
 // Import Packages
@@ -60,22 +61,15 @@ onMounted(getAllUsers)
             <div class="dashboard-body d-flex flex-column h-100 py-3">
                 <h2>Member Profiles</h2>
 
-                <ContentBlock :width="100" :height="102" :unit="'%'" :bg-color="'#FFF'">
                     <div class="d-flex flex-row h-100">
                         <div class="left pa-2">
-                            <MemberProfileLeft></MemberProfileLeft>
+                            <MemberProfileLeft/>
                         </div>
-
-                        <v-divider vertical
-                            :thickness="2" 
-                            class="mt-3 mb-3 border-opacity-70" 
-                        />
 
                         <div class="right pa-2">
-                            asdasd
+                            <MemberProfileRight />
                         </div>
                     </div>
-                </ContentBlock>
             </div>
         </div>
     </div>
@@ -83,13 +77,11 @@ onMounted(getAllUsers)
 
 <style scoped>
 .left {
-    border: 1px solid black;
     width: 30%;
     height: 100%;
 }
 
 .right {
-    border: 1px solid black;
     width: 70%;
     height: 100%;
 }
