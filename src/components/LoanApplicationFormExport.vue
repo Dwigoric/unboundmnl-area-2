@@ -102,7 +102,7 @@ const fetchPDF = async () => {
         Math.abs(birthday.getUTCFullYear() - new Date().getUTCFullYear()).toLocaleString()
     )
     form.getTextField('Place of Birth').setText(memberSearchStore.data.birthplace)
-    form.getCheckBox({ M: 'Male', F: 'Female' }[memberSearchStore.data.gender]).check()
+    form.getCheckBox({ M: 'Male', F: 'Female' }[memberSearchStore.data.sex]).check()
     const civilStatusTextField = form.getTextField('Civil Status')
     civilStatusTextField.setAlignment(TextAlignment.Center)
     civilStatusTextField.setText(memberSearchStore.data.civil_status)

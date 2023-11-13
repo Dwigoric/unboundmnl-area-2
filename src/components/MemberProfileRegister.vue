@@ -21,7 +21,7 @@ const userData = reactive({
     },
     birthday: '',
     birthplace: '',
-    gender: '',
+    sex: '',
     civil_status: '',
     tin_no: '',
     monthly_income: '',
@@ -291,18 +291,13 @@ onMounted(autofillFormIfPossible)
                     />
                 </div>
 
-                <!-- Gender -->
-                <!-- XXX: Should this be sex? -->
+                <!-- Sex -->
                 <div class="row-tab">
                     <div class="label">
-                        <div>* Gender:</div>
+                        <div>* Sex:</div>
                     </div>
 
-                    <VRadioGroup
-                        v-model="userData.gender"
-                        id="login-gender"
-                        :rules="[rules.required]"
-                    >
+                    <VRadioGroup v-model="userData.sex" id="login-sex" :rules="[rules.required]">
                         <VRadio label="Male" value="M" />
                         <VRadio label="Female" value="F" />
                     </VRadioGroup>
