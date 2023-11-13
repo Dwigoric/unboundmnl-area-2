@@ -83,70 +83,72 @@ const sendToNext = async () => {
 
 <template>
     <div class="wrapper">
-        <div class="header2">Search Existing Member or Create Member Profile</div>
+        <VForm>
+            <div class="header2">Search Existing Member or Create Member Profile</div>
 
-        <!-- Search bar -->
-        <div class="search-wrapper">
-            <v-text-field
-                v-model="searchUsername"
-                prepend-inner-icon="mdi-magnify"
-                label="Search Member by Username"
-                clearable=""
-                hide-details
-            />
-            <VAlert
-                v-if="errorAlert"
-                v-model="errorAlert"
-                type="error"
-                closable=""
-                density="comfortable"
-                elevation="5"
-            >
-                {{ errorMessage }}
-            </VAlert>
-        </div>
-        <div class="create-member" v-if="canCreateNewMember">
-            <v-dialog width="1200">
-                <template v-slot:activator="{ props }">
-                    <!-- Create Member Profile Button -->
-                    <v-btn
-                        class="capitalize-text mt-2"
-                        v-bind="props"
-                        variant="plain"
-                        text="New Member? Click here to create Member Profile instead"
-                        flat=""
-                    >
-                    </v-btn>
-                </template>
+            <!-- Search bar -->
+            <div class="search-wrapper">
+                <v-text-field
+                    v-model="searchUsername"
+                    prepend-inner-icon="mdi-magnify"
+                    label="Search Member by Username"
+                    clearable=""
+                    hide-details
+                />
+                <VAlert
+                    v-if="errorAlert"
+                    v-model="errorAlert"
+                    type="error"
+                    closable=""
+                    density="comfortable"
+                    elevation="5"
+                >
+                    {{ errorMessage }}
+                </VAlert>
+            </div>
+            <div class="create-member" v-if="canCreateNewMember">
+                <v-dialog width="1200">
+                    <template v-slot:activator="{ props }">
+                        <!-- Create Member Profile Button -->
+                        <v-btn
+                            class="capitalize-text mt-2"
+                            v-bind="props"
+                            variant="plain"
+                            text="New Member? Click here to create Member Profile instead"
+                            flat=""
+                        >
+                        </v-btn>
+                    </template>
 
-                <!-- Form popup -->
-                <template v-slot:default="{ isActive }">
-                    <v-card close-on-back contained class="form-wrapper">
-                        <v-container>
-                            <v-row justify="end">
-                                <v-card-actions>
-                                    <v-btn
-                                        class="ma-2 capitalize-text"
-                                        color="var(--vt-c-blue)"
-                                        @click="isActive.value = false"
-                                        icon="mdi-close"
-                                    >
-                                    </v-btn>
-                                </v-card-actions>
-                            </v-row>
-                        </v-container>
+                    <!-- Form popup -->
+                    <template v-slot:default="{ isActive }">
+                        <v-card close-on-back contained class="form-wrapper">
+                            <v-container>
+                                <v-row justify="end">
+                                    <v-card-actions>
+                                        <v-btn
+                                            class="ma-2 capitalize-text"
+                                            color="var(--vt-c-blue)"
+                                            @click="isActive.value = false"
+                                            icon="mdi-close"
+                                        >
+                                        </v-btn>
+                                    </v-card-actions>
+                                </v-row>
+                            </v-container>
 
-                        <MemberProfileRegister />
-                    </v-card>
-                </template>
-            </v-dialog>
-        </div>
+                            <MemberProfileRegister />
+                        </v-card>
+                    </template>
+                </v-dialog>
+            </div>
 
-        <div class="btn-wrapper">
-            <VBtn type="submit" class="btn capitalize-text" @click.prevent="sendToNext">
-                Next
-            </VBtn>
-        </div>
+            <div class="btn-wrapper">
+                <VBtn type="submit" class="btn capitalize-text" @click.prevent="sendToNext">
+                    Next
+                </VBtn>
+            </div>
+        </VForm>
     </div>
 </template>
 
