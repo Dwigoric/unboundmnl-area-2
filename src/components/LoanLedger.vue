@@ -19,7 +19,7 @@ const props = defineProps({
     }
 })
 
-const data = ref([])
+const ledgerData = ref([])
 const popupData = ref([])
 const isAddPopupActive = ref(false) // for add transaction pop up
 const isPopupActive = ref(false) // for edit transaction pop up
@@ -62,7 +62,6 @@ const loanTransactionColumns = [
     { name: 'Balance' },
     { name: 'Interest Paid' },
     { name: 'Fines Paid' },
-    { name: 'Term of Loan' },
     { name: 'Date of Entry' },
     { name: 'Officer in Charge' },
     {
@@ -80,18 +79,13 @@ const loanTransactionColumns = [
     }
 ]
 
-// loanTransactionColumns.forEach((obj) => {
-//     obj['width'] = '18%'
-// })
-
 // Create a ref to hold new loanPaymentsTable template
 const loanPaymentsTable = ref()
 
 // Create a ref to hold new grid instance
 const loanPayments = ref()
 
-// Ideally, we do a fetch request to the database to grab the data.
-onMounted(async () => {
+const getLoanInfo = async () => {
     // Fetch loan properties from the database by using the loanID property!
     const loanInfoJSON = await fetch(`${API_URL}/loans/get/${props.loanID}`, {
         method: 'GET',
@@ -109,17 +103,51 @@ onMounted(async () => {
         loanPaymentFrequency.value = loanData.paymentFrequency
     }
 
-    // IN THE FUTURE: DATA WILL DYNAMICALLY BE PASSED INTO THIS COMPONENT SOMEHOW
-    const data = Array.from({ length: 20 }, () =>
-        Array(9)
-            .fill(null)
-            .map(() => `Element`)
-    )
+    const ledgerRes = await fetch(`${API_URL}/loans/${props.loanID}/ledger`, {
+        method: 'GET',
+        headers: {
+            Authorization: `Bearer ${window.$cookies.get('credentials').token}`
+        }
+    })
+
+    const ledgerJson = await ledgerRes.json()
+    console.log(ledgerJson)
+
+    ledgerData.value = ledgerJson.ledger.map((transaction) => {
+        return [
+            transaction.paymentDate,
+            transaction.ORNumber,
+            transaction.amountPaid,
+            transaction.balance,
+            transaction.interestPaid,
+            transaction.finesPaid,
+            transaction.submissionDate,
+            `${transaction.officerInCharge.last}, ${transaction.officerInCharge.given}`
+        ]
+    })
+}
+
+// rerender the table
+const rerenderTable = function () {
+    // can't do anything about the errors that show up when running this, it's a bug in gridjs
+    // https://github.com/grid-js/gridjs/issues/1291
+    loanPayments.value
+        .updateConfig({
+            search: true,
+            pagination: true,
+            data: ledgerData.value
+        })
+        .forceRender()
+}
+
+// Ideally, we do a fetch request to the database to grab the data.
+onMounted(async () => {
+    await getLoanInfo()
 
     // Grid for all the loan's payments
     loanPayments.value = new Grid({
         columns: loanTransactionColumns,
-        data: data,
+        data: ledgerData.value,
         pagination: {
             limit: 10
         },
@@ -211,7 +239,16 @@ onMounted(async () => {
                         </VRow>
                     </VContainer>
 
-                    <LoanLedgerAdd :loanID="loanID" />
+                    <LoanLedgerAdd
+                        :loanID="loanID"
+                        :onsubmit="
+                            async () => {
+                                await getLoanInfo()
+                                rerenderTable()
+                                isActive.value = false
+                            }
+                        "
+                    />
                 </VCard>
             </template>
         </VDialog>

@@ -4,8 +4,6 @@ import NavigationDrawer from '../components/NavigationDrawer.vue'
 import ContentBlock from '../components/ContentBlock.vue'
 import DashboardTopBar from '../components/DashboardTopBar.vue'
 import CentralLoanBlock from '../components/CentralLoanBlock.vue'
-
-
 </script>
 
 <template>
@@ -14,7 +12,7 @@ import CentralLoanBlock from '../components/CentralLoanBlock.vue'
 
         <div class="d-flex flex-column w-100 pl-8">
             <!-- Top Bar of Dashboard -->
-            <DashboardTopBar :breadcrumbs="['Loans', 'Loan Dashboard']"/>
+            <DashboardTopBar :breadcrumbs="['Loans', 'Loan Dashboard']" />
             <h2>Loan Dashboard</h2>
 
             <!-- Main Dashboard Body -->
@@ -23,9 +21,8 @@ import CentralLoanBlock from '../components/CentralLoanBlock.vue'
                     <CentralLoanBlock />
                 </ContentBlock>
             </div>
-        </div>  
+        </div>
     </div>
 </template>
 
-<style>
-</style>
+<style></style>

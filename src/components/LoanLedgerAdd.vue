@@ -25,6 +25,10 @@ const props = defineProps({
     loanID: {
         type: [Number, String],
         default: null
+    },
+    onsubmit: {
+        type: Function,
+        default: () => () => null
     }
 })
 
@@ -67,6 +71,7 @@ const submit = async function () {
     } else {
         errorAlert.value = false
         errorMessage.value = ''
+        props.onsubmit()
         return true
     }
 }
