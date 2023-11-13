@@ -20,7 +20,6 @@ import DepositAdd from '../components/DepositAdd.vue'
 import DepositLedgerView from '../views/DepositLedgerView.vue'
 import MemberView from '../views/MemberView.vue'
 
-
 // Import path name constants
 import { PATH_NAMES } from '../constants'
 
@@ -85,12 +84,24 @@ const router = createRouter({
                 {
                     path: PATH_NAMES.APP_FORM.APPLICATION_DETAILS,
                     name: 'Loan Application Details',
-                    component: LoanApplicationForm
+                    component: LoanApplicationForm,
+                    beforeEnter: (to, from, next) => {
+                        // Redirect to member input if `from` is not member input
+                        if (from.name !== 'Loan Application Member Input')
+                            next({ name: 'Loan Application Member Input' })
+                        else next()
+                    }
                 },
                 {
                     path: PATH_NAMES.APP_FORM.EXPORT_FORM,
                     name: 'Export Application Form',
-                    component: LoanApplicationFormExport
+                    component: LoanApplicationFormExport,
+                    beforeEnter: (to, from, next) => {
+                        // Redirect to member input if `from` is not application details
+                        if (from.name !== 'Loan Application Details')
+                            next({ name: 'Loan Application Member Input' })
+                        else next()
+                    }
                 }
             ],
             beforeEnter: (to, from, next) => {
@@ -139,7 +150,13 @@ const router = createRouter({
                 {
                     path: PATH_NAMES.LOAN_TRANSACTIONS.TRANSACTION_DETAILS,
                     name: 'Loan Transaction Details',
-                    component: LoanLedgerAdd
+                    component: LoanLedgerAdd,
+                    beforeEnter: (to, from, next) => {
+                        // Redirect to member input if `from` is not member input
+                        if (from.name !== 'Loan Transaction Member Input')
+                            next({ name: 'Loan Transaction Member Input' })
+                        else next()
+                    }
                 }
             ]
             // TODO: this - jana uwu
@@ -209,7 +226,7 @@ const router = createRouter({
                 if (!credentials || !credentials.token) next({ name: 'Login' })
                 else next()
             }
-        },
+        }
     ]
 })
 
