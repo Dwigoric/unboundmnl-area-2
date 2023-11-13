@@ -20,13 +20,21 @@ const disableSubmit = ref(false)
 
 // Submit loan application
 const submit = async () => {
+    const credentials = window.$cookies.get('credentials')
+
+    if (!credentials || !credentials.token) {
+        errorAlert.value = true
+        errorMessage.value = 'You are not logged in.'
+        return false
+    }
+
     const { error, message } = await fetch(
         `${API_URL}/loans/new/${memberSearchStore.data.username}`,
         {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${window.$cookies.get('credentials').token}`
+                Authorization: `Bearer ${credentials.token}`
             },
             body: JSON.stringify(appFormStore.getLoanData())
         }
@@ -146,7 +154,32 @@ const fetchPDF = async () => {
         spouseContactNumberTextField.setText(memberSearchStore.data.spouse.contact_no)
     }
 
-    // TODO: Coborrower section
+    // Set coborrower information, if any
+    if (
+        Object.entries(loanData.coborrower.name).every(([, val]) => {
+            return val !== '' && val !== null
+        })
+    ) {
+        form.getTextField('Coborrower Surname').setText(loanData.coborrower.name.last)
+        form.getTextField('Coborrower Given Name').setText(loanData.coborrower.name.given)
+        form.getTextField('Coborrower Middle Name').setText(loanData.coborrower.name.middle)
+        const coborrowerBirthday = new Date(loanData.coborrower.birthday)
+        form.getTextField('Coborrower Date of Birth').setText(
+            coborrowerBirthday.toLocaleDateString('en-PH', { dateStyle: 'long' })
+        )
+        const coborrowerAgeTextField = form.getTextField('Coborrower Age')
+        coborrowerAgeTextField.setAlignment(TextAlignment.Center)
+        coborrowerAgeTextField.setText(
+            Math.abs(
+                coborrowerBirthday.getUTCFullYear() - new Date().getUTCFullYear()
+            ).toLocaleString()
+        )
+        form.getTextField('Coborrower Place of Birth').setText(loanData.coborrower.birthplace)
+        form.getTextField('Coborrower Source of Income').setText(loanData.coborrower.occupation)
+        const coborrowerContactNumberTextField = form.getTextField('Coborrower Contact No')
+        coborrowerContactNumberTextField.setAlignment(TextAlignment.Center)
+        coborrowerContactNumberTextField.setText(loanData.coborrower.contact_no)
+    }
 
     // Flatten form fields
     form.flatten()
@@ -159,7 +192,10 @@ const fetchPDF = async () => {
 
 // Define lifecycle hooks
 onMounted(fetchPDF)
-onUnmounted(() => URL.revokeObjectURL(pdfUrl.value))
+onUnmounted(() => {
+    URL.revokeObjectURL(pdfUrl.value)
+    appFormStore.reset()
+})
 </script>
 
 <template>

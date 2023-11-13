@@ -3,6 +3,18 @@ import { defineStore } from 'pinia'
 import { ref, reactive } from 'vue'
 
 export const useApplicationFormStore = defineStore('applicationForm', () => {
+    const emptyCoborrower = Object.freeze({
+        name: {
+            given: '',
+            middle: '',
+            last: ''
+        },
+        birthday: '',
+        birthplace: '',
+        occupation: '',
+        contact_no: ''
+    })
+
     const date = ref('')
     const amount = ref(0)
     const term = ref(0)
@@ -10,18 +22,17 @@ export const useApplicationFormStore = defineStore('applicationForm', () => {
     const classification = ref('')
     const type = ref('')
     const status = ref('')
-    const coborrowerName = reactive({
-        given: '',
-        middle: '',
-        last: ''
-    })
+    const coborrower = reactive({ ...emptyCoborrower })
 
     const reset = () => {
+        date.value = ''
         amount.value = 0
         term.value = 0
-        classification.value = false
+        paymentFrequency.value = ''
+        classification.value = ''
         type.value = ''
         status.value = ''
+        Object.assign(coborrower, { ...emptyCoborrower })
     }
 
     const getLoanData = () => {
@@ -33,7 +44,7 @@ export const useApplicationFormStore = defineStore('applicationForm', () => {
             classification: classification.value,
             type: type.value,
             status: status.value,
-            coborrowerName: coborrowerName
+            coborrower
         }
     }
 
@@ -45,7 +56,7 @@ export const useApplicationFormStore = defineStore('applicationForm', () => {
         status.value = loan.status || 'pending'
         paymentFrequency.value = loan.paymentFrequency
         classification.value = loan.classification
-        Object.assign(coborrowerName, loan.coborrowerName)
+        Object.assign(coborrower, loan.coborrower)
     }
 
     return { getLoanData, setLoanData, reset }
