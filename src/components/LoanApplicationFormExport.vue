@@ -164,27 +164,30 @@ onUnmounted(() => URL.revokeObjectURL(pdfUrl.value))
 
 <template>
     <embed :src="pdfUrl" type="application/pdf" width="100%" height="720px" />
-    <VBtn :href="pdfUrl" download="Loan Application Form.pdf" class="bg-purple-darken-3">
-        Download application form as PDF
-    </VBtn>
-    <VBtn
-        type="submit"
-        class="bg-orange-darken-4"
-        @click.prevent="submit"
-        :disabled="disableSubmit"
-    >
-        {{ disableSubmit ? 'Form Submitted' : 'Submit application form' }}
-    </VBtn>
-    <VAlert
-        v-if="errorAlert"
-        v-model="errorAlert"
-        type="error"
-        closable=""
-        density="comfortable"
-        elevation="5"
-    >
-        {{ errorMessage }}
-    </VAlert>
+    <VContainer class="d-flex justify-end ga-3">
+        <VBtn :href="pdfUrl" download="Loan Application Form.pdf" class="bg-purple-darken-3">
+            Download application form as PDF
+        </VBtn>
+        <VBtn
+            type="submit"
+            class="bg-orange-darken-4"
+            @click.prevent="submit"
+            :disabled="disableSubmit"
+            prepend-icon="mdi-send"
+        >
+            {{ disableSubmit ? 'Form Submitted' : 'Submit application form' }}
+        </VBtn>
+        <VAlert
+            v-if="errorAlert"
+            v-model="errorAlert"
+            type="error"
+            closable=""
+            density="comfortable"
+            elevation="5"
+        >
+            {{ errorMessage }}
+        </VAlert>
+    </VContainer>
 </template>
 
 <style scoped></style>
