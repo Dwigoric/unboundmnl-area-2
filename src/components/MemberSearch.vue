@@ -67,7 +67,6 @@ const getUserData = async () => {
     } else {
         errorAlert.value = false
         errorMessage.value = ''
-        console.log(loanees[0])
         memberSearchStore.setData(loanees[0])
     }
 }
