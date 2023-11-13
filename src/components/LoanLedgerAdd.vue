@@ -113,10 +113,25 @@ onMounted(async () => {
                     :rules="[rules.required]"
                 />
             </div>
-            <VTextField class="ml-3" label="Amount Paid" v-model="formData.amountPaid" />
-            <VTextField class="ml-3" label="Balance" v-model="formData.balance" />
-            <VTextField class="ml-3" label="Interest Paid" v-model="formData.interestPaid" />
-            <VTextField class="ml-3" label="Fines Paid" v-model="formData.finesPaid" />
+            <VTextField
+                class="ml-3"
+                type="number"
+                label="Amount Paid"
+                v-model="formData.amountPaid"
+            />
+            <VTextField class="ml-3" type="number" label="Balance" v-model="formData.balance" />
+            <VTextField
+                class="ml-3"
+                type="number"
+                label="Interest Paid"
+                v-model="formData.interestPaid"
+            />
+            <VTextField
+                class="ml-3"
+                type="number"
+                label="Fines Paid"
+                v-model="formData.finesPaid"
+            />
             <div class="d-flex flex-row">
                 <VTextField
                     class="ml-3"
