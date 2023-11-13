@@ -1,4 +1,3 @@
-// TODO: Change this to deployed URL when deploying
-const PROD_API_URL = 'http://localhost:3000'
+const PROD_API_URL = 'https://unboundmnl-area-2-backend.azurewebsites.net'
 
 export const API_URL = import.meta.env.VITE_API_URL || PROD_API_URL
