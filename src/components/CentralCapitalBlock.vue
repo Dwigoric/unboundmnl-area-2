@@ -40,7 +40,6 @@ onMounted(async () => {
     if (res.status === 200) {
         const resJson = await res.json()
         const rawDepositData = resJson.deposits
-        console.log(resJson)
 
         const depositData = rawDepositData.map((row) => {
             return [row.depositID, row.username, row.category, row.originalDepositAmount]

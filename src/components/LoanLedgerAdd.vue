@@ -1,7 +1,6 @@
 <script setup>
 import { ref, onMounted, watch, reactive } from 'vue'
-import { Grid } from 'gridjs'
-import { API_URL, LOAN_TYPES } from '../constants'
+import { API_URL } from '../constants'
 
 import 'gridjs/dist/theme/mermaid.css'
 

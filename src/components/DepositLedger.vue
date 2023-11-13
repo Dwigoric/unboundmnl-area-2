@@ -102,8 +102,6 @@ onMounted(async () => {
         }
     }).then((res) => res.json())
 
-    console.log(jsonRes)
-
     if (jsonRes) {
         const depositData = jsonRes.deposit
         // TEMP: Change this once calculations are implemented

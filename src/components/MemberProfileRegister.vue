@@ -92,7 +92,6 @@ const autofillFormIfPossible = function () {
         } else {
             delete autofillData.spouse
         }
-        console.log(autofillData)
         Object.assign(userData, autofillData)
     }
 }
@@ -451,7 +450,6 @@ onMounted(autofillFormIfPossible)
                             class="username-pw-input"
                             v-model="userData.spouse.name.given"
                             id="login-spouse-first-name"
-                            :rules="[rules.required]"
                             label="Enter Spouse's First Name"
                         />
                     </div>
@@ -478,7 +476,6 @@ onMounted(autofillFormIfPossible)
                             class="username-pw-input"
                             v-model="userData.spouse.name.last"
                             id="login-spouse-last-name"
-                            :rules="[rules.required]"
                             label="Enter Spouse's Last Name"
                         />
                     </div>
@@ -493,7 +490,6 @@ onMounted(autofillFormIfPossible)
                             v-model="userData.spouse.birthday"
                             id="login-spouse-birthday"
                             type="date"
-                            :rules="[rules.required]"
                             label="Select Spouse's Date of Birth"
                         />
                     </div>
@@ -507,7 +503,6 @@ onMounted(autofillFormIfPossible)
                             class="username-pw-input"
                             v-model="userData.spouse.birthplace"
                             id="login-spouse-birthplace"
-                            :rules="[rules.required]"
                             label="Enter Spouse's Place of Birth"
                         />
                     </div>
@@ -521,7 +516,6 @@ onMounted(autofillFormIfPossible)
                             class="username-pw-input"
                             v-model="userData.spouse.contact_no"
                             id="login-spouse-contact-number"
-                            :rules="[rules.required]"
                             label="Enter Spouse's Contact Number"
                         />
                     </div>
@@ -535,7 +529,6 @@ onMounted(autofillFormIfPossible)
                             class="username-pw-input"
                             v-model="userData.spouse.occupation"
                             id="login-spouse-occupation"
-                            :rules="[rules.required]"
                             label="Enter Spouse's Occupation/Source of Income"
                         />
                     </div>

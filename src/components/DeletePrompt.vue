@@ -75,8 +75,6 @@ const deleteMember = async function () {
 }
 
 const deleteOfficer = async function () {
-    console.log('hello')
-
     // Retrieve token from cookies
     const credentials = window.$cookies.get('credentials')
     if (!credentials) return

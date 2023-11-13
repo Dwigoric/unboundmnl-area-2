@@ -28,10 +28,12 @@ const setPopupAdd = () => {
     isAddPopupActive.value = true
 }
 
-const setPopupEdit = () => {
+const setPopupEdit = (data) => {
+    currentlyEditedTransactionID.value = data
     isPopupActive.value = true
 }
 
+const currentlyEditedTransactionID = ref('')
 const loanAmount = ref(0)
 const loanee = ref('')
 const loanType = ref('')
@@ -48,6 +50,7 @@ const formattedLoanAmount = computed(() => {
 // TODO: loan mode of payment
 
 const loanTransactionColumns = [
+    { name: 'Transaction ID', hidden: true },
     { name: 'Date of Payment' },
     { name: 'GV/OR Number' },
     { name: 'Amount Paid' },
@@ -103,10 +106,10 @@ const getLoanInfo = async () => {
     })
 
     const ledgerJson = await ledgerRes.json()
-    console.log(ledgerJson)
 
     ledgerData.value = ledgerJson.ledger.map((transaction) => {
         return [
+            transaction.transactionID,
             transaction.paymentDate.substring(0, 10),
             transaction.ORNumber,
             transaction.amountPaid,
@@ -263,7 +266,17 @@ onMounted(async () => {
                         </VRow>
                     </VContainer>
 
-                    <LoanLedgerEdit />
+                    <LoanLedgerEdit
+                        :loanID="loanID"
+                        :transactionID="currentlyEditedTransactionID"
+                        :onsubmit="
+                            async () => {
+                                await getLoanInfo()
+                                rerenderTable()
+                                isActive.value = false
+                            }
+                        "
+                    />
                 </VCard>
             </template>
         </VDialog>
