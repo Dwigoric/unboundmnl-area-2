@@ -38,6 +38,7 @@ const logout = () => {
             permanent=""
         >
             <div class="navigation-title-box">
+                <v-icon icon="../assets/logo.svg"></v-icon>
                 <h1>CSVMC</h1>
             </div>
 
