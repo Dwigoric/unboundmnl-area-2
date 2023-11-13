@@ -28,15 +28,6 @@ import ContentBlock from '../components/ContentBlock.vue'
             <v-tab href="#deposit" class="capitalize mt-n1 mb-n1">Deposits</v-tab>
         </v-tabs>
 
-        <v-tabs-items v-model="tab">
-            <v-window-item value="loan" :key="1">
-                <div>asd</div>
-            </v-window-item>
-
-            <v-window-item value="deposit" :key="2">
-                <div>asddd</div>
-            </v-window-item>
-        </v-tabs-items>
     </ContentBlock>
 </template>
 
