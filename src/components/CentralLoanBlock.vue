@@ -1,7 +1,13 @@
-z<script setup>
+z
+<script setup>
+// Packages
 import { ref, onMounted } from 'vue'
 import { Grid, h } from 'gridjs'
-import { API_URL } from '../constants/api_url.js'
+
+// Project constants
+import { API_URL, LOAN_TYPES } from '../constants'
+
+// Stylsheets
 import 'gridjs/dist/theme/mermaid.css'
 
 // Import router
@@ -13,7 +19,6 @@ import router from '../router'
 //     lastName: String,
 //     username: String
 // });
-
 
 const loan = ref()
 
@@ -48,8 +53,17 @@ onMounted(async () => {
             columns: [
                 { name: 'LoanID', hidden: true },
                 'Loanee',
-                'Type of Loan',
-                'Amount of Loan',
+                {
+                    name: 'Type of Loan',
+                    formatter: (cell) => LOAN_TYPES[cell]
+                },
+                {
+                    name: 'Amount of Loan',
+                    formatter: (cell) =>
+                        Intl.NumberFormat('en-US', { style: 'currency', currency: 'PHP' }).format(
+                            Number(cell)
+                        )
+                },
                 {
                     name: 'View Loan Ledger',
                     formatter: (cell, row) => {
@@ -72,7 +86,7 @@ onMounted(async () => {
             sort: true,
             resizable: true,
             fixedHeader: true,
-            data: loanData, 
+            data: loanData,
             className: {
                 // Define your class names here
             },

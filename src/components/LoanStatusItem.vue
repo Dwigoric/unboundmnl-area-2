@@ -86,7 +86,13 @@ onMounted(async () => {
                 name: 'Type of Loan',
                 formatter: (cell) => LOAN_TYPES[cell]
             },
-            'Amount of Loan',
+            {
+                name: 'Amount of Loan',
+                formatter: (cell) =>
+                    Intl.NumberFormat('en-US', { style: 'currency', currency: 'PHP' }).format(
+                        Number(cell)
+                    )
+            },
             {
                 name: 'Change Status',
                 formatter: (cell, row) => {

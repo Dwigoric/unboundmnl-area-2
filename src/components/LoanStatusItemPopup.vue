@@ -4,7 +4,7 @@ import { ref, onMounted } from 'vue'
 import { Grid } from 'gridjs'
 
 // Project constants
-import { API_URL } from '../constants'
+import { API_URL, LOAN_TYPES } from '../constants'
 
 // Stylesheets
 import 'gridjs/dist/theme/mermaid.css'
@@ -82,9 +82,18 @@ onMounted(() => {
                 name: 'Loan ID',
                 hidden: true
             },
-            'Type of Loan',
-            'Amount of Loan',
-            'Loanee'
+            'Loanee',
+            {
+                name: 'Type of Loan',
+                formatter: (cell) => LOAN_TYPES[cell]
+            },
+            {
+                name: 'Amount of Loan',
+                formatter: (cell) =>
+                    Intl.NumberFormat('en-US', { style: 'currency', currency: 'PHP' }).format(
+                        Number(cell)
+                    )
+            }
         ],
         data: [props.data],
         className: {

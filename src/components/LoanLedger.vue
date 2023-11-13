@@ -5,7 +5,7 @@ import { Grid, h } from 'gridjs'
 import 'gridjs/dist/theme/mermaid.css'
 
 // Import constants
-import { API_URL } from '../constants/api_url.js'
+import { API_URL, LOAN_TYPES } from '../constants'
 
 // Import components
 import LoanLedgerEdit from '../components/LoanLedgerEdit.vue'
@@ -26,14 +26,14 @@ const isPopupActive = ref(false) // for edit transaction pop up
 
 const setPopupAdd = () => {
     // database connection stuff
-    isAddPopupActive.value = true;
+    isAddPopupActive.value = true
 }
 
 const setPopupEdit = () => {
     // if (data.value.length === 0) return
 
     // popupData.value = data.value.find((loan) => loan[0] === loanId)
-    isPopupActive.value = true;
+    isPopupActive.value = true
 }
 
 const loanAmount = ref(0)
@@ -106,7 +106,7 @@ onMounted(async () => {
         const loanData = jsonRes.loan
         loanAmount.value = loanData.originalLoanAmount
         loanee.value = loanData.username
-        loanType.value = loanData.loanType
+        loanType.value = LOAN_TYPES[loanData.loanType]
         loanTerm.value = loanData.term
         loanPaymentFrequency.value = loanData.paymentFrequency
     }
@@ -181,15 +181,18 @@ onMounted(async () => {
         </div>
 
         <v-divider :thickness="1" class="mt-3 mb-3 border-opacity-70" />
-        
+
         <div id="loan-payments-wrapper" ref="loanPaymentsTable" class="w-100"></div>
-        <VBtn @click="setPopupAdd" 
-                block size="large" 
-                density="compact"
-                rounded="lg" 
-                prepend-icon="mdi-plus-circle" 
-                class="capitalize btn">
-                Add New Transaction
+        <VBtn
+            @click="setPopupAdd"
+            block
+            size="large"
+            density="compact"
+            rounded="lg"
+            prepend-icon="mdi-plus-circle"
+            class="capitalize btn"
+        >
+            Add New Transaction
         </VBtn>
 
         <!-- Form popup for ADD TRANSACTION -->
@@ -210,11 +213,10 @@ onMounted(async () => {
                         </VRow>
                     </VContainer>
 
-                    <LoanLedgerAdd/>
+                    <LoanLedgerAdd />
                 </VCard>
             </template>
         </VDialog>
-
 
         <!-- Form popup for EDIT TRANSACTION-->
         <VDialog width="1000" v-model="isPopupActive">
@@ -223,13 +225,13 @@ onMounted(async () => {
                     <VContainer fluid>
                         <VRow justify="end">
                             <VCardActions>
-                                    <VBtn
-                                        class="ma-2 capitalize-text"
-                                        color="var(--vt-c-blue)"
-                                        @click="isActive.value = false"
-                                        icon="mdi-close"
-                                    >
-                                    </VBtn>
+                                <VBtn
+                                    class="ma-2 capitalize-text"
+                                    color="var(--vt-c-blue)"
+                                    @click="isActive.value = false"
+                                    icon="mdi-close"
+                                >
+                                </VBtn>
                             </VCardActions>
                         </VRow>
                     </VContainer>
@@ -242,7 +244,6 @@ onMounted(async () => {
 </template>
 
 <style scoped>
-
 .btn {
     padding: 1.2%;
     color: var(--vt-c-white-off);
