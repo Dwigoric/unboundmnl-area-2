@@ -1,6 +1,6 @@
 <script setup>
 // Packages
-import { useDebounceFn } from '@vueuse/core'
+import { watchDebounced } from '@vueuse/core'
 
 // Import vue components
 import NavigationDrawer from '../components/NavigationDrawer.vue'
@@ -10,7 +10,7 @@ import UserProfileBtn from '../components/UserProfileBtn.vue'
 import DashboardTopBar from '../components/DashboardTopBar.vue'
 
 // Import Packages
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted } from 'vue'
 
 import { API_URL } from '../constants'
 
@@ -46,7 +46,7 @@ async function getAllUsers() {
 }
 
 // Refresh users listing when there is a change in the searchbar
-watch(searchQuery, useDebounceFn(getAllUsers, 1000))
+watchDebounced(searchQuery, getAllUsers, { debounce: 1000 })
 
 // Upon loading the page
 onMounted(getAllUsers)
