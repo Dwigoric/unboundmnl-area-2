@@ -22,7 +22,7 @@ const props = defineProps({
         type: Array,
         required: true
     },
-    closePopup: {
+    onsubmit: {
         type: Function,
         required: true
     }
@@ -71,7 +71,7 @@ const decide = async (toApprove) => {
         return
     }
 
-    props.closePopup()
+    props.onsubmit(props.data[0])
 }
 
 // Lifecycle hooks

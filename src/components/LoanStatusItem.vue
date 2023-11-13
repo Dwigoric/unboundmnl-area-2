@@ -70,8 +70,23 @@ const setPopupLoan = (loanId) => {
     isPopupActive.value = true
 }
 
-const closePopup = () => {
+const removeLoanFromGrid = (loanID) => {
     isPopupActive.value = false
+
+    const index = data.value.findIndex((loan) => loan[0] === loanID)
+    data.value.splice(index, 1)
+
+    // Remove search and pagination plugins first
+    loanStatus.value.plugin.remove('pagination')
+    loanStatus.value.plugin.remove('search')
+
+    loanStatus.value
+        .updateConfig({
+            data: data.value,
+            search: true,
+            pagination: { limit: 10 }
+        })
+        .forceRender()
 }
 
 // Lifecycle hooks
@@ -107,9 +122,7 @@ onMounted(async () => {
                 }
             }
         ],
-        pagination: {
-            limit: 10
-        },
+        pagination: { limit: 10 },
         search: true,
         sort: true,
         resizable: true,
@@ -126,10 +139,7 @@ onMounted(async () => {
                 // Define row styles here
             }
         }
-    })
-
-    // Render loanStatus in corresponding reference
-    loanStatus.value.render(loanStatusTable.value)
+    }).render(loanStatusTable.value)
 })
 </script>
 
@@ -153,7 +163,7 @@ onMounted(async () => {
                     </VRow>
                 </VContainer>
 
-                <LoanStatusItemPopup :data="popupData" :close-popup="closePopup" />
+                <LoanStatusItemPopup :data="popupData" :onsubmit="removeLoanFromGrid" />
             </VCard>
         </template>
     </VDialog>
