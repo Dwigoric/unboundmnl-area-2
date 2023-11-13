@@ -6,7 +6,7 @@ import { ref, reactive } from 'vue'
 import router from '../router'
 
 // Import constants
-import { API_URL, LOAN_TYPES } from '../constants'
+import { LOAN_TYPES } from '../constants'
 
 // Import stores
 import { useApplicationFormStore } from '../stores/applicationForm'
@@ -21,6 +21,7 @@ const rules = {
 const errorAlert = ref(false)
 const errorMessage = ref('')
 const form = ref(null)
+const hasCoborrower = ref(false)
 
 // Define form fields
 const loanData = reactive({
@@ -32,10 +33,16 @@ const loanData = reactive({
     amount: 0,
     minAmount: 0,
     maxAmount: 0,
-    coborrowerName: {
-        given: '',
-        middle: '',
-        last: ''
+    coborrower: {
+        name: {
+            given: '',
+            middle: '',
+            last: ''
+        },
+        birthday: '',
+        birthplace: '',
+        occupation: '',
+        contact_no: ''
     }
 })
 
@@ -157,38 +164,6 @@ const changeLoanRange = function () {
                     />
                 </div>
 
-                <!-- Coborrower Information -->
-                <div class="row-tab">
-                    <div class="label">
-                        <div>Coborrower First Name:</div>
-                    </div>
-                    <VTextField
-                        class="username-pw-input"
-                        v-model="loanData.coborrowerName.given"
-                        label="Enter Coborrower First Name"
-                    />
-                </div>
-                <div class="row-tab">
-                    <div class="label">
-                        <div>Coborrower Middle Name:</div>
-                    </div>
-                    <VTextField
-                        class="username-pw-input"
-                        v-model="loanData.coborrowerName.middle"
-                        label="Enter Coborrower Middle Name"
-                    />
-                </div>
-                <div class="row-tab">
-                    <div class="label">
-                        <div>Coborrower Last Name:</div>
-                    </div>
-                    <VTextField
-                        class="username-pw-input"
-                        v-model="loanData.coborrowerName.last"
-                        label="Enter Coborrower Last Name"
-                    />
-                </div>
-
                 <!-- Type of Loan -->
                 <div class="row-tab">
                     <div class="label">
@@ -251,6 +226,97 @@ const changeLoanRange = function () {
                                 {{ loanData.maxAmount }}
                             </template>
                         </VSlider>
+                    </div>
+                </div>
+
+                <div class="row-tab">
+                    <div class="label">
+                        <div>Coborrower Needed?</div>
+                    </div>
+                    <VCheckbox v-model="hasCoborrower"></VCheckbox>
+                </div>
+
+                <!-- Coborrower Information -->
+                <div v-if="hasCoborrower">
+                    <div class="header2">Coborrower's Information</div>
+
+                    <div class="row-tab">
+                        <div class="label">
+                            <div>Coborrower First Name:</div>
+                        </div>
+                        <VTextField
+                            class="username-pw-input"
+                            v-model="loanData.coborrower.name.given"
+                            :rules="[rules.required]"
+                            label="Enter Coborrower First Name"
+                        />
+                    </div>
+                    <div class="row-tab">
+                        <div class="label">
+                            <div>Coborrower Middle Name:</div>
+                        </div>
+                        <VTextField
+                            class="username-pw-input"
+                            v-model="loanData.coborrower.name.middle"
+                            :rules="[rules.required]"
+                            label="Enter Coborrower Middle Name"
+                        />
+                    </div>
+                    <div class="row-tab">
+                        <div class="label">
+                            <div>Coborrower Last Name:</div>
+                        </div>
+                        <VTextField
+                            class="username-pw-input"
+                            v-model="loanData.coborrower.name.last"
+                            :rules="[rules.required]"
+                            label="Enter Coborrower Last Name"
+                        />
+                    </div>
+                    <div class="row-tab">
+                        <div class="label">
+                            <div>Coborrower Date of Birth:</div>
+                        </div>
+                        <VTextField
+                            class="username-pw-input"
+                            v-model="loanData.coborrower.birthday"
+                            type="date"
+                            :rules="[rules.required]"
+                            label="Enter Coborrower Date of Birth"
+                        />
+                    </div>
+                    <div class="row-tab">
+                        <div class="label">
+                            <div>Coborrower Place of Birth:</div>
+                        </div>
+                        <VTextField
+                            class="username-pw-input"
+                            v-model="loanData.coborrower.birthplace"
+                            :rules="[rules.required]"
+                            label="Enter Coborrower Place of Birth"
+                        />
+                    </div>
+                    <div class="row-tab">
+                        <div class="label">
+                            <div>Coborrower Occupation/Source of Income:</div>
+                        </div>
+                        <VTextField
+                            class="username-pw-input"
+                            v-model="loanData.coborrower.occupation"
+                            :rules="[rules.required]"
+                            label="Enter Coborrower Occupation/Source of Income"
+                        />
+                    </div>
+                    <div class="row-tab">
+                        <div class="label">
+                            <div>Coborrower Contact Number:</div>
+                        </div>
+                        <VTextField
+                            class="username-pw-input"
+                            v-model="loanData.coborrower.contact_no"
+                            :rules="[rules.required]"
+                            label="Enter Coborrower Contact Number"
+                        />
                     </div>
                 </div>
 
