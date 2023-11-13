@@ -1,39 +1,151 @@
 <script setup>
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted, watch, reactive } from 'vue'
 import { Grid } from 'gridjs'
+import { API_URL, LOAN_TYPES } from '../constants'
+
 import 'gridjs/dist/theme/mermaid.css'
 
-//const loanLedgerRefTable = ref();
-//const loanLedgerRef = ref();
+// Define constants
+const rules = {
+    required: (v) => !!v || 'This field is required'
+}
+
+const formatDate = function (date) {
+    let year = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(date)
+    let month = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(date)
+    let day = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(date)
+    return `${year}-${month}-${day}`
+}
+
+const form = ref(null)
+const errorAlert = ref(false)
+const errorMessage = ref('')
+
+const props = defineProps({
+    loanID: {
+        type: [Number, String],
+        default: null
+    }
+})
+
+const formData = reactive({
+    ORNumber: '',
+    paymentDate: '',
+    submissionDate: formatDate(Date.now()),
+    amountPaid: 0,
+    balance: 0,
+    interestPaid: 0,
+    finesPaid: 0,
+    officerInCharge: ''
+})
+
+const officers = reactive([])
+
+const submit = async function () {
+    const { valid } = await form.value.validate()
+    if (!valid) return
+
+    const preprocessedFormData = { ...formData }
+    preprocessedFormData.officerInCharge = { ...preprocessedFormData.officerInCharge.value }
+
+    const res = await fetch(`${API_URL}/loans/${props.loanID}/ledger`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${window.$cookies.get('credentials').token}`
+        },
+        body: JSON.stringify({
+            ...preprocessedFormData
+        })
+    })
+    const { error, message } = await res.json()
+
+    if (error) {
+        errorAlert.value = true
+        errorMessage.value = message
+        return false
+    } else {
+        errorAlert.value = false
+        errorMessage.value = ''
+        return true
+    }
+}
+
+onMounted(async () => {
+    const officersRes = await fetch(`${API_URL}/officers/`, {
+        headers: {
+            Authorization: `Bearer ${window.$cookies.get('credentials').token}`
+        }
+    })
+    const officersJson = await officersRes.json()
+
+    for (const officer of officersJson.officers) {
+        officers.push({
+            title: `${officer.name.last}, ${officer.name.given}`,
+            value: officer.name
+        })
+    }
+})
 </script>
 
 <template>
     <h2 class="header-wrapper pt-3">Add New Transaction</h2>
     <div class="wrapper">
         <!-- Add transaction form -->
-        <div class="d-flex flex-row">
-            <VTextField class="ml-3" type="date" label="Date of Payment" />
-            <VTextField class="ml-3" label="GV/OR Number" />
-        </div>
-        <VTextField class="ml-3" label="Amount Paid" />
-        <VTextField class="ml-3" label="Balance" />
-        <VTextField class="ml-3" label="Interest Paid" />
-        <VTextField class="ml-3" label="Fines Paid" />
-        <VTextField class="ml-3" label="Term of Loan" />
-        <div class="d-flex flex-row">
-            <VTextField class="ml-3" type="date" label="Date of Entry" />
-            <!-- TODO: Retrieve list of officers from the database -->
-            <v-select
-                class="ml-3"
-                label="Officer in Charge"
-                :items="['Capy', 'Booboo', 'Baabaa']"
-            ></v-select>
-        </div>
+        <VForm id="loan-ledger-form" ref="form">
+            <div class="d-flex flex-row">
+                <VTextField
+                    class="ml-3"
+                    type="date"
+                    label="* Date of Payment"
+                    v-model="formData.paymentDate"
+                    :rules="[rules.required]"
+                />
+                <VTextField
+                    class="ml-3"
+                    label="* GV/OR Number"
+                    v-model="formData.ORNumber"
+                    :rules="[rules.required]"
+                />
+            </div>
+            <VTextField class="ml-3" label="Amount Paid" v-model="formData.amountPaid" />
+            <VTextField class="ml-3" label="Balance" v-model="formData.balance" />
+            <VTextField class="ml-3" label="Interest Paid" v-model="formData.interestPaid" />
+            <VTextField class="ml-3" label="Fines Paid" v-model="formData.finesPaid" />
+            <div class="d-flex flex-row">
+                <VTextField
+                    class="ml-3"
+                    type="date"
+                    label="* Date of Entry"
+                    v-model="formData.submissionDate"
+                    :rules="[rules.required]"
+                />
+                <v-combobox
+                    class="ml-3"
+                    label="* Officer in Charge"
+                    :items="officers"
+                    v-model="formData.officerInCharge"
+                    :rules="[rules.required]"
+                ></v-combobox>
+            </div>
 
-        <!-- TODO: Connect this button to a method to add to the database -->
-        <div class="btn-wrapper">
-            <VBtn prepend-icon="mdi-check" class="capitalize btn"> Submit </VBtn>
-        </div>
+            <div class="btn-wrapper">
+                <VBtn prepend-icon="mdi-check" class="capitalize btn" @click.prevent="submit">
+                    Submit
+                </VBtn>
+            </div>
+
+            <VAlert
+                v-if="errorAlert"
+                v-model="errorAlert"
+                type="error"
+                closable=""
+                density="comfortable"
+                elevation="5"
+            >
+                {{ errorMessage }}
+            </VAlert>
+        </VForm>
     </div>
 </template>
 

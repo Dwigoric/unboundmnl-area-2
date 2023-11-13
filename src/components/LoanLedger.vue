@@ -93,17 +93,15 @@ const loanPayments = ref()
 // Ideally, we do a fetch request to the database to grab the data.
 onMounted(async () => {
     // Fetch loan properties from the database by using the loanID property!
-    const jsonRes = await fetch(`${API_URL}/loans/get/${props.loanID}`, {
+    const loanInfoJSON = await fetch(`${API_URL}/loans/get/${props.loanID}`, {
         method: 'GET',
         headers: {
             Authorization: `Bearer ${window.$cookies.get('credentials').token}`
         }
     }).then((res) => res.json())
 
-    console.log(jsonRes)
-
-    if (jsonRes) {
-        const loanData = jsonRes.loan
+    if (loanInfoJSON) {
+        const loanData = loanInfoJSON.loan
         loanAmount.value = loanData.originalLoanAmount
         loanee.value = loanData.username
         loanType.value = LOAN_TYPES[loanData.loanType]
@@ -213,7 +211,7 @@ onMounted(async () => {
                         </VRow>
                     </VContainer>
 
-                    <LoanLedgerAdd />
+                    <LoanLedgerAdd :loanID="loanID" />
                 </VCard>
             </template>
         </VDialog>
