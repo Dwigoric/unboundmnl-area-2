@@ -13,7 +13,7 @@ import DepositAdd from '../components/DepositAdd.vue'
 
 // Define props for the component
 const props = defineProps({
-    loanID: {
+    depositID: {
         type: [Number, String],
         default: null
     }
@@ -26,28 +26,33 @@ const isPopupActive = ref(false) // for edit transaction pop up
 
 const setPopupAdd = () => {
     // database connection stuff
-    isAddPopupActive.value = true;
+    isAddPopupActive.value = true
 }
 
 const setPopupEdit = () => {
     // if (data.value.length === 0) return
 
     // popupData.value = data.value.find((loan) => loan[0] === loanId)
-    isPopupActive.value = true;
+    isPopupActive.value = true
 }
 
-// const loanAmount = ref(0)
-// const loanee = ref('')
-// const loanType = ref('')
-// const loanTerm = ref(0)
-// const loanPaymentFrequency = ref('')
+const depositAmount = ref(0)
+const depositOwner = ref('')
+const depositType = ref('')
+const depositApprovalDate = ref('')
+const depositInterestRate = ref(0)
 
-// // Format the loan amount to PHP standard
-// const formattedLoanAmount = computed(() => {
-//     return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'PHP' }).format(
-//         loanAmount.value
-//     )
-// })
+// Format the deposit amount to PHP standard
+const formattedDepositAmount = computed(() => {
+    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'PHP' }).format(
+        depositAmount.value
+    )
+})
+
+// Format the approval date of the laon
+const formattedApprovalDate = computed(() => {
+    return depositApprovalDate.value.substring(0, 10)
+})
 
 // const formattedLoanAmount = ref(
 //     new Intl.NumberFormat('en-US', { style: 'currency', currency: 'PHP' }).format(loanAmount)
@@ -89,24 +94,25 @@ const capital = ref()
 
 // Ideally, we do a fetch request to the database to grab the data.
 onMounted(async () => {
-//     // Fetch loan properties from the database by using the loanID property!
-//     const jsonRes = await fetch(`${API_URL}/loans/get/${props.loanID}`, {
-//         method: 'GET',
-//         headers: {
-//             Authorization: `Bearer ${window.$cookies.get('credentials').token}`
-//         }
-//     }).then((res) => res.json())
+    // Fetch loan properties from the database by using the loanID property!
+    const jsonRes = await fetch(`${API_URL}/deposits/get/${props.depositID}`, {
+        method: 'GET',
+        headers: {
+            Authorization: `Bearer ${window.$cookies.get('credentials').token}`
+        }
+    }).then((res) => res.json())
 
-//     console.log(jsonRes)
+    console.log(jsonRes)
 
-//     if (jsonRes) {
-//         const loanData = jsonRes.loan
-//         loanAmount.value = loanData.originalLoanAmount
-//         loanee.value = loanData.username
-//         loanType.value = loanData.loanType
-//         loanTerm.value = loanData.term
-//         loanPaymentFrequency.value = loanData.paymentFrequency
-//     }
+    if (jsonRes) {
+        const depositData = jsonRes.deposit
+        // TEMP: Change this once calculations are implemented
+        depositAmount.value = depositData.originalDepositAmount
+        depositOwner.value = depositData.username
+        depositType.value = depositData.category
+        depositApprovalDate.value = depositData.approvalDate
+        depositInterestRate.value = depositData.interestRate
+    }
 
     // IN THE FUTURE: DATA WILL DYNAMICALLY BE PASSED INTO THIS COMPONENT SOMEHOW
     const data = Array.from({ length: 20 }, () =>
@@ -151,36 +157,41 @@ onMounted(async () => {
         <div id="loan-info-wrapper" class="d-flex justify-space-between align-center">
             <div id="loan-amount-cell" class="h-75 w-30 pa-2">
                 <p class="font-weight-bold">Running Amount:</p>
-                <p class="amount">{{ formattedLoanAmount }}</p>
+                <p class="amount">{{ formattedDepositAmount }}</p>
             </div>
             <div class="d-flex justify-space-evenly align-center h-75 pa-2">
                 <div class="d-flex flex-column loan-info-cell grid-left-border h-100 px-2">
                     <p class="font-weight-bold">Deposit ID:</p>
-                    <p class="loan-properties">{{ loanee }}</p>
+                    <p class="loan-properties">{{ depositID }}</p>
                 </div>
                 <div class="d-flex flex-column loan-info-cell grid-left-border h-100 px-2">
                     <p class="font-weight-bold">Type of Deposit:</p>
-                    <p class="loan-properties">{{ loanee }}</p>
+                    <p class="loan-properties">{{ depositType }}</p>
                 </div>
                 <div class="d-flex flex-column loan-info-cell grid-left-border h-100 px-4">
-                    <p class="font-weight-bold">Date: </p>
-                    <p class="loan-properties">{{ loanID }}</p>
+                    <p class="font-weight-bold">Date:</p>
+                    <p class="loan-properties">{{ formattedApprovalDate }}</p>
                 </div>
                 <div class="d-flex flex-column loan-info-cell grid-left-border h-100 px-4">
                     <p class="font-weight-bold">Interest Rate:</p>
-                    <p class="loan-properties">{{ loanType }}</p>
+                    <p class="loan-properties">{{ depositInterestRate }}%</p>
                 </div>
-
-
             </div>
         </div>
 
         <v-divider :thickness="1" class="mt-3 mb-3 border-opacity-70" />
 
         <div id="capital-ledger-wrapper" ref="capitalLedgerTable" class="w-100"></div>
-        
-        <VBtn @click="setPopupAdd" block size="large" density="compact" rounded="lg" prepend-icon="mdi-plus-circle"
-            class="capitalize btn">
+
+        <VBtn
+            @click="setPopupAdd"
+            block
+            size="large"
+            density="compact"
+            rounded="lg"
+            prepend-icon="mdi-plus-circle"
+            class="capitalize btn"
+        >
             Add New Transaction
         </VBtn>
 
@@ -191,8 +202,12 @@ onMounted(async () => {
                     <VContainer fluid>
                         <VRow justify="end">
                             <VCardActions>
-                                <VBtn class="ma-2 capitalize-text" color="var(--vt-c-blue)" @click="isActive.value = false"
-                                    icon="mdi-close">
+                                <VBtn
+                                    class="ma-2 capitalize-text"
+                                    color="var(--vt-c-blue)"
+                                    @click="isActive.value = false"
+                                    icon="mdi-close"
+                                >
                                 </VBtn>
                             </VCardActions>
                         </VRow>
@@ -203,7 +218,6 @@ onMounted(async () => {
             </template>
         </VDialog>
 
-
         <!-- Form popup for EDIT TRANSACTION-->
         <VDialog width="1000" v-model="isPopupActive">
             <template #default="{ isActive }">
@@ -211,8 +225,12 @@ onMounted(async () => {
                     <VContainer fluid>
                         <VRow justify="end">
                             <VCardActions>
-                                <VBtn class="ma-2 capitalize-text" color="var(--vt-c-blue)" @click="isActive.value = false"
-                                    icon="mdi-close">
+                                <VBtn
+                                    class="ma-2 capitalize-text"
+                                    color="var(--vt-c-blue)"
+                                    @click="isActive.value = false"
+                                    icon="mdi-close"
+                                >
                                 </VBtn>
                             </VCardActions>
                         </VRow>

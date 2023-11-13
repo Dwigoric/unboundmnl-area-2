@@ -5,7 +5,6 @@ import { API_URL } from '../constants/api_url.js'
 import 'gridjs/dist/theme/mermaid.css'
 import DepositLedger from '../components/DepositLedger.vue'
 
-
 // Import router
 import router from '../router'
 
@@ -96,7 +95,6 @@ onMounted(async () => {
 </script>
 
 <template>
-    
     <div id="loan-status-wrapper" ref="depositsTable" class="w-90 px-4" />
 </template>
 
