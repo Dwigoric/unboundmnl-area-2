@@ -298,14 +298,14 @@ onMounted(autofillFormIfPossible)
                         <div>* Gender:</div>
                     </div>
 
-                    <VSelect
-                        class="username-pw-input"
+                    <VRadioGroup
                         v-model="userData.gender"
-                        :items="['M', 'F']"
                         id="login-gender"
                         :rules="[rules.required]"
-                        label="Select Gender"
-                    />
+                    >
+                        <VRadio label="Male" value="M" />
+                        <VRadio label="Female" value="F" />
+                    </VRadioGroup>
                 </div>
 
                 <!-- TIN Number -->
