@@ -25,14 +25,10 @@ const isAddPopupActive = ref(false) // for add transaction pop up
 const isPopupActive = ref(false) // for edit transaction pop up
 
 const setPopupAdd = () => {
-    // database connection stuff
     isAddPopupActive.value = true
 }
 
 const setPopupEdit = () => {
-    // if (data.value.length === 0) return
-
-    // popupData.value = data.value.find((loan) => loan[0] === loanId)
     isPopupActive.value = true
 }
 
@@ -48,10 +44,6 @@ const formattedLoanAmount = computed(() => {
         loanAmount.value
     )
 })
-
-// const formattedLoanAmount = ref(
-//     new Intl.NumberFormat('en-US', { style: 'currency', currency: 'PHP' }).format(loanAmount)
-// )
 
 // TODO: loan mode of payment
 
@@ -115,13 +107,13 @@ const getLoanInfo = async () => {
 
     ledgerData.value = ledgerJson.ledger.map((transaction) => {
         return [
-            transaction.paymentDate,
+            transaction.paymentDate.substring(0, 10),
             transaction.ORNumber,
             transaction.amountPaid,
             transaction.balance,
             transaction.interestPaid,
             transaction.finesPaid,
-            transaction.submissionDate,
+            transaction.submissionDate.substring(0, 10),
             `${transaction.officerInCharge.last}, ${transaction.officerInCharge.given}`
         ]
     })
