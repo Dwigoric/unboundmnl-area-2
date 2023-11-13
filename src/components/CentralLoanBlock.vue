@@ -35,7 +35,9 @@ const visitLoanLedger = async (loanID) => {
 }
 
 onMounted(async () => {
-    const res = await fetch(`${API_URL}/loans`, {
+    const params = new URLSearchParams()
+    params.set('status', 'approved')
+    const res = await fetch(`${API_URL}/loans?${params}`, {
         method: 'GET',
         headers: {
             Authorization: `Bearer ${window.$cookies.get('credentials').token}`
