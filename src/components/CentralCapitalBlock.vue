@@ -1,22 +1,27 @@
 <script setup>
+// Packages
 import { ref, onMounted } from 'vue'
 import { Grid, h } from 'gridjs'
-import { API_URL } from '../constants/api_url.js'
+
+// Project constants
+import { API_URL } from '../constants'
+
+// Stylesheets
 import 'gridjs/dist/theme/mermaid.css'
-import DepositLedger from '../components/DepositLedger.vue'
 
 // Import router
 import router from '../router'
 
-// TODO: Create proper vars
-// defineProps({
-//     givenName: String,
-//     lastName: String,
-//     username: String
-// });
+// Props
+const props = defineProps({
+    username: {
+        type: String,
+        required: false
+    }
+})
 
+// Reactive variables
 const deposit = ref()
-
 const depositsTable = ref()
 
 // Methods
@@ -30,7 +35,9 @@ const visitDepositLedger = async (depositID) => {
 }
 
 onMounted(async () => {
-    const res = await fetch(`${API_URL}/deposits`, {
+    const url = props.username ? `/${props.username}` : ''
+
+    const res = await fetch(`${API_URL}/deposits${url}`, {
         method: 'GET',
         headers: {
             Authorization: `Bearer ${window.$cookies.get('credentials').token}`

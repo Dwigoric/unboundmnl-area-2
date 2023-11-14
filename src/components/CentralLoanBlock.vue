@@ -1,4 +1,3 @@
-z
 <script setup>
 // Packages
 import { ref, onMounted } from 'vue'
@@ -7,7 +6,7 @@ import { Grid, h } from 'gridjs'
 // Project constants
 import { API_URL, LOAN_TYPES } from '../constants'
 
-// Stylsheets
+// Stylesheets
 import 'gridjs/dist/theme/mermaid.css'
 
 // Import router
