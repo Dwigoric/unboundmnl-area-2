@@ -13,15 +13,16 @@ import 'gridjs/dist/theme/mermaid.css'
 // Import router
 import router from '../router'
 
-// TODO: Create proper vars
-// defineProps({
-//     givenName: String,
-//     lastName: String,
-//     username: String
-// });
+// Props
+const props = defineProps({
+    username: {
+        type: String,
+        required: false
+    }
+})
 
+// Reactive variables
 const loan = ref()
-
 const loansTable = ref()
 
 // Methods
@@ -35,9 +36,10 @@ const visitLoanLedger = async (loanID) => {
 }
 
 onMounted(async () => {
+    const url = props.username ? `/${props.username}` : ''
     const params = new URLSearchParams()
     params.set('status', 'approved')
-    const res = await fetch(`${API_URL}/loans?${params}`, {
+    const res = await fetch(`${API_URL}/loans${url}?${params}`, {
         method: 'GET',
         headers: {
             Authorization: `Bearer ${window.$cookies.get('credentials').token}`
@@ -54,7 +56,7 @@ onMounted(async () => {
         loan.value = new Grid({
             columns: [
                 { name: 'LoanID', hidden: true },
-                'Loanee',
+                { name: 'Loanee', hidden: props.username !== undefined },
                 {
                     name: 'Type of Loan',
                     formatter: (cell) => LOAN_TYPES[cell]

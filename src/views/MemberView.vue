@@ -1,7 +1,6 @@
 <script setup>
 // Import vue components
 import NavigationDrawer from '../components/NavigationDrawer.vue'
-import ContentBlock from '../components/ContentBlock.vue'
 import MemberProfileLeft from '../components/MemberProfileLeft.vue'
 import MemberProfileRight from '../components/MemberProfileRight.vue'
 import DashboardTopBar from '../components/DashboardTopBar.vue'
@@ -61,15 +60,15 @@ onMounted(getAllUsers)
             <div class="dashboard-body d-flex flex-column h-100 py-3">
                 <h2>Member Profiles</h2>
 
-                    <div class="d-flex flex-row h-100">
-                        <div class="left pa-2">
-                            <MemberProfileLeft/>
-                        </div>
-
-                        <div class="right pa-2">
-                            <MemberProfileRight />
-                        </div>
+                <div class="d-flex flex-row h-100">
+                    <div class="left pa-2">
+                        <MemberProfileLeft />
                     </div>
+
+                    <div class="right pa-2">
+                        <MemberProfileRight />
+                    </div>
+                </div>
             </div>
         </div>
     </div>
