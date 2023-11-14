@@ -22,6 +22,7 @@ const form = ref(null)
 const errorMessage = ref('')
 const errorAlert = ref(false)
 const remember = ref(false)
+const showPassword = ref(false)
 
 // Define methods
 const logIn = async () => {
@@ -94,6 +95,9 @@ const logIn = async () => {
                             id="login-pw"
                             label="Password"
                             required
+                            :type="showPassword ? 'text' : 'password'"
+                            :append-inner-icon="showPassword ? 'mdi-eye-off' : 'mdi-eye'"
+                            @click:append-inner="showPassword = !showPassword"
                         />
 
                         <div class="remember-me-wrapper">
