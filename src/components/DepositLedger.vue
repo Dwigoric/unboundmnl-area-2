@@ -9,7 +9,7 @@ import { API_URL } from '../constants/api_url.js'
 
 // Import components
 import DepositEdit from '../components/DepositEdit.vue'
-import DepositAdd from '../components/DepositAdd.vue'
+import DepositLedgerAdd from '../components/DepositLedgerAdd.vue'
 
 // Define props for the component
 const props = defineProps({
@@ -19,7 +19,7 @@ const props = defineProps({
     }
 })
 
-// const data = ref([])
+const ledgerData = ref([])
 const popupData = ref([])
 const isAddPopupActive = ref(false) // for add transaction pop up
 const isPopupActive = ref(false) // for edit transaction pop up
@@ -54,11 +54,8 @@ const formattedApprovalDate = computed(() => {
     return depositApprovalDate.value.substring(0, 10)
 })
 
-// const formattedLoanAmount = ref(
-//     new Intl.NumberFormat('en-US', { style: 'currency', currency: 'PHP' }).format(loanAmount)
-// )
-
 const capitalLedgerColumns = [
+    { name: 'Transaction ID', hidden: true },
     { name: 'Date of Payment' },
     { name: 'GV/OR Number' },
     { name: 'Transaction Type' },
@@ -82,18 +79,13 @@ const capitalLedgerColumns = [
     }
 ]
 
-// capitalLedgerColumns.forEach((obj) => {
-//     obj['width'] = '18%'
-// })
-
 // Create a ref to hold new loanPaymentsTable template
 const capitalLedgerTable = ref()
 
 // Create a ref to hold new grid instance
 const capital = ref()
 
-// Ideally, we do a fetch request to the database to grab the data.
-onMounted(async () => {
+const getDepositInfo = async () => {
     // Fetch loan properties from the database by using the loanID property!
     const jsonRes = await fetch(`${API_URL}/deposits/get/${props.depositID}`, {
         method: 'GET',
@@ -112,17 +104,51 @@ onMounted(async () => {
         depositInterestRate.value = depositData.interestRate
     }
 
-    // IN THE FUTURE: DATA WILL DYNAMICALLY BE PASSED INTO THIS COMPONENT SOMEHOW
-    const data = Array.from({ length: 20 }, () =>
-        Array(9)
-            .fill(null)
-            .map(() => `Element`)
-    )
+    const ledgerRes = await fetch(`${API_URL}/deposits/${props.depositID}/ledger`, {
+        method: 'GET',
+        headers: {
+            Authorization: `Bearer ${window.$cookies.get('credentials').token}`
+        }
+    })
+
+    const ledgerJson = await ledgerRes.json()
+
+    ledgerData.value = ledgerJson.ledger.map((transaction) => {
+        return [
+            transaction.transactionID,
+            transaction.transactionDate.substring(0, 10),
+            transaction.ORNumber,
+            transaction.depositType,
+            transaction.amount,
+            transaction.interest,
+            transaction.balance,
+            transaction.submissionDate.substring(0, 10),
+            `${transaction.officerInCharge.last}, ${transaction.officerInCharge.given}`
+        ]
+    })
+}
+
+// rerender the table
+const rerenderTable = function () {
+    // can't do anything about the errors that show up when running this, it's a bug in gridjs
+    // https://github.com/grid-js/gridjs/issues/1291
+    capital.value
+        .updateConfig({
+            search: true,
+            pagination: true,
+            data: ledgerData.value
+        })
+        .forceRender()
+}
+
+// Ideally, we do a fetch request to the database to grab the data.
+onMounted(async () => {
+    await getDepositInfo()
 
     // Grid for all the loan's payments
     capital.value = new Grid({
         columns: capitalLedgerColumns,
-        data: data,
+        data: ledgerData.value,
         pagination: {
             limit: 10
         },
@@ -145,7 +171,7 @@ onMounted(async () => {
         }
     })
 
-    // Render loanPayments in corresponding reference
+    // Render capital in corresponding reference
     capital.value.render(capitalLedgerTable.value)
 })
 </script>
@@ -211,7 +237,16 @@ onMounted(async () => {
                         </VRow>
                     </VContainer>
 
-                    <DepositAdd />
+                    <DepositLedgerAdd
+                        :depositID="depositID"
+                        :onsubmit="
+                            async () => {
+                                await getDepositInfo()
+                                rerenderTable()
+                                isActive.value = false
+                            }
+                        "
+                    />
                 </VCard>
             </template>
         </VDialog>

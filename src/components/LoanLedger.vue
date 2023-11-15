@@ -110,7 +110,7 @@ const getLoanInfo = async () => {
     ledgerData.value = ledgerJson.ledger.map((transaction) => {
         return [
             transaction.transactionID,
-            transaction.paymentDate.substring(0, 10),
+            transaction.transactionDate.substring(0, 10),
             transaction.ORNumber,
             transaction.amountPaid,
             transaction.balance,

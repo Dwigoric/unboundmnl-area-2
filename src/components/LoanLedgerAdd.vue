@@ -33,7 +33,7 @@ const props = defineProps({
 
 const formData = reactive({
     ORNumber: '',
-    paymentDate: '',
+    transactionDate: '',
     submissionDate: formatDate(Date.now()),
     amountPaid: 0,
     balance: 0,
@@ -102,7 +102,7 @@ onMounted(async () => {
                     class="ml-3"
                     type="date"
                     label="* Date of Payment"
-                    v-model="formData.paymentDate"
+                    v-model="formData.transactionDate"
                     :rules="[rules.required]"
                 />
                 <VTextField
