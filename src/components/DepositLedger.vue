@@ -8,7 +8,7 @@ import 'gridjs/dist/theme/mermaid.css'
 import { API_URL } from '../constants/api_url.js'
 
 // Import components
-import DepositEdit from '../components/DepositEdit.vue'
+import DepositLedgerEdit from '../components/DepositLedgerEdit.vue'
 import DepositLedgerAdd from '../components/DepositLedgerAdd.vue'
 
 // Define props for the component
@@ -29,10 +29,8 @@ const setPopupAdd = () => {
     isAddPopupActive.value = true
 }
 
-const setPopupEdit = () => {
-    // if (data.value.length === 0) return
-
-    // popupData.value = data.value.find((loan) => loan[0] === loanId)
+const setPopupEdit = (data) => {
+    currentlyEditedTransactionID.value = data
     isPopupActive.value = true
 }
 
@@ -41,6 +39,8 @@ const depositOwner = ref('')
 const depositType = ref('')
 const depositApprovalDate = ref('')
 const depositInterestRate = ref(0)
+
+const currentlyEditedTransactionID = ref('')
 
 // Format the deposit amount to PHP standard
 const formattedDepositAmount = computed(() => {
@@ -269,7 +269,17 @@ onMounted(async () => {
                         </VRow>
                     </VContainer>
 
-                    <DepositEdit />
+                    <DepositLedgerEdit
+                        :depositID="depositID"
+                        :transactionID="currentlyEditedTransactionID"
+                        :onsubmit="
+                            async () => {
+                                await getDepositInfo()
+                                rerenderTable()
+                                isActive.value = false
+                            }
+                        "
+                    />
                 </VCard>
             </template>
         </VDialog>
