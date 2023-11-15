@@ -1,14 +1,19 @@
 <script setup>
-import { ref, onMounted, reactive, watch } from 'vue'
+import { ref, onMounted, reactive } from 'vue'
 import { API_URL } from '../constants'
 
 import 'gridjs/dist/theme/mermaid.css'
 
 // Define constants
 const rules = {
-    required: (v) => !!v || 'This field is required'
+    required: (v) => !!v || 'This field is required',
+    isOfficer: (v) => {
+        return (
+            officers.map((officer) => officer.title).includes(v.title) ||
+            'This field must be a valid officer'
+        )
+    }
 }
-
 const formatDate = function (date) {
     let year = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(date)
     let month = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(date)
@@ -61,23 +66,19 @@ const updateAutofill = async function () {
 
     const jsonData = await res.json()
 
-    console.log(jsonData)
     if (jsonData.error === false) {
         const transaction = jsonData.transaction
         transaction.transactionDate = transaction.transactionDate.substring(0, 10)
         transaction.submissionDate = transaction.submissionDate.substring(0, 10)
-        transaction.officerInCharge = `${transaction.officerInCharge.last}, ${transaction.officerInCharge.given}`
+
+        const transactionOfficer = transaction.officerInCharge
+        transaction.officerInCharge = {
+            title: `${transactionOfficer.last}, ${transactionOfficer.given}`,
+            value: transactionOfficer
+        }
         Object.assign(formData, transaction)
     }
 }
-
-watch(
-    () => props.transactionID,
-    async (newValue, oldValue) => {
-        updateAutofill()
-    },
-    { immediate: true }
-)
 
 const submit = async function () {
     const { valid } = await form.value.validate()
@@ -140,15 +141,7 @@ onMounted(async () => {
         })
     }
 
-    const transactionRes = await fetch(
-        `${API_URL}/deposits/${props.depositID}/ledger/${props.transactionID}`,
-        {
-            headers: {
-                Authorization: `Bearer ${window.$cookies.get('credentials').token}`
-            }
-        }
-    )
-    const transactionJson = await transactionRes.json()
+    updateAutofill()
 })
 </script>
 
@@ -207,7 +200,7 @@ onMounted(async () => {
                     label="* Officer in Charge"
                     :items="officers"
                     v-model="formData.officerInCharge"
-                    :rules="[rules.required]"
+                    :rules="[rules.required, rules.isOfficer]"
                 ></v-combobox>
             </div>
 

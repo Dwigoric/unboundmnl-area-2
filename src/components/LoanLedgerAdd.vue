@@ -6,7 +6,13 @@ import 'gridjs/dist/theme/mermaid.css'
 
 // Define constants
 const rules = {
-    required: (v) => !!v || 'This field is required'
+    required: (v) => !!v || 'This field is required',
+    isOfficer: (v) => {
+        return (
+            officers.map((officer) => officer.title).includes(v.title) ||
+            'This field must be a valid officer'
+        )
+    }
 }
 
 const formatDate = function (date) {
@@ -144,7 +150,7 @@ onMounted(async () => {
                     label="* Officer in Charge"
                     :items="officers"
                     v-model="formData.officerInCharge"
-                    :rules="[rules.required]"
+                    :rules="[rules.required, rules.isOfficer]"
                 ></v-combobox>
             </div>
 

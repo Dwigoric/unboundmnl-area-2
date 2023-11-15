@@ -42,7 +42,8 @@ const logout = () => {
                 <h1>CSVMC</h1>
             </div>
 
-            <v-list v-model:opened="open">
+            <!-- <v-list v-model:opened="open"> -->
+            <v-list>
                 <v-list-subheader class="mt-4 mb-n3 ml-n3"> LOANS </v-list-subheader>
 
                 <v-list-item
