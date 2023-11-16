@@ -52,8 +52,8 @@ const logout = () => {
                     prepend-icon="mdi-bank-transfer-out"
                     rounded="lg"
                     class="mt-1"
-                    >Loan Dashboard</v-list-item
-                >
+                    >Loan Dashboard
+                </v-list-item>
 
                 <v-list-item
                     to="/new-loan-application"
@@ -61,8 +61,8 @@ const logout = () => {
                     prepend-icon="mdi-file-sign"
                     rounded="lg"
                     class="mt-1"
-                    >New Loan Application</v-list-item
-                >
+                    >New Loan Application
+                </v-list-item>
 
                 <v-list-item
                     to="/loan-transaction"
@@ -70,8 +70,8 @@ const logout = () => {
                     prepend-icon="mdi-checkbook"
                     rounded="lg"
                     class="mt-1"
-                    >Enter Loan Transaction</v-list-item
-                >
+                    >Enter Loan Transaction
+                </v-list-item>
 
                 <v-list-item
                     to="/loan-status"
@@ -79,8 +79,8 @@ const logout = () => {
                     prepend-icon="mdi-list-status"
                     rounded="lg"
                     class="mt-1"
-                    >Loan Status</v-list-item
-                >
+                    >Pending Loans
+                </v-list-item>
 
                 <v-list-subheader class="mt-4 mb-n3 ml-n3"> DEPOSITS </v-list-subheader>
 
@@ -90,8 +90,8 @@ const logout = () => {
                     prepend-icon="mdi-bank-transfer-in"
                     rounded="lg"
                     class="mt-1"
-                    >Deposit Dashboard</v-list-item
-                >
+                    >Deposit Dashboard
+                </v-list-item>
 
                 <v-list-item
                     to="/enter-deposit"
@@ -99,8 +99,8 @@ const logout = () => {
                     prepend-icon="mdi-wallet-plus"
                     rounded="lg"
                     class="mt-1"
-                    >Enter Deposit</v-list-item
-                >
+                    >Enter Deposit
+                </v-list-item>
 
                 <v-list-subheader class="mt-4 mb-n3 ml-n3"> PROFILES </v-list-subheader>
 
@@ -110,8 +110,8 @@ const logout = () => {
                     prepend-icon="mdi-account-box"
                     rounded="lg"
                     class="mt-1"
-                    >Officer Profiles</v-list-item
-                >
+                    >Officer Profiles
+                </v-list-item>
 
                 <v-list-item
                     to="/member-profiles"
@@ -119,8 +119,8 @@ const logout = () => {
                     prepend-icon="mdi-account-supervisor-circle"
                     rounded="lg"
                     class="mt-1"
-                    >Member Profiles</v-list-item
-                >
+                    >Member Profiles
+                </v-list-item>
             </v-list>
 
             <template v-slot:append>
