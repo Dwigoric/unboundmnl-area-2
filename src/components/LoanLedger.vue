@@ -126,10 +126,14 @@ const getLoanInfo = async () => {
 const rerenderTable = function () {
     // can't do anything about the errors that show up when running this, it's a bug in gridjs
     // https://github.com/grid-js/gridjs/issues/1291
+    // Remove search and pagination plugins first
+    loanPayments.value.plugin.remove('pagination')
+    loanPayments.value.plugin.remove('search')
+
     loanPayments.value
         .updateConfig({
             search: true,
-            pagination: true,
+            pagination: { limit: 10 },
             data: ledgerData.value
         })
         .forceRender()
