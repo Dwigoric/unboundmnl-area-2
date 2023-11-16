@@ -1,29 +1,40 @@
 <script setup>
 // Import packages
-import { ref, onMounted } from 'vue'
-import { PDFDocument } from 'pdf-lib'
+import { ref, onMounted, onUnmounted } from 'vue'
+import { PDFDocument, TextAlignment } from 'pdf-lib'
 
 // Import constants
 import { API_URL, FILENAMES } from '../constants'
 
 // Import stores
 import { useApplicationFormStore } from '../stores/applicationForm'
+import { useMemberSearchStore } from '../stores/memberSearch'
 const appFormStore = useApplicationFormStore()
+const memberSearchStore = useMemberSearchStore()
 
 // Define reactive variables
 const pdfUrl = ref('')
 const errorAlert = ref(false)
 const errorMessage = ref('')
+const disableSubmit = ref(false)
 
 // Submit loan application
 const submit = async () => {
+    const credentials = window.$cookies.get('credentials')
+
+    if (!credentials || !credentials.token) {
+        errorAlert.value = true
+        errorMessage.value = 'You are not logged in.'
+        return false
+    }
+
     const { error, message } = await fetch(
-        `${API_URL}/loan-applications/${appFormStore.userData.username}`,
+        `${API_URL}/loans/new/${memberSearchStore.data.username}`,
         {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${window.$cookies.get('credentials').token}`
+                Authorization: `Bearer ${credentials.token}`
             },
             body: JSON.stringify(appFormStore.getLoanData())
         }
@@ -32,9 +43,12 @@ const submit = async () => {
     if (error) {
         errorAlert.value = true
         errorMessage.value = message
+        return false
     } else {
         errorAlert.value = false
         errorMessage.value = ''
+        disableSubmit.value = true
+        return true
     }
 }
 
@@ -61,93 +75,111 @@ const fetchPDF = async () => {
     form.getTextField('Date').setText(new Date().toLocaleDateString('en-PH', { dateStyle: 'long' }))
 
     // Set classification
-    if (loanData.classification === 'new') {
-        form.getCheckBox('New').check()
-    } else {
-        form.getCheckBox('Renewal').check()
-    }
+    form.getCheckBox({ new: 'New', renewal: 'Renewal' }[loanData.classification]).check()
 
     // Set term
-    form.getTextField('Term').setText(loanData.term)
+    const termTextField = form.getTextField('Term of Loan')
+    termTextField.setAlignment(TextAlignment.Center)
+    termTextField.setText(loanData.term)
 
     // Set amount
     form.getTextField('Amount').setText(loanData.amount.toLocaleString())
 
     // Set type of loan
-    switch (loanData.type) {
-        case 'education':
-            form.getCheckBox('Education').check()
-            break
-        case 'personal':
-            form.getCheckBox('Personal').check()
-            break
-        case 'micro':
-            form.getCheckBox('Micro').check()
-            break
-        case 'utilities':
-            form.getCheckBox('Utility').check()
-            break
-        case 'construction':
-            form.getCheckBox('House').check()
-            break
-        case 'emergency':
-            form.getCheckBox('Emergency').check()
-            break
-        case 'commodity':
-            form.getCheckBox('Commodity').check()
-            break
-    }
+    const loanTypes = Object.freeze({
+        emergency: 'Emergency',
+        'multi-purpose': 'Multi-Purpose',
+        educational: 'Educational',
+        'petty cash': 'Petty Cash',
+        commercial: 'Commercial',
+        livelihood: 'Livelihood'
+    })
+    form.getCheckBox(loanTypes[loanData.type]).check()
 
     // Set borrower's information
-    form.getTextField('Last Name').setText(appFormStore.userData.name.last)
-    form.getTextField('First Name').setText(appFormStore.userData.name.given)
-    form.getTextField('Middle Name').setText(appFormStore.userData.name.middle)
-    const birthday = new Date(appFormStore.userData.birthday)
+    form.getTextField('Surname').setText(memberSearchStore.data.name.last)
+    form.getTextField('Given Name').setText(memberSearchStore.data.name.given)
+    form.getTextField('Middle Name').setText(memberSearchStore.data.name.middle)
+    const birthday = new Date(memberSearchStore.data.birthday)
     form.getTextField('Date of Birth').setText(
         birthday.toLocaleDateString('en-PH', { dateStyle: 'long' })
     )
-    form.getTextField('Age').setText(
+    const ageTextField = form.getTextField('Age')
+    ageTextField.setAlignment(TextAlignment.Center)
+    ageTextField.setText(
         Math.abs(birthday.getUTCFullYear() - new Date().getUTCFullYear()).toLocaleString()
     )
-    form.getTextField('Place of Birth').setText(appFormStore.userData.birthplace)
-    if (appFormStore.userData.gender === 'M') form.getCheckBox('Male').check()
-    else form.getCheckBox('Female').check()
-    form.getTextField('Tin No').setText(appFormStore.userData.tin_no)
-    form.getTextField('Civil Status').setText(appFormStore.userData.civil_status)
-    form.getTextField('Contact No').setText(appFormStore.userData.contact_no)
-    form.getTextField('Address').setText(
+    form.getTextField('Place of Birth').setText(memberSearchStore.data.birthplace)
+    form.getCheckBox({ M: 'Male', F: 'Female' }[memberSearchStore.data.sex]).check()
+    const civilStatusTextField = form.getTextField('Civil Status')
+    civilStatusTextField.setAlignment(TextAlignment.Center)
+    civilStatusTextField.setText(memberSearchStore.data.civil_status)
+    form.getTextField('TIN').setText(memberSearchStore.data.tin_no)
+    const contactNumberTextField = form.getTextField('Contact No')
+    contactNumberTextField.setAlignment(TextAlignment.Center)
+    contactNumberTextField.setText(memberSearchStore.data.contact_no)
+    form.getTextField('Residence Address').setText(
         [
-            appFormStore.userData.address.street,
-            appFormStore.userData.address.barangay,
-            appFormStore.userData.address.city,
-            appFormStore.userData.address.province
+            memberSearchStore.data.address.street,
+            memberSearchStore.data.address.barangay,
+            memberSearchStore.data.address.city,
+            memberSearchStore.data.address.province
         ].join(', ')
     )
     form.getTextField('Monthly Income').setText(
-        appFormStore.userData.monthly_income.toLocaleString()
+        memberSearchStore.data.monthly_income.toLocaleString()
     )
-    form.getTextField('Source of Income').setText(appFormStore.userData.source_of_income)
+    form.getTextField('Source of Income').setText(memberSearchStore.data.occupation)
 
     // Set spouse's information
-    if (appFormStore.userData.civil_status === 'Married') {
-        form.getTextField('Spouse Last Name').setText(appFormStore.userData.spouse.name.last)
-        form.getTextField('Spouse First Name').setText(appFormStore.userData.spouse.name.given)
-        form.getTextField('Spouse Middle Name').setText(appFormStore.userData.spouse.name.middle)
-        const spouseBirthday = new Date(appFormStore.userData.spouse.birthday)
+    if (memberSearchStore.data.civil_status === 'Married') {
+        form.getTextField('Spouse Surname').setText(memberSearchStore.data.spouse.name.last)
+        form.getTextField('Spouse Given Name').setText(memberSearchStore.data.spouse.name.given)
+        form.getTextField('Spouse Middle Name').setText(memberSearchStore.data.spouse.name.middle)
+        const spouseBirthday = new Date(memberSearchStore.data.spouse.birthday)
         form.getTextField('Spouse Date of Birth').setText(
             spouseBirthday.toLocaleDateString('en-PH', { dateStyle: 'long' })
         )
-        form.getTextField('Spouse Age').setText(
+        const spouseAgeTextField = form.getTextField('Spouse Age')
+        spouseAgeTextField.setAlignment(TextAlignment.Center)
+        spouseAgeTextField.setText(
             Math.abs(spouseBirthday.getUTCFullYear() - new Date().getUTCFullYear()).toLocaleString()
         )
-        form.getTextField('Spouse Place of Birth').setText(appFormStore.userData.spouse.birthplace)
+        form.getTextField('Spouse Place of Birth').setText(memberSearchStore.data.spouse.birthplace)
         form.getTextField('Spouse Source of Income').setText(
-            appFormStore.userData.spouse.source_of_income
+            memberSearchStore.data.spouse.occupation
         )
-        form.getTextField('Spouse Contact No').setText(appFormStore.userData.spouse.contact_no)
+        const spouseContactNumberTextField = form.getTextField('Spouse Contact No')
+        spouseContactNumberTextField.setAlignment(TextAlignment.Center)
+        spouseContactNumberTextField.setText(memberSearchStore.data.spouse.contact_no)
     }
 
-    // TODO: Coborrower section
+    // Set coborrower information, if any
+    if (
+        Object.entries(loanData.coborrower.name).every(([, val]) => {
+            return val !== '' && val !== null
+        })
+    ) {
+        form.getTextField('Coborrower Surname').setText(loanData.coborrower.name.last)
+        form.getTextField('Coborrower Given Name').setText(loanData.coborrower.name.given)
+        form.getTextField('Coborrower Middle Name').setText(loanData.coborrower.name.middle)
+        const coborrowerBirthday = new Date(loanData.coborrower.birthday)
+        form.getTextField('Coborrower Date of Birth').setText(
+            coborrowerBirthday.toLocaleDateString('en-PH', { dateStyle: 'long' })
+        )
+        const coborrowerAgeTextField = form.getTextField('Coborrower Age')
+        coborrowerAgeTextField.setAlignment(TextAlignment.Center)
+        coborrowerAgeTextField.setText(
+            Math.abs(
+                coborrowerBirthday.getUTCFullYear() - new Date().getUTCFullYear()
+            ).toLocaleString()
+        )
+        form.getTextField('Coborrower Place of Birth').setText(loanData.coborrower.birthplace)
+        form.getTextField('Coborrower Source of Income').setText(loanData.coborrower.occupation)
+        const coborrowerContactNumberTextField = form.getTextField('Coborrower Contact No')
+        coborrowerContactNumberTextField.setAlignment(TextAlignment.Center)
+        coborrowerContactNumberTextField.setText(loanData.coborrower.contact_no)
+    }
 
     // Flatten form fields
     form.flatten()
@@ -160,26 +192,38 @@ const fetchPDF = async () => {
 
 // Define lifecycle hooks
 onMounted(fetchPDF)
+onUnmounted(() => {
+    URL.revokeObjectURL(pdfUrl.value)
+    appFormStore.reset()
+})
 </script>
 
 <template>
     <embed :src="pdfUrl" type="application/pdf" width="100%" height="720px" />
-    <VBtn :href="pdfUrl" download="Loan Application Form.pdf" class="bg-purple-darken-3">
-        Download application form as PDF
-    </VBtn>
-    <VBtn type="submit" class="bg-orange-darken-4" @click.prevent="submit">
-        Submit application form
-    </VBtn>
-    <VAlert
-        v-if="errorAlert"
-        v-model="errorAlert"
-        type="error"
-        closable=""
-        density="comfortable"
-        elevation="5"
-    >
-        {{ errorMessage }}
-    </VAlert>
+    <VContainer class="d-flex justify-end ga-3">
+        <VBtn :href="pdfUrl" download="Loan Application Form.pdf" class="bg-purple-darken-3">
+            Download application form as PDF
+        </VBtn>
+        <VBtn
+            type="submit"
+            class="bg-orange-darken-4"
+            @click.prevent="submit"
+            :disabled="disableSubmit"
+            prepend-icon="mdi-send"
+        >
+            {{ disableSubmit ? 'Form Submitted' : 'Submit application form' }}
+        </VBtn>
+        <VAlert
+            v-if="errorAlert"
+            v-model="errorAlert"
+            type="error"
+            closable=""
+            density="comfortable"
+            elevation="5"
+        >
+            {{ errorMessage }}
+        </VAlert>
+    </VContainer>
 </template>
 
 <style scoped></style>

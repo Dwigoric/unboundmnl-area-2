@@ -25,16 +25,25 @@ watch(
     (step) => {
         if (step === '1') {
             step1DotColor = 'var(--vt-c-blue-dark)'
+            step1Icon = 1
+            step2DotColor = 'var(--vt-c-blue)'
+            step2Icon = 2
+            step3DotColor = 'var(--vt-c-blue)'
+            step3Icon = 3
         } else if (step === '2') {
             step2DotColor = 'var(--vt-c-blue-dark)'
             step1DotColor = 'var(--vt-c-green)'
             step1Icon = 0
+            step2Icon = 2
+            step3DotColor = 'var(--vt-c-blue)'
+            step3Icon = 3
         } else if (step === '3') {
             step3DotColor = 'var(--vt-c-blue-dark)'
             step2DotColor = 'var(--vt-c-green)'
             step2Icon = 0
             step1DotColor = 'var(--vt-c-green)'
             step1Icon = 0
+            step3Icon = 3
         }
     }
 )
@@ -67,7 +76,7 @@ watch(
             <StepCounterTimelineItem
                 :dotColor="step3DotColor"
                 :icon="step3Icon"
-                :def="'Save and export form as PDF'"
+                :def="'Submit and Export Form as PDF'"
             >
             </StepCounterTimelineItem>
         </v-timeline>

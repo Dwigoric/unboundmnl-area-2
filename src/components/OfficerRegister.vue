@@ -29,6 +29,7 @@ const form = ref(null)
 const errorMessage = ref('')
 const errorAlert = ref(false)
 const submitBtnLoading = ref(false)
+const showPassword = ref(false)
 
 // Props
 const props = defineProps({
@@ -208,6 +209,9 @@ const createOfficer = async () => {
                             id="login-pw"
                             label="Enter Password"
                             required
+                            :type="showPassword ? 'text' : 'password'"
+                            :append-inner-icon="showPassword ? 'mdi-eye-off' : 'mdi-eye'"
+                            @click:append-inner="showPassword = !showPassword"
                         />
                     </div>
 

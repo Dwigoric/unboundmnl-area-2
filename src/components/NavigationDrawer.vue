@@ -29,66 +29,108 @@ const logout = () => {
 </script>
 
 <template>
-    <v-card class="mx-auto pa-5">
-        <v-layout>
-            <v-navigation-drawer
-                :width="330"
-                :margin="20"
-                class="navigation-drawer pa-md-4 elevation-9"
-                theme="dark"
-                permanent=""
-            >
-                <div class="navigation-title-box">
-                    <h1>CSVMC</h1>
+    <v-layout>
+        <v-navigation-drawer
+            :width="300"
+            :margin="20"
+            class="navigation-drawer pa-md-4"
+            theme="dark"
+            permanent=""
+        >
+            <div class="navigation-title-box">
+                <v-icon icon="../assets/logo.svg"></v-icon>
+                <h1>CSVMC</h1>
+            </div>
+
+            <!-- <v-list v-model:opened="open"> -->
+            <v-list>
+                <v-list-subheader class="mt-4 mb-n3 ml-n3"> LOANS </v-list-subheader>
+
+                <v-list-item
+                    to="/dashboard"
+                    link=""
+                    prepend-icon="mdi-bank-transfer-out"
+                    rounded="lg"
+                    class="mt-1"
+                    >Loan Dashboard</v-list-item
+                >
+
+                <v-list-item
+                    to="/new-loan-application"
+                    link=""
+                    prepend-icon="mdi-file-sign"
+                    rounded="lg"
+                    class="mt-1"
+                    >New Loan Application</v-list-item
+                >
+
+                <v-list-item
+                    to="/loan-transaction"
+                    link=""
+                    prepend-icon="mdi-checkbook"
+                    rounded="lg"
+                    class="mt-1"
+                    >Enter Loan Transaction</v-list-item
+                >
+
+                <v-list-item
+                    to="/loan-status"
+                    link=""
+                    prepend-icon="mdi-list-status"
+                    rounded="lg"
+                    class="mt-1"
+                    >Loan Status</v-list-item
+                >
+
+                <v-list-subheader class="mt-4 mb-n3 ml-n3"> DEPOSITS </v-list-subheader>
+
+                <v-list-item
+                    to="/deposit-dashboard"
+                    link=""
+                    prepend-icon="mdi-bank-transfer-in"
+                    rounded="lg"
+                    class="mt-1"
+                    >Deposit Dashboard</v-list-item
+                >
+
+                <v-list-item
+                    to="/enter-deposit"
+                    link=""
+                    prepend-icon="mdi-wallet-plus"
+                    rounded="lg"
+                    class="mt-1"
+                    >Enter Deposit</v-list-item
+                >
+
+                <v-list-subheader class="mt-4 mb-n3 ml-n3"> PROFILES </v-list-subheader>
+
+                <v-list-item
+                    to="/officer-profiles"
+                    link=""
+                    prepend-icon="mdi-account-box"
+                    rounded="lg"
+                    class="mt-1"
+                    >Officer Profiles</v-list-item
+                >
+
+                <v-list-item
+                    to="/member-profiles"
+                    link=""
+                    prepend-icon="mdi-account-supervisor-circle"
+                    rounded="lg"
+                    class="mt-1"
+                    >Member Profiles</v-list-item
+                >
+            </v-list>
+
+            <template v-slot:append>
+                <div class="pa-3">
+                    <v-btn class="logout-btn" block="" @click.prevent="logout"> Logout </v-btn>
                 </div>
-
-                <v-list>
-                    <v-list-item
-                        to="/dashboard"
-                        link=""
-                        prepend-icon="mdi-home-account"
-                        rounded="lg"
-                        class="mt-2"
-                        >Dashboard</v-list-item
-                    >
-
-                    <v-list-item
-                        to="/new-loan-application/member-input"
-                        link=""
-                        prepend-icon="mdi-file-document-edit-outline"
-                        rounded="lg"
-                        class="mt-2"
-                        >Create New Loan Application</v-list-item
-                    >
-
-                    <v-list-item
-                        to="/officer-profiles"
-                        link=""
-                        prepend-icon="mdi-account-box"
-                        rounded="lg"
-                        class="mt-2"
-                        >Officer Profiles</v-list-item
-                    >
-
-                    <v-list-item
-                        to="/member-profiles"
-                        link=""
-                        prepend-icon="mdi-magnify"
-                        rounded="lg"
-                        class="mt-2"
-                        >Member Profiles</v-list-item
-                    >
-                </v-list>
-
-                <template v-slot:append>
-                    <div class="pa-3">
-                        <v-btn class="logout-btn" block="" @click.prevent="logout"> Logout </v-btn>
-                    </div>
-                </template>
-            </v-navigation-drawer>
-            <v-main style="height: 94vh"></v-main>
-        </v-layout>
-    </v-card>
+            </template>
+        </v-navigation-drawer>
+        <v-main style="height: 94vh"></v-main>
+    </v-layout>
 </template>
 
 <style scoped>

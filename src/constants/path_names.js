@@ -3,5 +3,13 @@ export const PATH_NAMES = Object.freeze({
         MEMBER_INPUT: 'member-input',
         APPLICATION_DETAILS: 'application-details',
         EXPORT_FORM: 'export-form'
+    },
+    LOAN_TRANSACTIONS: {
+        MEMBER_INPUT: 'member-input',
+        TRANSACTION_DETAILS: 'transaction-details'
+    },
+    DEPOSIT_TRANSACTIONS: {
+        MEMBER_INPUT: 'member-input',
+        TRANSACTION_DETAILS: 'transaction-details'
     }
 })

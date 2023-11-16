@@ -1,14 +1,16 @@
 <script setup>
+// Packages
+import { watchDebounced } from '@vueuse/core'
+
 // Import vue components
 import NavigationDrawer from '../components/NavigationDrawer.vue'
-import UserProfile from '../components/UserProfile.vue'
-import NotificationBtn from '../components/NotificationBtn.vue'
 import ContentBlock from '../components/ContentBlock.vue'
 import MemberProfileRegister from '../components/MemberProfileRegister.vue'
 import UserProfileBtn from '../components/UserProfileBtn.vue'
+import DashboardTopBar from '../components/DashboardTopBar.vue'
 
 // Import Packages
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted } from 'vue'
 
 import { API_URL } from '../constants'
 
@@ -19,24 +21,32 @@ const users = ref([])
  * Grabs all officers registered in the database.
  */
 async function getAllUsers() {
-    const params = new URLSearchParams();
+    const credentials = window.$cookies.get('credentials')
+    if (!credentials) return
 
-    if (searchQuery.value === null) {
-        searchQuery.value = ''
+    const { token } = credentials
+    if (!token) return
+
+    let url = ''
+    const params = new URLSearchParams()
+    params.set('access_token', token)
+    if (searchQuery.value !== '') {
+        params.set('username', searchQuery.value)
+        url += `search?${params}`
+    } else {
+        url += `?${params}`
     }
-    params.set('username', searchQuery.value)
 
     try {
-        const response = await fetch(`${API_URL}/users/search?${params}`)
-        const jsonResponse = await response.json()
-        users.value = jsonResponse
+        const response = await fetch(`${API_URL}/users/${url}`)
+        users.value = await response.json()
     } catch (e) {
         console.error(e)
     }
 }
 
 // Refresh users listing when there is a change in the searchbar
-watch(searchQuery, getAllUsers)
+watchDebounced(searchQuery, getAllUsers, { debounce: 1000 })
 
 // Upon loading the page
 onMounted(getAllUsers)
@@ -47,18 +57,8 @@ onMounted(getAllUsers)
         <NavigationDrawer />
 
         <div class="d-flex flex-column w-100 pl-8">
-
             <!-- Top Bar of Dashboard -->
-            <div class="dashboard-top">
-                <div class="breadcrumbs-wrapper">
-                    <v-breadcrumbs :items="['Home', 'Member Profiles']"></v-breadcrumbs>
-                </div>
-
-                <div class="dashboard-top-right">
-                    <NotificationBtn />
-                    <UserProfile />
-                </div>
-            </div>
+            <DashboardTopBar :breadcrumbs="['Profiles', 'Member Profiles']" />
 
             <!-- Main Dashboard Body -->
             <div class="dashboard-body d-flex flex-column h-100 py-3">
@@ -67,46 +67,61 @@ onMounted(getAllUsers)
                 <div class="upper-wrapper">
                     <!-- Search bar -->
                     <div class="search-wrapper">
-                        <v-text-field v-model="searchQuery" prepend-inner-icon="mdi-magnify" label="Search Member"
-                            clearable />
+                        <v-text-field
+                            v-model="searchQuery"
+                            prepend-inner-icon="mdi-magnify"
+                            label="Search Member"
+                            clearable=""
+                        />
                     </div>
 
                     <div class="btn-wrapper">
                         <v-dialog width="1200">
                             <template v-slot:activator="{ props }">
-
                                 <!-- Create Member Profile Button -->
-                                <v-btn class="btn capitalize-text" v-bind="props" text="Create Member Profile">
+                                <v-btn
+                                    class="btn capitalize-text"
+                                    v-bind="props"
+                                    text="Create Member Profile"
+                                >
                                 </v-btn>
-
                             </template>
 
                             <!-- Form popup -->
                             <template v-slot:default="{ isActive }">
                                 <v-card close-on-back contained class="form-wrapper">
-
                                     <v-container>
                                         <v-row justify="end">
                                             <v-card-actions>
-                                                <v-btn class="ma-2 capitalize-text" color="var(--vt-c-blue)"
-                                                    @click="isActive.value = false" icon="mdi-close">
+                                                <v-btn
+                                                    class="ma-2 capitalize-text"
+                                                    color="var(--vt-c-blue)"
+                                                    @click="isActive.value = false"
+                                                    icon="mdi-close"
+                                                >
                                                 </v-btn>
                                             </v-card-actions>
                                         </v-row>
                                     </v-container>
 
-                                    <MemberProfileRegister :onsubmit="getAllUsers" />
-
+                                    <MemberProfileRegister
+                                        :onsubmit="
+                                            () => getAllUsers().then(() => (isActive.value = false))
+                                        "
+                                    />
                                 </v-card>
                             </template>
-
                         </v-dialog>
                     </div>
                 </div>
 
                 <ContentBlock :width="100" :height="102" :unit="'%'" :bg-color="'#FFF'">
                     <!-- List of members -->
-                    <div v-for="user in users" :key="user.username" class="officer-list-box d-flex flex-column">
+                    <div
+                        v-for="user in users"
+                        :key="user.username"
+                        class="officer-list-box d-flex flex-column"
+                    >
                         <UserProfileBtn :user="user" :onsubmit="getAllUsers" />
                     </div>
                 </ContentBlock>
@@ -114,8 +129,6 @@ onMounted(getAllUsers)
         </div>
     </div>
 </template>
-
-
 
 <style scoped>
 .dashboard-top {
@@ -177,7 +190,6 @@ onMounted(getAllUsers)
     cursor: pointer;
     text-transform: capitalize;
 }
-
 
 .btn:hover {
     background: var(--vt-c-blue-dark);

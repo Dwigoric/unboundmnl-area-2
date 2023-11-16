@@ -5,11 +5,10 @@ import jwt_decode from 'jwt-decode'
 
 // Import Components
 import NavigationDrawer from '../components/NavigationDrawer.vue'
-import UserProfile from '../components/UserProfile.vue'
-import NotificationBtn from '../components/NotificationBtn.vue'
 import ContentBlock from '../components/ContentBlock.vue'
 import OfficerRegister from '../components/OfficerRegister.vue'
 import OfficerProfileBtn from '../components/OfficerProfileBtn.vue'
+import DashboardTopBar from '../components/DashboardTopBar.vue'
 
 // Important Constants
 import { API_URL } from '../constants'
@@ -43,6 +42,11 @@ function addToOfficers(...newOfficers) {
     officers.push(...newOfficers)
 }
 
+function removeOfficer(officerUuid) {
+    const index = officers.findIndex((officer) => officer.uuid === officerUuid)
+    officers.splice(index, 1)
+}
+
 // Upon loading the page
 onMounted(getAllOfficers)
 </script>
@@ -53,32 +57,22 @@ onMounted(getAllOfficers)
 
         <div class="d-flex flex-column w-100 pl-8">
             <!-- Top Bar of Dashboard -->
-            <div class="dashboard-top">
-                <div class="breadcrumbs-wrapper">
-                    <v-breadcrumbs :items="['Home', 'Officer Profiles']"></v-breadcrumbs>
-                </div>
-
-                <div class="dashboard-top-right">
-                    <NotificationBtn />
-                    <UserProfile />
-                </div>
-            </div>
+            <DashboardTopBar :breadcrumbs="['Profiles', 'Officer Profiles']" />
 
             <!-- Main Dashboard Body -->
             <div class="dashboard-body d-flex flex-column h-100 py-3">
                 <h2>Officer Profiles</h2>
 
                 <div class="upper-wrapper">
-                    <!-- Search bar -->
-                    <div class="search-wrapper">
-                        <v-text-field prepend-inner-icon="mdi-magnify" label="Search Officer" clearable="" />
-                    </div>
-
                     <div class="btn-wrapper" v-if="type === 'admin'">
                         <v-dialog width="900">
                             <template v-slot:activator="{ props }">
                                 <!-- Create Officer Profile Button -->
-                                <v-btn class="btn capitalize-text" v-bind="props" text="Create Officer Profile">
+                                <v-btn
+                                    class="btn capitalize-text"
+                                    v-bind="props"
+                                    text="Create Officer Profile"
+                                >
                                 </v-btn>
                             </template>
 
@@ -88,16 +82,22 @@ onMounted(getAllOfficers)
                                     <v-container>
                                         <v-row justify="end">
                                             <v-card-actions>
-                                                <v-btn class="ma-2 capitalize-text" color="var(--vt-c-blue)"
-                                                    @click="isActive.value = false" icon="mdi-close">
+                                                <v-btn
+                                                    class="ma-2 capitalize-text"
+                                                    color="var(--vt-c-blue)"
+                                                    @click="isActive.value = false"
+                                                    icon="mdi-close"
+                                                >
                                                 </v-btn>
                                             </v-card-actions>
                                         </v-row>
                                     </v-container>
 
                                     <!-- TODO: officerAction must be 'Register' -->
-                                    <OfficerRegister :add-to-officers="addToOfficers"
-                                        :close-dialog="() => (isActive.value = false)" />
+                                    <OfficerRegister
+                                        :add-to-officers="addToOfficers"
+                                        :close-dialog="() => (isActive.value = false)"
+                                    />
                                 </v-card>
                             </template>
                         </v-dialog>
@@ -110,9 +110,15 @@ onMounted(getAllOfficers)
                 -->
                 <ContentBlock :width="100" :height="100" :unit="'%'" :bg-color="'#FFF'">
                     <!-- Render list of officers-->
-                    <div v-for="officer in officers" :key="officer.uuid" class="officer-list-box d-flex flex-column">
-                        <OfficerProfileBtn :givenName="officer.name.given" :lastName="officer.name.last"
-                            :username="officer.username" />
+                    <div
+                        v-for="officer in officers"
+                        :key="officer.uuid"
+                        class="officer-list-box d-flex flex-column"
+                    >
+                        <OfficerProfileBtn
+                            :officer="officer"
+                            :removeFunc="() => removeOfficer(officer.uuid)"
+                        />
                     </div>
                 </ContentBlock>
             </div>
@@ -148,7 +154,7 @@ onMounted(getAllOfficers)
 
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-end;
 
     /* border: 1px solid black; */
 }

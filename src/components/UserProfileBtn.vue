@@ -9,17 +9,19 @@ defineProps({
     },
     onsubmit: {
         type: Function,
-        default: () => (() => null)
+        default: () => () => null
     }
-});
+})
 </script>
 
 <template>
     <v-hover>
         <template v-slot:default="{ isHovering, props }">
-            <v-card class="officer-profile-btn w-100 d-flex align-center rounded-lg elevation-2 pa-2 mb-3" v-bind="props"
-                :color="isHovering ? 'rgba(239, 239, 239, 20)' : 'rgba(239, 239, 239, 0.525)'">
-
+            <v-card
+                class="officer-profile-btn w-100 d-flex align-center rounded-lg elevation-2 pa-2 mb-3"
+                v-bind="props"
+                :color="isHovering ? 'rgba(239, 239, 239, 20)' : 'rgba(239, 239, 239, 0.525)'"
+            >
                 <!-- Profile Picture -->
                 <div class="officer-icon-box">
                     <v-icon class="officer-icon w-100" icon="mdi-account-circle"></v-icon>
@@ -33,12 +35,15 @@ defineProps({
 
                 <!-- Actions -->
                 <div class="officer-actions-box ml-auto d-flex">
-
                     <!-- Update Officer Profile Button -->
                     <div class="updatebtn-wrapper">
                         <v-dialog width="900">
                             <template v-slot:activator="{ props }">
-                                <v-btn v-bind="props" icon="mdi-square-edit-outline" variant="plain">
+                                <v-btn
+                                    v-bind="props"
+                                    icon="mdi-square-edit-outline"
+                                    variant="plain"
+                                >
                                 </v-btn>
                             </template>
 
@@ -48,17 +53,27 @@ defineProps({
                                     <v-container>
                                         <v-row justify="end">
                                             <v-card-actions>
-                                                <v-btn class="ma-2 capitalize-text" color="var(--vt-c-blue)"
-                                                    @click="isActive.value = false" icon="mdi-close">
+                                                <v-btn
+                                                    class="ma-2 capitalize-text"
+                                                    color="var(--vt-c-blue)"
+                                                    @click="isActive.value = false"
+                                                    icon="mdi-close"
+                                                >
                                                 </v-btn>
                                             </v-card-actions>
                                         </v-row>
                                     </v-container>
 
-                                    <MemberProfileRegister :action="`update`" :autofill="user" :onsubmit="() => {
-                                        onsubmit()
-                                        isActive.value = false
-                                    }" />
+                                    <MemberProfileRegister
+                                        :action="`update`"
+                                        :autofill="user"
+                                        :onsubmit="
+                                            () => {
+                                                onsubmit()
+                                                isActive.value = false
+                                            }
+                                        "
+                                    />
                                 </v-card>
                             </template>
                         </v-dialog>
@@ -75,36 +90,51 @@ defineProps({
                             <!-- Form popup -->
                             <template v-slot:default="{ isActive }">
                                 <v-card close-on-back contained class="form-wrapper">
-
                                     <v-container>
                                         <div class="d-flex">
-
-                                            <v-icon icon="mdi-trash-can-outline" size="large" color="var(--vt-c-red)"
-                                                class="mt-6 ml-4" />
+                                            <v-icon
+                                                icon="mdi-trash-can-outline"
+                                                size="large"
+                                                color="var(--vt-c-red)"
+                                                class="mt-6 ml-4"
+                                            />
                                             <h1 class="mt-3 ml-2">Delete Profile</h1>
 
                                             <v-row justify="end">
-
                                                 <v-card-actions>
-                                                    <v-btn class="ma-2 capitalize-text" color="var(--vt-c-blue)"
-                                                        @click="isActive.value = false" icon="mdi-close">
+                                                    <v-btn
+                                                        class="ma-2 capitalize-text"
+                                                        color="var(--vt-c-blue)"
+                                                        @click="isActive.value = false"
+                                                        icon="mdi-close"
+                                                    >
                                                     </v-btn>
                                                 </v-card-actions>
-
                                             </v-row>
                                         </div>
-
                                     </v-container>
-                                    <DeletePrompt profileType="Member" :name="`${user.name.last}, ${user.name.given}`"
-                                        :identifier="user.username" :onsubmit="() => {
-                                            onsubmit()
-                                            isActive.value = false
-                                        }" />
-
+                                    <DeletePrompt
+                                        profileType="Member"
+                                        :name="`${user.name.last}, ${user.name.given}`"
+                                        :identifier="user.username"
+                                        :onsubmit="
+                                            () => {
+                                                onsubmit()
+                                                isActive.value = false
+                                            }
+                                        "
+                                    />
                                 </v-card>
                             </template>
                         </v-dialog>
                     </div>
+
+                    <v-btn
+                        icon="mdi-arrow-right-circle-outline"
+                        variant="plain"
+                        to="/member-profiles/profile-view"
+                    >
+                    </v-btn>
                 </div>
             </v-card>
         </template>
