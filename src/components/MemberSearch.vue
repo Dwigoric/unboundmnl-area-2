@@ -1,6 +1,7 @@
 <script setup>
 // Import packages
-import { ref } from 'vue'
+import { ref, reactive, watch } from 'vue'
+import { useDebounceFn } from '@vueuse/core'
 
 // Import router
 import router from '../router'
@@ -29,8 +30,10 @@ const props = defineProps({
 
 // Define reactive variables
 const searchUsername = ref(null)
+const user = ref(null)
 const errorAlert = ref(false)
 const errorMessage = ref('')
+const searchedMembers = reactive([])
 
 // Define methods
 const getUserData = async () => {
@@ -42,32 +45,58 @@ const getUserData = async () => {
 
     const credentials = window.$cookies.get('credentials')
 
-    if (!credentials) {
-        errorAlert.value = true
-        errorMessage.value = 'Please log in as officer to continue'
-        return
-    }
-
-    const { token } = credentials
-
-    if (!token) {
+    if (!credentials || !credentials.token) {
         errorAlert.value = true
         errorMessage.value = 'Please log in as officer to continue'
         return
     }
 
     const params = new URLSearchParams()
-    params.set('access_token', token)
-    params.set('username', searchUsername.value)
+    params.set('access_token', credentials.token)
+    params.set('username', user.value.username)
     const loanees = await fetch(`${API_URL}/users/search?${params}`).then((res) => res.json())
 
-    if (!loanees.length || loanees[0].username !== searchUsername.value) {
+    if (!loanees.length || loanees[0].username !== user.value.username) {
         errorAlert.value = true
         errorMessage.value = 'No user found with that username'
     } else {
         errorAlert.value = false
         errorMessage.value = ''
         memberSearchStore.setData(loanees[0])
+    }
+}
+
+const searchMember = async () => {
+    if (!searchUsername.value) return
+
+    const credentials = window.$cookies.get('credentials')
+
+    if (!credentials || !credentials.token) {
+        errorAlert.value = true
+        errorMessage.value = 'Please log in as officer to continue'
+        return
+    }
+
+    const params = new URLSearchParams()
+    params.set('access_token', credentials.token)
+    params.set('username', searchUsername.value)
+    const loanees = await fetch(`${API_URL}/users/search?${params}`).then((res) => res.json())
+
+    if (!loanees.length || loanees[0].username !== searchUsername.value) {
+        errorAlert.value = true
+        errorMessage.value = 'No user found with that username'
+        searchedMembers.splice(0, searchedMembers.length)
+    } else {
+        errorAlert.value = false
+        errorMessage.value = ''
+        searchedMembers.splice(
+            0,
+            searchedMembers.length,
+            ...loanees.slice(0, 5).map((loanee) => ({
+                name: `${loanee.name.last}, ${loanee.name.given}`,
+                username: loanee.username
+            }))
+        )
     }
 }
 
@@ -78,6 +107,13 @@ const sendToNext = async () => {
 
     router.push({ name: props.to })
 }
+
+// Lifecycle hooks
+const searchDebounce = useDebounceFn(searchMember, 2000)
+watch(searchUsername, () => {
+    searchedMembers.splice(0, searchedMembers.length)
+    searchDebounce()
+})
 </script>
 
 <template>
@@ -87,13 +123,28 @@ const sendToNext = async () => {
 
             <!-- Search bar -->
             <div class="search-wrapper">
-                <v-text-field
-                    v-model="searchUsername"
+                <VCombobox
+                    v-model="user"
+                    v-model:search="searchUsername"
+                    :items="searchedMembers"
+                    item-title="name"
+                    item-value="username"
                     prepend-inner-icon="mdi-magnify"
                     label="Search Member by Username"
                     clearable=""
-                    hide-details
-                />
+                    chips=""
+                    auto-select-first
+                >
+                    <template v-slot:no-data>
+                        <v-list-item>
+                            <v-list-item-title>
+                                No results matching "
+                                <strong>{{ searchUsername }}</strong>
+                                " were found.
+                            </v-list-item-title>
+                        </v-list-item>
+                    </template>
+                </VCombobox>
                 <VAlert
                     v-if="errorAlert"
                     v-model="errorAlert"
