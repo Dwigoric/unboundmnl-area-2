@@ -17,7 +17,7 @@ const currentUserStore = useCurrentUserStore()
             <p class="font-weight-bold name-text">
                 {{ currentUserStore.name.given }} {{ currentUserStore.name.last }}
             </p>
-            <p class="title-text">{{ currentUserStore.role }}</p>
+            <p class="title-text">{{ currentUserStore.role.toUpperCase() }}</p>
         </div>
     </div>
 </template>
@@ -30,7 +30,7 @@ const currentUserStore = useCurrentUserStore()
 }
 
 .user-avatar {
-    background-color: gray;
+    background-color: var(--vt-c-gray-dark);
 }
 
 .name-text {
@@ -40,5 +40,6 @@ const currentUserStore = useCurrentUserStore()
 
 .title-text {
     color: var(--vt-c-gray);
+    font-size: 0.9rem;
 }
 </style>
