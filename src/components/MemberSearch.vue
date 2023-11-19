@@ -37,7 +37,7 @@ const searchedMembers = reactive([])
 
 // Define methods
 const getUserData = async () => {
-    if (!searchUsername.value) {
+    if (!user.value) {
         errorAlert.value = true
         errorMessage.value = 'Please enter a username'
         return
@@ -53,10 +53,10 @@ const getUserData = async () => {
 
     const params = new URLSearchParams()
     params.set('access_token', credentials.token)
-    params.set('username', user.value.username)
+    params.set('username', user.value)
     const loanees = await fetch(`${API_URL}/users/search?${params}`).then((res) => res.json())
 
-    if (!loanees.length || loanees[0].username !== user.value.username) {
+    if (!loanees.length || loanees[0].username !== user.value) {
         errorAlert.value = true
         errorMessage.value = 'No user found with that username'
     } else {
@@ -111,6 +111,7 @@ const sendToNext = async () => {
 // Lifecycle hooks
 const searchDebounce = useDebounceFn(searchMember, 2000)
 watch(searchUsername, () => {
+    if (user.value !== null) return
     searchedMembers.splice(0, searchedMembers.length)
     searchDebounce()
 })
@@ -123,7 +124,7 @@ watch(searchUsername, () => {
 
             <!-- Search bar -->
             <div class="search-wrapper">
-                <VCombobox
+                <VAutocomplete
                     v-model="user"
                     v-model:search="searchUsername"
                     :items="searchedMembers"
@@ -132,7 +133,6 @@ watch(searchUsername, () => {
                     prepend-inner-icon="mdi-magnify"
                     label="Search Member by Username"
                     clearable=""
-                    chips=""
                     auto-select-first
                 >
                     <template v-slot:no-data>
@@ -144,7 +144,7 @@ watch(searchUsername, () => {
                             </v-list-item-title>
                         </v-list-item>
                     </template>
-                </VCombobox>
+                </VAutocomplete>
                 <VAlert
                     v-if="errorAlert"
                     v-model="errorAlert"
