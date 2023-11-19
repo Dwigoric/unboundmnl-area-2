@@ -134,7 +134,7 @@ watch(searchUsername, () => {
                     <template v-slot:no-data>
                         <VListItem>
                             <VListItemTitle v-if="!searchUsername">
-                                Enter a username to search for a member
+                                Enter a username or name to search for a member
                             </VListItemTitle>
                             <VListItemTitle v-else-if="!searching">
                                 No results matching "<strong>{{ searchUsername }}</strong
@@ -144,6 +144,12 @@ watch(searchUsername, () => {
                                 Searching for "<strong>{{ searchUsername }}</strong
                                 >"...
                             </VListItemTitle>
+                        </VListItem>
+                    </template>
+                    <template v-slot:item="{ item }">
+                        <VListItem>
+                            <VListItemTitle>{{ item.title }}</VListItemTitle>
+                            <VListItemSubtitle>{{ item.props.value }}</VListItemSubtitle>
                         </VListItem>
                     </template>
                 </VAutocomplete>
