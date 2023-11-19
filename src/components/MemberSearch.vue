@@ -31,6 +31,7 @@ const props = defineProps({
 // Define reactive variables
 const searchUsername = ref(null)
 const user = ref(null)
+const searching = ref(false)
 const errorAlert = ref(false)
 const errorMessage = ref('')
 const searchedMembers = reactive([])
@@ -82,22 +83,16 @@ const searchMember = async () => {
     params.set('username', searchUsername.value)
     const loanees = await fetch(`${API_URL}/users/search?${params}`).then((res) => res.json())
 
-    if (!loanees.length || loanees[0].username !== searchUsername.value) {
-        errorAlert.value = true
-        errorMessage.value = 'No user found with that username'
-        searchedMembers.splice(0, searchedMembers.length)
-    } else {
-        errorAlert.value = false
-        errorMessage.value = ''
-        searchedMembers.splice(
-            0,
-            searchedMembers.length,
-            ...loanees.slice(0, 5).map((loanee) => ({
-                name: `${loanee.name.last}, ${loanee.name.given}`,
-                username: loanee.username
-            }))
-        )
-    }
+    searchedMembers.splice(
+        0,
+        searchedMembers.length,
+        ...loanees.slice(0, 5).map((loanee) => ({
+            name: `${loanee.name.last}, ${loanee.name.given}`,
+            username: loanee.username
+        }))
+    )
+
+    searching.value = false
 }
 
 const sendToNext = async () => {
@@ -112,6 +107,7 @@ const sendToNext = async () => {
 const searchDebounce = useDebounceFn(searchMember, 2000)
 watch(searchUsername, () => {
     if (user.value !== null) return
+    searching.value = true
     searchedMembers.splice(0, searchedMembers.length)
     searchDebounce()
 })
@@ -136,13 +132,19 @@ watch(searchUsername, () => {
                     auto-select-first
                 >
                     <template v-slot:no-data>
-                        <v-list-item>
-                            <v-list-item-title>
-                                No results matching "
-                                <strong>{{ searchUsername }}</strong>
-                                " were found.
-                            </v-list-item-title>
-                        </v-list-item>
+                        <VListItem>
+                            <VListItemTitle v-if="!searchUsername">
+                                Enter a username to search for a member
+                            </VListItemTitle>
+                            <VListItemTitle v-else-if="!searching">
+                                No results matching "<strong>{{ searchUsername }}</strong
+                                >" were found.
+                            </VListItemTitle>
+                            <VListItemTitle v-else>
+                                Searching for "<strong>{{ searchUsername }}</strong
+                                >"...
+                            </VListItemTitle>
+                        </VListItem>
                     </template>
                 </VAutocomplete>
                 <VAlert
