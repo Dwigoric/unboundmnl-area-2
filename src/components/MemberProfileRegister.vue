@@ -451,6 +451,7 @@ onMounted(autofillFormIfPossible)
                             v-model="userData.spouse.name.given"
                             id="login-spouse-first-name"
                             label="Enter Spouse's First Name"
+                            :rules="[rules.required]"
                         />
                     </div>
 
@@ -477,6 +478,7 @@ onMounted(autofillFormIfPossible)
                             v-model="userData.spouse.name.last"
                             id="login-spouse-last-name"
                             label="Enter Spouse's Last Name"
+                            :rules="[rules.required]"
                         />
                     </div>
 
@@ -491,6 +493,7 @@ onMounted(autofillFormIfPossible)
                             id="login-spouse-birthday"
                             type="date"
                             label="Select Spouse's Date of Birth"
+                            :rules="[rules.required]"
                         />
                     </div>
 
@@ -504,6 +507,7 @@ onMounted(autofillFormIfPossible)
                             v-model="userData.spouse.birthplace"
                             id="login-spouse-birthplace"
                             label="Enter Spouse's Place of Birth"
+                            :rules="[rules.required]"
                         />
                     </div>
 
@@ -517,6 +521,7 @@ onMounted(autofillFormIfPossible)
                             v-model="userData.spouse.contact_no"
                             id="login-spouse-contact-number"
                             label="Enter Spouse's Contact Number"
+                            :rules="[rules.required]"
                         />
                     </div>
 
@@ -530,6 +535,7 @@ onMounted(autofillFormIfPossible)
                             v-model="userData.spouse.occupation"
                             id="login-spouse-occupation"
                             label="Enter Spouse's Occupation/Source of Income"
+                            :rules="[rules.required]"
                         />
                     </div>
                 </div>
