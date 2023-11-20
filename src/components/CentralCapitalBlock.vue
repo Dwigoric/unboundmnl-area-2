@@ -102,6 +102,8 @@ onMounted(async () => {
 
 <template>
     <div id="loan-status-wrapper" ref="depositsTable" class="w-90 px-4" />
+    <v-data-table :items="depositData">
+    </v-data-table>
 </template>
 
 <style>

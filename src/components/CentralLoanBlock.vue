@@ -49,7 +49,7 @@ onMounted(async () => {
         const resJson = await res.json()
         const rawLoanData = resJson.loans
         const loanData = rawLoanData.map((row) => {
-            return [row.loanID, row.username, row.loanType, row.originalLoanAmount]
+            return [row.loanID, row.username, row.loanType, row.originalLoanAmount, row.submissionDate]
         })
 
         loan.value = new Grid({
@@ -66,6 +66,15 @@ onMounted(async () => {
                         Intl.NumberFormat('en-US', { style: 'currency', currency: 'PHP' }).format(
                             Number(cell)
                         )
+                },
+                {   name: 'Due Date',
+                    formatter: (cell) => {
+                        const dueDate = new Date(cell);
+                        return dueDate.toLocaleDateString('en-US', {
+                            year: 'numeric',
+                            month: 'short',
+                            day: 'numeric'});
+                    }
                 },
                 {
                     name: 'View Loan Ledger',

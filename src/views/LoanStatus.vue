@@ -2,11 +2,8 @@
 // Import vue components
 import NavigationDrawer from '../components/NavigationDrawer.vue'
 import ContentBlock from '../components/ContentBlock.vue'
-import LoanLedger from '../components/LoanLedger.vue'
 import DashboardTopBar from '../components/DashboardTopBar.vue'
-
 import LoanStatusItem from '../components/LoanStatusItem.vue'
-import MemberProfileRegister from '../components/MemberProfileRegister.vue'
 </script>
 
 <template>

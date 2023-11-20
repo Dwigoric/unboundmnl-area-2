@@ -64,14 +64,14 @@ const logout = () => {
                     >New Loan Application
                 </v-list-item>
 
-                <v-list-item
+                <!-- <v-list-item
                     to="/loan-transaction"
                     link=""
                     prepend-icon="mdi-checkbook"
                     rounded="lg"
                     class="mt-1"
                     >Enter Loan Transaction
-                </v-list-item>
+                </v-list-item> -->
 
                 <v-list-item
                     to="/loan-status"
