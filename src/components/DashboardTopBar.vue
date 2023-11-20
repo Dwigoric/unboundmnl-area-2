@@ -19,7 +19,7 @@ defineProps({
         </div>
 
         <div class="dashboard-top-right">
-            <NotificationBtn />
+            <!-- <NotificationBtn /> -->
             <UserProfile />
         </div>
     </div>

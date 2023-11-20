@@ -7,13 +7,8 @@ const currentUserStore = useCurrentUserStore()
 </script>
 
 <template>
-    <div class="profile-box d-flex rounded-lg elevation-5 hover-scale-md">
-        <div class="d-flex justify-center align-center px-2">
-            <v-avatar class="user-avatar" size="large">
-                <v-icon icon="mdi-account"></v-icon>
-            </v-avatar>
-        </div>
-        <div class="d-flex flex-column px-2">
+    <div class="profile-box rounded-lg elevation-5 hover-scale-md pl-5 pr-5 pt-1 pb-1">
+        <div class="d-flex flex-column">
             <p class="font-weight-bold name-text">
                 {{ currentUserStore.name.given }} {{ currentUserStore.name.last }}
             </p>
@@ -25,8 +20,6 @@ const currentUserStore = useCurrentUserStore()
 <style scoped>
 .profile-box {
     background-color: var(--vt-c-white);
-    padding-top: 0.2%;
-    padding-bottom: 0.2%;
 }
 
 .user-avatar {
