@@ -87,13 +87,23 @@ const sendToNext = async () => {
 
             <!-- Search bar -->
             <div class="search-wrapper">
-                <v-text-field
+                <!-- <v-text-field
                     v-model="searchUsername"
                     prepend-inner-icon="mdi-magnify"
                     label="Search Member by Username"
                     clearable=""
                     hide-details
-                />
+                /> -->
+                <v-autocomplete
+                    v-model="searchUsername"
+                    :items="items"
+                    auto-select-first
+                    item-props
+                    menu-icon=""
+                    placeholder="Search Member by Username"
+                    prepend-inner-icon="mdi-magnify"
+                ></v-autocomplete>
+                
                 <VAlert
                     v-if="errorAlert"
                     v-model="errorAlert"
@@ -110,7 +120,7 @@ const sendToNext = async () => {
                     <template v-slot:activator="{ props }">
                         <!-- Create Member Profile Button -->
                         <v-btn
-                            class="capitalize-text mt-2"
+                            class="capitalize-text mt-n4"
                             v-bind="props"
                             variant="plain"
                             text="New Member? Click here to create Member Profile instead"

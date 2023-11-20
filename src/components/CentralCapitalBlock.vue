@@ -24,6 +24,7 @@ const props = defineProps({
 const deposit = ref()
 const depositsTable = ref()
 
+
 // Methods
 
 /**
@@ -101,7 +102,9 @@ onMounted(async () => {
 </script>
 
 <template>
-    <div id="loan-status-wrapper" ref="depositsTable" class="w-90 px-4" />
+    <!-- <div id="loan-status-wrapper" ref="depositsTable" class="w-90 px-4" /> -->
+    <v-data-table :items="depositData">
+    </v-data-table>
 </template>
 
 <style>

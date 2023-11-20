@@ -117,97 +117,99 @@ const changeLoanRange = function () {
             <h2>Nootnoot</h2>
         </div>
 
-        <div class="row-tab">
-            <div class="label">
-                <h3>Name</h3>
+        <div class="ml-9"> 
+            <div class="row-tab">
+                <div class="label">
+                    <h3>Name</h3>
+                </div>
             </div>
-        </div>
-        <div class="row-tab">
-            <div class="sub-label">Last</div>
-            <div class="field">Bantolino</div>
-        </div>
-        <div class="row-tab">
-            <div class="sub-label">First</div>
-            <div class="field">Jana Marie</div>
-        </div>
-        <div class="row-tab">
-            <div class="sub-label">Middle</div>
-            <div class="field">Salud</div>
-        </div>
-
-        <v-divider class="mt-2"></v-divider>
-
-        <div class="row-tab pt-2">
-            <div class="sub-label">Birthday</div>
-            <div class="field">09-05-2022</div>
-            <div class="ml-3">(MM-DD-YYYY)</div>
-        </div>
-
-        <div class="row-tab pt-2">
-            <div class="sub-label">Birthplace</div>
-            <div class="field">Manila</div>
-        </div>
-
-        <div class="row-tab pt-2">
-            <div class="sub-label">Gender</div>
-            <div class="field">F</div>
-        </div>
-
-        <div class="row-tab pt-2">
-            <div class="sub-label">Civil Status</div>
-            <div class="field">Widowed</div>
-        </div>
-
-        <div class="row-tab pt-2">
-            <div class="sub-label">Tin Number</div>
-            <div class="field">123-456-789</div>
-        </div>
-
-        <div class="row-tab pt-2">
-            <div class="sub-label">Occupation</div>
-            <div class="field">Penguin</div>
-        </div>
-
-        <v-divider class="mt-2"></v-divider>
-
-        <div class="row-tab pt-2">
-            <div class="label">
-                <h3>Address</h3>
+            <div class="row-tab">
+                <div class="sub-label">Last</div>
+                <div class="field">Bantolino</div>
             </div>
-        </div>
-        <div class="row-tab">
-            <div class="sub-label">Street</div>
-            <div class="field">304</div>
-        </div>
-        <div class="row-tab">
-            <div class="sub-label">Barangay</div>
-            <div class="field">Gov. A Santos Avenue</div>
-        </div>
-        <div class="row-tab">
-            <div class="sub-label">City</div>
-            <div class="field">Paranaque</div>
-        </div>
-        <div class="row-tab">
-            <div class="sub-label">Province</div>
-            <div class="field">NCR</div>
-        </div>
+            <div class="row-tab">
+                <div class="sub-label">First</div>
+                <div class="field">Jana Marie</div>
+            </div>
+            <div class="row-tab">
+                <div class="sub-label">Middle</div>
+                <div class="field">Salud</div>
+            </div>
 
-        <v-divider class="mt-2"></v-divider>
+            <v-divider class="mt-2"></v-divider>
 
-        <div class="row-tab pt-2">
-            <h3 class="label">Spouse</h3>
-        </div>
-        <div class="row-tab">
-            <div class="sub-label">Last</div>
-            <div class="field">Bantolino</div>
-        </div>
-        <div class="row-tab">
-            <div class="sub-label">First</div>
-            <div class="field">Jana Marie</div>
-        </div>
-        <div class="row-tab">
-            <div class="sub-label">Middle</div>
-            <div class="field">Salud</div>
+            <div class="row-tab pt-2">
+                <div class="sub-label">Birthday</div>
+                <div class="field">09-05-2022</div>
+                <div class="ml-3">(MM-DD-YYYY)</div>
+            </div>
+
+            <div class="row-tab pt-2">
+                <div class="sub-label">Birthplace</div>
+                <div class="field">Manila</div>
+            </div>
+
+            <div class="row-tab pt-2">
+                <div class="sub-label">Gender</div>
+                <div class="field">F</div>
+            </div>
+
+            <div class="row-tab pt-2">
+                <div class="sub-label">Civil Status</div>
+                <div class="field">Widowed</div>
+            </div>
+
+            <div class="row-tab pt-2">
+                <div class="sub-label">Tin Number</div>
+                <div class="field">123-456-789</div>
+            </div>
+
+            <div class="row-tab pt-2">
+                <div class="sub-label">Occupation</div>
+                <div class="field">Penguin</div>
+            </div>
+
+            <v-divider class="mt-2"></v-divider>
+
+            <div class="row-tab pt-2">
+                <div class="label">
+                    <h3>Address</h3>
+                </div>
+            </div>
+            <div class="row-tab">
+                <div class="sub-label">Street</div>
+                <div class="field">304</div>
+            </div>
+            <div class="row-tab">
+                <div class="sub-label">Barangay</div>
+                <div class="field">Gov. A Santos Avenue</div>
+            </div>
+            <div class="row-tab">
+                <div class="sub-label">City</div>
+                <div class="field">Paranaque</div>
+            </div>
+            <div class="row-tab">
+                <div class="sub-label">Province</div>
+                <div class="field">NCR</div>
+            </div>
+
+            <v-divider class="mt-2"></v-divider>
+
+            <div class="row-tab pt-2">
+                <h3 class="label">Spouse</h3>
+            </div>
+            <div class="row-tab">
+                <div class="sub-label">Last</div>
+                <div class="field">Bantolino</div>
+            </div>
+            <div class="row-tab">
+                <div class="sub-label">First</div>
+                <div class="field">Jana Marie</div>
+            </div>
+            <div class="row-tab">
+                <div class="sub-label">Middle</div>
+                <div class="field">Salud</div>
+            </div>
         </div>
         
     </ContentBlock>
