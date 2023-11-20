@@ -64,14 +64,6 @@ const loanRanges = {
     'petty cash': { min: 100, max: 1000 },
     commercial: { min: 100, max: 2500 },
     livelihood: { min: 100, max: 2500 }
-
-    // education: { min: 100, max: 5000 },
-    // personal: { min: 100, max: 2500 },
-    // micro: { min: 100, max: 1000 },
-    // utilities: { min: 100, max: 3000 },
-    // construction: { min: 100, max: 6000 },
-    // emergency: { min: 100, max: 7000 },
-    // commodity: { min: 100, max: 2500 }
 }
 
 // Define payment frequencies

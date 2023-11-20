@@ -1,6 +1,6 @@
 <script setup>
 // Import packages
-import { ref } from 'vue'
+import { ref, onMounted, reactive } from 'vue'
 
 // Import router
 import router from '../router'
@@ -31,6 +31,7 @@ const props = defineProps({
 const searchUsername = ref(null)
 const errorAlert = ref(false)
 const errorMessage = ref('')
+const usernames = ref([])
 
 // Define methods
 const getUserData = async () => {
@@ -59,7 +60,11 @@ const getUserData = async () => {
     const params = new URLSearchParams()
     params.set('access_token', token)
     params.set('username', searchUsername.value)
-    const loanees = await fetch(`${API_URL}/users/search?${params}`).then((res) => res.json())
+    const loanees = await fetch(`${API_URL}/users/search?${params}`, {
+        headers: {
+            Authorization: `Bearer ${window.$cookies.get('credentials').token}`
+        }
+    }).then((res) => res.json())
 
     if (!loanees.length || loanees[0].username !== searchUsername.value) {
         errorAlert.value = true
@@ -78,6 +83,16 @@ const sendToNext = async () => {
 
     router.push({ name: props.to })
 }
+
+onMounted(async () => {
+    const loanees = await fetch(`${API_URL}/users`, {
+        headers: {
+            Authorization: `Bearer ${window.$cookies.get('credentials').token}`
+        }
+    }).then((res) => res.json())
+
+    usernames.value = loanees.map((loanee) => loanee.username)
+})
 </script>
 
 <template>
@@ -96,14 +111,14 @@ const sendToNext = async () => {
                 /> -->
                 <v-autocomplete
                     v-model="searchUsername"
-                    :items="items"
+                    :items="usernames"
                     auto-select-first
                     item-props
                     menu-icon=""
                     placeholder="Search Member by Username"
                     prepend-inner-icon="mdi-magnify"
                 ></v-autocomplete>
-                
+
                 <VAlert
                     v-if="errorAlert"
                     v-model="errorAlert"
