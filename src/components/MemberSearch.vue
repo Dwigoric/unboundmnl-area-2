@@ -134,7 +134,7 @@ watch(searchUsername, () => {
                     <template v-slot:no-data>
                         <VListItem>
                             <VListItemTitle v-if="!searchUsername">
-                                Enter a username or name to search for a member
+                                
                             </VListItemTitle>
                             <VListItemTitle v-else-if="!searching">
                                 No results matching "<strong>{{ searchUsername }}</strong
@@ -164,7 +164,7 @@ watch(searchUsername, () => {
                     {{ errorMessage }}
                 </VAlert>
             </div>
-            <div class="create-member" v-if="canCreateNewMember">
+            <div class="create-member mt-n5" v-if="canCreateNewMember">
                 <v-dialog width="1200">
                     <template v-slot:activator="{ props }">
                         <!-- Create Member Profile Button -->

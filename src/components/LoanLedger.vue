@@ -201,7 +201,6 @@ onMounted(async () => {
                 </div>
 
                 <!-- TODO: Add Loan Approval Date -->
-                <!-- TODO: Add Coborrower Name -->
                 <!-- TODO: Add Mode of Payment -->
             </div>
         </div>

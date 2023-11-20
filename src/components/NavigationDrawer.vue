@@ -1,4 +1,6 @@
 <script setup>
+import IconLogo from '../components/IconLogo.vue'
+
 // Import packages
 import { storeToRefs } from 'pinia'
 
@@ -38,11 +40,10 @@ const logout = () => {
             permanent=""
         >
             <div class="navigation-title-box">
-                <!-- <v-icon icon="../assets/logo.svg"></v-icon> -->
+                <!-- <v-img src="../assets/logo-full.svg" class="h-25"></v-img> -->
                 <h1>CSVMC</h1>
             </div>
 
-            <!-- <v-list v-model:opened="open"> -->
             <v-list>
                 <v-list-subheader class="mt-4 mb-n3 ml-n3"> LOANS </v-list-subheader>
 
@@ -121,6 +122,18 @@ const logout = () => {
                     class="mt-1"
                     >Member Profiles
                 </v-list-item>
+
+                <v-list-subheader class="mt-4 mb-n3 ml-n3"> ADMIN </v-list-subheader>
+
+                <v-list-item
+                    to="/settings"
+                    link=""
+                    prepend-icon="mdi-cog"
+                    rounded="lg"
+                    class="mt-1"
+                    >Settings
+                </v-list-item>
+
             </v-list>
 
             <template v-slot:append>
