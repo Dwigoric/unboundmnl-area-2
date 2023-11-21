@@ -1,8 +1,11 @@
 <script setup>
-import { ref, onMounted, watch, reactive } from 'vue'
+import { ref, onMounted, watch, reactive, computed } from 'vue'
 import { API_URL } from '../constants'
 
 import 'gridjs/dist/theme/mermaid.css'
+
+// Import router
+import router from '../router'
 
 // Define constants
 const rules = {
@@ -34,6 +37,10 @@ const props = defineProps({
     onsubmit: {
         type: Function,
         default: () => () => null
+    },
+    currentBalance: {
+        type: Number,
+        default: 0
     }
 })
 
@@ -42,17 +49,24 @@ const formData = reactive({
     transactionDate: '',
     submissionDate: formatDate(Date.now()),
     amountPaid: 0,
-    balance: 0,
+    balance: props.currentBalance, // Is there a more elegant/dynamic way to update this? Maybe perform a fetch request?
     interestPaid: 0,
     finesPaid: 0,
     officerInCharge: ''
 })
+
+const newBalance = computed(() => {
+  return props.currentBalance - formData.amountPaid;
+});
 
 const officers = reactive([])
 
 const submit = async function () {
     const { valid } = await form.value.validate()
     if (!valid) return
+
+    // Update balance to match that of input
+    formData.balance = newBalance;
 
     const preprocessedFormData = { ...formData }
     preprocessedFormData.officerInCharge = { ...preprocessedFormData.officerInCharge.value }
@@ -77,6 +91,10 @@ const submit = async function () {
         errorAlert.value = false
         errorMessage.value = ''
         props.onsubmit()
+
+        // Then reload page to ensure that form saves new value
+        // Is there a more elegant way to do this? 
+        router.go();
         return true
     }
 }
@@ -124,7 +142,8 @@ onMounted(async () => {
                 label="Amount Paid"
                 v-model="formData.amountPaid"
             />
-            <VTextField class="ml-3" type="number" label="Balance" v-model="formData.balance" />
+            <!-- TODO: make this field hidden as well -->
+            <VTextField class="ml-3" type="number" label="Balance" disabled v-model="newBalance" />
             <VTextField
                 class="ml-3"
                 type="number"

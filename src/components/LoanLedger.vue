@@ -39,6 +39,7 @@ const loanee = ref('')
 const loanType = ref('')
 const loanTerm = ref(0)
 const loanPaymentFrequency = ref('')
+const totalAmountPaid = ref(0);
 
 // Format the loan amount to PHP standard
 const formattedLoanAmount = computed(() => {
@@ -53,6 +54,8 @@ const loanTransactionColumns = [
     { name: 'Transaction ID', hidden: true },
     { name: 'Date of Payment' },
     { name: 'GV/OR Number' },
+    //{ name: 'Total Amount Due' },
+    //{ name: 'Total Amount Paid' },
     { name: 'Amount Paid' },
     { name: 'Balance' },
     { name: 'Interest Paid' },
@@ -117,9 +120,24 @@ const getLoanInfo = async () => {
             transaction.interestPaid,
             transaction.finesPaid,
             transaction.submissionDate.substring(0, 10),
-            `${transaction.officerInCharge.last}, ${transaction.officerInCharge.given}`
+            `${transaction.officerInCharge.last}, ${transaction.officerInCharge.given}`,
+            // grab the field for fines due
         ]
     })
+}
+
+
+// Combines all the amounts paid for all the loan transactions
+function getTotalAmountPaid(ledgerTransactions) {
+    var totalAmountPaid = 0;
+    // For every transaction in the ledger, add its amount paid to a total sum
+
+    ledgerTransactions.forEach( transaction => {
+        let amountPaid = transaction[3]; // index for amount paid
+        totalAmountPaid += amountPaid;
+    });
+
+    return totalAmountPaid;
 }
 
 // rerender the table
@@ -172,6 +190,11 @@ onMounted(async () => {
 
     // Render loanPayments in corresponding reference
     loanPayments.value.render(loanPaymentsTable.value)
+    
+    // Call getTotalAmountPaid
+    totalAmountPaid.value = getTotalAmountPaid(ledgerData.value);
+    console.log(`HERE: ${totalAmountPaid.value}`);
+
 })
 </script>
 
@@ -179,7 +202,7 @@ onMounted(async () => {
     <div class="w-100">
         <div id="loan-info-wrapper" class="d-flex justify-space-between align-center">
             <div id="loan-amount-cell" class="h-75 w-30 pa-2">
-                <p class="font-weight-bold">Loan Amount:</p>
+                <p class="font-weight-bold">Original Loan Amount:</p>
                 <p class="loan-amount">{{ formattedLoanAmount }}</p>
             </div>
             <div class="d-flex justify-space-evenly align-center h-75 pa-2">
@@ -220,6 +243,8 @@ onMounted(async () => {
             Add New Transaction
         </VBtn>
 
+        <!-- ADD A "Mark Loan as Paid" button?? -->
+
         <!-- Form popup for ADD TRANSACTION -->
         <VDialog width="1000" v-model="isAddPopupActive">
             <template #default="{ isActive }">
@@ -247,6 +272,7 @@ onMounted(async () => {
                                 isActive.value = false
                             }
                         "
+                        :currentBalance="loanAmount - totalAmountPaid"
                     />
                 </VCard>
             </template>
@@ -333,6 +359,10 @@ onMounted(async () => {
 
 .gap-1 {
     gap: 1rem;
+}
+
+.gridjs-table{
+    min-width: 100%;
 }
 
 .gridjs-th {
