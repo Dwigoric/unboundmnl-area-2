@@ -1,6 +1,6 @@
 <script setup>
 // Import packages
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, computed, reactive } from 'vue'
 import { Grid, h } from 'gridjs'
 import 'gridjs/dist/theme/mermaid.css'
 
@@ -12,7 +12,6 @@ import LoanLedgerEdit from '../components/LoanLedgerEdit.vue'
 import LoanLedgerAdd from '../components/LoanLedgerAdd.vue'
 import LoanEdit from '../components/LoanDepositEdit.vue'
 import DeletePrompt from '../components/DeletePrompt.vue'
-
 
 // Define props for the component
 const props = defineProps({
@@ -37,17 +36,22 @@ const setPopupEdit = (data) => {
 }
 
 const currentlyEditedTransactionID = ref('')
-const loanAmount = ref(0)
-const loanee = ref('')
-const loanType = ref('')
-const loanTerm = ref(0)
-const loanPaymentFrequency = ref('')
-const totalAmountPaid = ref(0);
+
+const loanInfo = reactive({
+    amount: 0,
+    loanee: '',
+    type: '',
+    term: '',
+    paymentFrequency: '',
+    totalAmountPaid: 0,
+    coborrowerName: '',
+    approvalDate: ''
+})
 
 // Format the loan amount to PHP standard
 const formattedLoanAmount = computed(() => {
     return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'PHP' }).format(
-        loanAmount.value
+        loanInfo.amount
     )
 })
 
@@ -88,20 +92,30 @@ const loanPayments = ref()
 
 const getLoanInfo = async () => {
     // Fetch loan properties from the database by using the loanID property!
-    const loanInfoJSON = await fetch(`${API_URL}/loans/get/${props.loanID}`, {
+    const resJson = await fetch(`${API_URL}/loans/get/${props.loanID}`, {
         method: 'GET',
         headers: {
             Authorization: `Bearer ${window.$cookies.get('credentials').token}`
         }
     }).then((res) => res.json())
 
-    if (loanInfoJSON) {
-        const loanData = loanInfoJSON.loan
-        loanAmount.value = loanData.originalLoanAmount
-        loanee.value = loanData.username
-        loanType.value = LOAN_TYPES[loanData.loanType]
-        loanTerm.value = loanData.term
-        loanPaymentFrequency.value = loanData.paymentFrequency
+    if (resJson) {
+        console.log(resJson)
+
+        const loanData = resJson.loan
+        loanInfo.amount = loanData.originalLoanAmount
+        loanInfo.loanee = loanData.username
+        loanInfo.type = LOAN_TYPES[loanData.loanType]
+        loanInfo.term = loanData.term
+        loanInfo.paymentFrequency =
+            loanData.paymentFrequency.substring(0, 1).toUpperCase() +
+            loanData.paymentFrequency.substring(1)
+        loanInfo.approvalDate = loanData.approvalDate.substring(0, 10)
+        if (loanData.coborrower) {
+            loanInfo.coborrowerName = `${loanData.coborrower.name.last}, ${loanData.coborrower.name.given}`
+        } else {
+            loanInfo.coborrowerName = 'No coborrower'
+        }
     }
 
     const ledgerRes = await fetch(`${API_URL}/loans/${props.loanID}/ledger`, {
@@ -123,24 +137,23 @@ const getLoanInfo = async () => {
             transaction.interestPaid,
             transaction.finesPaid,
             transaction.submissionDate.substring(0, 10),
-            `${transaction.officerInCharge.last}, ${transaction.officerInCharge.given}`,
+            `${transaction.officerInCharge.last}, ${transaction.officerInCharge.given}`
             // grab the field for fines due
         ]
     })
 }
 
-
 // Combines all the amounts paid for all the loan transactions
 function getTotalAmountPaid(ledgerTransactions) {
-    var totalAmountPaid = 0;
+    var totalAmountPaid = 0
     // For every transaction in the ledger, add its amount paid to a total sum
 
-    ledgerTransactions.forEach( transaction => {
-        let amountPaid = transaction[3]; // index for amount paid
-        totalAmountPaid += amountPaid;
-    });
+    ledgerTransactions.forEach((transaction) => {
+        let amountPaid = transaction[3] // index for amount paid
+        totalAmountPaid += amountPaid
+    })
 
-    return totalAmountPaid;
+    return totalAmountPaid
 }
 
 // rerender the table
@@ -193,11 +206,10 @@ onMounted(async () => {
 
     // Render loanPayments in corresponding reference
     loanPayments.value.render(loanPaymentsTable.value)
-    
-    // Call getTotalAmountPaid
-    totalAmountPaid.value = getTotalAmountPaid(ledgerData.value);
-    console.log(`HERE: ${totalAmountPaid.value}`);
 
+    // Call getTotalAmountPaid
+    loanInfo.totalAmountPaid = getTotalAmountPaid(ledgerData.value)
+    console.log(`HERE: ${loanInfo.totalAmountPaid}`)
 })
 </script>
 
@@ -210,7 +222,7 @@ onMounted(async () => {
                 <p class="loan-amount mt-n3">{{ formattedLoanAmount }}</p>
                 <div class="d-flex flex-row">
                     <p>Loanee:</p>
-                    <p class="font-weight-bold ml-3">{{ loanee }}</p>
+                    <p class="font-weight-bold ml-3">{{ loanInfo.loanee }}</p>
                 </div>
                 <div class="d-flex flex-row">
                     <p>Loan ID:</p>
@@ -220,40 +232,41 @@ onMounted(async () => {
 
             <!-- Right -->
             <div class="d-flex flex-column align-end justify-space-between">
-                
                 <div class="d-flex justify-space-evenly align-center pa-2">
                     <div class="d-flex flex-column loan-info-cell grid-left-border h-100 px-4">
-                        <!-- TODO: Fill in the proper field -->
                         <p>Loan Approval Date:</p>
-                        <p class="loan-properties font-weight-bold mt-n2">{{ loanType }}</p>
+                        <p class="loan-properties font-weight-bold mt-n2">
+                            {{ loanInfo.approvalDate }}
+                        </p>
                     </div>
                     <div class="d-flex flex-column loan-info-cell grid-left-border h-100 px-4">
                         <p>Type of Loan:</p>
-                        <p class="loan-properties font-weight-bold mt-n2">{{ loanType }}</p>
+                        <p class="loan-properties font-weight-bold mt-n2">{{ loanInfo.type }}</p>
                     </div>
                     <div class="d-flex flex-column loan-info-cell grid-left-border h-100 px-4">
                         <p>Term of Loan:</p>
-                        <p class="loan-properties font-weight-bold mt-n2">{{ loanTerm }}</p>
+                        <p class="loan-properties font-weight-bold mt-n2">{{ loanInfo.term }}</p>
                     </div>
                     <div class="d-flex flex-column loan-info-cell grid-left-border h-100 px-4">
-                        <!-- TODO: Fill in the proper field -->
                         <p>Mode of Payment:</p>
-                        <p class="loan-properties font-weight-bold mt-n2">{{ loanTerm }}</p>
+                        <p class="loan-properties font-weight-bold mt-n2">
+                            {{ loanInfo.paymentFrequency }}
+                        </p>
                     </div>
                     <div class="d-flex flex-column loan-info-cell grid-left-border h-100 px-4">
-                        <!-- TODO: Fill in the proper field -->
                         <p>Coborrower Name:</p>
-                        <p class="loan-properties font-weight-bold mt-n2">{{ loanTerm }}</p>
+                        <p class="loan-properties font-weight-bold mt-n2">
+                            {{ loanInfo.coborrowerName }}
+                        </p>
                     </div>
                 </div>
-                
+
                 <div class="d-flex">
                     <!-- <p>Action buttons:</p> -->
 
                     <!-- Edit Loan -->
                     <v-dialog width="1200">
                         <template v-slot:activator="{ props }">
-                            
                             <v-btn
                                 prepend-icon="mdi-square-edit-outline"
                                 class="edit-loan-btn capitalize mr-2 text-white"
@@ -281,7 +294,6 @@ onMounted(async () => {
                                     </v-row>
                                 </v-container>
                                 <LoanEdit />
-
                             </v-card>
                         </template>
                     </v-dialog>
@@ -289,7 +301,6 @@ onMounted(async () => {
                     <!-- Delete Loan -->
                     <v-dialog width="600">
                         <template v-slot:activator="{ props }">
-                            
                             <v-btn
                                 prepend-icon="mdi-trash-can-outline"
                                 class="edit-loan-btn capitalize mr-2"
@@ -317,14 +328,11 @@ onMounted(async () => {
                                     </v-row>
                                 </v-container>
 
-                                <DeletePrompt
-                                        profileType="Member"
-                                />
+                                <DeletePrompt profileType="Member" />
                             </v-card>
                         </template>
                     </v-dialog>
                 </div>
-
             </div>
         </div>
 
@@ -454,14 +462,14 @@ onMounted(async () => {
 }
 
 .loan-properties {
-    font-size: 1.30em;
+    font-size: 1.3em;
 }
 
 .gap-1 {
     gap: 1rem;
 }
 
-.gridjs-table{
+.gridjs-table {
     min-width: 100%;
 }
 
