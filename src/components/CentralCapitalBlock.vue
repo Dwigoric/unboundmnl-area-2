@@ -23,6 +23,7 @@ const props = defineProps({
 // Reactive variables
 const deposit = ref()
 const depositsTable = ref()
+const rawDepositData = ref()
 
 // Methods
 
@@ -46,11 +47,13 @@ onMounted(async () => {
 
     if (res.status === 200) {
         const resJson = await res.json()
-        const rawDepositData = resJson.deposits
+        rawDepositData.value = resJson.deposits
 
-        const depositData = rawDepositData.map((row) => {
+        const depositData = rawDepositData.value.map((row) => {
             return [row.depositID, row.username, row.category, row.originalDepositAmount]
         })
+
+        console.log(rawDepositData)
 
         deposit.value = new Grid({
             columns: [
@@ -98,12 +101,35 @@ onMounted(async () => {
         deposit.value.render(depositsTable.value)
     }
 })
+
+const items = rawDepositData
 </script>
 
 <template>
     <div id="loan-status-wrapper" ref="depositsTable" class="w-90 px-4" />
-    <v-data-table :items="depositData">
+    <v-card>
+
+    <v-card-title class="d-flex align-center w-25">
+      <v-text-field
+        v-model="search"
+        prepend-inner-icon="mdi-magnify"
+        density="compact"
+        label="Search"
+        single-line
+        flat
+        hide-details
+        variant="solo-filled"
+      ></v-text-field>
+    </v-card-title>
+
+    <v-data-table 
+        :items="items"
+        hover
+        multi-sort
+        :search="search"
+        sticky>
     </v-data-table>
+    </v-card>
 </template>
 
 <style>
