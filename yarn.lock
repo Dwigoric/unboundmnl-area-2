@@ -3451,6 +3451,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"phil-reg-prov-mun-brgy@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "phil-reg-prov-mun-brgy@npm:1.1.0"
+  checksum: e3401c95479ac06eb0136b8908b123b45f6752d9ac59e79734678a3e8953ce10ac856abab4bee4094e0014cbf85370a2c7ccc8d8c7b2f2699e9ed94dc52a915f
+  languageName: node
+  linkType: hard
+
 "picocolors@npm:^1.0.0":
   version: 1.0.0
   resolution: "picocolors@npm:1.0.0"
@@ -4123,6 +4130,7 @@ __metadata:
     jwt-decode: "npm:3.x"
     nprogress: "npm:^0.2.0"
     pdf-lib: "npm:^1.17.1"
+    phil-reg-prov-mun-brgy: "npm:^1.1.0"
     pinia: "npm:^2.1.7"
     prettier: "npm:^3.1.0"
     vite: "npm:^4.5.0"

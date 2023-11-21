@@ -16,6 +16,7 @@
     "jwt-decode": "3.x",
     "nprogress": "^0.2.0",
     "pdf-lib": "^1.17.1",
+    "phil-reg-prov-mun-brgy": "^1.1.0",
     "pinia": "^2.1.7",
     "vite-plugin-vuetify": "^1.0.2",
     "vue": "^3.3.8",

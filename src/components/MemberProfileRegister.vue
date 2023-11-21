@@ -1,6 +1,12 @@
 <script setup>
 // Import packages
 import { ref, reactive, onMounted, watch } from 'vue'
+import {
+    regions,
+    getProvincesByRegion,
+    getCityMunByProvince,
+    getBarangayByMun
+} from 'phil-reg-prov-mun-brgy'
 
 // Import constants
 import { API_URL } from '../constants'
@@ -12,7 +18,6 @@ const form = ref(null)
 const loading = ref(false)
 const loadedLocations = ref(true)
 const locationsItems = reactive({
-    regions: [],
     provinces: [],
     cities: [],
     barangays: []
@@ -77,29 +82,6 @@ const props = defineProps({
         default: () => () => null
     }
 })
-
-// Methods
-const fetchLocations = async (endpoint, code) => {
-    const locationsApiUrl = 'https://ph-locations-api.buonzz.com/v1'
-
-    let pageDiff
-    let page = 1
-    const params = new URLSearchParams()
-    loadedLocations.value = false
-    do {
-        params.set('page', page)
-        const { data, pagination } = await fetch(`${locationsApiUrl}/${endpoint}?${params}`).then(
-            (res) => res.json()
-        )
-        pageDiff = pagination.lastPage - pagination.page
-        page++
-
-        if (code)
-            locationsItems[endpoint].push(...data.filter((item) => item[code.key] === code.id))
-        else locationsItems[endpoint].push(...data)
-    } while (pageDiff > 0)
-    loadedLocations.value = true
-}
 
 const submitForm = async function () {
     const { valid } = await form.value.validate()
@@ -217,26 +199,25 @@ const registerUser = async function () {
 
 // Lifecycle hooks
 onMounted(autofillFormIfPossible)
-onMounted(() => fetchLocations('regions'))
 watch(region, (newVal) => {
     locationsItems.provinces.splice(0, locationsItems.provinces.length)
-    const { id } = locationsItems.regions.find((item) => item.name === newVal)
-    if (newVal) fetchLocations('provinces', { key: 'region_code', id })
+    const { reg_code } = regions.find((item) => item.name === newVal)
+    locationsItems.provinces.push(...getProvincesByRegion(reg_code))
 })
 watch(
     () => userData.address.province,
     (newVal) => {
         locationsItems.cities.splice(0, locationsItems.cities.length)
-        const { id } = locationsItems.provinces.find((item) => item.name === newVal)
-        if (newVal) fetchLocations('cities', { key: 'province_code', id })
+        const { prov_code } = locationsItems.provinces.find((item) => item.name === newVal)
+        locationsItems.cities.push(...getCityMunByProvince(prov_code))
     }
 )
 watch(
     () => userData.address.city,
     (newVal) => {
         locationsItems.barangays.splice(0, locationsItems.barangays.length)
-        const { id } = locationsItems.cities.find((item) => item.name === newVal)
-        if (newVal) fetchLocations('barangays', { key: 'city_code', id })
+        const { mun_code } = locationsItems.cities.find((item) => item.name === newVal)
+        locationsItems.barangays.push(...getBarangayByMun(mun_code))
     }
 )
 </script>
@@ -446,7 +427,7 @@ watch(
                         :rules="[rules.required]"
                         label="Enter Region"
                         auto-select-first
-                        :items="locationsItems.regions"
+                        :items="regions"
                         item-title="name"
                         item-value="name"
                         :disabled="!loadedLocations"
