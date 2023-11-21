@@ -1,6 +1,6 @@
 <script setup>
 // Import packages
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, onMounted, watch } from 'vue'
 
 // Import constants
 import { API_URL } from '../constants'
@@ -10,6 +10,13 @@ const errorMessage = ref('')
 const errorAlert = ref(false)
 const form = ref(null)
 const loading = ref(false)
+const loadedLocations = ref(true)
+const locationsItems = reactive({
+    regions: [],
+    provinces: [],
+    cities: [],
+    barangays: []
+})
 
 // Define form fields
 const userData = reactive({
@@ -45,6 +52,7 @@ const userData = reactive({
         occupation: ''
     }
 })
+const region = ref(null)
 
 // Define constants
 const rules = {
@@ -71,6 +79,28 @@ const props = defineProps({
 })
 
 // Methods
+const fetchLocations = async (endpoint, code) => {
+    const locationsApiUrl = 'https://ph-locations-api.buonzz.com/v1'
+
+    let pageDiff
+    let page = 1
+    const params = new URLSearchParams()
+    loadedLocations.value = false
+    do {
+        params.set('page', page)
+        const { data, pagination } = await fetch(`${locationsApiUrl}/${endpoint}?${params}`).then(
+            (res) => res.json()
+        )
+        pageDiff = pagination.lastPage - pagination.page
+        page++
+
+        if (code)
+            locationsItems[endpoint].push(...data.filter((item) => item[code.key] === code.id))
+        else locationsItems[endpoint].push(...data)
+    } while (pageDiff > 0)
+    loadedLocations.value = true
+}
+
 const submitForm = async function () {
     const { valid } = await form.value.validate()
     if (!valid) return
@@ -185,7 +215,30 @@ const registerUser = async function () {
     return false
 }
 
+// Lifecycle hooks
 onMounted(autofillFormIfPossible)
+onMounted(() => fetchLocations('regions'))
+watch(region, (newVal) => {
+    locationsItems.provinces.splice(0, locationsItems.provinces.length)
+    const { id } = locationsItems.regions.find((item) => item.name === newVal)
+    if (newVal) fetchLocations('provinces', { key: 'region_code', id })
+})
+watch(
+    () => userData.address.province,
+    (newVal) => {
+        locationsItems.cities.splice(0, locationsItems.cities.length)
+        const { id } = locationsItems.provinces.find((item) => item.name === newVal)
+        if (newVal) fetchLocations('cities', { key: 'province_code', id })
+    }
+)
+watch(
+    () => userData.address.city,
+    (newVal) => {
+        locationsItems.barangays.splice(0, locationsItems.barangays.length)
+        const { id } = locationsItems.cities.find((item) => item.name === newVal)
+        if (newVal) fetchLocations('barangays', { key: 'city_code', id })
+    }
+)
 </script>
 
 <template>
@@ -383,59 +436,101 @@ onMounted(autofillFormIfPossible)
 
                 <div class="row-tab">
                     <div class="label">
-                        <div>* Street:</div>
+                        <div>* Region:</div>
                     </div>
 
-                    <VTextField
+                    <VAutocomplete
                         class="username-pw-input"
-                        v-model="userData.address.street"
-                        id="login-address-street"
+                        v-model="region"
+                        id="login-address-region"
                         :rules="[rules.required]"
-                        label="Enter Street"
+                        label="Enter Region"
+                        auto-select-first
+                        :items="locationsItems.regions"
+                        item-title="name"
+                        item-value="name"
+                        :disabled="!loadedLocations"
                     />
                 </div>
 
-                <div class="row-tab">
-                    <div class="label">
-                        <div>* Barangay:</div>
+                <VExpandTransition>
+                    <div class="row-tab" v-if="region">
+                        <div class="label">
+                            <div>* Province:</div>
+                        </div>
+
+                        <VAutocomplete
+                            class="username-pw-input"
+                            v-model="userData.address.province"
+                            id="login-address-province"
+                            :rules="[rules.required]"
+                            label="Enter Province"
+                            auto-select-first
+                            :items="locationsItems.provinces"
+                            item-title="name"
+                            item-value="name"
+                            :disabled="!loadedLocations"
+                        />
                     </div>
+                </VExpandTransition>
 
-                    <VTextField
-                        class="username-pw-input"
-                        v-model="userData.address.barangay"
-                        id="login-address-barangay"
-                        :rules="[rules.required]"
-                        label="Enter Barangay"
-                    />
-                </div>
+                <VExpandTransition>
+                    <div class="row-tab" v-if="userData.address.province">
+                        <div class="label">
+                            <div>* City:</div>
+                        </div>
 
-                <div class="row-tab">
-                    <div class="label">
-                        <div>* City:</div>
+                        <VAutocomplete
+                            class="username-pw-input"
+                            v-model="userData.address.city"
+                            id="login-address-city"
+                            :rules="[rules.required]"
+                            label="Enter City"
+                            auto-select-first
+                            :items="locationsItems.cities"
+                            item-title="name"
+                            item-value="name"
+                            :disabled="!loadedLocations"
+                        />
                     </div>
+                </VExpandTransition>
 
-                    <VTextField
-                        class="username-pw-input"
-                        v-model="userData.address.city"
-                        id="login-address-city"
-                        :rules="[rules.required]"
-                        label="Enter City"
-                    />
-                </div>
+                <VExpandTransition>
+                    <div class="row-tab" v-if="userData.address.city">
+                        <div class="label">
+                            <div>* Barangay:</div>
+                        </div>
 
-                <div class="row-tab">
-                    <div class="label">
-                        <div>* Province:</div>
+                        <VAutocomplete
+                            class="username-pw-input"
+                            v-model="userData.address.barangay"
+                            id="login-address-barangay"
+                            :rules="[rules.required]"
+                            label="Enter Barangay"
+                            auto-select-first
+                            :items="locationsItems.barangays"
+                            item-title="name"
+                            item-value="name"
+                            :disabled="!loadedLocations"
+                        />
                     </div>
+                </VExpandTransition>
 
-                    <VTextField
-                        class="username-pw-input"
-                        v-model="userData.address.province"
-                        id="login-address"
-                        :rules="[rules.required]"
-                        label="Enter Province"
-                    />
-                </div>
+                <VExpandTransition>
+                    <div class="row-tab" v-if="userData.address.barangay">
+                        <div class="label">
+                            <div>* Street:</div>
+                        </div>
+
+                        <VTextField
+                            class="username-pw-input"
+                            v-model="userData.address.street"
+                            id="login-address-street"
+                            :rules="[rules.required]"
+                            label="Enter Street"
+                        />
+                    </div>
+                </VExpandTransition>
 
                 <!-- Spouse's Information -->
                 <VExpandTransition>
