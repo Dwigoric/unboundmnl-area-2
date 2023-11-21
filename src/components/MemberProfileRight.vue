@@ -1,19 +1,17 @@
 <script setup>
 // Import packages
-import { ref, reactive } from 'vue'
+import { ref } from 'vue'
 
-// Import router
-import router from '../router'
-
-// Import constants
-import { API_URL, LOAN_TYPES } from '../constants'
-
-// Import stores
-import { useApplicationFormStore } from '../stores/applicationForm'
-const appFormStore = useApplicationFormStore()
-
+// Components
 import ContentBlock from '../components/ContentBlock.vue'
+import CentralLoanBlock from './CentralLoanBlock.vue'
+import CentralDepositBlock from './CentralCapitalBlock.vue'
 
+// Stores
+import { useProfileDataStore } from '../stores/profileData'
+const { profileData } = useProfileDataStore()
+
+// Reactive variables
 const tab = ref('loans')
 </script>
 
@@ -21,10 +19,7 @@ const tab = ref('loans')
     <!-- Details -->
     <ContentBlock :width="100" :height="100" :unit="'%'">
         <div class="d-flex flex-column mt-2">
-            <v-tabs
-                v-model="tab"
-                color="primary">
-
+            <v-tabs v-model="tab" color="primary">
                 <v-tab value="loans">
                     <div class="capitalize">Loans</div>
                 </v-tab>
@@ -37,19 +32,15 @@ const tab = ref('loans')
             <v-window v-model="tab" class="ml-5 mt-2">
                 <v-window-item value="loans">
                     <h3>Loans</h3>
-                    <!-- TODO: Add table here -->
+                    <CentralLoanBlock :username="profileData.username" />
                 </v-window-item>
 
                 <v-window-item value="deposits">
                     <h3>Deposits</h3>
-                    <!-- TODO: Add table here -->
+                    <CentralDepositBlock :username="profileData.username" />
                 </v-window-item>
-
-                
             </v-window>
-
         </div>
-
     </ContentBlock>
 </template>
 
