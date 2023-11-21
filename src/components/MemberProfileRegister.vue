@@ -438,108 +438,110 @@ onMounted(autofillFormIfPossible)
                 </div>
 
                 <!-- Spouse's Information -->
-                <div v-if="userData.civil_status === 'Married'">
-                    <div class="header2">Spouse's Information</div>
+                <VExpandTransition>
+                    <div v-if="userData.civil_status === 'Married'">
+                        <div class="header2">Spouse's Information</div>
 
-                    <div class="row-tab">
-                        <div class="label">
-                            <div>Spouse's First Name:</div>
+                        <div class="row-tab">
+                            <div class="label">
+                                <div>Spouse's First Name:</div>
+                            </div>
+
+                            <VTextField
+                                class="username-pw-input"
+                                v-model="userData.spouse.name.given"
+                                id="login-spouse-first-name"
+                                label="Enter Spouse's First Name"
+                                :rules="[rules.required]"
+                            />
                         </div>
 
-                        <VTextField
-                            class="username-pw-input"
-                            v-model="userData.spouse.name.given"
-                            id="login-spouse-first-name"
-                            label="Enter Spouse's First Name"
-                            :rules="[rules.required]"
-                        />
-                    </div>
+                        <div class="row-tab">
+                            <div class="label">
+                                <div>Spouse's Middle Name:</div>
+                            </div>
 
-                    <div class="row-tab">
-                        <div class="label">
-                            <div>Spouse's Middle Name:</div>
+                            <VTextField
+                                class="username-pw-input"
+                                v-model="userData.spouse.name.middle"
+                                id="login-spouse-middle-name"
+                                label="Enter Spouse's Middle Name"
+                                :rules="[rules.required]"
+                            />
                         </div>
 
-                        <VTextField
-                            class="username-pw-input"
-                            v-model="userData.spouse.name.middle"
-                            id="login-spouse-middle-name"
-                            label="Enter Spouse's Middle Name"
-                            :rules="[rules.required]"
-                        />
-                    </div>
+                        <div class="row-tab">
+                            <div class="label">
+                                <div>Spouse's Last Name:</div>
+                            </div>
 
-                    <div class="row-tab">
-                        <div class="label">
-                            <div>Spouse's Last Name:</div>
+                            <VTextField
+                                class="username-pw-input"
+                                v-model="userData.spouse.name.last"
+                                id="login-spouse-last-name"
+                                label="Enter Spouse's Last Name"
+                                :rules="[rules.required]"
+                            />
                         </div>
 
-                        <VTextField
-                            class="username-pw-input"
-                            v-model="userData.spouse.name.last"
-                            id="login-spouse-last-name"
-                            label="Enter Spouse's Last Name"
-                            :rules="[rules.required]"
-                        />
-                    </div>
+                        <div class="row-tab">
+                            <div class="label">
+                                <div>Spouse's Date of Birth:</div>
+                            </div>
 
-                    <div class="row-tab">
-                        <div class="label">
-                            <div>Spouse's Date of Birth:</div>
+                            <VTextField
+                                class="username-pw-input"
+                                v-model="userData.spouse.birthday"
+                                id="login-spouse-birthday"
+                                type="date"
+                                label="Select Spouse's Date of Birth"
+                                :rules="[rules.required]"
+                            />
                         </div>
 
-                        <VTextField
-                            class="username-pw-input"
-                            v-model="userData.spouse.birthday"
-                            id="login-spouse-birthday"
-                            type="date"
-                            label="Select Spouse's Date of Birth"
-                            :rules="[rules.required]"
-                        />
-                    </div>
+                        <div class="row-tab">
+                            <div class="label">
+                                <div>Spouse's Place of Birth:</div>
+                            </div>
 
-                    <div class="row-tab">
-                        <div class="label">
-                            <div>Spouse's Place of Birth:</div>
+                            <VTextField
+                                class="username-pw-input"
+                                v-model="userData.spouse.birthplace"
+                                id="login-spouse-birthplace"
+                                label="Enter Spouse's Place of Birth"
+                                :rules="[rules.required]"
+                            />
                         </div>
 
-                        <VTextField
-                            class="username-pw-input"
-                            v-model="userData.spouse.birthplace"
-                            id="login-spouse-birthplace"
-                            label="Enter Spouse's Place of Birth"
-                            :rules="[rules.required]"
-                        />
-                    </div>
+                        <div class="row-tab">
+                            <div class="label">
+                                <div>Spouse's Contact Number:</div>
+                            </div>
 
-                    <div class="row-tab">
-                        <div class="label">
-                            <div>Spouse's Contact Number:</div>
+                            <VTextField
+                                class="username-pw-input"
+                                v-model="userData.spouse.contact_no"
+                                id="login-spouse-contact-number"
+                                label="Enter Spouse's Contact Number"
+                                :rules="[rules.required]"
+                            />
                         </div>
 
-                        <VTextField
-                            class="username-pw-input"
-                            v-model="userData.spouse.contact_no"
-                            id="login-spouse-contact-number"
-                            label="Enter Spouse's Contact Number"
-                            :rules="[rules.required]"
-                        />
-                    </div>
+                        <div class="row-tab">
+                            <div class="label">
+                                <div>Spouse's Occupation/Source of Income:</div>
+                            </div>
 
-                    <div class="row-tab">
-                        <div class="label">
-                            <div>Spouse's Occupation/Source of Income:</div>
+                            <VTextField
+                                class="username-pw-input"
+                                v-model="userData.spouse.occupation"
+                                id="login-spouse-occupation"
+                                label="Enter Spouse's Occupation/Source of Income"
+                                :rules="[rules.required]"
+                            />
                         </div>
-
-                        <VTextField
-                            class="username-pw-input"
-                            v-model="userData.spouse.occupation"
-                            id="login-spouse-occupation"
-                            label="Enter Spouse's Occupation/Source of Income"
-                            :rules="[rules.required]"
-                        />
                     </div>
-                </div>
+                </VExpandTransition>
 
                 <VAlert
                     v-if="errorAlert"
