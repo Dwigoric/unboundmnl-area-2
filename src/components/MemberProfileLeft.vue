@@ -28,9 +28,9 @@ import ContentBlock from '../components/ContentBlock.vue'
                 <div class="sub-label">First</div>
                 <div class="field">{{ profileData.name.given }}</div>
             </div>
-            <div class="row-tab">
+            <div class="row-tab" v-if="profileData.name.middle">
                 <div class="sub-label">Middle</div>
-                <div class="field">{{ profileData.name.middle || '(None)' }}</div>
+                <div class="field">{{ profileData.name.middle }}</div>
             </div>
 
             <v-divider class="mt-2"></v-divider>
@@ -109,7 +109,7 @@ import ContentBlock from '../components/ContentBlock.vue'
                     <div class="sub-label">First</div>
                     <div class="field">{{ profileData.spouse.name.given }}</div>
                 </div>
-                <div class="row-tab">
+                <div class="row-tab" v-if="profileData.spouse.name.middle">
                     <div class="sub-label">Middle</div>
                     <div class="field">{{ profileData.spouse.name.middle }}</div>
                 </div>
