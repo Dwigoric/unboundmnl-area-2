@@ -59,6 +59,17 @@ const router = createRouter({
             }
         },
         {
+            path: '/member-profiles/:username',
+            name: 'Profile View',
+            component: MemberView,
+            props: true,
+            beforeEnter: (to, from, next) => {
+                const credentials = window.$cookies.get('credentials')
+                if (!credentials || !credentials.token) next({ name: 'Login' })
+                else next()
+            }
+        },
+        {
             path: '/officer-profiles',
             name: 'Officer Register',
             component: OfficerProfilesView,
@@ -211,17 +222,6 @@ const router = createRouter({
             path: '/deposit-ledger/:id',
             name: 'Deposit Ledger',
             component: DepositLedgerView,
-            props: true, // allows props to be passed
-            beforeEnter: (to, from, next) => {
-                const credentials = window.$cookies.get('credentials')
-                if (!credentials || !credentials.token) next({ name: 'Login' })
-                else next()
-            }
-        },
-        {
-            path: '/member-profiles/profile-view',
-            name: 'Profile View',
-            component: MemberView,
             props: true, // allows props to be passed
             beforeEnter: (to, from, next) => {
                 const credentials = window.$cookies.get('credentials')

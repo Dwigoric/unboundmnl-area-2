@@ -1,13 +1,41 @@
 <script setup>
+// Import Packages
+import { onMounted } from 'vue'
+
+// Project constants
+import { API_URL } from '../constants'
+
 // Import vue components
 import NavigationDrawer from '../components/NavigationDrawer.vue'
 import MemberProfileLeft from '../components/MemberProfileLeft.vue'
 import MemberProfileRight from '../components/MemberProfileRight.vue'
 import DashboardTopBar from '../components/DashboardTopBar.vue'
 
-// Import Packages
-import { ref, onMounted, watch } from 'vue'
+// Stores
+import { useProfileDataStore } from '../stores/profileData'
+const profileDataStore = useProfileDataStore()
 
+// Props
+const props = defineProps({
+    username: {
+        type: String,
+        required: true
+    }
+})
+
+// Lifecycle hooks
+onMounted(async () => {
+    if (profileDataStore.profileData.username) return
+
+    const { token } = window.$cookies.get('credentials')
+
+    const params = new URLSearchParams()
+    params.set('access_token', token)
+    params.set('username', props.username)
+    const users = await fetch(`${API_URL}/users/search?${params}`).then((res) => res.json())
+
+    profileDataStore.setProfileData(users[0])
+})
 </script>
 <template>
     <div class="bg-off-white d-flex px-4 py-2">

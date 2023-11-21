@@ -1,8 +1,17 @@
 <script setup>
+// Router
+import router from '../router'
+
+// Components
 import MemberProfileRegister from '../components/MemberProfileRegister.vue'
 import DeletePrompt from '../components/DeletePrompt.vue'
 
-defineProps({
+// Stores
+import { useProfileDataStore } from '../stores/profileData'
+const profileDataStore = useProfileDataStore()
+
+// Props
+const props = defineProps({
     user: {
         type: Object,
         required: true
@@ -12,6 +21,15 @@ defineProps({
         default: () => () => null
     }
 })
+
+// Methods
+const setUser = () => {
+    profileDataStore.setProfileData(props.user)
+    router.push({
+        name: 'Profile View',
+        params: { username: props.user.username }
+    })
+}
 </script>
 
 <template>
@@ -85,10 +103,7 @@ defineProps({
                     <div class="deletebtn-wrapper">
                         <v-dialog width="600">
                             <template v-slot:activator="{ props }">
-                                <v-btn 
-                                    v-bind="props" 
-                                    icon="mdi-trash-can-outline" 
-                                    variant="plain">
+                                <v-btn v-bind="props" icon="mdi-trash-can-outline" variant="plain">
                                 </v-btn>
                             </template>
 
@@ -96,18 +111,18 @@ defineProps({
                             <template v-slot:default="{ isActive }">
                                 <v-card close-on-back contained class="form-wrapper">
                                     <v-container>
-                                            <v-row justify="end">
-                                                <v-card-actions>
-                                                    <v-btn
-                                                        class="ma-2 capitalize-text"
-                                                        color="var(--vt-c-blue)"
-                                                        @click="isActive.value = false"
-                                                        icon="mdi-close"
-                                                    >
-                                                    </v-btn>
-                                                </v-card-actions>
-                                            </v-row>
-                                            <h2 class="ml-5">Delete Profile</h2>
+                                        <v-row justify="end">
+                                            <v-card-actions>
+                                                <v-btn
+                                                    class="ma-2 capitalize-text"
+                                                    color="var(--vt-c-blue)"
+                                                    @click="isActive.value = false"
+                                                    icon="mdi-close"
+                                                >
+                                                </v-btn>
+                                            </v-card-actions>
+                                        </v-row>
+                                        <h2 class="ml-5">Delete Profile</h2>
                                     </v-container>
                                     <DeletePrompt
                                         profileType="Member"
@@ -128,7 +143,7 @@ defineProps({
                     <v-btn
                         icon="mdi-arrow-right-circle-outline"
                         variant="plain"
-                        to="/member-profiles/profile-view"
+                        @click.prevent="setUser"
                     >
                     </v-btn>
                 </div>
