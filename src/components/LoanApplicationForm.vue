@@ -6,7 +6,7 @@ import { ref, reactive } from 'vue'
 import router from '../router'
 
 // Import constants
-import { LOAN_TYPES } from '../constants'
+import { LOAN_TYPES, PAYMENT_FREQUENCIES } from '../constants'
 
 // Import stores
 import { useApplicationFormStore } from '../stores/applicationForm'
@@ -73,13 +73,6 @@ const loanRanges = {
     // emergency: { min: 100, max: 7000 },
     // commodity: { min: 100, max: 2500 }
 }
-
-// Define payment frequencies
-const paymentFrequencies = [
-    { title: 'Daily', value: 'daily' },
-    { title: 'Weekly', value: 'weekly' },
-    { title: 'Monthly', value: 'monthly' }
-]
 
 // Define methods
 /**
@@ -157,7 +150,7 @@ const changeLoanRange = function () {
                     <VSelect
                         class="username-pw-input"
                         v-model="loanData.paymentFrequency"
-                        :items="paymentFrequencies"
+                        :items="PAYMENT_FREQUENCIES"
                         id="payment-frequency"
                         :rules="[rules.required]"
                         label="Mode of Repayment"

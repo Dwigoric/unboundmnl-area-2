@@ -22,22 +22,19 @@ const props = defineProps({
 })
 
 const ledgerData = ref([])
-const popupData = ref([])
 const isAddPopupActive = ref(false) // for add transaction pop up
 const isPopupActive = ref(false) // for edit transaction pop up
 
-const setPopupAdd = () => {
-    isAddPopupActive.value = true
-}
-
-const setPopupEdit = (data) => {
-    currentlyEditedTransactionID.value = data
-    isPopupActive.value = true
-}
-
 const currentlyEditedTransactionID = ref('')
 
-const loanInfo = reactive({
+// Create a ref to hold new loanPaymentsTable template
+const loanPaymentsTable = ref()
+
+// Create a ref to hold new grid instance
+const loanPayments = ref()
+const rawLoanData = ref()
+
+const formData = reactive({
     amount: 0,
     loanee: '',
     type: '',
@@ -45,17 +42,26 @@ const loanInfo = reactive({
     paymentFrequency: '',
     totalAmountPaid: 0,
     coborrowerName: '',
-    approvalDate: ''
+    approvalDate: '',
+    coborrower: {
+        name: {
+            given: '',
+            middle: '',
+            last: ''
+        },
+        birthday: '',
+        birthplace: '',
+        occupation: '',
+        contact_no: ''
+    }
 })
 
 // Format the loan amount to PHP standard
 const formattedLoanAmount = computed(() => {
     return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'PHP' }).format(
-        loanInfo.amount
+        formData.amount
     )
 })
-
-// TODO: loan mode of payment
 
 const loanTransactionColumns = [
     { name: 'Transaction ID', hidden: true },
@@ -84,11 +90,14 @@ const loanTransactionColumns = [
     }
 ]
 
-// Create a ref to hold new loanPaymentsTable template
-const loanPaymentsTable = ref()
+const setPopupAdd = () => {
+    isAddPopupActive.value = true
+}
 
-// Create a ref to hold new grid instance
-const loanPayments = ref()
+const setPopupEdit = (data) => {
+    currentlyEditedTransactionID.value = data
+    isPopupActive.value = true
+}
 
 const getLoanInfo = async () => {
     // Fetch loan properties from the database by using the loanID property!
@@ -103,18 +112,20 @@ const getLoanInfo = async () => {
         console.log(resJson)
 
         const loanData = resJson.loan
-        loanInfo.amount = loanData.originalLoanAmount
-        loanInfo.loanee = loanData.username
-        loanInfo.type = LOAN_TYPES[loanData.loanType]
-        loanInfo.term = loanData.term
-        loanInfo.paymentFrequency =
+        rawLoanData.value = loanData
+
+        formData.amount = loanData.originalLoanAmount
+        formData.loanee = loanData.username
+        formData.type = LOAN_TYPES[loanData.loanType]
+        formData.term = loanData.term
+        formData.paymentFrequency =
             loanData.paymentFrequency.substring(0, 1).toUpperCase() +
             loanData.paymentFrequency.substring(1)
-        loanInfo.approvalDate = loanData.approvalDate.substring(0, 10)
+        formData.approvalDate = loanData.approvalDate.substring(0, 10)
         if (loanData.coborrower) {
-            loanInfo.coborrowerName = `${loanData.coborrower.name.last}, ${loanData.coborrower.name.given}`
+            formData.coborrowerName = `${loanData.coborrower.name.last}, ${loanData.coborrower.name.given}`
         } else {
-            loanInfo.coborrowerName = 'No coborrower'
+            formData.coborrowerName = 'No coborrower'
         }
     }
 
@@ -208,8 +219,8 @@ onMounted(async () => {
     loanPayments.value.render(loanPaymentsTable.value)
 
     // Call getTotalAmountPaid
-    loanInfo.totalAmountPaid = getTotalAmountPaid(ledgerData.value)
-    console.log(`HERE: ${loanInfo.totalAmountPaid}`)
+    formData.totalAmountPaid = getTotalAmountPaid(ledgerData.value)
+    console.log(`HERE: ${formData.totalAmountPaid}`)
 })
 </script>
 
@@ -222,7 +233,7 @@ onMounted(async () => {
                 <p class="loan-amount mt-n3">{{ formattedLoanAmount }}</p>
                 <div class="d-flex flex-row">
                     <p>Loanee:</p>
-                    <p class="font-weight-bold ml-3">{{ loanInfo.loanee }}</p>
+                    <p class="font-weight-bold ml-3">{{ formData.loanee }}</p>
                 </div>
                 <div class="d-flex flex-row">
                     <p>Loan ID:</p>
@@ -236,27 +247,27 @@ onMounted(async () => {
                     <div class="d-flex flex-column loan-info-cell grid-left-border h-100 px-4">
                         <p>Loan Approval Date:</p>
                         <p class="loan-properties font-weight-bold mt-n2">
-                            {{ loanInfo.approvalDate }}
+                            {{ formData.approvalDate }}
                         </p>
                     </div>
                     <div class="d-flex flex-column loan-info-cell grid-left-border h-100 px-4">
                         <p>Type of Loan:</p>
-                        <p class="loan-properties font-weight-bold mt-n2">{{ loanInfo.type }}</p>
+                        <p class="loan-properties font-weight-bold mt-n2">{{ formData.type }}</p>
                     </div>
                     <div class="d-flex flex-column loan-info-cell grid-left-border h-100 px-4">
                         <p>Term of Loan:</p>
-                        <p class="loan-properties font-weight-bold mt-n2">{{ loanInfo.term }}</p>
+                        <p class="loan-properties font-weight-bold mt-n2">{{ formData.term }}</p>
                     </div>
                     <div class="d-flex flex-column loan-info-cell grid-left-border h-100 px-4">
                         <p>Mode of Payment:</p>
                         <p class="loan-properties font-weight-bold mt-n2">
-                            {{ loanInfo.paymentFrequency }}
+                            {{ formData.paymentFrequency }}
                         </p>
                     </div>
                     <div class="d-flex flex-column loan-info-cell grid-left-border h-100 px-4">
                         <p>Coborrower Name:</p>
                         <p class="loan-properties font-weight-bold mt-n2">
-                            {{ loanInfo.coborrowerName }}
+                            {{ formData.coborrowerName }}
                         </p>
                     </div>
                 </div>
@@ -293,7 +304,17 @@ onMounted(async () => {
                                         </v-card-actions>
                                     </v-row>
                                 </v-container>
-                                <LoanEdit />
+                                <LoanEdit
+                                    :loanID="loanID"
+                                    :autofill="rawLoanData"
+                                    :onsubmit="
+                                        async () => {
+                                            await getLoanInfo()
+                                            rerenderTable()
+                                            isActive.value = false
+                                        }
+                                    "
+                                />
                             </v-card>
                         </template>
                     </v-dialog>
