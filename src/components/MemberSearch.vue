@@ -133,7 +133,9 @@ watch(searchUsername, () => {
                 >
                     <template v-slot:no-data>
                         <VListItem>
-                            <VListItemTitle v-if="!searchUsername"> </VListItemTitle>
+                            <VListItemTitle v-if="!searchUsername">
+                                Enter the member's name or username to search for them...
+                            </VListItemTitle>
                             <VListItemTitle v-else-if="!searching">
                                 No results matching "<strong>{{ searchUsername }}</strong
                                 >" were found.
