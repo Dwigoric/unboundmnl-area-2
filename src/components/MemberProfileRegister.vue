@@ -611,8 +611,7 @@ onMounted(autofillFormIfPossible)
 
     font-size: 1.5rem;
     font-weight: bold;
-
-    text-align: center;
+    margin-left: 5%;
 }
 
 .header-text {

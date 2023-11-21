@@ -81,3 +81,7 @@ body {
 .capitalize {
     text-transform: capitalize;
 }
+
+.text-white {
+    color: var(--vt-c-white)
+}

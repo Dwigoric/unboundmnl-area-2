@@ -10,6 +10,9 @@ import { API_URL, LOAN_TYPES } from '../constants'
 // Import components
 import LoanLedgerEdit from '../components/LoanLedgerEdit.vue'
 import LoanLedgerAdd from '../components/LoanLedgerAdd.vue'
+import LoanEdit from '../components/LoanDepositEdit.vue'
+import DeletePrompt from '../components/DeletePrompt.vue'
+
 
 // Define props for the component
 const props = defineProps({
@@ -200,31 +203,128 @@ onMounted(async () => {
 
 <template>
     <div class="w-100">
-        <div id="loan-info-wrapper" class="d-flex justify-space-between align-center">
+        <div id="loan-info-wrapper" class="d-flex justify-space-between">
+            <!-- Left -->
             <div id="loan-amount-cell" class="h-75 w-30 pa-2">
-                <p class="font-weight-bold">Original Loan Amount:</p>
-                <p class="loan-amount">{{ formattedLoanAmount }}</p>
+                <p>Original Loan Amount:</p>
+                <p class="loan-amount mt-n3">{{ formattedLoanAmount }}</p>
+                <div class="d-flex flex-row">
+                    <p>Loanee:</p>
+                    <p class="font-weight-bold ml-3">{{ loanee }}</p>
+                </div>
+                <div class="d-flex flex-row">
+                    <p>Loan ID:</p>
+                    <p class="font-weight-bold ml-3">{{ loanID }}</p>
+                </div>
             </div>
-            <div class="d-flex justify-space-evenly align-center h-75 pa-2">
-                <div class="d-flex flex-column loan-info-cell grid-left-border h-100 px-2">
-                    <p class="font-weight-bold">Loanee:</p>
-                    <p class="loan-properties">{{ loanee }}</p>
+
+            <!-- Right -->
+            <div class="d-flex flex-column align-end justify-space-between">
+                
+                <div class="d-flex justify-space-evenly align-center pa-2">
+                    <div class="d-flex flex-column loan-info-cell grid-left-border h-100 px-4">
+                        <!-- TODO: Fill in the proper field -->
+                        <p>Loan Approval Date:</p>
+                        <p class="loan-properties font-weight-bold mt-n2">{{ loanType }}</p>
+                    </div>
+                    <div class="d-flex flex-column loan-info-cell grid-left-border h-100 px-4">
+                        <p>Type of Loan:</p>
+                        <p class="loan-properties font-weight-bold mt-n2">{{ loanType }}</p>
+                    </div>
+                    <div class="d-flex flex-column loan-info-cell grid-left-border h-100 px-4">
+                        <p>Term of Loan:</p>
+                        <p class="loan-properties font-weight-bold mt-n2">{{ loanTerm }}</p>
+                    </div>
+                    <div class="d-flex flex-column loan-info-cell grid-left-border h-100 px-4">
+                        <!-- TODO: Fill in the proper field -->
+                        <p>Mode of Payment:</p>
+                        <p class="loan-properties font-weight-bold mt-n2">{{ loanTerm }}</p>
+                    </div>
+                    <div class="d-flex flex-column loan-info-cell grid-left-border h-100 px-4">
+                        <!-- TODO: Fill in the proper field -->
+                        <p>Coborrower Name:</p>
+                        <p class="loan-properties font-weight-bold mt-n2">{{ loanTerm }}</p>
+                    </div>
                 </div>
-                <div class="d-flex flex-column loan-info-cell grid-left-border h-100 px-4">
-                    <p class="font-weight-bold">Loan ID:</p>
-                    <p class="loan-properties">{{ loanID }}</p>
-                </div>
-                <div class="d-flex flex-column loan-info-cell grid-left-border h-100 px-4">
-                    <p class="font-weight-bold">Type of Loan:</p>
-                    <p class="loan-properties">{{ loanType }}</p>
-                </div>
-                <div class="d-flex flex-column loan-info-cell grid-left-border h-100 px-4">
-                    <p class="font-weight-bold">Term of Loan:</p>
-                    <p class="loan-properties">{{ loanTerm }}</p>
+                
+                <div class="d-flex">
+                    <!-- <p>Action buttons:</p> -->
+
+                    <!-- Edit Loan -->
+                    <v-dialog width="1200">
+                        <template v-slot:activator="{ props }">
+                            
+                            <v-btn
+                                prepend-icon="mdi-square-edit-outline"
+                                class="edit-loan-btn capitalize mr-2 text-white"
+                                v-bind="props"
+                                text="Edit Loan"
+                                color="var(--vt-c-blue)"
+                            >
+                            </v-btn>
+                        </template>
+
+                        <!-- Form popup -->
+                        <template v-slot:default="{ isActive }">
+                            <v-card close-on-back contained class="form-wrapper">
+                                <v-container>
+                                    <v-row justify="end">
+                                        <v-card-actions>
+                                            <v-btn
+                                                class="ma-2 capitalize-text"
+                                                color="var(--vt-c-blue)"
+                                                @click="isActive.value = false"
+                                                icon="mdi-close"
+                                            >
+                                            </v-btn>
+                                        </v-card-actions>
+                                    </v-row>
+                                </v-container>
+                                <LoanEdit />
+
+                            </v-card>
+                        </template>
+                    </v-dialog>
+
+                    <!-- Delete Loan -->
+                    <v-dialog width="600">
+                        <template v-slot:activator="{ props }">
+                            
+                            <v-btn
+                                prepend-icon="mdi-trash-can-outline"
+                                class="edit-loan-btn capitalize mr-2"
+                                v-bind="props"
+                                text="Delete Loan"
+                                color="error"
+                            >
+                            </v-btn>
+                        </template>
+
+                        <!-- Form popup -->
+                        <template v-slot:default="{ isActive }">
+                            <v-card close-on-back contained class="form-wrapper">
+                                <v-container>
+                                    <v-row justify="end">
+                                        <v-card-actions>
+                                            <v-btn
+                                                class="ma-2 capitalize-text"
+                                                color="var(--vt-c-blue)"
+                                                @click="isActive.value = false"
+                                                icon="mdi-close"
+                                            >
+                                            </v-btn>
+                                        </v-card-actions>
+                                    </v-row>
+                                </v-container>
+
+                                <DeletePrompt
+                                        profileType="Member"
+                                />
+                            </v-card>
+                        </template>
+                    </v-dialog>
                 </div>
 
-                <!-- TODO: Add Loan Approval Date -->
-                <!-- TODO: Add Mode of Payment -->
             </div>
         </div>
 
@@ -354,7 +454,7 @@ onMounted(async () => {
 }
 
 .loan-properties {
-    font-size: 1.25rem;
+    font-size: 1.30em;
 }
 
 .gap-1 {

@@ -18,7 +18,7 @@ const props = defineProps({
     </div>
 </template>
 
-<style scope>
+<style scoped>
 
 .wrapper {
     border: 1px solid black;

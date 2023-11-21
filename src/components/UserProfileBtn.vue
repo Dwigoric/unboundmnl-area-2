@@ -51,17 +51,19 @@ defineProps({
                             <template v-slot:default="{ isActive }">
                                 <v-card close-on-back contained class="form-wrapper">
                                     <v-container>
-                                        <v-row justify="end">
-                                            <v-card-actions>
-                                                <v-btn
-                                                    class="ma-2 capitalize-text"
-                                                    color="var(--vt-c-blue)"
-                                                    @click="isActive.value = false"
-                                                    icon="mdi-close"
-                                                >
-                                                </v-btn>
-                                            </v-card-actions>
-                                        </v-row>
+                                        <div class="d-flex flex-row">
+                                            <v-row justify="end">
+                                                <v-card-actions>
+                                                    <v-btn
+                                                        class="ma-2 capitalize-text"
+                                                        color="var(--vt-c-blue)"
+                                                        @click="isActive.value = false"
+                                                        icon="mdi-close"
+                                                    >
+                                                    </v-btn>
+                                                </v-card-actions>
+                                            </v-row>
+                                        </div>
                                     </v-container>
 
                                     <MemberProfileRegister
@@ -83,7 +85,10 @@ defineProps({
                     <div class="deletebtn-wrapper">
                         <v-dialog width="600">
                             <template v-slot:activator="{ props }">
-                                <v-btn v-bind="props" icon="mdi-trash-can-outline" variant="plain">
+                                <v-btn 
+                                    v-bind="props" 
+                                    icon="mdi-trash-can-outline" 
+                                    variant="plain">
                                 </v-btn>
                             </template>
 
@@ -91,15 +96,6 @@ defineProps({
                             <template v-slot:default="{ isActive }">
                                 <v-card close-on-back contained class="form-wrapper">
                                     <v-container>
-                                        <div class="d-flex">
-                                            <v-icon
-                                                icon="mdi-trash-can-outline"
-                                                size="large"
-                                                color="var(--vt-c-red)"
-                                                class="mt-6 ml-4"
-                                            />
-                                            <h1 class="mt-3 ml-2">Delete Profile</h1>
-
                                             <v-row justify="end">
                                                 <v-card-actions>
                                                     <v-btn
@@ -111,7 +107,7 @@ defineProps({
                                                     </v-btn>
                                                 </v-card-actions>
                                             </v-row>
-                                        </div>
+                                            <h2 class="ml-5">Delete Profile</h2>
                                     </v-container>
                                     <DeletePrompt
                                         profileType="Member"

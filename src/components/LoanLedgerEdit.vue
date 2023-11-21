@@ -142,12 +142,10 @@ onMounted(async () => {
 <template>
     <h2 class="header-wrapper">Edit Transaction</h2>
     <div class="wrapper">
-        <h3 class="w-100 px-4 mb-3">Current Loan Data</h3>
-        <!-- TODO: Put current loan data table here; display the current so users have reference -->
         <div id="loan-ledger-wrapper" ref="loanLedgerRefTable" class="w-100 px-4"></div>
 
         <!-- Edit transaction form -->
-        <h3 class="w-100 px-4 mb-3 mt-5">Edit the data below</h3>
+        <h3 class="w-100 px-4 mb-5">Edit the data below</h3>
         <VForm id="loan-ledger-edit-form" ref="form">
             <div class="d-flex flex-row">
                 <VTextField
