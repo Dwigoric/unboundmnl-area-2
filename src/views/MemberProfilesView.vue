@@ -30,7 +30,7 @@ async function getAllUsers() {
     let url = ''
     const params = new URLSearchParams()
     params.set('access_token', token)
-    if (searchQuery.value !== '') {
+    if (searchQuery.value) {
         params.set('username', searchQuery.value)
         url += `search?${params}`
     } else {
