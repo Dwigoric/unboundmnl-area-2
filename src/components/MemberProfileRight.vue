@@ -14,19 +14,41 @@ const appFormStore = useApplicationFormStore()
 
 import ContentBlock from '../components/ContentBlock.vue'
 
+const tab = ref('loans')
 </script>
 
 <template>
     <!-- Details -->
     <ContentBlock :width="100" :height="100" :unit="'%'">
-        <v-tabs
-            v-model="tab"
-            slider-color="var(--vt-c-blue-dark)"
-            class="mt-1"
-        >
-            <v-tab href="#loan" class="capitalize mt-n1 mb-n1">Loans</v-tab>
-            <v-tab href="#deposit" class="capitalize mt-n1 mb-n1">Deposits</v-tab>
-        </v-tabs>
+        <div class="d-flex flex-column mt-2">
+            <v-tabs
+                v-model="tab"
+                color="primary">
+
+                <v-tab value="loans">
+                    <div class="capitalize">Loans</div>
+                </v-tab>
+
+                <v-tab value="deposits">
+                    <div class="capitalize">Deposits</div>
+                </v-tab>
+            </v-tabs>
+
+            <v-window v-model="tab" class="ml-5 mt-2">
+                <v-window-item value="loans">
+                    <h3>Loans</h3>
+                    <!-- TODO: Add table here -->
+                </v-window-item>
+
+                <v-window-item value="deposits">
+                    <h3>Deposits</h3>
+                    <!-- TODO: Add table here -->
+                </v-window-item>
+
+                
+            </v-window>
+
+        </div>
 
     </ContentBlock>
 </template>

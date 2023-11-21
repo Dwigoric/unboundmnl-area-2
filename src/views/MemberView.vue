@@ -8,46 +8,7 @@ import DashboardTopBar from '../components/DashboardTopBar.vue'
 // Import Packages
 import { ref, onMounted, watch } from 'vue'
 
-import { API_URL } from '../constants'
-
-const searchQuery = ref('')
-const users = ref([])
-
-/**
- * Grabs all officers registered in the database.
- */
-async function getAllUsers() {
-    const credentials = window.$cookies.get('credentials')
-    if (!credentials) return
-
-    const { token } = credentials
-    if (!token) return
-
-    let url = ''
-    const params = new URLSearchParams()
-    params.set('access_token', token)
-    if (searchQuery.value !== '') {
-        params.set('username', searchQuery.value)
-        url += `search?${params}`
-    } else {
-        url += `?${params}`
-    }
-
-    try {
-        const response = await fetch(`${API_URL}/users/${url}`)
-        users.value = await response.json()
-    } catch (e) {
-        console.error(e)
-    }
-}
-
-// Refresh users listing when there is a change in the searchbar
-watch(searchQuery, getAllUsers)
-
-// Upon loading the page
-onMounted(getAllUsers)
 </script>
-
 <template>
     <div class="bg-off-white d-flex px-4 py-2">
         <NavigationDrawer />
