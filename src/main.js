@@ -11,6 +11,7 @@ import router from './router'
 import './assets/base.css'
 import 'vuetify/lib/styles/main.css'
 import '@mdi/font/css/materialdesignicons.css'
+import 'nprogress/nprogress.css'
 
 // Build the app
 const app = createApp(App)

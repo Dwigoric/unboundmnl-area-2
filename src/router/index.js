@@ -1,5 +1,6 @@
 // Import packages
 import { createRouter, createWebHistory } from 'vue-router'
+import NProgress from 'nprogress'
 
 // Import view components
 import LoginView from '../views/LoginView.vue'
@@ -240,6 +241,17 @@ const router = createRouter({
             }
         }
     ]
+})
+
+router.beforeEach(async (to, from, next) => {
+    // eslint-disable-next-line no-undef
+    NProgress.start()
+    next()
+})
+
+router.afterEach(() => {
+    // eslint-disable-next-line no-undef
+    NProgress.done()
 })
 
 export default router
