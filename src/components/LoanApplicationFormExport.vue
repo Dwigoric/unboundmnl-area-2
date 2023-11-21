@@ -17,6 +17,7 @@ const pdfUrl = ref('')
 const errorAlert = ref(false)
 const errorMessage = ref('')
 const disableSubmit = ref(false)
+const loading = ref(false)
 
 // Submit loan application
 const submit = async () => {
@@ -27,6 +28,8 @@ const submit = async () => {
         errorMessage.value = 'You are not logged in.'
         return false
     }
+
+    loading.value = true
 
     const { error, message } = await fetch(
         `${API_URL}/loans/new/${memberSearchStore.data.username}`,
@@ -39,6 +42,8 @@ const submit = async () => {
             body: JSON.stringify(appFormStore.getLoanData())
         }
     ).then((res) => res.json())
+
+    loading.value = false
 
     if (error) {
         errorAlert.value = true
@@ -207,6 +212,7 @@ onUnmounted(() => {
         <VBtn
             type="submit"
             class="bg-orange-darken-4"
+            :loading="loading"
             @click.prevent="submit"
             :disabled="disableSubmit"
             prepend-icon="mdi-send"

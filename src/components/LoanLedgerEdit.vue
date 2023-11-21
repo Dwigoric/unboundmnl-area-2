@@ -24,6 +24,7 @@ const formatDate = function (date) {
 const form = ref(null)
 const errorAlert = ref(false)
 const errorMessage = ref('')
+const loading = ref(false)
 
 const props = defineProps({
     loanID: {
@@ -81,6 +82,8 @@ const submit = async function () {
     const { valid } = await form.value.validate()
     if (!valid) return
 
+    loading.value = true
+
     const preprocessedFormData = { ...formData }
     if (
         typeof preprocessedFormData.officerInCharge === 'string' ||
@@ -107,6 +110,8 @@ const submit = async function () {
         })
     })
     const { error, message } = await res.json()
+
+    loading.value = false
 
     if (error) {
         errorAlert.value = true
@@ -200,7 +205,12 @@ onMounted(async () => {
             </div>
 
             <div class="btn-wrapper">
-                <VBtn prepend-icon="mdi-check" class="capitalize btn" @click.prevent="submit">
+                <VBtn
+                    prepend-icon="mdi-check"
+                    class="capitalize btn"
+                    :loading="loading"
+                    @click.prevent="submit"
+                >
                     Submit
                 </VBtn>
             </div>

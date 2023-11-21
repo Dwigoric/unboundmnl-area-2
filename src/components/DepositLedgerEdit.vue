@@ -24,6 +24,7 @@ const formatDate = function (date) {
 const form = ref(null)
 const errorAlert = ref(false)
 const errorMessage = ref('')
+const loading = ref(false)
 
 const props = defineProps({
     depositID: {
@@ -84,6 +85,8 @@ const submit = async function () {
     const { valid } = await form.value.validate()
     if (!valid) return
 
+    loading.value = true
+
     const preprocessedFormData = { ...formData }
     if (
         typeof preprocessedFormData.officerInCharge === 'string' ||
@@ -113,6 +116,8 @@ const submit = async function () {
         }
     )
     const { error, message } = await res.json()
+
+    loading.value = false
 
     if (error) {
         errorAlert.value = true

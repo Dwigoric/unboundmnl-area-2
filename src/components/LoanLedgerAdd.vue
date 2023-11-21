@@ -28,7 +28,9 @@ const formatDate = function (date) {
 const form = ref(null)
 const errorAlert = ref(false)
 const errorMessage = ref('')
+const loading = ref(false)
 
+// Props
 const props = defineProps({
     loanID: {
         type: [Number, String],
@@ -56,8 +58,8 @@ const formData = reactive({
 })
 
 const newBalance = computed(() => {
-  return props.currentBalance - formData.amountPaid;
-});
+    return props.currentBalance - formData.amountPaid
+})
 
 const officers = reactive([])
 
@@ -65,8 +67,10 @@ const submit = async function () {
     const { valid } = await form.value.validate()
     if (!valid) return
 
+    loading.value = true
+
     // Update balance to match that of input
-    formData.balance = newBalance;
+    formData.balance = newBalance
 
     const preprocessedFormData = { ...formData }
     preprocessedFormData.officerInCharge = { ...preprocessedFormData.officerInCharge.value }
@@ -83,6 +87,8 @@ const submit = async function () {
     })
     const { error, message } = await res.json()
 
+    loading.value = false
+
     if (error) {
         errorAlert.value = true
         errorMessage.value = message
@@ -93,8 +99,8 @@ const submit = async function () {
         props.onsubmit()
 
         // Then reload page to ensure that form saves new value
-        // Is there a more elegant way to do this? 
-        router.go();
+        // Is there a more elegant way to do this?
+        router.go()
         return true
     }
 }
@@ -143,7 +149,13 @@ onMounted(async () => {
                 v-model="formData.amountPaid"
             />
             <!-- TODO: make this field hidden as well -->
-            <VTextField class="ml-3" type="number" label="Balance" disabled v-model="newBalance" />
+            <VTextField
+                class="ml-3"
+                type="number"
+                label="Balance"
+                disabled=""
+                v-model="newBalance"
+            />
             <VTextField
                 class="ml-3"
                 type="number"
@@ -174,7 +186,12 @@ onMounted(async () => {
             </div>
 
             <div class="btn-wrapper">
-                <VBtn prepend-icon="mdi-check" class="capitalize btn" @click.prevent="submit">
+                <VBtn
+                    prepend-icon="mdi-check"
+                    class="capitalize btn"
+                    :loading="loading"
+                    @click.prevent="submit"
+                >
                     Submit
                 </VBtn>
             </div>

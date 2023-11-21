@@ -25,11 +25,11 @@ const depositData = reactive({
     interestRate: ''
 })
 
+const form = ref(null)
 const disableSubmit = ref(false)
 const errorAlert = ref('')
 const errorMessage = ref('')
-
-const form = ref(null)
+const loading = ref(false)
 
 const depositCategories = reactive(
     Object.keys(DEPOSIT_CATEGORIES).map((key) => {
@@ -44,6 +44,8 @@ const submit = async function () {
     const { valid } = await form.value.validate()
     if (!valid) return
 
+    loading.value = true
+
     const res = await fetch(`${API_URL}/deposits/new/${memberSearchStore.data.username}`, {
         method: 'PUT',
         headers: {
@@ -55,6 +57,8 @@ const submit = async function () {
             username: memberSearchStore.data.username
         })
     })
+
+    loading.value = false
 
     if (res.status === 404) {
         errorAlert.value = true
@@ -124,6 +128,7 @@ const submit = async function () {
                 <VBtn
                     prepend-icon="mdi-check"
                     class="capitalize btn"
+                    :loading="loading"
                     @click.prevent="submit"
                     :disabled="disableSubmit"
                 >

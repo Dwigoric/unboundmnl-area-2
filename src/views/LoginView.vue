@@ -23,9 +23,12 @@ const errorMessage = ref('')
 const errorAlert = ref(false)
 const remember = ref(false)
 const showPassword = ref(false)
+const loading = ref(false)
 
 // Define methods
 const logIn = async () => {
+    loading.value = true
+
     const { token, message } = await fetch(`${API_URL}/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -34,6 +37,8 @@ const logIn = async () => {
             password: password.value
         })
     }).then((res) => res.json())
+
+    loading.value = false
 
     if (!token) {
         errorMessage.value = message
@@ -111,7 +116,12 @@ const logIn = async () => {
                             </div>
                         </div>
 
-                        <VBtn type="submit" class="btn capitalize-text" @click.prevent="logIn">
+                        <VBtn
+                            type="submit"
+                            class="btn capitalize-text"
+                            :loading="loading"
+                            @click.prevent="logIn"
+                        >
                             Log In
                         </VBtn>
                     </VForm>
