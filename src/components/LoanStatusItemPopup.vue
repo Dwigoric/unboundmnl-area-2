@@ -80,8 +80,6 @@ const decide = async (toApprove) => {
 
 // Lifecycle hooks
 onMounted(() => {
-    console.log(currentUserStore.name)
-
     loanStatusUser.value = new Grid({
         columns: [
             {
