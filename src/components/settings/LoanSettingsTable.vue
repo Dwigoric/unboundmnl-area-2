@@ -18,7 +18,7 @@ const checkbox_Savings = ref(true)
 
 <template>
     <div>
-        <h3>{{ props.header }}</h3>
+        <h3 class="pb-2">{{ props.header }}</h3>
         <div class="wrapper w-100 rounded-lg pb-5">
             <VForm ref="form">
                 <div>

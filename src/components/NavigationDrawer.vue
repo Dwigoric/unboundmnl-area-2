@@ -123,15 +123,15 @@ const logout = () => {
                     >Member Profiles
                 </v-list-item>
 
-                <v-list-subheader class="mt-4 mb-n3 ml-n3"> ADMIN </v-list-subheader>
+                <v-list-subheader class="mt-4 mb-n3 ml-n3"> SETTINGS </v-list-subheader>
 
                 <v-list-item
-                    to="/transaction-settings"
+                    to="/settings/loans-and-deposits"
                     link=""
                     prepend-icon="mdi-cog"
                     rounded="lg"
                     class="mt-1"
-                    >Settings
+                    >Loans & Deposits
                 </v-list-item>
 
             </v-list>
