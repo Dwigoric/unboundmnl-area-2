@@ -22,6 +22,8 @@ import DepositLedgerView from '../views/DepositLedgerView.vue'
 import MemberView from '../views/MemberView.vue'
 import TransactionSettings from '../views/TransactionSettings.vue'
 import NotificationSettings from '../views/NotificationSettings.vue'
+import AdminSettings from '../views/AdminSettings.vue'
+
 
 
 // Import path name constants
@@ -248,6 +250,17 @@ const router = createRouter({
             path: '/settings/notification',
             name: 'Notification Settings',
             component: NotificationSettings,
+            props: true, // allows props to be passed
+            beforeEnter: (to, from, next) => {
+                const credentials = window.$cookies.get('credentials')
+                if (!credentials || !credentials.token) next({ name: 'Login' })
+                else next()
+            }
+        },
+        {
+            path: '/settings/admin',
+            name: 'Admin Settings',
+            component: AdminSettings,
             props: true, // allows props to be passed
             beforeEnter: (to, from, next) => {
                 const credentials = window.$cookies.get('credentials')

@@ -143,6 +143,16 @@ const logout = () => {
                     >Notifications
                 </v-list-item>
 
+                <v-list-item
+                    to="/settings/admin"
+                    link=""
+                    prepend-icon="mdi-account-cog"
+                    rounded="lg"
+                    class="mt-1"
+                    >Admin
+                </v-list-item>
+
+
             </v-list>
 
             <template v-slot:append>

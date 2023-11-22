@@ -1,0 +1,259 @@
+<script setup>
+// Import vue components
+import { ref } from 'vue'
+
+import ContentBlock from '../../components/ContentBlock.vue'
+</script>
+
+<template>
+    <ContentBlock :width="45" :height="43" :unit="'%'" :padding="3">
+        <div class="wrapper w-100 rounded-lg pb-5">
+            <VForm ref="form">
+                <div class="info-fields">
+                    <div class="form-wrapper">
+                        <VForm id="login-form" ref="form">
+                            <div class="header2">Change Password</div>
+
+                            <!-- Password -->
+                            <div class="row-tab">
+                                <div class="label">
+                                    <div>* New Password:</div>
+                                </div>
+
+                                <!-- <VTextField
+                                    v-model="newPassword"
+                                    class="username-pw-input"
+                                    label="Enter New Password"
+                                    :rules="[rules.required, rules.min8, rules.max255, rules.password]"
+                                    :type="showPassword ? 'text' : 'password'"
+                                    :append-inner-icon="showPassword ? 'mdi-eye-off' : 'mdi-eye'"
+                                    @click:append-inner="showPassword = !showPassword"
+                                /> -->
+                            </div>
+
+                            <!-- Password -->
+                            <div class="row-tab">
+                                <div class="label">
+                                    <div>* Re-enter New Password:</div>
+                                </div>
+
+                                <!-- <VTextField
+                                    v-model="confirmNewPassword"
+                                    class="username-pw-input"
+                                    label="Re-enter New Password"
+                                    :rules="[
+                                        rules.required,
+                                        rules.min8,
+                                        rules.max255,
+                                        rules.password,
+                                        rules.mustMatch
+                                    ]"
+                                    :type="showConfirmPassword ? 'text' : 'password'"
+                                    :append-inner-icon="showConfirmPassword ? 'mdi-eye-off' : 'mdi-eye'"
+                                    @click:append-inner="showConfirmPassword = !showConfirmPassword"
+                                /> -->
+                            </div>
+                            <VAlert
+                                v-if="errorAlert"
+                                v-model="errorAlert"
+                                type="error"
+                                closable=""
+                                density="comfortable"
+                                elevation="5"
+                            >
+                                {{ errorMessage }}
+                            </VAlert>
+
+                            <div class="btn-wrapper">
+                                <VBtn
+                                    type="submit"
+                                    class="btn capitalize-text"
+                                    @click.prevent="submitForm"
+                                    :loading="loading"
+                                    >Change Password
+                                </VBtn>
+                            </div>
+                        </VForm>
+                    </div>
+                </div>
+            </VForm>
+        </div>
+    </ContentBlock>
+</template>
+
+<style scoped>
+.wrapper {}
+
+.row-tab {
+    /* border: 1px solid black; */
+    display: flex;
+}
+
+.label {
+    margin-top: 5.2%;
+    margin-right: 6%;
+
+    /* border: 1px solid black; */
+    width: 67%;
+
+    display: inline-block;
+    text-align: right;
+    vertical-align: top;
+}
+
+.btn {
+    font-weight: 600;
+    color: var(--vt-c-white-off);
+    background: var(--vt-c-blue);
+
+    display: flex;
+    align-items: center;
+    text-align: center;
+
+    border-radius: 5px;
+    text-transform: capitalize;
+}
+
+.btn-wrapper {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 7%;
+    margin-right: 2%;
+}
+
+.bg {
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    position: fixed;
+    z-index: 9999;
+
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.wrapper {
+    background: var(--vt-c-white);
+    border-radius: 5px;
+
+    width: 60vw;
+    max-height: 80vh;
+
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+}
+
+.info-fields {
+    background-color: var(--vt-c-white);
+    padding: 5%;
+    padding-top: 2%;
+    padding-bottom: 2%;
+    overflow: auto;
+}
+
+.form-wrapper {
+    background-color: var(--vt-c-white);
+}
+
+.header {
+    background-color: var(--vt-c-white-off);
+    width: 100%;
+    padding-bottom: 3%;
+
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-left: 5%;
+}
+
+.header-text {
+}
+
+.header2 {
+    font-size: 1.2rem;
+    margin-bottom: 3%;
+    font-weight: bold;
+}
+
+.row-tab {
+    /* border: 1px solid black; */
+    display: flex;
+    margin-bottom: 1%;
+}
+
+.label {
+    margin-top: 15px;
+    margin-right: 2%;
+    /* border: 1px solid black; */
+    width: 30%;
+
+    display: inline-block;
+    text-align: right;
+    vertical-align: top;
+}
+
+.error-msg-wrapper {
+    width: 100%;
+    height: 7vh;
+    position: absolute;
+    z-index: 999;
+}
+
+.btn {
+    font-weight: 600;
+    color: var(--vt-c-white-off);
+    background: var(--vt-c-blue);
+
+    display: flex;
+    align-items: center;
+    text-align: center;
+
+    border-radius: 5px;
+    text-transform: capitalize;
+}
+
+.btn-wrapper {
+    height: min-content;
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 2%;
+}
+
+.capitalize-text {
+    text-transform: capitalize;
+}
+
+.btn:hover {
+    background: var(--vt-c-blue-dark);
+}
+
+.rememberMe {
+    font-size: 0.9em;
+    color: var(--primary-color-jade);
+    font-weight: 500;
+    margin: -15px 2 15px;
+    display: flex;
+    justify-content: right;
+    margin-top: 5px;
+    margin-bottom: 20px;
+}
+
+.error {
+    display: flex;
+    font-size: 0.9em;
+    text-align: center;
+    color: red;
+    font-weight: 400;
+    margin: 25px 1 10px;
+    justify-content: center;
+}
+
+</style>
