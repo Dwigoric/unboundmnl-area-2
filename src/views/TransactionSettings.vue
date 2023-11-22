@@ -13,7 +13,7 @@ import DepositSettings from '../components/settings/DepositSettings.vue'
 
         <div class="d-flex flex-column w-100 pl-8">
             <!-- Top Bar of Dashboard -->
-            <DashboardTopBar :breadcrumbs="['Admin', 'Settings']" />
+            <DashboardTopBar :breadcrumbs="['Settings', 'Loans & Deposits']" />
 
             <!-- Main Dashboard Body -->
             <div class="dashboard-body d-flex flex-column h-100 py-3">

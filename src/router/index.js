@@ -232,8 +232,8 @@ const router = createRouter({
             }
         },
         {
-            path: '/transaction-settings',
-            name: 'Settings',
+            path: '/settings/loans-and-deposits',
+            name: 'Loans and Deposits Settings',
             component: TransactionSettings,
             props: true, // allows props to be passed
             beforeEnter: (to, from, next) => {
