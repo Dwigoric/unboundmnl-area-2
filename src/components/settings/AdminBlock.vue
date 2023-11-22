@@ -1,8 +1,64 @@
 <script setup>
-// Import vue components
+// Packages
 import { ref } from 'vue'
 
+// Components
 import ContentBlock from '../../components/ContentBlock.vue'
+
+// Project constants
+import { API_URL } from '../../constants'
+
+// Reactive variables
+const form = ref(null)
+const newPassword = ref('')
+const confirmNewPassword = ref('')
+const errorAlert = ref(false)
+const errorMessage = ref('')
+const loading = ref(false)
+const showPassword = ref(false)
+const showConfirmPassword = ref(false)
+const done = ref(false)
+
+// Form rules
+const rules = {
+    required: (v) => !!v || 'This field is required',
+    password: (v) =>
+        (v && !/^(.{0,7}|[^0-9]*|[^A-Z]*|[^a-z]*|[a-zA-Z0-9]*)$/.test(v)) ||
+        'Password must contain at least one uppercase, one lowercase, one number and one special character',
+    mustMatch: (v) => (!!v && v === newPassword.value) || 'Passwords do not match',
+    min8: (v) => (v && v.length >= 8) || 'Minimum of 8 characters',
+    max255: (v) => (v && v.length <= 255) || 'Maximum of 255 characters'
+}
+
+// Methods
+const submitForm = async () => {
+    const { valid } = await form.value.validate()
+    if (!valid) return
+
+    loading.value = true
+
+    const { token } = window.$cookies.get('credentials')
+
+    const res = await fetch(`${API_URL}/officers/admin/password`, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({ password: newPassword.value })
+    })
+
+    if (!res.ok) {
+        const { message } = await res.json()
+        errorAlert.value = true
+        errorMessage.value = message
+        loading.value = false
+        return
+    }
+
+    loading.value = false
+    done.value = true
+}
 </script>
 
 <template>
@@ -20,15 +76,21 @@ import ContentBlock from '../../components/ContentBlock.vue'
                                     <div>* New Password:</div>
                                 </div>
 
-                                <!-- <VTextField
+                                <VTextField
                                     v-model="newPassword"
                                     class="username-pw-input"
                                     label="Enter New Password"
-                                    :rules="[rules.required, rules.min8, rules.max255, rules.password]"
+                                    :rules="[
+                                        rules.required,
+                                        rules.min8,
+                                        rules.max255,
+                                        rules.password
+                                    ]"
+                                    :disabled="done || loading"
                                     :type="showPassword ? 'text' : 'password'"
                                     :append-inner-icon="showPassword ? 'mdi-eye-off' : 'mdi-eye'"
                                     @click:append-inner="showPassword = !showPassword"
-                                /> -->
+                                />
                             </div>
 
                             <!-- Password -->
@@ -37,7 +99,7 @@ import ContentBlock from '../../components/ContentBlock.vue'
                                     <div>* Re-enter New Password:</div>
                                 </div>
 
-                                <!-- <VTextField
+                                <VTextField
                                     v-model="confirmNewPassword"
                                     class="username-pw-input"
                                     label="Re-enter New Password"
@@ -48,10 +110,13 @@ import ContentBlock from '../../components/ContentBlock.vue'
                                         rules.password,
                                         rules.mustMatch
                                     ]"
+                                    :disabled="done || loading"
                                     :type="showConfirmPassword ? 'text' : 'password'"
-                                    :append-inner-icon="showConfirmPassword ? 'mdi-eye-off' : 'mdi-eye'"
+                                    :append-inner-icon="
+                                        showConfirmPassword ? 'mdi-eye-off' : 'mdi-eye'
+                                    "
                                     @click:append-inner="showConfirmPassword = !showConfirmPassword"
-                                /> -->
+                                />
                             </div>
                             <VAlert
                                 v-if="errorAlert"
@@ -70,7 +135,8 @@ import ContentBlock from '../../components/ContentBlock.vue'
                                     class="btn capitalize-text"
                                     @click.prevent="submitForm"
                                     :loading="loading"
-                                    >Change Password
+                                    :disabled="done"
+                                    >{{ done ? 'Changed Password!' : 'Change Password' }}
                                 </VBtn>
                             </div>
                         </VForm>
@@ -82,7 +148,8 @@ import ContentBlock from '../../components/ContentBlock.vue'
 </template>
 
 <style scoped>
-.wrapper {}
+.wrapper {
+}
 
 .row-tab {
     /* border: 1px solid black; */
@@ -255,5 +322,4 @@ import ContentBlock from '../../components/ContentBlock.vue'
     margin: 25px 1 10px;
     justify-content: center;
 }
-
 </style>
