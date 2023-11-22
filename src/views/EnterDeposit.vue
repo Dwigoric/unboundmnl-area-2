@@ -50,7 +50,7 @@ onMounted(() => updateStepCounter(route.path))
                     :maxUnit="'vw'"
                     :bg-color="'#FFF'"
                 >
-                    <StepCounterLoanTransaction />
+                    <StepCounterLoanTransaction :step="step" />
                 </ContentBlock>
 
                 <ContentBlock
