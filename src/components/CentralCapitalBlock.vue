@@ -53,8 +53,6 @@ onMounted(async () => {
             return [row.depositID, row.username, row.category, row.originalDepositAmount]
         })
 
-        console.log(rawDepositData)
-
         deposit.value = new Grid({
             columns: [
                 { name: 'DepositID', hidden: true },
@@ -108,27 +106,20 @@ const items = rawDepositData
 <template>
     <div id="loan-status-wrapper" ref="depositsTable" class="w-90 px-4" />
     <v-card>
+        <v-card-title class="d-flex align-center w-25">
+            <v-text-field
+                v-model="search"
+                prepend-inner-icon="mdi-magnify"
+                density="compact"
+                label="Search"
+                single-line
+                flat
+                hide-details
+                variant="solo-filled"
+            ></v-text-field>
+        </v-card-title>
 
-    <v-card-title class="d-flex align-center w-25">
-      <v-text-field
-        v-model="search"
-        prepend-inner-icon="mdi-magnify"
-        density="compact"
-        label="Search"
-        single-line
-        flat
-        hide-details
-        variant="solo-filled"
-      ></v-text-field>
-    </v-card-title>
-
-    <v-data-table 
-        :items="items"
-        hover
-        multi-sort
-        :search="search"
-        sticky>
-    </v-data-table>
+        <v-data-table :items="items" hover multi-sort :search="search" sticky> </v-data-table>
     </v-card>
 </template>
 
