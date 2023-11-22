@@ -53,6 +53,7 @@ const submit = async () => {
         errorAlert.value = false
         errorMessage.value = ''
         disableSubmit.value = true
+        alert("Loan Application Submitted!")
         return true
     }
 }

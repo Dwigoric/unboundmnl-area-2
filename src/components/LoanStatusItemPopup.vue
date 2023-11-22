@@ -73,6 +73,9 @@ const decide = async (toApprove) => {
         errorAlert.value = true
         errorMessage.value = message
         return
+    } 
+    else {
+        alert("Loan was processed!")
     }
 
     props.onsubmit(props.data[0])

@@ -77,6 +77,7 @@ const submit = async function () {
         errorAlert.value = false
         errorMessage.value = ''
         disableSubmit.value = true
+        alert("Deposit was processed!")
         return true
     }
 }

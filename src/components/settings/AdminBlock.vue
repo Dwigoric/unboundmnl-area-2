@@ -62,8 +62,8 @@ const submitForm = async () => {
 </script>
 
 <template>
-    <ContentBlock :width="45" :height="43" :unit="'%'" :padding="3">
-        <div class="wrapper w-100 rounded-lg pb-5">
+    <ContentBlock :width="45" :height="45" :unit="'%'" :padding="3">
+        <div class="w-100 rounded-lg pb-5">
             <VForm ref="form">
                 <div class="info-fields">
                     <div class="form-wrapper">
