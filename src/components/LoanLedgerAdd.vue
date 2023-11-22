@@ -137,9 +137,8 @@ onMounted(async () => {
                 />
                 <VTextField
                     class="ml-3"
-                    label="* GV/OR Number"
+                    label="GV/OR Number"
                     v-model="formData.ORNumber"
-                    :rules="[rules.required]"
                 />
             </div>
             <VTextField

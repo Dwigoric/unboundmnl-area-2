@@ -412,7 +412,7 @@ onMounted(async () => {
                                 isActive.value = false
                             }
                         "
-                        :currentBalance="loanAmount - totalAmountPaid"
+                        :currentBalance="formData.amount - formData.totalAmountPaid"
                     />
                 </VCard>
             </template>
