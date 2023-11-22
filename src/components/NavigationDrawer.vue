@@ -128,10 +128,19 @@ const logout = () => {
                 <v-list-item
                     to="/settings/loans-and-deposits"
                     link=""
-                    prepend-icon="mdi-cog"
+                    prepend-icon="mdi-table-cog"
                     rounded="lg"
                     class="mt-1"
                     >Loans & Deposits
+                </v-list-item>
+
+                <v-list-item
+                    to="/settings/notifications"
+                    link=""
+                    prepend-icon="mdi-bell-cog"
+                    rounded="lg"
+                    class="mt-1"
+                    >Notifications
                 </v-list-item>
 
             </v-list>
