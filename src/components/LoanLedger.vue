@@ -13,6 +13,8 @@ import LoanLedgerAdd from '../components/LoanLedgerAdd.vue'
 import LoanEdit from '../components/LoanDepositEdit.vue'
 import DeletePrompt from '../components/DeletePrompt.vue'
 
+import router from '../router'
+
 // Define props for the component
 const props = defineProps({
     loanID: {
@@ -349,7 +351,16 @@ onMounted(async () => {
                                     </v-row>
                                 </v-container>
 
-                                <DeletePrompt profileType="Member" />
+                                <DeletePrompt
+                                    profileType="Loan"
+                                    :identifier="loanID"
+                                    :onsubmit="
+                                        async () => {
+                                            isActive.value = false
+                                            router.push({ name: 'Loan Dashboard' })
+                                        }
+                                    "
+                                />
                             </v-card>
                         </template>
                     </v-dialog>
