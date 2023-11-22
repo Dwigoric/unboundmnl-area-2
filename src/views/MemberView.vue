@@ -58,7 +58,9 @@ onMounted(async () => {
 
                 <div class="d-flex flex-row h-100">
                     <div class="left pa-2">
-                        <MemberProfileLeft />
+                        <VExpandTransition>
+                            <MemberProfileLeft />
+                        </VExpandTransition>
                     </div>
 
                     <div class="right pa-2">
