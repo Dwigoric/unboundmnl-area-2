@@ -137,13 +137,12 @@ const router = createRouter({
         {
             path: '/loan-status',
             name: 'Loan Status',
-            component: LoanStatus
-            // TODO: this - jana uwu
-            // beforeEnter: (to, from, next) => {
-            //     const credentials = window.$cookies.get('credentials')
-            //     if (!credentials || !credentials.token) next({ name: 'Login' })
-            //     else next()
-            // }
+            component: LoanStatus,
+            beforeEnter: (to, from, next) => {
+                const credentials = window.$cookies.get('credentials')
+                if (!credentials || !credentials.token) next({ name: 'Login' })
+                else next()
+            }
         },
         {
             path: '/loan-transaction',
@@ -171,24 +170,22 @@ const router = createRouter({
                         else next()
                     }
                 }
-            ]
-            // TODO: this - jana uwu
-            // beforeEnter: (to, from, next) => {
-            //     const credentials = window.$cookies.get('credentials')
-            //     if (!credentials || !credentials.token) next({ name: 'Login' })
-            //     else next()
-            // }
+            ],
+            beforeEnter: (to, from, next) => {
+                const credentials = window.$cookies.get('credentials')
+                if (!credentials || !credentials.token) next({ name: 'Login' })
+                else next()
+            }
         },
         {
             path: '/deposit-dashboard',
             name: 'Deposit Dashboard',
-            component: DashboardDeposit
-            // TODO: this - jana uwu
-            // beforeEnter: (to, from, next) => {
-            //     const credentials = window.$cookies.get('credentials')
-            //     if (!credentials || !credentials.token) next({ name: 'Login' })
-            //     else next()
-            // }
+            component: DashboardDeposit,
+            beforeEnter: (to, from, next) => {
+                const credentials = window.$cookies.get('credentials')
+                if (!credentials || !credentials.token) next({ name: 'Login' })
+                else next()
+            }
         },
         {
             path: '/enter-deposit',
@@ -208,15 +205,20 @@ const router = createRouter({
                 {
                     path: PATH_NAMES.DEPOSIT_TRANSACTIONS.TRANSACTION_DETAILS,
                     name: 'Deposit Transaction Details',
-                    component: DepositAdd
+                    component: DepositAdd,
+                    beforeEnter: (to, from, next) => {
+                        // Redirect to member input if `from` is not member input
+                        if (from.name !== 'Deposit Transaction Member Input')
+                            next({ name: 'Deposit Transaction Member Input' })
+                        else next()
+                    }
                 }
-            ]
-            // TODO: this - jana uwu
-            // beforeEnter: (to, from, next) => {
-            //     const credentials = window.$cookies.get('credentials')
-            //     if (!credentials || !credentials.token) next({ name: 'Login' })
-            //     else next()
-            // }
+            ],
+            beforeEnter: (to, from, next) => {
+                const credentials = window.$cookies.get('credentials')
+                if (!credentials || !credentials.token) next({ name: 'Login' })
+                else next()
+            }
         },
         {
             path: '/deposit-ledger/:id',
@@ -244,14 +246,10 @@ const router = createRouter({
 })
 
 router.beforeEach(async (to, from, next) => {
-    // eslint-disable-next-line no-undef
     NProgress.start()
     next()
 })
 
-router.afterEach(() => {
-    // eslint-disable-next-line no-undef
-    NProgress.done()
-})
+router.afterEach(NProgress.done)
 
 export default router
