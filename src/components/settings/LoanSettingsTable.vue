@@ -176,7 +176,7 @@ const checkbox_Savings = ref(true)
 <style scoped>
 
 .wrapper {
-    border: 1px solid black;
+    border: 1px solid var(--vt-c-gray);
     margin-bottom: 2%;    
 }
 

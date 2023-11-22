@@ -68,7 +68,7 @@ const props = defineProps({
 
 <style scoped>
 .wrapper {
-    border: 1px solid black;
+    border: 1px solid var(--vt-c-gray);
 }
 
 .row-tab {
