@@ -20,7 +20,7 @@ import EnterDeposit from '../views/EnterDeposit.vue'
 import DepositAdd from '../components/DepositAdd.vue'
 import DepositLedgerView from '../views/DepositLedgerView.vue'
 import MemberView from '../views/MemberView.vue'
-import Settings from '../views/Settings.vue'
+import TransactionSettings from '../views/TransactionSettings.vue'
 
 // Import path name constants
 import { PATH_NAMES } from '../constants'
@@ -230,9 +230,9 @@ const router = createRouter({
             }
         },
         {
-            path: '/settings',
+            path: '/transaction-settings',
             name: 'Settings',
-            component: Settings,
+            component: TransactionSettings,
             props: true, // allows props to be passed
             beforeEnter: (to, from, next) => {
                 const credentials = window.$cookies.get('credentials')

@@ -1,7 +1,6 @@
 <script setup>
 // Import vue components
 import NavigationDrawer from '../components/NavigationDrawer.vue'
-import ContentBlock from '../components/ContentBlock.vue'
 import DashboardTopBar from '../components/DashboardTopBar.vue'
 
 import LoanSettings from '../components/settings/LoanSettings.vue'

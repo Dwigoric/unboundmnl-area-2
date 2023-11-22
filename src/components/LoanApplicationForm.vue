@@ -123,6 +123,7 @@ const changeLoanRange = function () {
                         v-model="loanData.classification"
                         id="loan-classification"
                         :rules="[rules.required]"
+                        class="mt-2"
                     >
                         <VRadio label="New Loan" value="new"></VRadio>
                         <VRadio label="Renewal" value="renewal"></VRadio>
