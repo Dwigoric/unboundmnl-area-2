@@ -157,6 +157,17 @@ const checkbox_Savings = ref(true)
                         ></v-checkbox>
                     </div>
                 </div>
+
+                <div class="btn-wrapper">
+                    <VBtn
+                        prepend-icon="mdi-check"
+                        class="capitalize btn"
+                        :loading="loading"
+                        @click.prevent="submit"
+                    >
+                        Submit
+                    </VBtn>
+                </div>
             </VForm>
         </div>
     </div>
@@ -184,6 +195,27 @@ const checkbox_Savings = ref(true)
     display: inline-block;
     text-align: right;
     vertical-align: top;
+}
+
+.btn {
+    font-weight: 600;
+    color: var(--vt-c-white-off);
+    background: var(--vt-c-blue);
+
+    display: flex;
+    align-items: center;
+    text-align: center;
+
+    border-radius: 5px;
+    text-transform: capitalize;
+}
+
+.btn-wrapper {
+    height: min-content;
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 7%;
+    margin-right: 2%;
 }
 
 </style>
