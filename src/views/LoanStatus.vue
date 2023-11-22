@@ -1,9 +1,13 @@
 <script setup>
+import { ref } from 'vue'
+
 // Import vue components
 import NavigationDrawer from '../components/NavigationDrawer.vue'
 import ContentBlock from '../components/ContentBlock.vue'
 import DashboardTopBar from '../components/DashboardTopBar.vue'
 import LoanStatusItem from '../components/LoanStatusItem.vue'
+
+const tab = ref('pending')
 </script>
 
 <template>
@@ -26,8 +30,28 @@ import LoanStatusItem from '../components/LoanStatusItem.vue'
                     :maxUnit="'vw'"
                     :bg-color="'#FFF'"
                 >
-                    
-                    <LoanStatusItem />
+                    <div class="d-flex flex-column ml-2">
+                        <v-tabs v-model="tab" color="primary">
+                            <v-tab value="pending">
+                                <div class="capitalize">Pending Loans</div>
+                            </v-tab>
+
+                            <v-tab value="rejected">
+                                <div class="capitalize">Rejected</div>
+                            </v-tab>
+                        </v-tabs>
+
+                        <v-window v-model="tab" class="ml-5 mt-2">
+                            <v-window-item value="pending">
+                                <LoanStatusItem />
+                            </v-window-item>
+
+                            <v-window-item value="rejected">
+                                <!-- TODO: Create component for rejected loans -->
+                                <LoanStatusItem />
+                            </v-window-item>
+                        </v-window>
+                    </div>
                 </ContentBlock>
             </div>
         </div>

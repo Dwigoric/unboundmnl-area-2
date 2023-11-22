@@ -141,6 +141,28 @@ onMounted(async () => {
                 </v-chip>
             </template>
 
+            <template v-slot:item.status="{ value }">
+                <v-chip :color="'purple'">
+                    Pending
+                </v-chip>
+
+                <v-chip :color="'success'">
+                    Approved
+                </v-chip>
+
+                <v-chip :color="'orange'">
+                    Released
+                </v-chip>
+
+                <v-chip :color="'red'">
+                    Rejected
+                </v-chip>
+
+                <v-chip :color="'blue'">
+                    Complete
+                </v-chip>
+            </template>
+
             <template v-slot:item.id="{ value }">
                 <v-btn
                     class="text-none bg-blue-darken-1"
