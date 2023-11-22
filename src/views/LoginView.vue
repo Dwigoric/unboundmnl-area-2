@@ -141,7 +141,7 @@ const logIn = async () => {
 .bg {
     height: 100vh;
     width: 100vw;
-    background-image: url('../assets/bg.svg');
+    background-image: url('../../public/assets/bg.svg');
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center center;
