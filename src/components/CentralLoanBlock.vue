@@ -1,16 +1,16 @@
 <script setup>
 // Packages
-import { ref, onMounted } from 'vue'
-import { Grid, h } from 'gridjs'
+import { ref, reactive, onMounted } from 'vue'
 
 // Project constants
 import { API_URL, LOAN_TYPES } from '../constants'
 
-// Stylesheets
-import 'gridjs/dist/theme/mermaid.css'
-
 // Import router
 import router from '../router'
+
+// Stores
+import { useProfileDataStore } from '../stores/profileData'
+const profileDataStore = useProfileDataStore()
 
 // Props
 const props = defineProps({
@@ -21,8 +21,17 @@ const props = defineProps({
 })
 
 // Reactive variables
-const loan = ref()
-const loansTable = ref()
+const search = ref('')
+const items = reactive([])
+const headers = [
+    { title: 'Type of Loan', key: 'type' },
+    { title: 'Loanee', key: 'loanee' },
+    { title: 'Amount of Loan', key: 'amount' },
+    { title: 'Submission Date', key: 'submissionDate' },
+    { title: 'View Loan Ledger', key: 'id' }
+]
+
+if (props.username) headers.splice(1, 1)
 
 // Methods
 
@@ -32,6 +41,16 @@ const loansTable = ref()
  */
 const visitLoanLedger = async (loanID) => {
     router.push({ name: 'Loan Ledger', params: { id: loanID } })
+}
+
+/**
+ * Visits the member profile based on their username
+ * @param {*} username - Username of the member
+ */
+const visitMemberProfile = async (username) => {
+    if (profileDataStore.profileData && profileDataStore.profileData.username !== username)
+        profileDataStore.setProfileData({})
+    router.push({ name: 'Profile View', params: { username } })
 }
 
 onMounted(async () => {
@@ -46,80 +65,68 @@ onMounted(async () => {
     })
 
     if (res.status === 200) {
-        const resJson = await res.json()
-        const rawLoanData = resJson.loans
-        const loanData = rawLoanData.map((row) => {
-            return [row.loanID, row.username, row.loanType, row.originalLoanAmount, row.submissionDate]
-        })
-
-        loan.value = new Grid({
-            columns: [
-                { name: 'LoanID', hidden: true },
-                { name: 'Loanee', hidden: props.username !== undefined },
-                {
-                    name: 'Type of Loan',
-                    formatter: (cell) => LOAN_TYPES[cell]
-                },
-                {
-                    name: 'Amount of Loan',
-                    formatter: (cell) =>
-                        Intl.NumberFormat('en-US', { style: 'currency', currency: 'PHP' }).format(
-                            Number(cell)
-                        )
-                },
-                {   name: 'Due Date',
-                    formatter: (cell) => {
-                        const dueDate = new Date(cell);
-                        return dueDate.toLocaleDateString('en-US', {
-                            year: 'numeric',
-                            month: 'short',
-                            day: 'numeric'});
-                    }
-                },
-                {
-                    name: 'View Loan Ledger',
-                    formatter: (cell, row) => {
-                        return h(
-                            'v-hover',
-                            {
-                                className:
-                                    'cursor-pointer hover-scale-md py-2 mb-4 px-4 border rounded-md',
-                                onClick: () => visitLoanLedger(row.cells[0].data) // grabs the row's Loan ID and passes it to the function.
-                            },
-                            'View Loan Ledger'
-                        )
-                    }
-                }
-            ],
-            pagination: {
-                limit: 10
-            },
-            search: true,
-            sort: true,
-            resizable: true,
-            fixedHeader: true,
-            data: loanData,
-            className: {
-                // Define your class names here
-            },
-            style: {
-                table: {
-                    // Define your table styles here
-                },
-                tr: {
-                    // Define row styles here
-                }
-            }
-        })
-
-        // Render loanStatus in corresponding reference
-        loan.value.render(loansTable.value)
+        const { loans } = await res.json()
+        items.push(
+            ...loans.map((loan) => ({
+                id: loan.loanID,
+                loanee: loan.username,
+                type: LOAN_TYPES[loan.loanType],
+                amount: Intl.NumberFormat('en-US', {
+                    style: 'currency',
+                    currency: 'PHP'
+                }).format(Number(loan.originalLoanAmount)),
+                submissionDate: new Date(loan.submissionDate).toLocaleDateString('en-PH', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric'
+                })
+            }))
+        )
     }
 })
 </script>
 
 <template>
-    <div id="loan-status-wrapper" ref="loansTable" class="w-100 px-4" />
+    <v-card>
+        <v-card-title class="d-flex align-center w-25">
+            <v-text-field
+                v-model="search"
+                prepend-inner-icon="mdi-magnify"
+                density="compact"
+                label="Search"
+                single-line=""
+                flat=""
+                hide-details
+                variant="solo-filled"
+            ></v-text-field>
+        </v-card-title>
+
+        <v-data-table
+            :headers="headers"
+            :items="items"
+            hover=""
+            multi-sort=""
+            :search="search"
+            sticky=""
+        >
+            <template v-slot:item.loanee="{ value }">
+                <v-btn
+                    class="text-none bg-blue-darken-1"
+                    @click.prevent="visitMemberProfile(value)"
+                >
+                    {{ value }}
+                </v-btn>
+            </template>
+            <template v-slot:item.id="{ value }">
+                <v-btn
+                    class="text-none bg-blue-darken-1"
+                    @click.prevent="visitLoanLedger(value)"
+                    density="comfortable"
+                    icon="mdi-arrow-right-circle"
+                />
+            </template>
+        </v-data-table>
+    </v-card>
 </template>
 
 <style>

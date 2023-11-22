@@ -5,7 +5,7 @@ import { ref } from 'vue'
 import ContentBlock from '../../components/ContentBlock.vue'
 import LoanSettingsTable from '../../components/settings/LoanSettingsTable.vue'
 
-const tab = ref('option-1')
+const tab = ref('emergency')
 </script>
 
 <template>
@@ -16,7 +16,8 @@ const tab = ref('option-1')
             <v-tabs
                 v-model="tab"
                 direction="vertical"
-                color="primary">
+                color="primary"
+                class="mt-9">
 
                 <v-tab value="emergency">
                     <div class="capitalize">Emergency</div>
@@ -43,7 +44,7 @@ const tab = ref('option-1')
                 </v-tab>
             </v-tabs>
 
-            <v-window v-model="tab" class="ml-2 mt-2">
+            <v-window v-model="tab" class="ml-2 mt-2 w-100">
                 <v-window-item value="emergency">
                         <LoanSettingsTable :header="`Emergency`"/>
                 </v-window-item>

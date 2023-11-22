@@ -26,7 +26,8 @@ const props = defineProps({
 
 // Lifecycle hooks
 onMounted(async () => {
-    if (profileDataStore.profileData.username) return
+    if (profileDataStore.profileData && profileDataStore.profileData.username === props.username)
+        return
 
     const { token } = window.$cookies.get('credentials')
 
@@ -50,7 +51,7 @@ onMounted(async () => {
 
         <div class="d-flex flex-column w-100 pl-8">
             <!-- Top Bar of Dashboard -->
-            <DashboardTopBar :breadcrumbs="['Home', 'Member Profiles']" />
+            <DashboardTopBar :breadcrumbs="['Profiles', 'Member Profiles', username]" />
 
             <!-- Main Dashboard Body -->
             <div class="dashboard-body d-flex flex-column h-100 py-3">
@@ -58,7 +59,9 @@ onMounted(async () => {
 
                 <div class="d-flex flex-row h-100">
                     <div class="left pa-2">
-                        <MemberProfileLeft />
+                        <VExpandTransition>
+                            <MemberProfileLeft />
+                        </VExpandTransition>
                     </div>
 
                     <div class="right pa-2">

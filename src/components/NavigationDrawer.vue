@@ -126,7 +126,7 @@ const logout = () => {
                 <v-list-subheader class="mt-4 mb-n3 ml-n3"> ADMIN </v-list-subheader>
 
                 <v-list-item
-                    to="/settings"
+                    to="/transaction-settings"
                     link=""
                     prepend-icon="mdi-cog"
                     rounded="lg"
