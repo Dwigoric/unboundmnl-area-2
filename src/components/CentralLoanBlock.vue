@@ -28,6 +28,7 @@ const headers = [
     { title: 'Loanee', key: 'loanee' },
     { title: 'Amount of Loan', key: 'amount' },
     { title: 'Submission Date', key: 'submissionDate' },
+    { title: 'Status', key: 'status'},
     { title: 'View Loan Ledger', key: 'id' }
 ]
 
@@ -51,6 +52,18 @@ const visitMemberProfile = async (username) => {
     if (profileDataStore.profileData && profileDataStore.profileData.username !== username)
         profileDataStore.setProfileData({})
     router.push({ name: 'Profile View', params: { username } })
+}
+
+// TODO: Make this work
+const getDateColor = (dueDate) => {
+    var currentDate = new Date();
+    if (dueDate == 1){
+        console.log("HELP")
+        console.log(dueDate)
+        console.log(currentDate)
+        return 'red'
+    } 
+    else return "null"
 }
 
 onMounted(async () => {
@@ -117,6 +130,13 @@ onMounted(async () => {
                     {{ value }}
                 </v-btn>
             </template>
+
+            <template v-slot:item.submissionDate="{ value }">
+                <v-chip :color="getDateColor(value)">
+                    {{  value }}
+                </v-chip>
+            </template>
+
             <template v-slot:item.id="{ value }">
                 <v-btn
                     class="text-none bg-blue-darken-1"

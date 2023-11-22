@@ -26,6 +26,7 @@ import LoanStatusItem from '../components/LoanStatusItem.vue'
                     :maxUnit="'vw'"
                     :bg-color="'#FFF'"
                 >
+                    
                     <LoanStatusItem />
                 </ContentBlock>
             </div>
