@@ -135,6 +135,7 @@ const changeLoanRange = function () {
                         <div>* Term:</div>
                     </div>
                     <VTextField
+                        type="number"
                         class="username-pw-input"
                         v-model="loanData.term"
                         :rules="[rules.required]"
