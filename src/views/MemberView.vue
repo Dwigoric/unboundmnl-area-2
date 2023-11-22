@@ -26,7 +26,8 @@ const props = defineProps({
 
 // Lifecycle hooks
 onMounted(async () => {
-    if (profileDataStore.profileData.username) return
+    if (profileDataStore.profileData && profileDataStore.profileData.username === props.username)
+        return
 
     const { token } = window.$cookies.get('credentials')
 
