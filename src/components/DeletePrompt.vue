@@ -15,12 +15,12 @@ const props = defineProps({
         type: String,
         required: true,
         validator: (value) => {
-            return ['Member', 'Officer'].includes(value)
+            return ['Member', 'Officer', 'Loan'].includes(value)
         }
     },
     name: {
         type: String,
-        required: true
+        default: ''
     },
     // unique identifier for profile to be deleted
     identifier: {
@@ -98,25 +98,64 @@ const deleteOfficer = async function () {
         errorAlert.value = true
     }
 }
+
+const deleteLoan = async function () {
+    const credentials = window.$cookies.get('credentials')
+    if (!credentials) return
+    const { token } = credentials
+
+    const result = await fetch(`${API_URL}/loans/delete-loan`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({
+            loanID: props.identifier
+        })
+    })
+
+    errorMessage.value = ''
+
+    if (result.status === 200) {
+        props.onsubmit()
+    } else if (result.status === 400) {
+        const jsonRes = await result.json()
+        errorMessage.value = jsonRes.message
+        errorAlert.value = true
+    } else if (result.status === 500) {
+        errorMessage.value = 'Internal Server Error'
+        errorAlert.value = true
+    }
+}
+
+const deleteProfile = function () {
+    switch (props.profileType) {
+        case 'Officer':
+            deleteOfficer()
+            break
+        case 'Member':
+            deleteMember()
+            break
+        case 'Loan':
+            deleteLoan()
+            break
+    }
+}
 </script>
 
 <template>
     <div class="wrapper">
         <div class="header">
             <div class="header-text">
-                Are you sure you want to delete this {{ profileType }} Profile {{ name }}?
+                Are you sure you want to delete this
+                {{ profileType.toLowerCase() }}{{ name ? ' ' + name : '' }}?
             </div>
         </div>
 
         <div class="btn-wrapper">
-            <VBtn
-                type="submit"
-                class="btn capitalize-text"
-                @click.prevent="
-                    () => (profileType === 'Officer' ? deleteOfficer() : deleteMember())
-                "
-            >
-                Delete {{ profileType }} Profile
+            <VBtn type="submit" class="btn capitalize-text" @click.prevent="deleteProfile">
+                Delete {{ profileType }}
             </VBtn>
         </div>
 
