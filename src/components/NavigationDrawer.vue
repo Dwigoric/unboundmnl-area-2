@@ -40,8 +40,9 @@ const logout = () => {
             permanent=""
         >
             <div class="navigation-title-box">
-                <!-- <v-img src="../assets/logo-full.svg" class="h-25"></v-img> -->
-                <h1>CSVMC</h1>
+                <svg width="260" height="80" xmlns="http://www.w3.org/2000/svg">
+                    <image href="../assets/logo-full.svg" width="250" height="100" />
+                </svg>
             </div>
 
             <v-list>

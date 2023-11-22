@@ -16,6 +16,8 @@ import 'nprogress/nprogress.css'
 // Build the app
 const app = createApp(App)
 
+import IconLogo from '../src/components/IconLogo.vue'
+
 app.use(createPinia())
 app.use(router)
 app.use(VueCookies, { expires: '30d', secure: true, sameSite: 'Lax' })
@@ -26,7 +28,12 @@ app.use(
             aliases,
             sets: {
                 mdi
-            }
+            },
+            values: {
+                logo: { // name of our custom icon
+                    component: IconLogo, // our custom component
+                },
+            },
         }
     })
 )

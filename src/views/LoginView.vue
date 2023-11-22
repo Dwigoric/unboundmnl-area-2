@@ -70,8 +70,13 @@ const logIn = async () => {
     <div class="bg">
         <div class="wrapper">
             <div class="login">
-                <!-- TODO: Add logo -->
-                <div class="header">CSVMC</div>
+                <div class="d-flex justify-center w-100">
+                    <!-- BUG: DOESNT SCALE AAAAAAAAAA -->
+                    <svg width="300" height="80" xmlns="http://www.w3.org/2000/svg" class="ml-n5">
+                        <image href="../assets/logo-full-black.svg" width="300" height="100" />
+                    </svg>
+                </div>
+                
 
                 <div class="error-msg-wrapper">
                     <VAlert
