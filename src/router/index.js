@@ -21,6 +21,8 @@ import DepositAdd from '../components/DepositAdd.vue'
 import DepositLedgerView from '../views/DepositLedgerView.vue'
 import MemberView from '../views/MemberView.vue'
 import TransactionSettings from '../views/TransactionSettings.vue'
+import NotificationSettings from '../views/NotificationSettings.vue'
+
 
 // Import path name constants
 import { PATH_NAMES } from '../constants'
@@ -235,6 +237,17 @@ const router = createRouter({
             path: '/settings/loans-and-deposits',
             name: 'Loans and Deposits Settings',
             component: TransactionSettings,
+            props: true, // allows props to be passed
+            beforeEnter: (to, from, next) => {
+                const credentials = window.$cookies.get('credentials')
+                if (!credentials || !credentials.token) next({ name: 'Login' })
+                else next()
+            }
+        },
+        {
+            path: '/settings/notification',
+            name: 'Notification Settings',
+            component: NotificationSettings,
             props: true, // allows props to be passed
             beforeEnter: (to, from, next) => {
                 const credentials = window.$cookies.get('credentials')

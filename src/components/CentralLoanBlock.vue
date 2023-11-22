@@ -54,6 +54,10 @@ const visitMemberProfile = async (username) => {
     router.push({ name: 'Profile View', params: { username } })
 }
 
+/**
+ * Gets the corresponding color for the data 
+ * @param {*} dueDate - Due date of the loan
+ */
 // TODO: Make this work
 const getDateColor = (dueDate) => {
     var currentDate = new Date();

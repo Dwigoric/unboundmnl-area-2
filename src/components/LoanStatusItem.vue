@@ -141,9 +141,29 @@ onMounted(async () => {
         }
     }).render(loanStatusTable.value)
 })
+
+// Reactive variables
+const search = ref('')
+const items = data
+const headers = [
+    { title: 'Loanee', key: 'loanee' },
+    { title: 'Type of Loan', key: 'loanType' },
+    { title: 'Amount of Loan', key: 'originalLoanAmount' },
+    { title: 'Change Status', key: 'status' }
+]
+
 </script>
 
 <template>
+    <!-- <v-data-table
+            :headers="headers"
+            :items="items"
+            hover=""
+            multi-sort=""
+            :search="search"
+            sticky=""
+    >
+    </v-data-table> -->
     <div id="loan-status-wrapper" ref="loanStatusTable" class="w-100 px-4"></div>
     <VDialog width="1200" v-model="isPopupActive">
         <!-- Form popup -->

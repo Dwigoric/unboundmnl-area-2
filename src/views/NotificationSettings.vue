@@ -3,7 +3,7 @@
 import NavigationDrawer from '../components/NavigationDrawer.vue'
 import DashboardTopBar from '../components/DashboardTopBar.vue'
 
-import LoanSettings from '../components/settings/LoanSettings.vue'
+import NotificationBlock from '../components/settings/NotificationBlock.vue'
 import DepositSettings from '../components/settings/DepositSettings.vue'
 </script>
 
@@ -13,20 +13,14 @@ import DepositSettings from '../components/settings/DepositSettings.vue'
 
         <div class="d-flex flex-column w-100 pl-8">
             <!-- Top Bar of Dashboard -->
-            <DashboardTopBar :breadcrumbs="['Settings', 'Loans & Deposits']" />
+            <DashboardTopBar :breadcrumbs="['Settings', 'Notifications']" />
 
             <!-- Main Dashboard Body -->
             <div class="dashboard-body d-flex flex-column h-100 py-3">
-                <h2>Loan & Deposit Settings</h2>
+                <h2>Notification Settings</h2>
 
                 <div class="d-flex flex-row h-100">
-                    <div class="left pa-2">
-                        <LoanSettings />
-                    </div>
-
-                    <div class="right pa-2">
-                        <DepositSettings />
-                    </div>
+                    <NotificationBlock />
                 </div>
             </div>
         </div>

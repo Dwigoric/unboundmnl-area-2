@@ -135,7 +135,7 @@ const logout = () => {
                 </v-list-item>
 
                 <v-list-item
-                    to="/settings/notifications"
+                    to="/settings/notification"
                     link=""
                     prepend-icon="mdi-bell-cog"
                     rounded="lg"
