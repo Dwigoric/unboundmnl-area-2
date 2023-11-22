@@ -173,7 +173,13 @@ onMounted(async () => {
                 label="Amount Paid"
                 v-model="formData.amountPaid"
             />
-            <VTextField class="ml-3" type="number" label="Balance" v-model="formData.balance" />
+            <VTextField
+                class="ml-3"
+                type="number"
+                label="Balance"
+                v-model="formData.balance"
+                disabled
+            />
             <VTextField
                 class="ml-3"
                 type="number"
