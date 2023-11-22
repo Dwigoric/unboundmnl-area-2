@@ -111,8 +111,6 @@ const getLoanInfo = async () => {
     }).then((res) => res.json())
 
     if (resJson) {
-        console.log(resJson)
-
         const loanData = resJson.loan
         rawLoanData.value = loanData
 
@@ -150,7 +148,10 @@ const getLoanInfo = async () => {
             transaction.interestPaid,
             transaction.finesPaid,
             transaction.submissionDate.substring(0, 10),
-            `${transaction.officerInCharge.last}, ${transaction.officerInCharge.given}`
+            transaction.officerInCharge.given === 'Admin' &&
+            transaction.officerInCharge.last === ' '
+                ? 'Admin'
+                : `${transaction.officerInCharge.last}, ${transaction.officerInCharge.given}`
             // grab the field for fines due
         ]
     })

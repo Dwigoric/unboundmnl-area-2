@@ -123,7 +123,10 @@ const getDepositInfo = async () => {
             transaction.interest,
             transaction.balance,
             transaction.submissionDate.substring(0, 10),
-            `${transaction.officerInCharge.last}, ${transaction.officerInCharge.given}`
+            transaction.officerInCharge.given === 'Admin' &&
+            transaction.officerInCharge.last === ' '
+                ? 'Admin'
+                : `${transaction.officerInCharge.last}, ${transaction.officerInCharge.given}`
         ]
     })
 }

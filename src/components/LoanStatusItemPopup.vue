@@ -6,6 +6,9 @@ import { Grid } from 'gridjs'
 // Project constants
 import { API_URL, LOAN_TYPES } from '../constants'
 
+import { useCurrentUserStore } from '../stores/currentUser.js'
+const currentUserStore = useCurrentUserStore()
+
 // Stylesheets
 import 'gridjs/dist/theme/mermaid.css'
 
@@ -55,7 +58,8 @@ const decide = async (toApprove) => {
             Authorization: `Bearer ${token}`
         },
         body: JSON.stringify({
-            approved: toApprove
+            approved: toApprove,
+            oic: currentUserStore.name
         })
     }).then((res) => res.json())
 
@@ -76,6 +80,8 @@ const decide = async (toApprove) => {
 
 // Lifecycle hooks
 onMounted(() => {
+    console.log(currentUserStore.name)
+
     loanStatusUser.value = new Grid({
         columns: [
             {

@@ -25,7 +25,7 @@ export const useCurrentUserStore = defineStore('currentUser', () => {
             const isAdmin = officer.username === 'admin'
             name.given = isAdmin ? 'Admin' : officer.name.given
             name.middle = isAdmin ? '' : officer.name.middle
-            name.last = isAdmin ? '' : officer.name.last
+            name.last = isAdmin ? ' ' : officer.name.last
             id.value = officer.uuid
             role.value = isAdmin ? 'System Administrator' : officer.role
         }
