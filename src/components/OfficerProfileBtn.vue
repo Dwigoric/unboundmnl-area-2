@@ -1,8 +1,13 @@
 <script setup>
+// Packages
+import { onMounted, ref } from 'vue'
+import jwt_decode from 'jwt-decode'
+
+// Components
 import DeletePrompt from '../components/DeletePrompt.vue'
 import OfficerEdit from '../components/OfficerEdit.vue'
 
-
+// Props
 defineProps({
     officer: {
         type: Object,
@@ -12,6 +17,15 @@ defineProps({
         type: Function,
         default: () => () => null
     }
+})
+
+// Reactive variables
+const isAdmin = ref(false)
+
+// Lifecycle hooks
+onMounted(() => {
+    const { type } = jwt_decode(window.$cookies.get('credentials').token)
+    isAdmin.value = type === 'admin'
 })
 </script>
 
@@ -36,83 +50,84 @@ defineProps({
 
                 <!-- Actions -->
                 <div class="officer-actions-box ml-auto d-flex">
-                    
                     <!-- Update Officer Profile Button -->
-                    <div class="updatebtn-wrapper">
+                    <div class="updatebtn-wrapper" v-if="isAdmin">
                         <v-dialog width="900">
-                                <template v-slot:activator="{ props }">
-                                    <v-btn
-                                        v-bind="props"
-                                        icon="mdi-square-edit-outline"
-                                        variant="plain"
-                                    >
-                                    </v-btn>
-                                </template>
+                            <template v-slot:activator="{ props }">
+                                <v-btn
+                                    v-bind="props"
+                                    icon="mdi-square-edit-outline"
+                                    variant="plain"
+                                >
+                                </v-btn>
+                            </template>
 
-                                <!-- Form popup -->
-                                <template v-slot:default="{ isActive }">
-                                    <v-card close-on-back contained class="form-wrapper">
-                                        <v-container>
-                                            <v-row justify="end">
-                                                <v-card-actions>
-                                                    <v-btn
-                                                        class="ma-2 capitalize-text"
-                                                        color="var(--vt-c-blue)"
-                                                        @click="isActive.value = false"
-                                                        icon="mdi-close"
-                                                    >
-                                                    </v-btn>
-                                                </v-card-actions>
-                                            </v-row>
-                                        </v-container>
-                                        
-                                        <!-- TODO: officerAction must bn 'Update' -->
-                                        <OfficerEdit />
-                                    </v-card>
-                                </template>
-                            </v-dialog>
+                            <!-- Form popup -->
+                            <template v-slot:default="{ isActive }">
+                                <v-card close-on-back contained class="form-wrapper">
+                                    <v-container>
+                                        <v-row justify="end">
+                                            <v-card-actions>
+                                                <v-btn
+                                                    class="ma-2 capitalize-text"
+                                                    color="var(--vt-c-blue)"
+                                                    @click="isActive.value = false"
+                                                    icon="mdi-close"
+                                                >
+                                                </v-btn>
+                                            </v-card-actions>
+                                        </v-row>
+                                    </v-container>
+
+                                    <OfficerEdit
+                                        :id="officer.id"
+                                        :close-popup="() => (isActive.value = false)"
+                                    />
+                                </v-card>
+                            </template>
+                        </v-dialog>
                     </div>
 
                     <!-- Delete Officer Profile Button -->
-                        <div class="deletebtn-wrapper">
-                            <v-dialog width="600">
-                                <template v-slot:activator="{ props }">
-                                    <v-btn v-bind="props" icon="mdi-trash-can-outline" variant="plain">
-                                    </v-btn>
-                                </template>
+                    <div class="deletebtn-wrapper">
+                        <v-dialog width="600">
+                            <template v-slot:activator="{ props }">
+                                <v-btn v-bind="props" icon="mdi-trash-can-outline" variant="plain">
+                                </v-btn>
+                            </template>
 
-                                <!-- Form popup -->
-                                <template v-slot:default="{ isActive }">
-                                    <v-card close-on-back contained class="form-wrapper">
-                                        <v-container>
-                                                <v-row justify="end">
-                                                    <v-card-actions>
-                                                        <v-btn
-                                                            class="ma-2 capitalize-text"
-                                                            color="var(--vt-c-blue)"
-                                                            @click="isActive.value = false"
-                                                            icon="mdi-close"
-                                                        >
-                                                        </v-btn>
-                                                    </v-card-actions>
-                                                </v-row>
-                                                <h2 class="ml-5">Delete Profile</h2>
-                                        </v-container>
-                                        <DeletePrompt
-                                            profileType="Officer"
-                                            :name="`${officer.name.last}, ${officer.name.given}`"
-                                            :identifier="officer.uuid"
-                                            :onsubmit="() => {
-                                                    removeFunc()
-                                                    isActive.value = false
-                                                }
-                                                "
-                                        />
-                                    </v-card>
-                                </template>
-                            </v-dialog>
-                        </div>
-
+                            <!-- Form popup -->
+                            <template v-slot:default="{ isActive }">
+                                <v-card close-on-back contained class="form-wrapper">
+                                    <v-container>
+                                        <v-row justify="end">
+                                            <v-card-actions>
+                                                <v-btn
+                                                    class="ma-2 capitalize-text"
+                                                    color="var(--vt-c-blue)"
+                                                    @click="isActive.value = false"
+                                                    icon="mdi-close"
+                                                >
+                                                </v-btn>
+                                            </v-card-actions>
+                                        </v-row>
+                                        <h2 class="ml-5">Delete Profile</h2>
+                                    </v-container>
+                                    <DeletePrompt
+                                        profileType="Officer"
+                                        :name="`${officer.name.last}, ${officer.name.given}`"
+                                        :identifier="officer.uuid"
+                                        :onsubmit="
+                                            () => {
+                                                removeFunc()
+                                                isActive.value = false
+                                            }
+                                        "
+                                    />
+                                </v-card>
+                            </template>
+                        </v-dialog>
+                    </div>
                 </div>
             </v-card>
         </template>

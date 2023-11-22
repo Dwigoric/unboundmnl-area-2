@@ -1,13 +1,80 @@
+<script setup>
+// Packages
+import { ref } from 'vue'
+
+// Reactive variables
+const form = ref(null)
+const newPassword = ref('')
+const confirmNewPassword = ref('')
+const errorAlert = ref(false)
+const errorMessage = ref('')
+const loading = ref(false)
+const showPassword = ref(false)
+const showConfirmPassword = ref(false)
+
+// Project constants
+import { API_URL } from '../constants'
+
+// Define constants
+const rules = {
+    required: (v) => !!v || 'This field is required',
+    password: (v) =>
+        (v && !/^(.{0,7}|[^0-9]*|[^A-Z]*|[^a-z]*|[a-zA-Z0-9]*)$/.test(v)) ||
+        'Password must contain at least one uppercase, one lowercase, one number and one special character',
+    mustMatch: (v) => (!!v && v === newPassword.value) || 'Passwords do not match',
+    min8: (v) => (v && v.length >= 8) || 'Minimum of 8 characters',
+    max255: (v) => (v && v.length <= 255) || 'Maximum of 255 characters'
+}
+
+// Props
+const props = defineProps({
+    id: {
+        type: String,
+        required: true
+    },
+    closePopup: {
+        type: Function,
+        required: true
+    }
+})
+
+// Methods
+const submitForm = async () => {
+    const { valid } = await form.value.validate()
+    if (!valid) return
+
+    loading.value = true
+
+    const { token } = window.$cookies.get('credentials')
+
+    const res = await fetch(`${API_URL}/officers/${props.id}/password`, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({ password: newPassword.value })
+    })
+
+    if (!res.ok) {
+        const { message } = await res.json()
+
+        errorAlert.value = true
+        errorMessage.value = message
+        loading.value = false
+    } else {
+        props.closePopup()
+    }
+}
+</script>
+
 <template>
     <div class="header">
-        <div class="header-text">
-            Edit Officer
-        </div>
+        <div class="header-text">Edit Officer</div>
     </div>
     <div class="info-fields">
         <div class="form-wrapper">
             <VForm id="login-form" ref="form">
-
                 <div class="header2">Change Password</div>
 
                 <!-- Password -->
@@ -16,9 +83,15 @@
                         <div>* New Password:</div>
                     </div>
 
-                    <VTextField 
-                        class="username-pw-input" 
-                        label="Enter New Password" />
+                    <VTextField
+                        v-model="newPassword"
+                        class="username-pw-input"
+                        label="Enter New Password"
+                        :rules="[rules.required, rules.min8, rules.max255, rules.password]"
+                        :type="showPassword ? 'text' : 'password'"
+                        :append-inner-icon="showPassword ? 'mdi-eye-off' : 'mdi-eye'"
+                        @click:append-inner="showPassword = !showPassword"
+                    />
                 </div>
 
                 <!-- Password -->
@@ -27,19 +100,42 @@
                         <div>* Re-enter New Password:</div>
                     </div>
 
-                    <VTextField 
-                        class="username-pw-input" 
-                        label="Re-enter New Password" />
+                    <VTextField
+                        v-model="confirmNewPassword"
+                        class="username-pw-input"
+                        label="Re-enter New Password"
+                        :rules="[
+                            rules.required,
+                            rules.min8,
+                            rules.max255,
+                            rules.password,
+                            rules.mustMatch
+                        ]"
+                        :type="showConfirmPassword ? 'text' : 'password'"
+                        :append-inner-icon="showConfirmPassword ? 'mdi-eye-off' : 'mdi-eye'"
+                        @click:append-inner="showConfirmPassword = !showConfirmPassword"
+                    />
                 </div>
-                <!-- <VAlert v-if="errorAlert" v-model="errorAlert" type="error" closable="" density="comfortable" elevation="5">
+                <VAlert
+                    v-if="errorAlert"
+                    v-model="errorAlert"
+                    type="error"
+                    closable=""
+                    density="comfortable"
+                    elevation="5"
+                >
                     {{ errorMessage }}
                 </VAlert>
 
                 <div class="btn-wrapper">
-                    <VBtn type="submit" class="btn capitalize-text" @click.prevent="submitForm" :loading="loading">{{
-                        props.action === 'update' ? 'Edit' : 'Create' }} Member Profile
+                    <VBtn
+                        type="submit"
+                        class="btn capitalize-text"
+                        @click.prevent="submitForm"
+                        :loading="loading"
+                        >Change Password
                     </VBtn>
-                </div> -->
+                </div>
             </VForm>
         </div>
     </div>
@@ -100,7 +196,8 @@
     margin-left: 5%;
 }
 
-.header-text {}
+.header-text {
+}
 
 .header2 {
     font-size: 1.2rem;
