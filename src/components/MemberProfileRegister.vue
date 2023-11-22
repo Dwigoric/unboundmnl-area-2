@@ -42,7 +42,8 @@ const userData = reactive({
         street: '',
         barangay: '',
         city: '',
-        province: ''
+        province: '',
+        region: ''
     },
     occupation: '',
     spouse: {
@@ -57,7 +58,6 @@ const userData = reactive({
         occupation: ''
     }
 })
-const region = ref(null)
 
 // Define constants
 const rules = {
@@ -199,25 +199,40 @@ const registerUser = async function () {
 
 // Lifecycle hooks
 onMounted(autofillFormIfPossible)
-watch(region, (newVal) => {
-    locationsItems.provinces.splice(0, locationsItems.provinces.length)
-    const { reg_code } = regions.find((item) => item.name === newVal)
-    locationsItems.provinces.push(...getProvincesByRegion(reg_code))
-})
+watch(
+    () => userData.address.region,
+    (newVal) => {
+        locationsItems.provinces.splice(0, locationsItems.provinces.length)
+        try {
+            const { reg_code } = regions.find((item) => item.name === newVal)
+            locationsItems.provinces.push(...getProvincesByRegion(reg_code))
+        } catch (e) {
+            console.error(e)
+        }
+    }
+)
 watch(
     () => userData.address.province,
     (newVal) => {
         locationsItems.cities.splice(0, locationsItems.cities.length)
-        const { prov_code } = locationsItems.provinces.find((item) => item.name === newVal)
-        locationsItems.cities.push(...getCityMunByProvince(prov_code))
+        try {
+            const { prov_code } = locationsItems.provinces.find((item) => item.name === newVal)
+            locationsItems.cities.push(...getCityMunByProvince(prov_code))
+        } catch (e) {
+            console.error(e)
+        }
     }
 )
 watch(
     () => userData.address.city,
     (newVal) => {
         locationsItems.barangays.splice(0, locationsItems.barangays.length)
-        const { mun_code } = locationsItems.cities.find((item) => item.name === newVal)
-        locationsItems.barangays.push(...getBarangayByMun(mun_code))
+        try {
+            const { mun_code } = locationsItems.cities.find((item) => item.name === newVal)
+            locationsItems.barangays.push(...getBarangayByMun(mun_code))
+        } catch (e) {
+            console.error(e)
+        }
     }
 )
 </script>
@@ -422,7 +437,7 @@ watch(
 
                     <VAutocomplete
                         class="username-pw-input"
-                        v-model="region"
+                        v-model="userData.address.region"
                         id="login-address-region"
                         :rules="[rules.required]"
                         label="Enter Region"
@@ -435,7 +450,7 @@ watch(
                 </div>
 
                 <VExpandTransition>
-                    <div class="row-tab" v-if="region">
+                    <div class="row-tab" v-if="userData.address.region">
                         <div class="label">
                             <div>* Province:</div>
                         </div>
