@@ -40,7 +40,11 @@ const props = defineProps({
         type: Function,
         default: () => () => null
     },
-    currentBalance: {
+    originalLoanAmount: {
+        type: Number,
+        default: 0
+    },
+    balance: {
         type: Number,
         default: 0
     }
@@ -51,14 +55,26 @@ const formData = reactive({
     transactionDate: '',
     submissionDate: formatDate(Date.now()),
     amountPaid: 0,
-    balance: props.currentBalance, // Is there a more elegant/dynamic way to update this? Maybe perform a fetch request?
+    amountDue: 0,
+    balance: props.balance, // Is there a more elegant/dynamic way to update this? Maybe perform a fetch request?
     interestPaid: 0,
     finesPaid: 0,
-    officerInCharge: ''
+    interestDue: 0,
+    officerInCharge: '',
+    payment: false,
+    dues: true,
+    readjustment: false
 })
 
+// Reactive variable to determine what type of transaction the user is making for the loan ledger.
+const transactionType = ref('');
+
 const newBalance = computed(() => {
-    return props.currentBalance - formData.amountPaid
+
+    const dues = 0;
+    const payments = Number(formData.amountPaid) + Number(formData.interestPaid);
+
+    return props.balance - Number(formData.amountPaid) - Number(formData.interestPaid) + Number(formData.interestDue) 
 })
 
 const officers = reactive([])
@@ -69,11 +85,24 @@ const submit = async function () {
 
     loading.value = true
 
-    // Update balance to match that of input
-    formData.balance = newBalance
+    // If transaction is NOT readjustment 
+    // THIS GUY IS THE REASON ????
+    if (formData.readjustment === false) {
+        // Update balance to match that of form input
+        formData.balance = newBalance;
+    }
 
+
+
+    // if transaction is dues instead
+    // front end calculation of balance
+
+    // if transaction is dues, add to current balance instead of reducing from it.
+    
     const preprocessedFormData = { ...formData }
     preprocessedFormData.officerInCharge = { ...preprocessedFormData.officerInCharge.value }
+
+    console.log(`FORM DATA: ${preprocessedFormData.interestDue}`);
 
     const res = await fetch(`${API_URL}/loans/${props.loanID}/ledger`, {
         method: 'PUT',
@@ -105,6 +134,38 @@ const submit = async function () {
     }
 }
 
+// Watch the transaction type to reset formData back to default if switching transaction type
+watch(transactionType, (transaction) => {
+    console.log(`I PICKED THIS TRANSACTION TYPE: ${transaction}`)
+
+    // If selected transaction is payments
+    if (transaction === 'payments') {
+        formData.amountPaid = 0;
+        formData.amountDue = 0;
+        formData.interestDue = 0;
+        formData.balance = props.balance;
+        formData.payment = true;
+        formData.dues = false;
+        formData.readjustment = false;
+    } else if (transaction === 'dues') {
+        formData.amountPaid = 0;
+        formData.interestPaid = 0;
+        formData.finesPaid = 0;
+        formData.balance = props.balance;
+        formData.payment = false;
+        formData.dues = true;
+        formData.readjustment = false;
+    } else if (transaction === 'readjustment') {
+        formData.balance = props.balance
+        formData.readjustment = true;
+        formData.amountDue = 0;
+        formData.amountPaid = 0;
+        formData.interestDue = 0;
+        formData.interestPaid = 0;
+        formData.finesPaid = 0;
+    }
+})
+
 onMounted(async () => {
     const officersRes = await fetch(`${API_URL}/officers/`, {
         headers: {
@@ -127,85 +188,149 @@ onMounted(async () => {
     <div class="wrapper">
         <!-- Add transaction form -->
         <VForm id="loan-ledger-form" ref="form">
-            <div class="d-flex flex-row">
-                <VTextField
-                    class="ml-3"
-                    type="date"
-                    label="* Date of Payment"
-                    v-model="formData.transactionDate"
-                    :rules="[rules.required]"
-                />
-                <VTextField
-                    class="ml-3"
-                    label="* GV/OR Number"
-                    v-model="formData.ORNumber"
-                    :rules="[rules.required]"
-                />
-            </div>
-            <VTextField
-                class="ml-3"
-                type="number"
-                label="Amount Paid"
-                v-model="formData.amountPaid"
-            />
-            <!-- TODO: make this field hidden as well -->
-            <VTextField
-                class="ml-3"
-                type="number"
-                label="Balance"
-                disabled=""
-                v-model="newBalance"
-            />
-            <VTextField
-                class="ml-3"
-                type="number"
-                label="Interest Paid"
-                v-model="formData.interestPaid"
-            />
-            <VTextField
-                class="ml-3"
-                type="number"
-                label="Fines Paid"
-                v-model="formData.finesPaid"
-            />
-            <div class="d-flex flex-row">
-                <VTextField
-                    class="ml-3"
-                    type="date"
-                    label="* Date of Entry"
-                    v-model="formData.submissionDate"
-                    :rules="[rules.required]"
-                />
-                <v-combobox
-                    class="ml-3"
-                    label="* Officer in Charge"
-                    :items="officers"
-                    v-model="formData.officerInCharge"
-                    :rules="[rules.required, rules.isOfficer]"
-                ></v-combobox>
-            </div>
 
-            <div class="btn-wrapper">
-                <VBtn
-                    prepend-icon="mdi-check"
-                    class="capitalize btn"
-                    :loading="loading"
-                    @click.prevent="submit"
+            <!-- ADD RADIO BUTTONS AND V-IF HERE PLEASEEEEEEEEEE -->
+            <h2 class="ml-3 py-3">Transaction Type</h2>
+            <div class="d-flex justify-center w-100">
+                <v-radio-group v-model="transactionType" inline>
+                    <v-radio label="Payment" value="payment"></v-radio>
+                    <v-radio label="Dues" value="dues"></v-radio>
+                    <v-radio label="Balance Readjustment" value="readjustment"></v-radio>
+                </v-radio-group>
+            </div>
+            
+            <!-- Only show form once user has selected transaction type -->
+            <div v-if="transactionType !== ''" >
+                <div class="d-flex flex-row mb-3">
+                    <VTextField
+                        class="ml-3"
+                        type="date"
+                        label="* Date of Payment"
+                        v-model="formData.transactionDate"
+                        :rules="[rules.required]"
+                        hint="When was the payment made?"
+                        persistent-hint
+                    />
+                    <VTextField
+                        class="ml-3"
+                        label="* GV/OR Number"
+                        v-model="formData.ORNumber"
+                        :rules="[rules.required]"
+                    />
+                </div>
+                <div class="d-flex flex-row">
+                    <VTextField
+                        class="ml-3"
+                        type="date"
+                        label="* Date of Entry"
+                        v-model="formData.submissionDate"
+                        :rules="[rules.required]"
+                        hint="When is this entry being created?"
+                        persistent-hint
+                    />
+                    <v-combobox
+                        class="ml-3"
+                        label="* Officer in Charge"
+                        :items="officers"
+                        v-model="formData.officerInCharge"
+                        :rules="[rules.required, rules.isOfficer]"
+                        hint="Which Loan Officer/Administrator is handling this loan?"
+                        persistent-hint
+                    ></v-combobox>
+                </div>
+
+                <!-- Only show payments if Payments is Selected -->
+                <div v-if="transactionType === 'payment'">
+
+                    <h3 class="ml-3 py-3">Payments</h3>
+                    <VTextField
+                        class="ml-3"
+                        type="number"
+                        label="Amount Paid"
+                        v-model="formData.amountPaid"
+                        :min="0"
+                    />
+                    <!-- TODO: make this field hidden as well -->
+                    <VTextField
+                        class="ml-3"
+                        type="number"
+                        label="Balance"
+                        disabled=""
+                        v-model="newBalance"
+                        :min="0"
+                    />
+                    <VTextField
+                        class="ml-3"
+                        type="number"
+                        label="Interest Paid"
+                        v-model="formData.interestPaid"
+                        :min="0"
+                    />
+
+                    <!-- Fines Paid -->
+                    <VTextField
+                        class="ml-3"
+                        type="number"
+                        label="Fines Paid"
+                        v-model="formData.finesPaid"
+                        :min="0"
+                    />
+                </div>
+                
+                <!-- Only show dues if Due is selected -->
+                <div v-if="transactionType === 'dues'">
+                    <!-- Only show dues if Fine/Interest is selected -->
+                    <h3 class="ml-3 py-3">Dues</h3>
+                    <VTextField
+                        class="ml-3"
+                        type="number"
+                        label="Amount Due"
+                        v-model="formData.amountDue"
+                        :min="0"
+                    />
+                    <!-- TODO: Automatically generate interest value?? -->
+                    <VTextField
+                        class="ml-3"
+                        type="number"
+                        label="Interest Due"
+                        v-model="formData.interestDue"
+                        :min="0"
+                    />
+                </div>
+
+                <div v-if="transactionType === 'readjustment'">
+                    <h3 class="ml-3 py-3">Balance Readjustment</h3>
+                    <VTextField
+                        class="ml-3"
+                        type="number"
+                        label="New Balance"
+                        v-model="formData.balance"
+                        :min="0"
+                        :max="props.originalLoanAmount"
+                    />    
+                </div>
+                <div class="btn-wrapper">
+                    <VBtn
+                        prepend-icon="mdi-check"
+                        class="capitalize btn"
+                        :loading="loading"
+                        @click.prevent="submit"
+                    >
+                        Submit
+                    </VBtn>
+                </div>
+    
+                <VAlert
+                    v-if="errorAlert"
+                    v-model="errorAlert"
+                    type="error"
+                    closable=""
+                    density="comfortable"
+                    elevation="5"
                 >
-                    Submit
-                </VBtn>
+                    {{ errorMessage }}
+                </VAlert>
             </div>
-
-            <VAlert
-                v-if="errorAlert"
-                v-model="errorAlert"
-                type="error"
-                closable=""
-                density="comfortable"
-                elevation="5"
-            >
-                {{ errorMessage }}
-            </VAlert>
         </VForm>
     </div>
 </template>

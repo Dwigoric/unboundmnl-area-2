@@ -1,6 +1,6 @@
 <script setup>
 // Import packages
-import { ref, reactive } from 'vue'
+import { ref, reactive, computed } from 'vue'
 
 // Import router
 import router from '../router'
@@ -56,24 +56,6 @@ const loanTypes = reactive(
     })
 )
 
-// Define loan ranges depending on type (TENTATIVE VALUES)
-const loanRanges = {
-    emergency: { min: 100, max: 7000 },
-    'multi-purpose': { min: 100, max: 6000 },
-    educational: { min: 100, max: 6000 },
-    'petty cash': { min: 100, max: 1000 },
-    commercial: { min: 100, max: 2500 },
-    livelihood: { min: 100, max: 2500 }
-
-    // education: { min: 100, max: 5000 },
-    // personal: { min: 100, max: 2500 },
-    // micro: { min: 100, max: 1000 },
-    // utilities: { min: 100, max: 3000 },
-    // construction: { min: 100, max: 6000 },
-    // emergency: { min: 100, max: 7000 },
-    // commodity: { min: 100, max: 2500 }
-}
-
 // Define methods
 /**
  * Saves form data to the application form store.
@@ -91,19 +73,6 @@ const prefillForm = async function () {
     await router.push({ name: 'Export Application Form' })
 }
 
-// Function that changes loan range depending on type of loan selected.
-const changeLoanRange = function () {
-    // Stores a string indicating the loan type selected
-    const loanType = loanData.type
-
-    // Queries the loanRanges object for the corresponding minimum and maximum amounts.
-    const min = loanRanges[loanType].min
-    const max = loanRanges[loanType].max
-    // Then modifies the minimum and maximum amounts accordingly
-    loanData.amount = min
-    loanData.minAmount = min
-    loanData.maxAmount = max
-}
 </script>
 
 <template>
@@ -172,7 +141,6 @@ const changeLoanRange = function () {
                         id="loan-type"
                         :rules="[rules.required]"
                         label="Select Loan Type"
-                        @update:modelValue="changeLoanRange"
                     />
                 </div>
 
@@ -188,12 +156,10 @@ const changeLoanRange = function () {
                             :rules="[
                                 rules.required,
                                 (v) => {
-                                    if (v < loanData.minAmount || v > loanData.maxAmount) {
+                                    if (v <= loanData.minAmount ) {
                                         return (
-                                            'Amount must be between ' +
-                                            loanData.minAmount +
-                                            ' and ' +
-                                            loanData.maxAmount
+                                            `Amount must be greater than ${loanData.minAmount}`
+
                                         )
                                     }
                                     return true
@@ -201,26 +167,9 @@ const changeLoanRange = function () {
                             ]"
                             label="Enter Loan Amount"
                             type="number"
-                            :min="loanData.minAmount"
-                            :max="loanData.maxAmount"
+                            :min="0"
                             :step="100"
                         />
-                        <VSlider
-                            v-model="loanData.amount"
-                            :min="loanData.minAmount"
-                            :max="loanData.maxAmount"
-                            :step="10"
-                            thumb-label
-                            :thumb-size="20"
-                        >
-                            <!-- Only showcase loanRange if a loan type is selected. -->
-                            <template v-if="loanData.type !== ''" #prepend>
-                                {{ loanData.minAmount }}
-                            </template>
-                            <template v-if="loanData.type !== ''" #append>
-                                {{ loanData.maxAmount }}
-                            </template>
-                        </VSlider>
                     </div>
                 </div>
 
@@ -393,9 +342,6 @@ const changeLoanRange = function () {
     display: inline-block;
     text-align: right;
     vertical-align: top;
-}
-
-.username-pw-input {
 }
 
 .btn {

@@ -45,13 +45,18 @@ const formData = reactive({
     ORNumber: '',
     transactionDate: '',
     submissionDate: formatDate(Date.now()),
+    amountDue: 0,
     amountPaid: 0,
     balance: 0,
     interestPaid: 0,
     finesPaid: 0,
     officerInCharge: ''
 })
-
+/*
+const newBalance = computed(() => {
+    return props.currentBalance - formData.amountPaid;
+})
+*/
 const officers = reactive([])
 
 const updateAutofill = async function () {
@@ -85,6 +90,10 @@ const submit = async function () {
     loading.value = true
 
     const preprocessedFormData = { ...formData }
+
+    // Update the balance to match that of automatic calculations
+    //preprocessedFormData.balance = ;
+
     if (
         typeof preprocessedFormData.officerInCharge === 'string' ||
         preprocessedFormData.officerInCharge instanceof String
@@ -121,6 +130,7 @@ const submit = async function () {
         errorAlert.value = false
         errorMessage.value = ''
         props.onsubmit()
+        // refresh?
         return true
     }
 }
@@ -158,6 +168,8 @@ onMounted(async () => {
                     type="date"
                     label="* Date of Payment"
                     v-model="formData.transactionDate"
+                    hint="When was the payment made?"
+                    persistent-hint
                     :rules="[rules.required]"
                 />
                 <VTextField
@@ -209,6 +221,35 @@ onMounted(async () => {
                     :rules="[rules.required, rules.isOfficer]"
                 ></v-combobox>
             </div>
+            <h3 class="ml-3 py-3">Dues</h3>
+            <VTextField
+                class="ml-3"
+                type="number"
+                label="Amount Due"
+                v-model="formData.amountDue"
+            />
+            <h3 class="ml-3 py-3">Payments</h3>
+            <VTextField
+                class="ml-3"
+                type="number"
+                label="Amount Paid"
+                v-model="formData.amountPaid"
+            />
+            <!-- Disabled because balance is derived from amountPaid -->
+            <VTextField class="ml-3" type="number" label="Balance" disabled v-model="formData.balance" />
+            <VTextField
+                class="ml-3"
+                type="number"
+                label="Interest Paid"
+                v-model="formData.interestPaid"
+            />
+            <VTextField
+                class="ml-3"
+                type="number"
+                label="Fines Paid"
+                v-model="formData.finesPaid"
+            />
+
 
             <div class="btn-wrapper">
                 <VBtn

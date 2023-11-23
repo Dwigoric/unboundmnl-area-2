@@ -16,7 +16,8 @@ export const useApplicationFormStore = defineStore('applicationForm', () => {
     })
 
     const date = ref('')
-    const amount = ref(0)
+    const amount = ref(0)   
+    const runningBalance = ref(0)
     const term = ref(0)
     const paymentFrequency = ref('')
     const classification = ref('')
@@ -27,6 +28,7 @@ export const useApplicationFormStore = defineStore('applicationForm', () => {
     const reset = () => {
         date.value = ''
         amount.value = 0
+        runningBalance.value = 0
         term.value = 0
         paymentFrequency.value = ''
         classification.value = ''
@@ -39,6 +41,7 @@ export const useApplicationFormStore = defineStore('applicationForm', () => {
         return {
             date: date.value,
             amount: amount.value,
+            runningBalance: runningBalance.value,
             term: term.value,
             paymentFrequency: paymentFrequency.value,
             classification: classification.value,
@@ -51,6 +54,7 @@ export const useApplicationFormStore = defineStore('applicationForm', () => {
     const setLoanData = (loan) => {
         date.value = loan.date
         amount.value = loan.amount
+        runningBalance.value = loan.amuont
         term.value = loan.term
         type.value = loan.type
         status.value = loan.status || 'pending'

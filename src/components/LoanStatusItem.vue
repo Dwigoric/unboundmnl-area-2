@@ -117,7 +117,7 @@ onMounted(async () => {
                             className: 'py-2 mb-4 px-4 border rounded-md',
                             onClick: () => setPopupLoan(row.cells[0].data)
                         },
-                        'Change Status'
+                        'Loan Status'
                     )
                 }
             }

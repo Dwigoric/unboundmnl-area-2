@@ -237,7 +237,7 @@ const createOfficer = async () => {
                             :loading="submitBtnLoading"
                         >
                             <!-- TODO: Have officerAction input Update/Register -->
-                            {{ officerAction }} Officer
+                            {{ officerAction }} Create Profile
                         </VBtn>
                     </div>
                 </VForm>

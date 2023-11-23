@@ -26,6 +26,9 @@ const props = defineProps({
 const ledgerData = ref([])
 const isAddPopupActive = ref(false) // for add transaction pop up
 const isPopupActive = ref(false) // for edit transaction pop up
+const originalLoanAmount = ref(0) // for dynamically calculating balance in form
+const totalAmountPaid = ref(0) // for dynamically calculating balance in form
+const balance = ref(0);
 
 const currentlyEditedTransactionID = ref('')
 
@@ -65,18 +68,27 @@ const formattedLoanAmount = computed(() => {
     )
 })
 
+// Format the current balance to PHP standard
+const formattedBalance = computed(() => {
+    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'PHP' }).format(
+        balance.value
+    )
+})
+
 const loanTransactionColumns = [
     { name: 'Transaction ID', hidden: true },
-    { name: 'Date of Payment' },
+    { name: 'Date of Transaction' },
     { name: 'GV/OR Number' },
-    //{ name: 'Total Amount Due' },
-    //{ name: 'Total Amount Paid' },
+    { name: 'Amount Due' },
     { name: 'Amount Paid' },
     { name: 'Balance' },
+    { name: 'Interest Due' },
     { name: 'Interest Paid' },
     { name: 'Fines Paid' },
     { name: 'Date of Entry' },
     { name: 'Officer in Charge' },
+    // remove actions
+    /*
     {
         name: 'Actions',
         formatter: (cell, row) => {
@@ -88,9 +100,15 @@ const loanTransactionColumns = [
                 },
                 'Edit row'
             )
-        }
+        },
     }
+    */
 ]
+
+// Give each transaction column a minimum width to properly fit the content
+loanTransactionColumns.forEach(col => {
+    col.width = '15%';
+})
 
 const setPopupAdd = () => {
     isAddPopupActive.value = true
@@ -113,6 +131,12 @@ const getLoanInfo = async () => {
     if (resJson) {
         const loanData = resJson.loan
         rawLoanData.value = loanData
+        
+        // Also assign the original loan amount to the reactive variable
+        originalLoanAmount.value = loanData.originalLoanAmount
+        
+        // Store value of balance
+        balance.value = loanData.balance;
 
         formData.amount = loanData.originalLoanAmount
         formData.loanee = loanData.username
@@ -143,8 +167,10 @@ const getLoanInfo = async () => {
             transaction.transactionID,
             transaction.transactionDate.substring(0, 10),
             transaction.ORNumber,
+            transaction.amountDue,
             transaction.amountPaid,
             transaction.balance,
+            transaction.interestDue,
             transaction.interestPaid,
             transaction.finesPaid,
             transaction.submissionDate.substring(0, 10),
@@ -162,10 +188,10 @@ function getTotalAmountPaid(ledgerTransactions) {
     var totalAmountPaid = 0
     // For every transaction in the ledger, add its amount paid to a total sum
 
-    ledgerTransactions.forEach((transaction) => {
-        let amountPaid = transaction[3] // index for amount paid
-        totalAmountPaid += amountPaid
-    })
+    ledgerTransactions.forEach( transaction => {
+        let amountPaid = transaction[4]; // index for amount paid
+        totalAmountPaid += amountPaid;
+    });
 
     return totalAmountPaid
 }
@@ -196,9 +222,6 @@ onMounted(async () => {
     loanPayments.value = new Grid({
         columns: loanTransactionColumns,
         data: ledgerData.value,
-        pagination: {
-            limit: 10
-        },
         search: true,
         sort: true,
         resizable: true,
@@ -209,9 +232,6 @@ onMounted(async () => {
             tr: 'my-16 py-3'
         },
         style: {
-            th: {
-                'min-width': '250px'
-            },
             tr: {
                 'margin-bottom': '1rem'
             }
@@ -223,7 +243,6 @@ onMounted(async () => {
 
     // Call getTotalAmountPaid
     formData.totalAmountPaid = getTotalAmountPaid(ledgerData.value)
-    console.log(`HERE: ${formData.totalAmountPaid}`)
 })
 </script>
 
@@ -233,7 +252,8 @@ onMounted(async () => {
             <!-- Left -->
             <div id="loan-amount-cell" class="h-75 w-30 pa-2">
                 <p>Original Loan Amount:</p>
-                <p class="loan-amount mt-n3">{{ formattedLoanAmount }}</p>
+                <p class="loan-amount">{{ formattedLoanAmount }}</p>
+                <p> Balance: {{ formattedBalance }} </p> <!-- TODO: remove this! -->
                 <div class="d-flex flex-row">
                     <p>Loanee:</p>
                     <p class="font-weight-bold ml-3">{{ formData.loanee }}</p>
@@ -413,8 +433,9 @@ onMounted(async () => {
                                 isActive.value = false
                             }
                         "
-                        :currentBalance="formData.amount - formData.totalAmountPaid"
-                    />
+                        :originalLoanAmount="originalLoanAmount"
+                        :balance="balance"
+                    /> <!-- NOTE: we should not be doing the solution above na -->
                 </VCard>
             </template>
         </VDialog>
@@ -502,11 +523,12 @@ onMounted(async () => {
     gap: 1rem;
 }
 
-.gridjs-table {
-    min-width: 100%;
+th.gridjs-th {
+    
 }
 
-.gridjs-th {
+th .gridjs-th {
     white-space: normal;
+    min-width: 500px;
 }
 </style>
