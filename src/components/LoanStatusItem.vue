@@ -151,6 +151,7 @@ const headers = [
     { title: 'Amount of Loan', key: 'originalLoanAmount' },
     { title: 'Change Status', key: 'status' }
 ]
+
 </script>
 
 <template>
