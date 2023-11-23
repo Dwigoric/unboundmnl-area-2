@@ -54,7 +54,7 @@ const visitMemberProfile = async (username) => {
 }
 
 onMounted(async () => {
-    const url = props.username ? `/${props.username}` : ''
+    const url = props.username ? `/user/${props.username}` : ''
 
     const res = await fetch(`${API_URL}/deposits${url}`, {
         method: 'GET',

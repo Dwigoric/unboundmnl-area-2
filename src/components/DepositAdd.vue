@@ -46,7 +46,7 @@ const submit = async function () {
 
     loading.value = true
 
-    const res = await fetch(`${API_URL}/deposits/new/${memberSearchStore.data.username}`, {
+    const res = await fetch(`${API_URL}/deposits/user/${memberSearchStore.data.username}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
@@ -77,7 +77,7 @@ const submit = async function () {
         errorAlert.value = false
         errorMessage.value = ''
         disableSubmit.value = true
-        alert("Deposit was processed!")
+        alert('Deposit was processed!')
         return true
     }
 }

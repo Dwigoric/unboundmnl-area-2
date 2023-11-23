@@ -87,7 +87,7 @@ const capital = ref()
 
 const getDepositInfo = async () => {
     // Fetch loan properties from the database by using the loanID property!
-    const jsonRes = await fetch(`${API_URL}/deposits/get/${props.depositID}`, {
+    const jsonRes = await fetch(`${API_URL}/deposits/${props.depositID}`, {
         method: 'GET',
         headers: {
             Authorization: `Bearer ${window.$cookies.get('credentials').token}`
