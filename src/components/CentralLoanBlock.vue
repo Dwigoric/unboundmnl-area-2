@@ -69,6 +69,14 @@ const getDateColor = (dueDate) => {
     } else return 'null'
 }
 
+const buildStatus = {
+    pending: ['Pending', 'purple'],
+    approved: ['Approved (for release)', 'orange'],
+    released: ['Approved (released)', 'success'],
+    rejected: ['Rejected', 'red'],
+    complete: ['Complete', 'blue']
+}
+
 onMounted(async () => {
     const url = props.username ? `/user/${props.username}` : ''
     const params = new URLSearchParams()
@@ -95,7 +103,8 @@ onMounted(async () => {
                     year: 'numeric',
                     month: 'short',
                     day: 'numeric'
-                })
+                }),
+                status: loan.status
             }))
         )
     }
@@ -141,15 +150,7 @@ onMounted(async () => {
             </template>
 
             <template v-slot:item.status="{ value }">
-                <v-chip :color="'purple'"> Pending </v-chip>
-
-                <v-chip :color="'success'"> Approved </v-chip>
-
-                <v-chip :color="'orange'"> Released </v-chip>
-
-                <v-chip :color="'red'"> Rejected </v-chip>
-
-                <v-chip :color="'blue'"> Complete </v-chip>
+                <v-chip :color="buildStatus[value][1]"> {{ buildStatus[value][0] }} </v-chip>
             </template>
 
             <template v-slot:item.id="{ value }">
