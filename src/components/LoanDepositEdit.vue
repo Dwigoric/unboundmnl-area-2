@@ -89,19 +89,16 @@ const submit = async function () {
             birthplace: hasCoborrower.value ? formData.coborrower.birthplace : '',
             occupation: hasCoborrower.value ? formData.coborrower.occupation : '',
             contact_no: hasCoborrower.value ? formData.coborrower.contact_no : ''
-        },
-        loanID: props.loanID
+        }
     }
 
-    const res = await fetch(`${API_URL}/loans/edit-loan`, {
+    const res = await fetch(`${API_URL}/loans/${props.loanID}`, {
         method: 'PATCH',
         headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${window.$cookies.get('credentials').token}`
         },
-        body: JSON.stringify({
-            ...preprocessedFormData
-        })
+        body: JSON.stringify(preprocessedFormData)
     })
     const { error, message } = await res.json()
 

@@ -32,7 +32,7 @@ const submit = async () => {
     loading.value = true
 
     const { error, message } = await fetch(
-        `${API_URL}/loans/new/${memberSearchStore.data.username}`,
+        `${API_URL}/loans/user/${memberSearchStore.data.username}`,
         {
             method: 'PUT',
             headers: {
@@ -53,7 +53,7 @@ const submit = async () => {
         errorAlert.value = false
         errorMessage.value = ''
         disableSubmit.value = true
-        alert("Loan Application Submitted!")
+        alert('Loan Application Submitted!')
         return true
     }
 }

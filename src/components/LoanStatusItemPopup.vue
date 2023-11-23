@@ -51,7 +51,7 @@ const decide = async (toApprove) => {
         return
     }
 
-    const { error, message } = await fetch(`${API_URL}/loans/review-application/${props.data[0]}`, {
+    const { error, message } = await fetch(`${API_URL}/loans/${props.data[0]}/review`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -73,9 +73,8 @@ const decide = async (toApprove) => {
         errorAlert.value = true
         errorMessage.value = message
         return
-    } 
-    else {
-        alert("Loan was processed!")
+    } else {
+        alert('Loan was processed!')
     }
 
     props.onsubmit(props.data[0])

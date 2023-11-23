@@ -104,15 +104,12 @@ const deleteLoan = async function () {
     if (!credentials) return
     const { token } = credentials
 
-    const result = await fetch(`${API_URL}/loans/delete-loan`, {
-        method: 'POST',
+    const result = await fetch(`${API_URL}/loans/${props.identifier}`, {
+        method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`
-        },
-        body: JSON.stringify({
-            loanID: props.identifier
-        })
+        }
     })
 
     errorMessage.value = ''

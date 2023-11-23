@@ -28,7 +28,7 @@ const headers = [
     { title: 'Loanee', key: 'loanee' },
     { title: 'Amount of Loan', key: 'amount' },
     { title: 'Submission Date', key: 'submissionDate' },
-    { title: 'Status', key: 'status'},
+    { title: 'Status', key: 'status' },
     { title: 'View Loan Ledger', key: 'id' }
 ]
 
@@ -55,23 +55,22 @@ const visitMemberProfile = async (username) => {
 }
 
 /**
- * Gets the corresponding color for the data 
+ * Gets the corresponding color for the data
  * @param {*} dueDate - Due date of the loan
  */
 // TODO: Make this work
 const getDateColor = (dueDate) => {
-    var currentDate = new Date();
-    if (dueDate == 1){
-        console.log("HELP")
+    var currentDate = new Date()
+    if (dueDate == 1) {
+        console.log('HELP')
         console.log(dueDate)
         console.log(currentDate)
         return 'red'
-    } 
-    else return "null"
+    } else return 'null'
 }
 
 onMounted(async () => {
-    const url = props.username ? `/${props.username}` : ''
+    const url = props.username ? `/user/${props.username}` : ''
     const params = new URLSearchParams()
     params.set('status', 'approved')
     const res = await fetch(`${API_URL}/loans${url}?${params}`, {
@@ -137,30 +136,20 @@ onMounted(async () => {
 
             <template v-slot:item.submissionDate="{ value }">
                 <v-chip :color="getDateColor(value)">
-                    {{  value }}
+                    {{ value }}
                 </v-chip>
             </template>
 
             <template v-slot:item.status="{ value }">
-                <v-chip :color="'purple'">
-                    Pending
-                </v-chip>
+                <v-chip :color="'purple'"> Pending </v-chip>
 
-                <v-chip :color="'success'">
-                    Approved
-                </v-chip>
+                <v-chip :color="'success'"> Approved </v-chip>
 
-                <v-chip :color="'orange'">
-                    Released
-                </v-chip>
+                <v-chip :color="'orange'"> Released </v-chip>
 
-                <v-chip :color="'red'">
-                    Rejected
-                </v-chip>
+                <v-chip :color="'red'"> Rejected </v-chip>
 
-                <v-chip :color="'blue'">
-                    Complete
-                </v-chip>
+                <v-chip :color="'blue'"> Complete </v-chip>
             </template>
 
             <template v-slot:item.id="{ value }">
