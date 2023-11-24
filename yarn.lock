@@ -3840,10 +3840,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"phil-reg-prov-mun-brgy@npm:^1.1.0":
-  version: 1.1.0
-  resolution: "phil-reg-prov-mun-brgy@npm:1.1.0"
-  checksum: e3401c95479ac06eb0136b8908b123b45f6752d9ac59e79734678a3e8953ce10ac856abab4bee4094e0014cbf85370a2c7ccc8d8c7b2f2699e9ed94dc52a915f
+"ph-locations@npm:^1.1.3":
+  version: 1.1.3
+  resolution: "ph-locations@npm:1.1.3"
+  checksum: 4c5b10b41ae0e17fd04cf62e5d884ca3c0995e34d72eb551e86ecc9dc6e0e10285e17ff16912f8731b729dbde75a9b4269b5b11060174cdf6ae77455da918a82
   languageName: node
   linkType: hard
 
@@ -4569,7 +4569,7 @@ __metadata:
     jwt-decode: "npm:^3.1.2"
     nprogress: "npm:^0.2.0"
     pdf-lib: "npm:^1.17.1"
-    phil-reg-prov-mun-brgy: "npm:^1.1.0"
+    ph-locations: "npm:^1.1.3"
     pinia: "npm:^2.1.7"
     prettier: "npm:^3.1.0"
     vite: "npm:^5.0.2"

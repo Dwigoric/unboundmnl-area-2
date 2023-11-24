@@ -1,12 +1,10 @@
 <script setup>
 // Import packages
 import { ref, reactive, onMounted, watch } from 'vue'
-import {
-    regions,
-    getProvincesByRegion,
-    getCityMunByProvince,
-    getBarangayByMun
-} from 'phil-reg-prov-mun-brgy'
+import { psgc } from 'ph-locations'
+
+// Philippine locations
+const { regions, provinces, citiesMunicipalities } = psgc
 
 // Import constants
 import { API_URL } from '../constants'
@@ -16,11 +14,9 @@ const errorMessage = ref('')
 const errorAlert = ref(false)
 const form = ref(null)
 const loading = ref(false)
-const loadedLocations = ref(true)
 const locationsItems = reactive({
     provinces: [],
-    cities: [],
-    barangays: []
+    cities: []
 })
 
 // Define form fields
@@ -204,8 +200,11 @@ watch(
     (newVal) => {
         locationsItems.provinces.splice(0, locationsItems.provinces.length)
         try {
-            const { reg_code } = regions.find((item) => item.name === newVal)
-            locationsItems.provinces.push(...getProvincesByRegion(reg_code))
+            const { code } = regions.find((item) => item.name === newVal)
+            console.log(code)
+            locationsItems.provinces.push(
+                ...provinces.filter((province) => province.region === code)
+            )
         } catch (e) {
             console.error(e)
         }
@@ -216,20 +215,10 @@ watch(
     (newVal) => {
         locationsItems.cities.splice(0, locationsItems.cities.length)
         try {
-            const { prov_code } = locationsItems.provinces.find((item) => item.name === newVal)
-            locationsItems.cities.push(...getCityMunByProvince(prov_code))
-        } catch (e) {
-            console.error(e)
-        }
-    }
-)
-watch(
-    () => userData.address.city,
-    (newVal) => {
-        locationsItems.barangays.splice(0, locationsItems.barangays.length)
-        try {
-            const { mun_code } = locationsItems.cities.find((item) => item.name === newVal)
-            locationsItems.barangays.push(...getBarangayByMun(mun_code))
+            const { code } = locationsItems.provinces.find((item) => item.name === newVal)
+            locationsItems.cities.push(
+                ...citiesMunicipalities.filter((cityMun) => cityMun.province === code)
+            )
         } catch (e) {
             console.error(e)
         }
@@ -442,10 +431,14 @@ watch(
                         :rules="[rules.required]"
                         label="Enter Region"
                         auto-select-first
-                        :items="regions"
-                        item-title="name"
+                        :items="
+                            regions.map((region) => ({
+                                ...region,
+                                title: `${region.name} (${region.altName})`
+                            }))
+                        "
+                        item-title="title"
                         item-value="name"
-                        :disabled="!loadedLocations"
                     />
                 </div>
 
@@ -465,7 +458,6 @@ watch(
                             :items="locationsItems.provinces"
                             item-title="name"
                             item-value="name"
-                            :disabled="!loadedLocations"
                         />
                     </div>
                 </VExpandTransition>
@@ -486,7 +478,6 @@ watch(
                             :items="locationsItems.cities"
                             item-title="name"
                             item-value="name"
-                            :disabled="!loadedLocations"
                         />
                     </div>
                 </VExpandTransition>
@@ -497,17 +488,12 @@ watch(
                             <div>* Barangay:</div>
                         </div>
 
-                        <VAutocomplete
+                        <VTextField
                             class="username-pw-input"
                             v-model="userData.address.barangay"
                             id="login-address-barangay"
                             :rules="[rules.required]"
                             label="Enter Barangay"
-                            auto-select-first
-                            :items="locationsItems.barangays"
-                            item-title="name"
-                            item-value="name"
-                            :disabled="!loadedLocations"
                         />
                     </div>
                 </VExpandTransition>
