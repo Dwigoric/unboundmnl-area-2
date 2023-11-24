@@ -89,7 +89,15 @@ const fetchPDF = async () => {
     termTextField.setText(loanData.term)
 
     // Set amount
-    form.getTextField('Amount').setText(loanData.amount.toLocaleString())
+    form.getTextField('Amount').setText(
+        Intl.NumberFormat('en-PH', {
+            style: 'currency',
+            currency: 'PHP',
+            currencyDisplay: 'code'
+        })
+            .format(loanData.amount)
+            .replace('PHP', '')
+    )
 
     // Set type of loan
     const loanTypes = Object.freeze({
@@ -133,7 +141,13 @@ const fetchPDF = async () => {
         ].join(', ')
     )
     form.getTextField('Monthly Income').setText(
-        memberSearchStore.data.monthly_income.toLocaleString()
+        Intl.NumberFormat('en-PH', {
+            style: 'currency',
+            currency: 'PHP',
+            currencyDisplay: 'code'
+        })
+            .format(memberSearchStore.data.monthly_income)
+            .replace('PHP', '')
     )
     form.getTextField('Source of Income').setText(memberSearchStore.data.occupation)
 
