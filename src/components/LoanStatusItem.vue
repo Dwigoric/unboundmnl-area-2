@@ -12,12 +12,12 @@ import LoanStatusItemPopup from './LoanStatusItemPopup.vue'
 // Project constants
 import { API_URL, LOAN_TYPES } from '../constants'
 
-// TODO: Create proper vars
-// defineProps({
-//     givenName: String,
-//     lastName: String,
-//     username: String
-// });
+const props = defineProps({
+    status: {
+        type: String,
+        default: 'pending'
+    }
+})
 
 // Reactive variables
 const loanStatusTable = ref()
@@ -44,7 +44,7 @@ const fetchLoans = async () => {
 
     const params = new URLSearchParams()
     params.set('access_token', token)
-    params.set('status', 'pending')
+    params.set('status', props.status)
     const { error, message, loans } = await fetch(`${API_URL}/loans?${params}`).then((res) =>
         res.json()
     )
@@ -151,7 +151,6 @@ const headers = [
     { title: 'Amount of Loan', key: 'originalLoanAmount' },
     { title: 'Change Status', key: 'status' }
 ]
-
 </script>
 
 <template>

@@ -47,8 +47,7 @@ const tab = ref('pending')
                             </v-window-item>
 
                             <v-window-item value="rejected">
-                                <!-- TODO: Create component for rejected loans -->
-                                <LoanStatusItem />
+                                <LoanStatusItem status="rejected" />
                             </v-window-item>
                         </v-window>
                     </div>
