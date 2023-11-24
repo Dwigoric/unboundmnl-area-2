@@ -1,10 +1,59 @@
 <script setup>
 // Import vue components
-import { ref } from 'vue'
+import { ref, onMounted, reactive } from 'vue'
+import { API_URL } from '../../constants'
 
 import ContentBlock from '../../components/ContentBlock.vue'
 
 const tab = ref('emergency')
+
+const errorMessage = ref('')
+const errorAlert = ref(false)
+
+const formData = reactive({
+    notification_period_1: 0,
+    notification_period_2: 0,
+    notification_period_3: 0
+})
+
+const updateAutofill = async function () {
+    const res = await fetch(`${API_URL}/settings/notifications`, {
+        method: 'GET',
+        headers: {
+            Authorization: `Bearer ${window.$cookies.get('credentials').token}`
+        }
+    })
+
+    const resJSON = await res.json()
+
+    Object.assign(formData, resJSON.settings)
+}
+
+const submit = async function () {
+    const res = await fetch(`${API_URL}/settings/notifications`, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${window.$cookies.get('credentials').token}`
+        },
+        body: JSON.stringify({ ...formData })
+    })
+
+    const { error, message } = await res.json()
+
+    errorAlert.value = false
+
+    if (!error) {
+        alert('Successfully updated settings!')
+    } else {
+        errorAlert.value = true
+        errorMessage.value = message
+    }
+}
+
+onMounted(async () => {
+    await updateAutofill()
+})
 </script>
 
 <template>
@@ -16,12 +65,7 @@ const tab = ref('emergency')
                     <div class="row-tab mb-n5">
                         <div class="label d-flex">
                             <div>Notification Period 1</div>
-                            <v-chip 
-                                size="small"
-                                class="ml-2"
-                                color="blue">
-                                Blue
-                            </v-chip>
+                            <v-chip size="small" class="ml-2" color="blue"> Blue </v-chip>
                         </div>
 
                         <div class="w-25">
@@ -30,6 +74,8 @@ const tab = ref('emergency')
                                 variant="underlined"
                                 placeholder="Unit"
                                 suffix="days"
+                                type="number"
+                                v-model="formData.notification_period_1"
                             />
                         </div>
                     </div>
@@ -38,12 +84,7 @@ const tab = ref('emergency')
                     <div class="row-tab mb-n5">
                         <div class="label d-flex">
                             <div>Notification Period 2</div>
-                            <v-chip 
-                                size="small"
-                                class="ml-2"
-                                color="orange">
-                                Orange
-                            </v-chip>
+                            <v-chip size="small" class="ml-2" color="orange"> Orange </v-chip>
                         </div>
 
                         <div class="w-25">
@@ -52,6 +93,8 @@ const tab = ref('emergency')
                                 variant="underlined"
                                 placeholder="Unit"
                                 suffix="days"
+                                type="number"
+                                v-model="formData.notification_period_2"
                             />
                         </div>
                     </div>
@@ -60,12 +103,7 @@ const tab = ref('emergency')
                     <div class="row-tab mb-n5">
                         <div class="label d-flex">
                             <div>Notification Period 3</div>
-                            <v-chip 
-                                size="small"
-                                class="ml-2"
-                                color="red">
-                                Red
-                            </v-chip>
+                            <v-chip size="small" class="ml-2" color="red"> Red </v-chip>
                         </div>
 
                         <div class="w-25">
@@ -74,11 +112,11 @@ const tab = ref('emergency')
                                 variant="underlined"
                                 placeholder="Unit"
                                 suffix="days"
+                                type="number"
+                                v-model="formData.notification_period_3"
                             />
                         </div>
                     </div>
-
-                    
                 </div>
 
                 <div class="btn-wrapper">
@@ -91,6 +129,17 @@ const tab = ref('emergency')
                         Submit
                     </VBtn>
                 </div>
+
+                <VAlert
+                    v-if="errorAlert"
+                    v-model="errorAlert"
+                    type="error"
+                    closable=""
+                    density="comfortable"
+                    elevation="5"
+                >
+                    {{ errorMessage }}
+                </VAlert>
             </VForm>
         </div>
     </ContentBlock>
@@ -108,7 +157,7 @@ const tab = ref('emergency')
 .label {
     margin-top: 5.2%;
     margin-right: 6%;
-    
+
     /* border: 1px solid black; */
     width: 67%;
 
