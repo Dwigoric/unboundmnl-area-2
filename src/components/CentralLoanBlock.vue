@@ -157,7 +157,10 @@ onMounted(async () => {
             multi-sort=""
             :search="search"
             sticky=""
-            :sort-by="[{ key: 'dueDate', desc: false }]"
+            :sort-by="[
+                { key: 'status', order: 'asc' },
+                { key: 'dueDate', order: 'asc' }
+            ]"
         >
             <template v-slot:item.loanee="{ value }">
                 <v-btn
