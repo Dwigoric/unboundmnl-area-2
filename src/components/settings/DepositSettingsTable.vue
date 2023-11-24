@@ -19,7 +19,7 @@ const errorMessage = ref('')
 const errorAlert = ref(false)
 
 const formData = reactive({
-    interest_rate: { unit: '', value: 0, enabled: false },
+    interest_rate: { unit: '', value: 0 },
     time: { type: '', value: 0 }
 })
 
