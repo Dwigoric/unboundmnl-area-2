@@ -22,8 +22,7 @@ const props = defineProps({
 
 // Reactive variables
 const search = ref('')
-const releaseLoading = ref(false)
-const beingReleased = ref(null)
+const releaseLoading = ref([])
 const items = reactive([])
 const headers = [
     { title: 'Type of Loan', key: 'type' },
@@ -75,8 +74,7 @@ const getDateColor = (dueDate) => {
 }
 
 const markAsReleased = async (loanID) => {
-    releaseLoading.value = true
-    beingReleased.value = loanID
+    releaseLoading.value.push(loanID)
     const res = await fetch(`${API_URL}/loans/${loanID}`, {
         method: 'PATCH',
         headers: {
@@ -95,8 +93,7 @@ const markAsReleased = async (loanID) => {
         items[index].dueDate = dueDate
     }
 
-    releaseLoading.value = false
-    beingReleased.value = null
+    releaseLoading.value.splice(releaseLoading.value.indexOf(loanID), 1)
 }
 
 const buildStatus = {
@@ -160,7 +157,7 @@ onMounted(async () => {
             multi-sort=""
             :search="search"
             sticky=""
-            :sort-by="[{ key: 'dueDate', desc: true }]"
+            :sort-by="[{ key: 'dueDate', desc: false }]"
         >
             <template v-slot:item.loanee="{ value }">
                 <v-btn
@@ -191,7 +188,7 @@ onMounted(async () => {
                     variant="text"
                     prepend-icon="mdi-send-check"
                     v-if="value === 'approved'"
-                    :loading="releaseLoading && beingReleased === item.id"
+                    :loading="releaseLoading.includes(item.id)"
                     @click.prevent="markAsReleased(item.id)"
                 >
                     Mark as released
