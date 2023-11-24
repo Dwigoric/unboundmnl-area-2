@@ -236,7 +236,13 @@ onMounted(async () => {
                 v-model="formData.amountPaid"
             />
             <!-- Disabled because balance is derived from amountPaid -->
-            <VTextField class="ml-3" type="number" label="Balance" disabled v-model="formData.balance" />
+            <VTextField
+                class="ml-3"
+                type="number"
+                label="Balance"
+                disabled
+                v-model="formData.balance"
+            />
             <VTextField
                 class="ml-3"
                 type="number"
@@ -249,7 +255,6 @@ onMounted(async () => {
                 label="Fines Paid"
                 v-model="formData.finesPaid"
             />
-
 
             <div class="btn-wrapper">
                 <VBtn

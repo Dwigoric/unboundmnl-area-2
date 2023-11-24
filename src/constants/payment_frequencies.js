@@ -1,5 +1,5 @@
 export const PAYMENT_FREQUENCIES = Object.freeze([
-    { title: 'Daily', value: 'daily' },
+    { title: 'Daily', value: 'days' },
     { title: 'Weekly', value: 'weekly' },
-    { title: 'Monthly', value: 'monthly' }
+    { title: 'Monthly', value: 'months' }
 ])

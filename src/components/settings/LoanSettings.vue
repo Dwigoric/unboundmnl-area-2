@@ -11,14 +11,9 @@ const tab = ref('emergency')
 <template>
     <ContentBlock :width="100" :height="79" :unit="'%'" :padding="3">
         <h3>Loan Settings</h3>
-        
-        <div class="d-flex flex-row mt-2">
-            <v-tabs
-                v-model="tab"
-                direction="vertical"
-                color="primary"
-                class="mt-9">
 
+        <div class="d-flex flex-row mt-2">
+            <v-tabs v-model="tab" direction="vertical" color="primary" class="mt-9">
                 <v-tab value="emergency">
                     <div class="capitalize">Emergency</div>
                 </v-tab>
@@ -39,37 +34,36 @@ const tab = ref('emergency')
                     <div class="capitalize">Commercial</div>
                 </v-tab>
 
-                <v-tab value="agriculture">
-                    <div class="capitalize">Agriculture</div>
+                <v-tab value="livelihood">
+                    <div class="capitalize">Livelihood</div>
                 </v-tab>
             </v-tabs>
 
             <v-window v-model="tab" class="ml-2 mt-2 w-100">
                 <v-window-item value="emergency">
-                        <LoanSettingsTable :header="`Emergency`"/>
+                    <LoanSettingsTable :header="`Emergency`" />
                 </v-window-item>
 
                 <v-window-item value="educational">
-                        <LoanSettingsTable :header="`Educational`"/>
+                    <LoanSettingsTable :header="`Educational`" />
                 </v-window-item>
 
                 <v-window-item value="petty-cash">
-                        <LoanSettingsTable :header="`Petty Cash`"/>
+                    <LoanSettingsTable :header="`Petty Cash`" />
                 </v-window-item>
 
                 <v-window-item value="multipurpose-cash">
-                        <LoanSettingsTable :header="`Multipurpose Cash`"/>
+                    <LoanSettingsTable :header="`Multipurpose Cash`" />
                 </v-window-item>
 
                 <v-window-item value="commercial">
-                        <LoanSettingsTable :header="`Commercial`"/>
+                    <LoanSettingsTable :header="`Commercial`" />
                 </v-window-item>
 
-                <v-window-item value="agriculture">
-                        <LoanSettingsTable :header="`Agriculture`"/>
+                <v-window-item value="livelihood">
+                    <LoanSettingsTable :header="`Livelihood`" />
                 </v-window-item>
             </v-window>
-
         </div>
     </ContentBlock>
 </template>

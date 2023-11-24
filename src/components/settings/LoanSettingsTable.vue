@@ -1,19 +1,73 @@
 <script setup>
-
-import { ref } from 'vue'
+import { ref, onMounted, reactive } from 'vue'
+import { API_URL } from '../../constants'
 
 const props = defineProps({
     header: {
         type: String,
-        required: true,
+        required: true
     }
-});
+})
 
-const checkbox_ServiceFee = ref(true)
-const checkbox_CBU = ref(true)
-const checkbox_Savings = ref(true)
+const setting_keys = {
+    Emergency: 'emergency',
+    Educational: 'educational',
+    'Petty Cash': 'pettyCash',
+    'Multipurpose Cash': 'multipurpose',
+    Commercial: 'commercial',
+    Livelihood: 'livelihood'
+}
 
+const errorMessage = ref('')
+const errorAlert = ref(false)
 
+const formData = reactive({
+    interest_rate: { unit: '', value: 0, enabled: false },
+    service_fee: { unit: '', value: 0, enabled: false },
+    capital_build_up: { unit: '', value: 0, enabled: false },
+    savings: { unit: '', value: 0, enabled: false },
+    time: { type: '', value: 0 }
+})
+
+const updateAutofill = async function () {
+    const res = await fetch(`${API_URL}/settings/loans`, {
+        method: 'GET',
+        headers: {
+            Authorization: `Bearer ${window.$cookies.get('credentials').token}`
+        }
+    })
+
+    const resJSON = await res.json()
+    const settingsData = resJSON.settings[setting_keys[props.header]]
+
+    Object.assign(formData, settingsData)
+}
+
+const submit = async function () {
+    const res = await fetch(`${API_URL}/settings/loans/${setting_keys[props.header]}`, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${window.$cookies.get('credentials').token}`
+        },
+        body: JSON.stringify({ ...formData })
+    })
+
+    const { error, message } = await res.json()
+
+    errorAlert.value = false
+
+    if (!error) {
+        alert('Successfully updated settings!')
+    } else {
+        errorAlert.value = true
+        errorMessage.value = message
+    }
+}
+
+onMounted(async () => {
+    await updateAutofill()
+})
 </script>
 
 <template>
@@ -32,14 +86,17 @@ const checkbox_Savings = ref(true)
                             <VTextField
                                 class="mt-2 center-affix"
                                 variant="underlined"
-                                placeholder="Unit"
+                                placeholder="Value"
+                                type="number"
+                                v-model="formData.interest_rate.value"
                             />
                         </div>
 
                         <div class="mt-4 ml-3 w-25">
                             <v-select
                                 density="compact"
-                                :items="['%', 'Days']"
+                                :items="['%', 'Fixed']"
+                                v-model="formData.interest_rate.unit"
                             ></v-select>
                         </div>
                     </div>
@@ -47,27 +104,30 @@ const checkbox_Savings = ref(true)
                     <!-- Time -->
                     <div class="row-tab">
                         <div class="label">
-                            <div>Time</div>
+                            <div>Gain interest every</div>
                         </div>
 
                         <div class="w-25 d-flex">
                             <VTextField
                                 class="mt-2 center-affix"
                                 variant="underlined"
-                                placeholder="Unit"
+                                placeholder="Value"
+                                type="number"
+                                v-model="formData.time.value"
                             />
                         </div>
 
                         <div class="mt-4 ml-3 w-25">
                             <v-select
                                 density="compact"
-                                :items="['Day', 'Month', 'Year']"
+                                :items="['days', 'months', 'years']"
+                                v-model="formData.time.type"
                             ></v-select>
                         </div>
                     </div>
 
                     <h4 class="ml-4">Initial Deductions</h4>
-                    
+
                     <!-- Service Fee -->
                     <div class="row-tab mb-n5">
                         <div class="label">
@@ -78,22 +138,25 @@ const checkbox_Savings = ref(true)
                             <VTextField
                                 class="mt-2 center-affix"
                                 variant="underlined"
-                                placeholder="Unit"
-                                :disabled="!checkbox_ServiceFee"
+                                placeholder="Value"
+                                type="number"
+                                v-model="formData.service_fee.value"
+                                :disabled="!formData.service_fee.enabled"
                             />
                         </div>
 
                         <div class="mt-4 ml-3 w-25">
                             <v-select
                                 density="compact"
-                                :items="['%', 'Days']"
-                                :disabled="!checkbox_ServiceFee"
+                                :items="['%', 'Fixed']"
+                                v-model="formData.service_fee.unit"
+                                :disabled="!formData.service_fee.enabled"
                             ></v-select>
                         </div>
 
                         <v-checkbox
                             class="mt-2 mb-n2"
-                            v-model="checkbox_ServiceFee"
+                            v-model="formData.service_fee.enabled"
                         ></v-checkbox>
                     </div>
 
@@ -107,53 +170,57 @@ const checkbox_Savings = ref(true)
                             <VTextField
                                 class="mt-2 center-affix"
                                 variant="underlined"
-                                placeholder="Unit"
-                                :disabled="!checkbox_CBU"
+                                placeholder="Value"
+                                type="number"
+                                v-model="formData.capital_build_up.value"
+                                :disabled="!formData.capital_build_up.enabled"
                             />
                         </div>
 
                         <div class="mt-4 ml-3 w-25">
                             <v-select
                                 density="compact"
-                                :items="['%', 'Days']"
-                                :disabled="!checkbox_CBU"
+                                :items="['%', 'Fixed']"
+                                v-model="formData.capital_build_up.unit"
+                                :disabled="!formData.capital_build_up.enabled"
                             ></v-select>
                         </div>
 
                         <v-checkbox
                             class="mt-2 mb-n2"
-                            v-model="checkbox_CBU"
+                            v-model="formData.capital_build_up.enabled"
                         ></v-checkbox>
                     </div>
 
                     <!-- Savings -->
-                    <div class="row-tab mb-n5">                        
+                    <div class="row-tab mb-n5">
                         <div class="label">
-                            
                             <div>Savings</div>
-                            
                         </div>
 
                         <div class="w-25 d-flex">
                             <VTextField
                                 class="mt-2 center-affix"
                                 variant="underlined"
-                                placeholder="Unit"
-                                :disabled="!checkbox_Savings"
+                                placeholder="Value"
+                                type="number"
+                                v-model="formData.savings.value"
+                                :disabled="!formData.savings.enabled"
                             />
                         </div>
 
                         <div class="mt-4 ml-3 w-25">
                             <v-select
                                 density="compact"
-                                :items="['%', 'Days']"
-                                :disabled="!checkbox_Savings"
+                                :items="['%', 'Fixed']"
+                                v-model="formData.savings.unit"
+                                :disabled="!formData.savings.enabled"
                             ></v-select>
                         </div>
 
                         <v-checkbox
                             class="mt-2 mb-n2"
-                            v-model="checkbox_Savings"
+                            v-model="formData.savings.enabled"
                         ></v-checkbox>
                     </div>
                 </div>
@@ -168,16 +235,26 @@ const checkbox_Savings = ref(true)
                         Submit
                     </VBtn>
                 </div>
+
+                <VAlert
+                    v-if="errorAlert"
+                    v-model="errorAlert"
+                    type="error"
+                    closable=""
+                    density="comfortable"
+                    elevation="5"
+                >
+                    {{ errorMessage }}
+                </VAlert>
             </VForm>
         </div>
     </div>
 </template>
 
 <style scoped>
-
 .wrapper {
     border: 1px solid var(--vt-c-gray);
-    margin-bottom: 2%;    
+    margin-bottom: 2%;
 }
 
 .row-tab {
@@ -188,7 +265,7 @@ const checkbox_Savings = ref(true)
 .label {
     margin-top: 5.2%;
     margin-right: 6%;
-    
+
     /* border: 1px solid black; */
     width: 35%;
 
@@ -217,5 +294,4 @@ const checkbox_Savings = ref(true)
     margin-top: 7%;
     margin-right: 2%;
 }
-
 </style>
