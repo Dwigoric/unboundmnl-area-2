@@ -22,6 +22,8 @@ const props = defineProps({
 
 // Reactive variables
 const search = ref('')
+const releaseLoading = ref(false)
+const beingReleased = ref(null)
 const items = reactive([])
 const headers = [
     { title: 'Type of Loan', key: 'type' },
@@ -29,6 +31,7 @@ const headers = [
     { title: 'Amount of Loan', key: 'amount' },
     { title: 'Submission Date', key: 'submissionDate' },
     { title: 'Status', key: 'status' },
+    { title: 'Due Date', key: 'dueDate' },
     { title: 'View Loan Ledger', key: 'id' }
 ]
 
@@ -58,15 +61,42 @@ const visitMemberProfile = async (username) => {
  * Gets the corresponding color for the data
  * @param {*} dueDate - Due date of the loan
  */
-// TODO: Make this work
 const getDateColor = (dueDate) => {
-    var currentDate = new Date()
-    if (dueDate == 1) {
-        console.log('HELP')
-        console.log(dueDate)
-        console.log(currentDate)
-        return 'red'
-    } else return 'null'
+    const currentDate = new Date()
+
+    const diffTime = Math.abs(currentDate - new Date(dueDate))
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
+
+    // TODO: Refer to settings for the number of days
+    if (diffDays <= 7) return 'red'
+    else if (diffDays <= 14) return 'orange'
+    else if (diffDays <= 21) return 'yellow'
+    else return 'green'
+}
+
+const markAsReleased = async (loanID) => {
+    releaseLoading.value = true
+    beingReleased.value = loanID
+    const res = await fetch(`${API_URL}/loans/${loanID}`, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${window.$cookies.get('credentials').token}`
+        },
+        body: JSON.stringify({
+            status: 'released'
+        })
+    })
+
+    if (res.status === 200) {
+        const { dueDate } = await res.json()
+        const index = items.findIndex((item) => item.id === loanID)
+        items[index].status = 'released'
+        items[index].dueDate = dueDate
+    }
+
+    releaseLoading.value = false
+    beingReleased.value = null
 }
 
 const buildStatus = {
@@ -80,7 +110,7 @@ const buildStatus = {
 onMounted(async () => {
     const url = props.username ? `/user/${props.username}` : ''
     const params = new URLSearchParams()
-    params.set('status', 'approved')
+    params.set('status', 'approved,released')
     const res = await fetch(`${API_URL}/loans${url}?${params}`, {
         method: 'GET',
         headers: {
@@ -99,12 +129,9 @@ onMounted(async () => {
                     style: 'currency',
                     currency: 'PHP'
                 }).format(Number(loan.originalLoanAmount)),
-                submissionDate: new Date(loan.submissionDate).toLocaleDateString('en-PH', {
-                    year: 'numeric',
-                    month: 'short',
-                    day: 'numeric'
-                }),
-                status: loan.status
+                submissionDate: loan.submissionDate,
+                status: loan.status,
+                dueDate: loan.dueDate
             }))
         )
     }
@@ -133,6 +160,7 @@ onMounted(async () => {
             multi-sort=""
             :search="search"
             sticky=""
+            :sort-by="[{ key: 'dueDate', desc: true }]"
         >
             <template v-slot:item.loanee="{ value }">
                 <v-btn
@@ -144,13 +172,42 @@ onMounted(async () => {
             </template>
 
             <template v-slot:item.submissionDate="{ value }">
-                <v-chip :color="getDateColor(value)">
-                    {{ value }}
+                <v-chip>
+                    {{
+                        new Date(value).toLocaleDateString('en-PH', {
+                            year: 'numeric',
+                            month: 'short',
+                            day: 'numeric'
+                        })
+                    }}
                 </v-chip>
             </template>
 
-            <template v-slot:item.status="{ value }">
+            <template v-slot:item.status="{ value, item }">
                 <v-chip :color="buildStatus[value][1]"> {{ buildStatus[value][0] }} </v-chip>
+                <v-btn
+                    class="bg-teal-lighten-3 ml-2 text-none"
+                    density="comfortable"
+                    variant="text"
+                    prepend-icon="mdi-send-check"
+                    v-if="value === 'approved'"
+                    :loading="releaseLoading && beingReleased === item.id"
+                    @click.prevent="markAsReleased(item.id)"
+                >
+                    Mark as released
+                </v-btn>
+            </template>
+
+            <template v-slot:item.dueDate="{ value }">
+                <v-chip :color="getDateColor(value)" v-if="value">
+                    {{
+                        new Date(value).toLocaleDateString('en-PH', {
+                            year: 'numeric',
+                            month: 'short',
+                            day: 'numeric'
+                        })
+                    }}
+                </v-chip>
             </template>
 
             <template v-slot:item.id="{ value }">
