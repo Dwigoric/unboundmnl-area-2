@@ -14,9 +14,8 @@ const tab = ref('option-1')
 
         <div class="d-flex flex-row mt-2">
             <v-tabs v-model="tab" direction="vertical" color="primary" class="mt-9">
-
-                <v-tab value="fixed-deposit">
-                    <div class="capitalize">Fixed Deposit</div>
+                <v-tab value="share-capital">
+                    <div class="capitalize">Share Capital</div>
                 </v-tab>
 
                 <v-tab value="savings">
@@ -29,8 +28,8 @@ const tab = ref('option-1')
             </v-tabs>
 
             <v-window v-model="tab" class="ml-2 w-100">
-                <v-window-item value="fixed-deposit">
-                    <DepositSettingsTable :header="`Fixed Deposit`" />
+                <v-window-item value="share-capital">
+                    <DepositSettingsTable :header="`Share Capital`" />
                 </v-window-item>
 
                 <v-window-item value="savings">
@@ -41,7 +40,6 @@ const tab = ref('option-1')
                     <DepositSettingsTable :header="`Time Deposit`" />
                 </v-window-item>
             </v-window>
-
         </div>
     </ContentBlock>
 </template>

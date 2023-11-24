@@ -1,16 +1,67 @@
 <script setup>
-
-import { ref } from 'vue'
+import { ref, onMounted, reactive } from 'vue'
+import { API_URL } from '../../constants'
 
 const props = defineProps({
     header: {
         type: String,
-        required: true,
+        required: true
     }
-});
+})
 
+const setting_keys = {
+    'Share Capital': 'shareCapital',
+    Savings: 'savings',
+    'Time Deposit': 'timeDeposit'
+}
 
+const errorMessage = ref('')
+const errorAlert = ref(false)
 
+const formData = reactive({
+    interest_rate: { unit: '', value: 0, enabled: false },
+    time: { type: '', value: 0 }
+})
+
+const updateAutofill = async function () {
+    const res = await fetch(`${API_URL}/settings/deposits`, {
+        method: 'GET',
+        headers: {
+            Authorization: `Bearer ${window.$cookies.get('credentials').token}`
+        }
+    })
+
+    const resJSON = await res.json()
+    const settingsData = resJSON.settings[setting_keys[props.header]]
+
+    Object.assign(formData, settingsData)
+}
+
+const submit = async function () {
+    const res = await fetch(`${API_URL}/settings/deposits/${setting_keys[props.header]}`, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${window.$cookies.get('credentials').token}`
+        },
+        body: JSON.stringify({ ...formData })
+    })
+
+    const { error, message } = await res.json()
+
+    errorAlert.value = false
+
+    if (!error) {
+        alert('Successfully updated settings!')
+    } else {
+        errorAlert.value = true
+        errorMessage.value = message
+    }
+}
+
+onMounted(async () => {
+    await updateAutofill()
+})
 </script>
 
 <template>
@@ -26,11 +77,21 @@ const props = defineProps({
                         </div>
 
                         <div class="w-25 d-flex">
-                            <VTextField class="mt-2 center-affix" variant="underlined" placeholder="Unit" />
+                            <VTextField
+                                class="mt-2 center-affix"
+                                variant="underlined"
+                                placeholder="Unit"
+                                type="number"
+                                v-model="formData.interest_rate.value"
+                            />
                         </div>
 
                         <div class="mt-4 ml-3 w-25">
-                            <v-select density="compact" :items="['%', 'Days']"></v-select>
+                            <v-select
+                                density="compact"
+                                :items="['%', 'Fixed']"
+                                v-model="formData.interest_rate.unit"
+                            ></v-select>
                         </div>
                     </div>
 
@@ -41,16 +102,25 @@ const props = defineProps({
                         </div>
 
                         <div class="w-25 d-flex">
-                            <VTextField class="mt-2 center-affix" variant="underlined" placeholder="Unit" />
+                            <VTextField
+                                class="mt-2 center-affix"
+                                variant="underlined"
+                                placeholder="Unit"
+                                type="number"
+                                v-model="formData.time.value"
+                            />
                         </div>
 
                         <div class="mt-4 ml-3 w-25">
-                            <v-select density="compact" :items="['Day', 'Month', 'Year']"></v-select>
+                            <v-select
+                                density="compact"
+                                :items="['days', 'months', 'years']"
+                                v-model="formData.time.type"
+                            ></v-select>
                         </div>
                     </div>
-
                 </div>
-                
+
                 <div class="btn-wrapper">
                     <VBtn
                         prepend-icon="mdi-check"
@@ -61,6 +131,17 @@ const props = defineProps({
                         Submit
                     </VBtn>
                 </div>
+
+                <VAlert
+                    v-if="errorAlert"
+                    v-model="errorAlert"
+                    type="error"
+                    closable=""
+                    density="comfortable"
+                    elevation="5"
+                >
+                    {{ errorMessage }}
+                </VAlert>
             </VForm>
         </div>
     </div>
