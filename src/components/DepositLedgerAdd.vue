@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, watch, reactive } from 'vue'
+import { ref, onMounted, watch, reactive, computed } from 'vue'
 import { API_URL } from '../constants'
 
 import 'gridjs/dist/theme/mermaid.css'
@@ -34,6 +34,10 @@ const props = defineProps({
     onsubmit: {
         type: Function,
         default: () => () => null
+    },
+    runningAmount: {
+        type: Number,
+        default: 0
     }
 })
 
@@ -41,12 +45,21 @@ const formData = reactive({
     ORNumber: '',
     transactionDate: '',
     submissionDate: formatDate(Date.now()),
-    depositType: '',
+    transactionType: '',
     amount: 0,
     interest: 0,
     balance: 0,
     officerInCharge: ''
 })
+
+const newBalance = computed(() => {
+    // Compute the new balance differently depending on whether transaction is deposit or withdrawal
+    if (formData.transactionType === 'Deposit' || formData.transactionType === 'deposit') {
+        return props.runningAmount + Number(formData.amount) + Number(formData.interest);
+    } else if (formData.transactionType === 'Withdrawal' || formData.transactionType === 'withdrawal') {
+        return props.runningAmount - Number(formData.amount);
+    }
+});
 
 const officers = reactive([])
 
@@ -54,6 +67,8 @@ const submit = async function () {
     const { valid } = await form.value.validate()
     if (!valid) return
 
+    formData.balance = newBalance
+    
     const preprocessedFormData = { ...formData }
     preprocessedFormData.officerInCharge = { ...preprocessedFormData.officerInCharge.value }
 
@@ -107,74 +122,93 @@ onMounted(async () => {
     <div class="wrapper">
         <!-- Add transaction form -->
         <VForm id="loan-ledger-form" ref="form">
-            <div class="d-flex flex-row">
-                <VTextField
-                    class="ml-3"
-                    type="date"
-                    label="* Date of Payment"
-                    v-model="formData.transactionDate"
-                    :rules="[rules.required]"
-                />
-                <VTextField
-                    class="ml-3"
-                    label="* GV/OR Number"
-                    v-model="formData.ORNumber"
-                    :rules="[rules.required]"
-                />
-            </div>
-            <VSelect
-                class="ml-3"
-                label="* Deposit Type"
-                v-model="formData.depositType"
-                :items="['deposit', 'withdrawal']"
-                :rules="[rules.required]"
-            ></VSelect>
-            <VTextField class="ml-3" type="number" label="Amount" v-model="formData.amount" />
-            <VTextField class="ml-3" type="number" label="Balance" v-model="formData.balance" />
-            <VTextField
-                class="ml-3"
-                type="number"
-                label="Interest Paid"
-                v-model="formData.interest"
-            />
-            <div class="d-flex flex-row">
-                <VTextField
-                    class="ml-3"
-                    type="date"
-                    label="* Date of Entry"
-                    v-model="formData.submissionDate"
-                    :rules="[rules.required]"
-                />
-                <v-combobox
-                    class="ml-3"
-                    label="* Officer in Charge"
-                    :items="officers"
-                    v-model="formData.officerInCharge"
-                    :rules="[rules.required, rules.isOfficer]"
-                ></v-combobox>
-            </div>
+            <!-- Only show form once user has selected transaction type -->
 
-            <div class="btn-wrapper">
-                <VBtn
-                    prepend-icon="mdi-check"
-                    class="capitalize btn"
-                    :loading="loading"
-                    @click.prevent="submit"
+                <div class="d-flex flex-row">
+                    <VTextField
+                        class="ml-3"
+                        type="date"
+                        label="* Date of Payment"
+                        v-model="formData.transactionDate"
+                        :rules="[rules.required]"
+                    />
+                    <VTextField
+                        class="ml-3"
+                        label="* GV/OR Number"
+                        v-model="formData.ORNumber"
+                        :rules="[rules.required]"
+                    />
+                </div>
+                <div class="d-flex flex-row">
+                    <VTextField
+                        class="ml-3"
+                        type="date"
+                        label="* Date of Entry"
+                        v-model="formData.submissionDate"
+                        :rules="[rules.required]"
+                    />
+                    <v-combobox
+                        class="ml-3"
+                        label="* Officer in Charge"
+                        :items="officers"
+                        v-model="formData.officerInCharge"
+                        :rules="[rules.required, rules.isOfficer]"
+                    ></v-combobox>
+                </div>
+                <VSelect
+                    class="ml-3"
+                    label="* Transaction Type"
+                    v-model="formData.transactionType"
+                    :items="['Deposit', 'Withdrawal']"
+                    :rules="[rules.required]"
+                ></VSelect>
+
+                <div v-if="formData.transactionType !== ''">
+                    <VTextField 
+                        class="ml-3" 
+                        type="number" 
+                        label="Amount" 
+                        v-model="formData.amount" />
+                    <VTextField    
+                        class="ml-3" 
+                        type="number" 
+                        label="Balance" 
+                        v-model="newBalance" />
+                    <!-- Only show interest earned if deposit transaction -->
+                    <div v-if="formData.transactionType === 'Deposit'">
+                        <VTextField
+                            
+                            class="ml-3"
+                            type="number"
+                            label="Interest Earned"
+                            v-model="formData.interest"
+                        />
+                    </div>
+                </div>
+
+    
+                <div class="btn-wrapper">
+                    <VBtn
+                        prepend-icon="mdi-check"
+                        class="capitalize btn"
+                        :loading="loading"
+                        @click.prevent="submit"
+                    >
+                        Submit
+                    </VBtn>
+                </div>
+    
+                <VAlert
+                    v-if="errorAlert"
+                    v-model="errorAlert"
+                    type="error"
+                    closable=""
+                    density="comfortable"
+                    elevation="5"
                 >
-                    Submit
-                </VBtn>
-            </div>
+                    {{ errorMessage }}
+                </VAlert>
 
-            <VAlert
-                v-if="errorAlert"
-                v-model="errorAlert"
-                type="error"
-                closable=""
-                density="comfortable"
-                elevation="5"
-            >
-                {{ errorMessage }}
-            </VAlert>
         </VForm>
     </div>
 </template>

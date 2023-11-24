@@ -84,30 +84,15 @@ const loanTransactionColumns = [
     { name: 'Balance' },
     { name: 'Interest Due' },
     { name: 'Interest Paid' },
+    { name: 'Fines Due' },
     { name: 'Fines Paid' },
     { name: 'Date of Entry' },
     { name: 'Officer in Charge' },
-    // remove actions
-    /*
-    {
-        name: 'Actions',
-        formatter: (cell, row) => {
-            return h(
-                'v-hover',
-                {
-                    className: 'py-2 mb-4 px-4 border rounded-md cursor-pointer rounded-lg btn',
-                    onClick: () => setPopupEdit(row.cells[0].data)
-                },
-                'Edit row'
-            )
-        },
-    }
-    */
 ]
 
 // Give each transaction column a minimum width to properly fit the content
 loanTransactionColumns.forEach(col => {
-    col.width = '15%';
+    col.width = '225px';
 })
 
 const setPopupAdd = () => {
@@ -172,6 +157,7 @@ const getLoanInfo = async () => {
             transaction.balance,
             transaction.interestDue,
             transaction.interestPaid,
+            transaction.finesDue,
             transaction.finesPaid,
             transaction.submissionDate.substring(0, 10),
             transaction.officerInCharge.given === 'Admin' &&

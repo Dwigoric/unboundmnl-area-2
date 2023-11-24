@@ -35,6 +35,7 @@ const setPopupEdit = (data) => {
 }
 
 const depositAmount = ref(0)
+const depositRunningAmount = ref(0)
 const depositOwner = ref('')
 const depositType = ref('')
 const depositApprovalDate = ref('')
@@ -45,7 +46,7 @@ const currentlyEditedTransactionID = ref('')
 // Format the deposit amount to PHP standard
 const formattedDepositAmount = computed(() => {
     return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'PHP' }).format(
-        depositAmount.value
+        depositRunningAmount.value
     )
 })
 
@@ -64,20 +65,12 @@ const capitalLedgerColumns = [
     { name: 'Balance' },
     { name: 'Date of Entry' },
     { name: 'Officer in Charge' },
-    {
-        name: 'Actions',
-        formatter: (cell, row) => {
-            return h(
-                'v-hover',
-                {
-                    className: 'py-2 mb-4 px-4 border rounded-md cursor-pointer rounded-lg btn',
-                    onClick: () => setPopupEdit(row.cells[0].data)
-                },
-                'Edit row'
-            )
-        }
-    }
 ]
+
+// Give each transaction column a minimum width to properly fit the content
+capitalLedgerColumns.forEach(col => {
+    col.width = '225px';
+})
 
 // Create a ref to hold new loanPaymentsTable template
 const capitalLedgerTable = ref()
@@ -97,7 +90,8 @@ const getDepositInfo = async () => {
     if (jsonRes) {
         const depositData = jsonRes.deposit
         // TEMP: Change this once calculations are implemented
-        depositAmount.value = depositData.originalDepositAmount
+        depositAmount.value = depositData.originalDepositAmount // change to running amount
+        depositRunningAmount.value = depositData.runningAmount
         depositOwner.value = depositData.username
         depositType.value = depositData.category
         depositApprovalDate.value = depositData.approvalDate
@@ -118,7 +112,7 @@ const getDepositInfo = async () => {
             transaction.transactionID,
             transaction.transactionDate.substring(0, 10),
             transaction.ORNumber,
-            transaction.depositType,
+            transaction.transactionType,
             transaction.amount,
             transaction.interest,
             transaction.balance,
@@ -249,6 +243,7 @@ onMounted(async () => {
                                 isActive.value = false
                             }
                         "
+                        :runningAmount="depositRunningAmount"
                     />
                 </VCard>
             </template>

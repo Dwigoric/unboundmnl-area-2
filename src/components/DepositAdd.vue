@@ -22,6 +22,7 @@ const depositData = reactive({
     approvalDate: formatDate(Date.now()),
     category: '',
     originalDepositAmount: '',
+    runningAmount: 0,
     interestRate: ''
 })
 
@@ -45,6 +46,9 @@ const submit = async function () {
     if (!valid) return
 
     loading.value = true
+
+    // Upon creating a new deposit, make the running amount equal to the origina deposit amount
+    depositData.runningAmount = depositData.originalDepositAmount
 
     const res = await fetch(`${API_URL}/deposits/user/${memberSearchStore.data.username}`, {
         method: 'PUT',
@@ -123,6 +127,14 @@ const submit = async function () {
                 :min="0"
                 :rules="[rules.required]"
             />
+            <VTextField
+                class="ml-3"
+                label="* Running Amount"
+                v-model="depositData.originalDepositAmount"
+                type="number"
+                :min="0"
+            />
+
 
             <!-- TODO: Connect this button to a method to add to the database -->
             <div class="btn-wrapper">

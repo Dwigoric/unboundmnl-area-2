@@ -56,8 +56,9 @@ const formData = reactive({
     submissionDate: formatDate(Date.now()),
     amountPaid: 0,
     amountDue: 0,
-    balance: props.balance, // Is there a more elegant/dynamic way to update this? Maybe perform a fetch request?
+    balance: props.balance,
     interestPaid: 0,
+    finesDue: 0,
     finesPaid: 0,
     interestDue: 0,
     officerInCharge: '',
@@ -70,11 +71,10 @@ const formData = reactive({
 const transactionType = ref('');
 
 const newBalance = computed(() => {
+    const dues = Number(formData.interestDue) + Number(formData.finesDue);
+    const payments = Number(formData.amountPaid) + Number(formData.interestPaid) + Number(formData.finesPaid);
 
-    const dues = 0;
-    const payments = Number(formData.amountPaid) + Number(formData.interestPaid);
-
-    return props.balance - Number(formData.amountPaid) - Number(formData.interestPaid) + Number(formData.interestDue) 
+    return props.balance - payments + dues;
 })
 
 const officers = reactive([])
@@ -86,23 +86,14 @@ const submit = async function () {
     loading.value = true
 
     // If transaction is NOT readjustment 
-    // THIS GUY IS THE REASON ????
     if (formData.readjustment === false) {
         // Update balance to match that of form input
         formData.balance = newBalance;
     }
 
-
-
-    // if transaction is dues instead
-    // front end calculation of balance
-
-    // if transaction is dues, add to current balance instead of reducing from it.
-    
     const preprocessedFormData = { ...formData }
     preprocessedFormData.officerInCharge = { ...preprocessedFormData.officerInCharge.value }
 
-    console.log(`FORM DATA: ${preprocessedFormData.interestDue}`);
 
     const res = await fetch(`${API_URL}/loans/${props.loanID}/ledger`, {
         method: 'PUT',
@@ -189,7 +180,6 @@ onMounted(async () => {
         <!-- Add transaction form -->
         <VForm id="loan-ledger-form" ref="form">
 
-            <!-- ADD RADIO BUTTONS AND V-IF HERE PLEASEEEEEEEEEE -->
             <h2 class="ml-3 py-3">Transaction Type</h2>
             <div class="d-flex justify-center w-100">
                 <v-radio-group v-model="transactionType" inline>
@@ -246,17 +236,17 @@ onMounted(async () => {
                     <VTextField
                         class="ml-3"
                         type="number"
-                        label="Amount Paid"
-                        v-model="formData.amountPaid"
+                        label="Balance (Automatically Calculated)"
+                        disabled=""
+                        v-model="newBalance"
                         :min="0"
+                        persistent-hint
                     />
-                    <!-- TODO: make this field hidden as well -->
                     <VTextField
                         class="ml-3"
                         type="number"
-                        label="Balance"
-                        disabled=""
-                        v-model="newBalance"
+                        label="Amount Paid"
+                        v-model="formData.amountPaid"
                         :min="0"
                     />
                     <VTextField
@@ -294,6 +284,14 @@ onMounted(async () => {
                         type="number"
                         label="Interest Due"
                         v-model="formData.interestDue"
+                        :min="0"
+                    />
+
+                    <VTextField
+                        class="ml-3"
+                        type="number"
+                        label="Fines Due"
+                        v-model="formData.finesDue"
                         :min="0"
                     />
                 </div>
