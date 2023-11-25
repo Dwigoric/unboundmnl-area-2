@@ -13,17 +13,11 @@ const showPassword = ref(false)
 const showConfirmPassword = ref(false)
 
 // Project constants
-import { API_URL } from '../constants'
+import { API_URL, FORM_RULES } from '../constants'
 
 // Define constants
 const rules = {
-    required: (v) => !!v || 'This field is required',
-    password: (v) =>
-        (v && !/^(.{0,7}|[^0-9]*|[^A-Z]*|[^a-z]*|[a-zA-Z0-9]*)$/.test(v)) ||
-        'Password must contain at least one uppercase, one lowercase, one number and one special character',
-    mustMatch: (v) => (!!v && v === newPassword.value) || 'Passwords do not match',
-    min8: (v) => (v && v.length >= 8) || 'Minimum of 8 characters',
-    max255: (v) => (v && v.length <= 255) || 'Maximum of 255 characters'
+    mustMatch: (v) => (!!v && v === newPassword.value) || 'Passwords do not match'
 }
 
 // Props
@@ -87,7 +81,12 @@ const submitForm = async () => {
                         v-model="newPassword"
                         class="username-pw-input"
                         label="Enter New Password"
-                        :rules="[rules.required, rules.min8, rules.max255, rules.password]"
+                        :rules="[
+                            FORM_RULES.required,
+                            FORM_RULES.min8,
+                            FORM_RULES.max255,
+                            FORM_RULES.password
+                        ]"
                         :type="showPassword ? 'text' : 'password'"
                         :append-inner-icon="showPassword ? 'mdi-eye-off' : 'mdi-eye'"
                         @click:append-inner="showPassword = !showPassword"
@@ -105,10 +104,10 @@ const submitForm = async () => {
                         class="username-pw-input"
                         label="Re-enter New Password"
                         :rules="[
-                            rules.required,
-                            rules.min8,
-                            rules.max255,
-                            rules.password,
+                            FORM_RULES.required,
+                            FORM_RULES.min8,
+                            FORM_RULES.max255,
+                            FORM_RULES.password,
                             rules.mustMatch
                         ]"
                         :type="showConfirmPassword ? 'text' : 'password'"

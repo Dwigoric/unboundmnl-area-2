@@ -3,21 +3,7 @@
 import { ref } from 'vue'
 
 // Import constants
-import { API_URL } from '../constants'
-
-// Define constants
-const validationRules = {
-    required: (v) => !!v || 'Required',
-    min6: (v) => (v && v.length >= 6) || 'Minimum of 6 characters',
-    min8: (v) => (v && v.length >= 8) || 'Minimum of 8 characters',
-    max20: (v) => (v && v.length <= 20) || 'Maximum of 20 characters',
-    max255: (v) => (v && v.length <= 255) || 'Maximum of 255 characters',
-    username: (v) =>
-        (v && /^[a-zA-Z0-9_]+$/.test(v)) || 'Username can only be alphanumeric and underscore',
-    password: (v) =>
-        (v && !/^(.{0,7}|[^0-9]*|[^A-Z]*|[^a-z]*|[a-zA-Z0-9]*)$/.test(v)) ||
-        'Password must contain at least one uppercase, one lowercase, one number and one special character'
-}
+import { API_URL, FORM_RULES } from '../constants'
 
 // Define refs
 const given_name = ref('')
@@ -127,7 +113,7 @@ const createOfficer = async () => {
                         <VTextField
                             class="username-pw-input"
                             v-model="given_name"
-                            :rules="[validationRules.required]"
+                            :rules="[FORM_RULES.required]"
                             id="login-pw"
                             label="Enter Given Name"
                             required
@@ -142,7 +128,7 @@ const createOfficer = async () => {
                         <VTextField
                             class="username-pw-input"
                             v-model="last_name"
-                            :rules="[validationRules.required]"
+                            :rules="[FORM_RULES.required]"
                             id="login-pw"
                             label="Enter Last Name"
                             required
@@ -156,7 +142,7 @@ const createOfficer = async () => {
                         <VSelect
                             class="username-pw-input"
                             v-model="role"
-                            :rules="[validationRules.required]"
+                            :rules="[FORM_RULES.required]"
                             :items="[
                                 { name: 'Manager', value: 'manager' },
                                 { name: 'Treasurer', value: 'treasurer' },
@@ -180,10 +166,10 @@ const createOfficer = async () => {
                             name="username"
                             v-model="username"
                             :rules="[
-                                validationRules.required,
-                                validationRules.min6,
-                                validationRules.max20,
-                                validationRules.username
+                                FORM_RULES.required,
+                                FORM_RULES.min6,
+                                FORM_RULES.max20,
+                                FORM_RULES.username
                             ]"
                             id="login-username"
                             label="Enter Username"
@@ -201,10 +187,10 @@ const createOfficer = async () => {
                             name="password"
                             v-model="password"
                             :rules="[
-                                validationRules.required,
-                                validationRules.min8,
-                                validationRules.max255,
-                                validationRules.password
+                                FORM_RULES.required,
+                                FORM_RULES.min8,
+                                FORM_RULES.max255,
+                                FORM_RULES.password
                             ]"
                             id="login-pw"
                             label="Enter Password"

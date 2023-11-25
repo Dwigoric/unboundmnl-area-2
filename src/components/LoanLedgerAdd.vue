@@ -1,9 +1,12 @@
 <script setup>
+// Packages
 import { ref, onMounted, watch, reactive, computed } from 'vue'
 import Decimal from 'decimal.js'
 
-import { API_URL } from '../constants'
+// Project constants
+import { API_URL, FORM_RULES } from '../constants'
 
+// Stylesheets
 import 'gridjs/dist/theme/mermaid.css'
 
 // Import router
@@ -11,7 +14,6 @@ import router from '../router'
 
 // Define constants
 const rules = {
-    required: (v) => !!v || 'This field is required',
     isOfficer: (v) => {
         return (
             officers.map((officer) => officer.title).includes(v.title) ||
@@ -193,7 +195,7 @@ onMounted(async () => {
         <VForm id="loan-ledger-form" ref="form">
             <h2 class="ml-3 py-3">Transaction Type</h2>
             <div class="d-flex justify-center w-100">
-                <v-radio-group v-model="transactionType" inline>
+                <v-radio-group v-model="transactionType" inline="">
                     <v-radio label="Payment" value="payment"></v-radio>
                     <v-radio label="Dues" value="dues"></v-radio>
                     <v-radio label="Balance Readjustment" value="readjustment"></v-radio>
@@ -208,15 +210,15 @@ onMounted(async () => {
                         type="date"
                         label="* Date of Payment"
                         v-model="formData.transactionDate"
-                        :rules="[rules.required]"
+                        :rules="[FORM_RULES.required]"
                         hint="When was the payment made?"
-                        persistent-hint
+                        persistent-hint=""
                     />
                     <VTextField
                         class="ml-3"
                         label="* GV/OR Number"
                         v-model="formData.ORNumber"
-                        :rules="[rules.required]"
+                        :rules="[FORM_RULES.required]"
                     />
                 </div>
                 <div class="d-flex flex-row">
@@ -225,18 +227,18 @@ onMounted(async () => {
                         type="date"
                         label="* Date of Entry"
                         v-model="formData.submissionDate"
-                        :rules="[rules.required]"
+                        :rules="[FORM_RULES.required]"
                         hint="When is this entry being created?"
-                        persistent-hint
+                        persistent-hint=""
                     />
                     <v-combobox
                         class="ml-3"
                         label="* Officer in Charge"
                         :items="officers"
                         v-model="formData.officerInCharge"
-                        :rules="[rules.required, rules.isOfficer]"
+                        :rules="[FORM_RULES.required, rules.isOfficer]"
                         hint="Which Loan Officer/Administrator is handling this loan?"
-                        persistent-hint
+                        persistent-hint=""
                     ></v-combobox>
                 </div>
 
@@ -250,7 +252,7 @@ onMounted(async () => {
                         disabled=""
                         v-model="newBalance"
                         :min="0"
-                        persistent-hint
+                        persistent-hint=""
                     />
                     <VTextField
                         class="ml-3"

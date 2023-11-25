@@ -6,7 +6,7 @@ import { ref } from 'vue'
 import ContentBlock from '../../components/ContentBlock.vue'
 
 // Project constants
-import { API_URL } from '../../constants'
+import { API_URL, FORM_RULES } from '../../constants'
 
 // Reactive variables
 const form = ref(null)
@@ -21,13 +21,7 @@ const done = ref(false)
 
 // Form rules
 const rules = {
-    required: (v) => !!v || 'This field is required',
-    password: (v) =>
-        (v && !/^(.{0,7}|[^0-9]*|[^A-Z]*|[^a-z]*|[a-zA-Z0-9]*)$/.test(v)) ||
-        'Password must contain at least one uppercase, one lowercase, one number and one special character',
-    mustMatch: (v) => (!!v && v === newPassword.value) || 'Passwords do not match',
-    min8: (v) => (v && v.length >= 8) || 'Minimum of 8 characters',
-    max255: (v) => (v && v.length <= 255) || 'Maximum of 255 characters'
+    mustMatch: (v) => (!!v && v === newPassword.value) || 'Passwords do not match'
 }
 
 // Methods
@@ -81,10 +75,10 @@ const submitForm = async () => {
                                     class="username-pw-input"
                                     label="Enter New Password"
                                     :rules="[
-                                        rules.required,
-                                        rules.min8,
-                                        rules.max255,
-                                        rules.password
+                                        FORM_RULES.required,
+                                        FORM_RULES.min8,
+                                        FORM_RULES.max255,
+                                        FORM_RULES.password
                                     ]"
                                     :disabled="done || loading"
                                     :type="showPassword ? 'text' : 'password'"
@@ -104,10 +98,10 @@ const submitForm = async () => {
                                     class="username-pw-input"
                                     label="Re-enter New Password"
                                     :rules="[
-                                        rules.required,
-                                        rules.min8,
-                                        rules.max255,
-                                        rules.password,
+                                        FORM_RULES.required,
+                                        FORM_RULES.min8,
+                                        FORM_RULES.max255,
+                                        FORM_RULES.password,
                                         rules.mustMatch
                                     ]"
                                     :disabled="done || loading"

@@ -1,22 +1,11 @@
 <script setup>
+// Packages
 import { reactive, ref, onMounted } from 'vue'
 
-import { LOAN_TYPES, PAYMENT_FREQUENCIES, API_URL } from '../constants'
+// Project constants
+import { LOAN_TYPES, PAYMENT_FREQUENCIES, API_URL, FORM_RULES } from '../constants'
 
-// Define constants
-const rules = {
-    required: (v) => !!v || 'This field is required'
-}
-
-const loanTypes = reactive(
-    Object.keys(LOAN_TYPES).map((key) => {
-        return {
-            title: LOAN_TYPES[key],
-            value: key
-        }
-    })
-)
-
+// Props
 const props = defineProps({
     loanID: {
         type: [Number, String],
@@ -31,11 +20,21 @@ const props = defineProps({
     }
 })
 
+// Reactive variables
 const hasCoborrower = ref(false)
 const errorAlert = ref(false)
 const errorMessage = ref('')
 const loading = ref(false)
 const form = ref(null)
+
+const loanTypes = reactive(
+    Object.keys(LOAN_TYPES).map((key) => {
+        return {
+            title: LOAN_TYPES[key],
+            value: key
+        }
+    })
+)
 
 const formData = reactive({
     type: '',
@@ -54,6 +53,7 @@ const formData = reactive({
     }
 })
 
+// Methods
 const updateAutofill = function () {
     formData.type = props.autofill.loanType
     formData.term = props.autofill.term
@@ -116,6 +116,7 @@ const submit = async function () {
     }
 }
 
+// Lifecycle hooks
 onMounted(() => {
     if (props.autofill) {
         updateAutofill()
@@ -135,7 +136,7 @@ onMounted(() => {
                 label="Loan Type"
                 :items="loanTypes"
                 v-model="formData.type"
-                :rules="[rules.required]"
+                :rules="[FORM_RULES.required]"
             >
             </VSelect>
 
@@ -143,7 +144,7 @@ onMounted(() => {
                 class="ml-3"
                 type="number"
                 label="Loan Term"
-                :rules="[rules.required]"
+                :rules="[FORM_RULES.required]"
                 v-model="formData.term"
             />
             <VSelect
@@ -151,7 +152,7 @@ onMounted(() => {
                 label="Mode of Payment"
                 :items="PAYMENT_FREQUENCIES"
                 v-model="formData.paymentFrequency"
-                :rules="[rules.required]"
+                :rules="[FORM_RULES.required]"
             >
             </VSelect>
 
@@ -174,7 +175,7 @@ onMounted(() => {
                         <VTextField
                             class="username-pw-input"
                             v-model="formData.coborrower.name.given"
-                            :rules="[rules.required]"
+                            :rules="[FORM_RULES.required]"
                             label="Enter Coborrower First Name"
                         />
                     </div>
@@ -195,7 +196,7 @@ onMounted(() => {
                         <VTextField
                             class="username-pw-input"
                             v-model="formData.coborrower.name.last"
-                            :rules="[rules.required]"
+                            :rules="[FORM_RULES.required]"
                             label="Enter Coborrower Last Name"
                         />
                     </div>
@@ -207,7 +208,7 @@ onMounted(() => {
                             class="username-pw-input"
                             v-model="formData.coborrower.birthday"
                             type="date"
-                            :rules="[rules.required]"
+                            :rules="[FORM_RULES.required]"
                             label="Enter Coborrower Date of Birth"
                         />
                     </div>
@@ -218,7 +219,7 @@ onMounted(() => {
                         <VTextField
                             class="username-pw-input"
                             v-model="formData.coborrower.birthplace"
-                            :rules="[rules.required]"
+                            :rules="[FORM_RULES.required]"
                             label="Enter Coborrower Place of Birth"
                         />
                     </div>
@@ -229,7 +230,7 @@ onMounted(() => {
                         <VTextField
                             class="username-pw-input"
                             v-model="formData.coborrower.occupation"
-                            :rules="[rules.required]"
+                            :rules="[FORM_RULES.required]"
                             label="Enter Coborrower Occupation/Source of Income"
                         />
                     </div>
@@ -240,7 +241,7 @@ onMounted(() => {
                         <VTextField
                             class="username-pw-input"
                             v-model="formData.coborrower.contact_no"
-                            :rules="[rules.required]"
+                            :rules="[FORM_RULES.required]"
                             label="Enter Coborrower Contact Number"
                         />
                     </div>

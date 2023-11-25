@@ -1,12 +1,15 @@
 <script setup>
+// Packages
 import { ref, onMounted, reactive } from 'vue'
-import { API_URL } from '../constants'
 
+// Project constants
+import { API_URL, FORM_RULES } from '../constants'
+
+// Stylesheets
 import 'gridjs/dist/theme/mermaid.css'
 
 // Define constants
 const rules = {
-    required: (v) => !!v || 'This field is required',
     isOfficer: (v) => {
         return (
             officers.map((officer) => officer.title).includes(v.title) ||
@@ -169,14 +172,14 @@ onMounted(async () => {
                     label="* Date of Payment"
                     v-model="formData.transactionDate"
                     hint="When was the payment made?"
-                    persistent-hint
-                    :rules="[rules.required]"
+                    persistent-hint=""
+                    :rules="[FORM_RULES.required]"
                 />
                 <VTextField
                     class="ml-3"
                     label="* GV/OR Number"
                     v-model="formData.ORNumber"
-                    :rules="[rules.required]"
+                    :rules="[FORM_RULES.required]"
                 />
             </div>
             <VTextField
@@ -190,7 +193,7 @@ onMounted(async () => {
                 type="number"
                 label="Balance"
                 v-model="formData.balance"
-                disabled
+                disabled=""
             />
             <VTextField
                 class="ml-3"
@@ -210,15 +213,15 @@ onMounted(async () => {
                     type="date"
                     label="* Date of Entry"
                     v-model="formData.submissionDate"
-                    :rules="[rules.required]"
-                    disabled
+                    :rules="[FORM_RULES.required]"
+                    disabled=""
                 />
                 <v-combobox
                     class="ml-3"
                     label="* Officer in Charge"
                     :items="officers"
                     v-model="formData.officerInCharge"
-                    :rules="[rules.required, rules.isOfficer]"
+                    :rules="[FORM_RULES.required, rules.isOfficer]"
                 ></v-combobox>
             </div>
             <h3 class="ml-3 py-3">Dues</h3>
@@ -240,7 +243,7 @@ onMounted(async () => {
                 class="ml-3"
                 type="number"
                 label="Balance"
-                disabled
+                disabled=""
                 v-model="formData.balance"
             />
             <VTextField

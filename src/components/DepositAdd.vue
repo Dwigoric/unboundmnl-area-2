@@ -1,14 +1,16 @@
 <script setup>
+// Packages
 import { ref, reactive } from 'vue'
-import { API_URL } from '../constants'
-import { DEPOSIT_CATEGORIES } from '../constants/deposit_categories.js'
 
+// Project constants
+import { API_URL, DEPOSIT_CATEGORIES, FORM_RULES } from '../constants'
+
+// Stores
 import { useMemberSearchStore } from '../stores/memberSearch'
 const memberSearchStore = useMemberSearchStore()
 
 // Define constants
 const rules = {
-    required: (v) => !!v || 'This field is required',
     maxDecimalPlaces: (decimalPlaces) => {
         return (v) =>
             ((v) => {
@@ -106,7 +108,7 @@ const submit = async function () {
                 label="* Deposit Category"
                 :items="depositCategories"
                 v-model="depositData.category"
-                :rules="[rules.required]"
+                :rules="[FORM_RULES.required]"
             ></v-select>
 
             <VTextField
@@ -114,7 +116,7 @@ const submit = async function () {
                 label="* Approval Date"
                 class="ml-3"
                 v-model="depositData.approvalDate"
-                :rules="[rules.required]"
+                :rules="[FORM_RULES.required]"
             ></VTextField>
 
             <!-- TODO: Will be autofilled for Sprint 4 using Settings Tab -->
@@ -125,7 +127,7 @@ const submit = async function () {
                 :min="0"
                 :max="100"
                 v-model="depositData.interestRate"
-                :rules="[rules.required, rules.maxDecimalPlaces(2)]"
+                :rules="[FORM_RULES.required, rules.maxDecimalPlaces(2)]"
             />
             <!-- <VTextField class="ml-3" label="Time" /> -->
             <VTextField
@@ -134,7 +136,7 @@ const submit = async function () {
                 v-model="depositData.originalDepositAmount"
                 type="number"
                 :min="0"
-                :rules="[rules.required, rules.maxDecimalPlaces(2)]"
+                :rules="[FORM_RULES.required, rules.maxDecimalPlaces(2)]"
             />
             <VTextField
                 class="ml-3"

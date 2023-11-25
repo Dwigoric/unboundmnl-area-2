@@ -1,12 +1,12 @@
 <script setup>
 // Import packages
-import { ref, reactive, computed } from 'vue'
+import { ref, reactive } from 'vue'
 
 // Import router
 import router from '../router'
 
 // Import constants
-import { LOAN_TYPES, PAYMENT_FREQUENCIES } from '../constants'
+import { LOAN_TYPES, PAYMENT_FREQUENCIES, FORM_RULES } from '../constants'
 
 // Import stores
 import { useApplicationFormStore } from '../stores/applicationForm'
@@ -14,7 +14,6 @@ const appFormStore = useApplicationFormStore()
 
 // Define constants
 const rules = {
-    required: (v) => !!v || 'This field is required',
     maxDecimalPlaces: (decimalPlaces) => {
         return (v) =>
             ((v) => {
@@ -99,7 +98,7 @@ const prefillForm = async function () {
                     <VRadioGroup
                         v-model="loanData.classification"
                         id="loan-classification"
-                        :rules="[rules.required]"
+                        :rules="[FORM_RULES.required]"
                         class="mt-2"
                     >
                         <VRadio label="New Loan" value="new"></VRadio>
@@ -116,7 +115,7 @@ const prefillForm = async function () {
                         type="number"
                         class="username-pw-input"
                         v-model="loanData.term"
-                        :rules="[rules.required]"
+                        :rules="[FORM_RULES.required]"
                         label="Enter Term of Loan"
                     />
                 </div>
@@ -131,7 +130,7 @@ const prefillForm = async function () {
                         v-model="loanData.paymentFrequency"
                         :items="PAYMENT_FREQUENCIES"
                         id="payment-frequency"
-                        :rules="[rules.required]"
+                        :rules="[FORM_RULES.required]"
                         label="Mode of Repayment"
                     />
                 </div>
@@ -147,7 +146,7 @@ const prefillForm = async function () {
                         v-model="loanData.type"
                         :items="loanTypes"
                         id="loan-type"
-                        :rules="[rules.required]"
+                        :rules="[FORM_RULES.required]"
                         label="Select Loan Type"
                     />
                 </div>
@@ -162,7 +161,7 @@ const prefillForm = async function () {
                             v-model="loanData.amount"
                             id="loan-amount"
                             :rules="[
-                                rules.required,
+                                FORM_RULES.required,
                                 (v) => {
                                     if (v <= loanData.minAmount) {
                                         return `Amount must be greater than ${loanData.minAmount}`
@@ -198,7 +197,7 @@ const prefillForm = async function () {
                             <VTextField
                                 class="username-pw-input"
                                 v-model="loanData.coborrower.name.given"
-                                :rules="[rules.required]"
+                                :rules="[FORM_RULES.required]"
                                 label="Enter Coborrower First Name"
                             />
                         </div>
@@ -209,7 +208,7 @@ const prefillForm = async function () {
                             <VTextField
                                 class="username-pw-input"
                                 v-model="loanData.coborrower.name.middle"
-                                :rules="[rules.required]"
+                                :rules="[FORM_RULES.required]"
                                 label="Enter Coborrower Middle Name"
                             />
                         </div>
@@ -220,7 +219,7 @@ const prefillForm = async function () {
                             <VTextField
                                 class="username-pw-input"
                                 v-model="loanData.coborrower.name.last"
-                                :rules="[rules.required]"
+                                :rules="[FORM_RULES.required]"
                                 label="Enter Coborrower Last Name"
                             />
                         </div>
@@ -232,7 +231,7 @@ const prefillForm = async function () {
                                 class="username-pw-input"
                                 v-model="loanData.coborrower.birthday"
                                 type="date"
-                                :rules="[rules.required]"
+                                :rules="[FORM_RULES.required]"
                                 label="Enter Coborrower Date of Birth"
                             />
                         </div>
@@ -243,7 +242,7 @@ const prefillForm = async function () {
                             <VTextField
                                 class="username-pw-input"
                                 v-model="loanData.coborrower.birthplace"
-                                :rules="[rules.required]"
+                                :rules="[FORM_RULES.required]"
                                 label="Enter Coborrower Place of Birth"
                             />
                         </div>
@@ -254,7 +253,7 @@ const prefillForm = async function () {
                             <VTextField
                                 class="username-pw-input"
                                 v-model="loanData.coborrower.occupation"
-                                :rules="[rules.required]"
+                                :rules="[FORM_RULES.required]"
                                 label="Enter Coborrower Occupation/Source of Income"
                             />
                         </div>
@@ -265,7 +264,7 @@ const prefillForm = async function () {
                             <VTextField
                                 class="username-pw-input"
                                 v-model="loanData.coborrower.contact_no"
-                                :rules="[rules.required]"
+                                :rules="[FORM_RULES.required]"
                                 label="Enter Coborrower Contact Number"
                             />
                         </div>

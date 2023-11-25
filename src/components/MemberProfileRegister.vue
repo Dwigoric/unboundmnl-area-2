@@ -7,7 +7,7 @@ import { psgc } from 'ph-locations'
 const { regions, provinces, citiesMunicipalities } = psgc
 
 // Import constants
-import { API_URL } from '../constants'
+import { API_URL, FORM_RULES } from '../constants'
 
 // Define reactive variables
 const errorMessage = ref('')
@@ -54,11 +54,6 @@ const userData = reactive({
         occupation: ''
     }
 })
-
-// Define constants
-const rules = {
-    required: (v) => !!v || 'This field is required'
-}
 
 // Props
 const props = defineProps({
@@ -247,7 +242,7 @@ watch(
                         class="username-pw-input"
                         v-model="userData.username"
                         id="login-username"
-                        :rules="[rules.required]"
+                        :rules="[FORM_RULES.required]"
                         label="Enter Username"
                         :disabled="props.action === 'update'"
                     />
@@ -263,7 +258,7 @@ watch(
                         class="username-pw-input"
                         v-model="userData.name.given"
                         id="login-first-name"
-                        :rules="[rules.required]"
+                        :rules="[FORM_RULES.required]"
                         label="Enter First Name"
                     />
                 </div>
@@ -292,7 +287,7 @@ watch(
                         class="username-pw-input"
                         v-model="userData.name.last"
                         id="login-last-name"
-                        :rules="[rules.required]"
+                        :rules="[FORM_RULES.required]"
                         label="Enter Last Name"
                     />
                 </div>
@@ -308,7 +303,7 @@ watch(
                         v-model="userData.birthday"
                         id="login-birthday"
                         type="date"
-                        :rules="[rules.required]"
+                        :rules="[FORM_RULES.required]"
                         label="Select Date of Birth"
                     />
                 </div>
@@ -323,7 +318,7 @@ watch(
                         class="username-pw-input"
                         v-model="userData.birthplace"
                         id="login-birthplace"
-                        :rules="[rules.required]"
+                        :rules="[FORM_RULES.required]"
                         label="Enter Place of Birth"
                     />
                 </div>
@@ -334,7 +329,11 @@ watch(
                         <div>* Sex:</div>
                     </div>
 
-                    <VRadioGroup v-model="userData.sex" id="login-sex" :rules="[rules.required]">
+                    <VRadioGroup
+                        v-model="userData.sex"
+                        id="login-sex"
+                        :rules="[FORM_RULES.required]"
+                    >
                         <VRadio label="Male" value="M" />
                         <VRadio label="Female" value="F" />
                     </VRadioGroup>
@@ -350,7 +349,7 @@ watch(
                         class="username-pw-input"
                         v-model="userData.tin_no"
                         id="login-tin-number"
-                        :rules="[rules.required]"
+                        :rules="[FORM_RULES.required]"
                         label="Enter TIN Number (XXX-XXX-XXX-XXX)"
                     />
                 </div>
@@ -366,7 +365,7 @@ watch(
                         v-model="userData.civil_status"
                         :items="['Single', 'Married']"
                         id="login-civil-status"
-                        :rules="[rules.required]"
+                        :rules="[FORM_RULES.required]"
                         label="Select Civil Status"
                     />
                 </div>
@@ -381,7 +380,7 @@ watch(
                         class="username-pw-input"
                         v-model="userData.contact_no"
                         id="login-contact-number"
-                        :rules="[rules.required]"
+                        :rules="[FORM_RULES.required]"
                         label="Enter Contact Number"
                     />
                 </div>
@@ -397,7 +396,7 @@ watch(
                         v-model="userData.monthly_income"
                         id="login-monthly-income"
                         type="number"
-                        :rules="[rules.required]"
+                        :rules="[FORM_RULES.required]"
                         label="Enter Monthly Income"
                     />
                 </div>
@@ -411,7 +410,7 @@ watch(
                         class="username-pw-input"
                         v-model="userData.occupation"
                         id="login-occupation"
-                        :rules="[rules.required]"
+                        :rules="[FORM_RULES.required]"
                         label="Enter Occupation/Source of Income"
                     />
                 </div>
@@ -428,7 +427,7 @@ watch(
                         class="username-pw-input"
                         v-model="userData.address.region"
                         id="login-address-region"
-                        :rules="[rules.required]"
+                        :rules="[FORM_RULES.required]"
                         label="Enter Region"
                         auto-select-first
                         :items="
@@ -452,7 +451,7 @@ watch(
                             class="username-pw-input"
                             v-model="userData.address.province"
                             id="login-address-province"
-                            :rules="[rules.required]"
+                            :rules="[FORM_RULES.required]"
                             label="Enter Province"
                             auto-select-first
                             :items="locationsItems.provinces"
@@ -472,7 +471,7 @@ watch(
                             class="username-pw-input"
                             v-model="userData.address.city"
                             id="login-address-city"
-                            :rules="[rules.required]"
+                            :rules="[FORM_RULES.required]"
                             label="Enter City"
                             auto-select-first
                             :items="locationsItems.cities"
@@ -492,7 +491,7 @@ watch(
                             class="username-pw-input"
                             v-model="userData.address.barangay"
                             id="login-address-barangay"
-                            :rules="[rules.required]"
+                            :rules="[FORM_RULES.required]"
                             label="Enter Barangay"
                         />
                     </div>
@@ -508,7 +507,7 @@ watch(
                             class="username-pw-input"
                             v-model="userData.address.street"
                             id="login-address-street"
-                            :rules="[rules.required]"
+                            :rules="[FORM_RULES.required]"
                             label="Enter Street"
                         />
                     </div>
@@ -529,7 +528,7 @@ watch(
                                 v-model="userData.spouse.name.given"
                                 id="login-spouse-first-name"
                                 label="Enter Spouse's First Name"
-                                :rules="[rules.required]"
+                                :rules="[FORM_RULES.required]"
                             />
                         </div>
 
@@ -543,7 +542,7 @@ watch(
                                 v-model="userData.spouse.name.middle"
                                 id="login-spouse-middle-name"
                                 label="Enter Spouse's Middle Name"
-                                :rules="[rules.required]"
+                                :rules="[FORM_RULES.required]"
                             />
                         </div>
 
@@ -557,7 +556,7 @@ watch(
                                 v-model="userData.spouse.name.last"
                                 id="login-spouse-last-name"
                                 label="Enter Spouse's Last Name"
-                                :rules="[rules.required]"
+                                :rules="[FORM_RULES.required]"
                             />
                         </div>
 
@@ -572,7 +571,7 @@ watch(
                                 id="login-spouse-birthday"
                                 type="date"
                                 label="Select Spouse's Date of Birth"
-                                :rules="[rules.required]"
+                                :rules="[FORM_RULES.required]"
                             />
                         </div>
 
@@ -586,7 +585,7 @@ watch(
                                 v-model="userData.spouse.birthplace"
                                 id="login-spouse-birthplace"
                                 label="Enter Spouse's Place of Birth"
-                                :rules="[rules.required]"
+                                :rules="[FORM_RULES.required]"
                             />
                         </div>
 
@@ -600,7 +599,7 @@ watch(
                                 v-model="userData.spouse.contact_no"
                                 id="login-spouse-contact-number"
                                 label="Enter Spouse's Contact Number"
-                                :rules="[rules.required]"
+                                :rules="[FORM_RULES.required]"
                             />
                         </div>
 
@@ -614,7 +613,7 @@ watch(
                                 v-model="userData.spouse.occupation"
                                 id="login-spouse-occupation"
                                 label="Enter Spouse's Occupation/Source of Income"
-                                :rules="[rules.required]"
+                                :rules="[FORM_RULES.required]"
                             />
                         </div>
                     </div>

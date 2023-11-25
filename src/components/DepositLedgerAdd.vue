@@ -1,12 +1,15 @@
 <script setup>
-import { ref, onMounted, watch, reactive, computed } from 'vue'
-import { API_URL } from '../constants'
+// Packages
+import { ref, onMounted, reactive, computed } from 'vue'
 
+// Project constants
+import { API_URL, FORM_RULES } from '../constants'
+
+// Stylesheets
 import 'gridjs/dist/theme/mermaid.css'
 
 // Define constants
 const rules = {
-    required: (v) => !!v || 'This field is required',
     isOfficer: (v) => {
         return (
             officers.map((officer) => officer.title).includes(v.title) ||
@@ -144,13 +147,13 @@ onMounted(async () => {
                     type="date"
                     label="* Date of Payment"
                     v-model="formData.transactionDate"
-                    :rules="[rules.required]"
+                    :rules="[FORM_RULES.required]"
                 />
                 <VTextField
                     class="ml-3"
                     label="* GV/OR Number"
                     v-model="formData.ORNumber"
-                    :rules="[rules.required]"
+                    :rules="[FORM_RULES.required]"
                 />
             </div>
             <div class="d-flex flex-row">
@@ -159,14 +162,14 @@ onMounted(async () => {
                     type="date"
                     label="* Date of Entry"
                     v-model="formData.submissionDate"
-                    :rules="[rules.required]"
+                    :rules="[FORM_RULES.required]"
                 />
                 <v-combobox
                     class="ml-3"
                     label="* Officer in Charge"
                     :items="officers"
                     v-model="formData.officerInCharge"
-                    :rules="[rules.required, rules.isOfficer]"
+                    :rules="[FORM_RULES.required, rules.isOfficer]"
                 ></v-combobox>
             </div>
             <VSelect
@@ -174,7 +177,7 @@ onMounted(async () => {
                 label="* Transaction Type"
                 v-model="formData.transactionType"
                 :items="['Deposit', 'Withdrawal']"
-                :rules="[rules.required]"
+                :rules="[FORM_RULES.required]"
             ></VSelect>
 
             <div v-if="formData.transactionType !== ''">

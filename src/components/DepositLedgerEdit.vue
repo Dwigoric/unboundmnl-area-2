@@ -1,12 +1,15 @@
 <script setup>
+// Packages
 import { ref, onMounted, reactive } from 'vue'
-import { API_URL } from '../constants'
 
+// Project constants
+import { API_URL, FORM_RULES } from '../constants'
+
+// Stylesheets
 import 'gridjs/dist/theme/mermaid.css'
 
 // Define constants
 const rules = {
-    required: (v) => !!v || 'This field is required',
     isOfficer: (v) => {
         return (
             officers.map((officer) => officer.title).includes(v.title) ||
@@ -167,13 +170,13 @@ onMounted(async () => {
                     type="date"
                     label="* Date of Payment"
                     v-model="formData.transactionDate"
-                    :rules="[rules.required]"
+                    :rules="[FORM_RULES.required]"
                 />
                 <VTextField
                     class="ml-3"
                     label="* GV/OR Number"
                     v-model="formData.ORNumber"
-                    :rules="[rules.required]"
+                    :rules="[FORM_RULES.required]"
                 />
             </div>
             <VSelect
@@ -181,7 +184,7 @@ onMounted(async () => {
                 label="* Deposit Type"
                 v-model="formData.depositType"
                 :items="['deposit', 'withdrawal']"
-                :rules="[rules.required]"
+                :rules="[FORM_RULES.required]"
             ></VSelect>
             <VTextField class="ml-3" type="number" label="Amount" v-model="formData.amount" />
             <VTextField class="ml-3" type="number" label="Balance" v-model="formData.balance" />
@@ -197,7 +200,7 @@ onMounted(async () => {
                     type="date"
                     label="* Date of Entry"
                     v-model="formData.submissionDate"
-                    :rules="[rules.required]"
+                    :rules="[FORM_RULES.required]"
                     disabled
                 />
                 <v-combobox
@@ -205,7 +208,7 @@ onMounted(async () => {
                     label="* Officer in Charge"
                     :items="officers"
                     v-model="formData.officerInCharge"
-                    :rules="[rules.required, rules.isOfficer]"
+                    :rules="[FORM_RULES.required, rules.isOfficer]"
                 ></v-combobox>
             </div>
 
