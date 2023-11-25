@@ -24,7 +24,8 @@ import TransactionSettings from '../views/TransactionSettings.vue'
 import NotificationSettings from '../views/NotificationSettings.vue'
 import AdminSettings from '../views/AdminSettings.vue'
 
-
+// Disable NProgress spinner
+NProgress.configure({ showSpinner: false })
 
 // Import path name constants
 import { PATH_NAMES } from '../constants'
