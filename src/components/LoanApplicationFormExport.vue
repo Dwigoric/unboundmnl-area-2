@@ -102,9 +102,9 @@ const fetchPDF = async () => {
     // Set type of loan
     const loanTypes = Object.freeze({
         emergency: 'Emergency',
-        'multi-purpose': 'Multi-Purpose',
+        multipurpose: 'Multi-Purpose',
         educational: 'Educational',
-        'petty cash': 'Petty Cash',
+        pettyCash: 'Petty Cash',
         commercial: 'Commercial',
         livelihood: 'Livelihood'
     })

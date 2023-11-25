@@ -14,7 +14,16 @@ const appFormStore = useApplicationFormStore()
 
 // Define constants
 const rules = {
-    required: (v) => !!v || 'This field is required'
+    required: (v) => !!v || 'This field is required',
+    maxDecimalPlaces: (decimalPlaces) => {
+        return (v) =>
+            ((v) => {
+                v = parseFloat(v)
+                if (!v) return 0
+                if (Math.floor(v) === v) return 0
+                return v.toString().split('.')[1].length || 0
+            })(v) <= decimalPlaces || `Must not have more than ${decimalPlaces} decimal places`
+    }
 }
 
 // Define reactive variables
@@ -72,7 +81,6 @@ const prefillForm = async function () {
     // Send to application details page
     await router.push({ name: 'Export Application Form' })
 }
-
 </script>
 
 <template>
@@ -156,14 +164,12 @@ const prefillForm = async function () {
                             :rules="[
                                 rules.required,
                                 (v) => {
-                                    if (v <= loanData.minAmount ) {
-                                        return (
-                                            `Amount must be greater than ${loanData.minAmount}`
-
-                                        )
+                                    if (v <= loanData.minAmount) {
+                                        return `Amount must be greater than ${loanData.minAmount}`
                                     }
                                     return true
-                                }
+                                },
+                                rules.maxDecimalPlaces(2)
                             ]"
                             label="Enter Loan Amount"
                             type="number"

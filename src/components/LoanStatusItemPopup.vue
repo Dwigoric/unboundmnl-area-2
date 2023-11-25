@@ -51,6 +51,8 @@ const decide = async (toApprove) => {
         return
     }
 
+    console.log(props.data[0])
+
     const { error, message } = await fetch(`${API_URL}/loans/${props.data[0]}/review`, {
         method: 'POST',
         headers: {

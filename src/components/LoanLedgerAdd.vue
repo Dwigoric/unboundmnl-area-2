@@ -15,8 +15,19 @@ const rules = {
             officers.map((officer) => officer.title).includes(v.title) ||
             'This field must be a valid officer'
         )
+    },
+    maxDecimalPlaces: (decimalPlaces) => {
+        return (v) =>
+            ((v) => {
+                v = parseFloat(v)
+                if (!v) return 0
+                if (Math.floor(v) === v) return 0
+                return v.toString().split('.')[1].length || 0
+            })(v) <= decimalPlaces || `Must not have more than ${decimalPlaces} decimal places`
     }
 }
+
+// :rules="[rules.maxDecimalPlaces(2)]"
 
 const formatDate = function (date) {
     let year = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(date)
@@ -68,13 +79,14 @@ const formData = reactive({
 })
 
 // Reactive variable to determine what type of transaction the user is making for the loan ledger.
-const transactionType = ref('');
+const transactionType = ref('')
 
 const newBalance = computed(() => {
-    const dues = Number(formData.interestDue) + Number(formData.finesDue);
-    const payments = Number(formData.amountPaid) + Number(formData.interestPaid) + Number(formData.finesPaid);
+    const dues = Number(formData.interestDue) + Number(formData.finesDue)
+    const payments =
+        Number(formData.amountPaid) + Number(formData.interestPaid) + Number(formData.finesPaid)
 
-    return props.balance - payments + dues;
+    return props.balance - payments + dues
 })
 
 const officers = reactive([])
@@ -85,15 +97,14 @@ const submit = async function () {
 
     loading.value = true
 
-    // If transaction is NOT readjustment 
+    // If transaction is NOT readjustment
     if (formData.readjustment === false) {
         // Update balance to match that of form input
-        formData.balance = newBalance;
+        formData.balance = newBalance
     }
 
     const preprocessedFormData = { ...formData }
     preprocessedFormData.officerInCharge = { ...preprocessedFormData.officerInCharge.value }
-
 
     const res = await fetch(`${API_URL}/loans/${props.loanID}/ledger`, {
         method: 'PUT',
@@ -131,29 +142,29 @@ watch(transactionType, (transaction) => {
 
     // If selected transaction is payments
     if (transaction === 'payments') {
-        formData.amountPaid = 0;
-        formData.amountDue = 0;
-        formData.interestDue = 0;
-        formData.balance = props.balance;
-        formData.payment = true;
-        formData.dues = false;
-        formData.readjustment = false;
+        formData.amountPaid = 0
+        formData.amountDue = 0
+        formData.interestDue = 0
+        formData.balance = props.balance
+        formData.payment = true
+        formData.dues = false
+        formData.readjustment = false
     } else if (transaction === 'dues') {
-        formData.amountPaid = 0;
-        formData.interestPaid = 0;
-        formData.finesPaid = 0;
-        formData.balance = props.balance;
-        formData.payment = false;
-        formData.dues = true;
-        formData.readjustment = false;
+        formData.amountPaid = 0
+        formData.interestPaid = 0
+        formData.finesPaid = 0
+        formData.balance = props.balance
+        formData.payment = false
+        formData.dues = true
+        formData.readjustment = false
     } else if (transaction === 'readjustment') {
         formData.balance = props.balance
-        formData.readjustment = true;
-        formData.amountDue = 0;
-        formData.amountPaid = 0;
-        formData.interestDue = 0;
-        formData.interestPaid = 0;
-        formData.finesPaid = 0;
+        formData.readjustment = true
+        formData.amountDue = 0
+        formData.amountPaid = 0
+        formData.interestDue = 0
+        formData.interestPaid = 0
+        formData.finesPaid = 0
     }
 })
 
@@ -179,7 +190,6 @@ onMounted(async () => {
     <div class="wrapper">
         <!-- Add transaction form -->
         <VForm id="loan-ledger-form" ref="form">
-
             <h2 class="ml-3 py-3">Transaction Type</h2>
             <div class="d-flex justify-center w-100">
                 <v-radio-group v-model="transactionType" inline>
@@ -188,9 +198,9 @@ onMounted(async () => {
                     <v-radio label="Balance Readjustment" value="readjustment"></v-radio>
                 </v-radio-group>
             </div>
-            
+
             <!-- Only show form once user has selected transaction type -->
-            <div v-if="transactionType !== ''" >
+            <div v-if="transactionType !== ''">
                 <div class="d-flex flex-row mb-3">
                     <VTextField
                         class="ml-3"
@@ -231,7 +241,6 @@ onMounted(async () => {
 
                 <!-- Only show payments if Payments is Selected -->
                 <div v-if="transactionType === 'payment'">
-
                     <h3 class="ml-3 py-3">Payments</h3>
                     <VTextField
                         class="ml-3"
@@ -247,6 +256,7 @@ onMounted(async () => {
                         type="number"
                         label="Amount Paid"
                         v-model="formData.amountPaid"
+                        :rules="[rules.maxDecimalPlaces(2)]"
                         :min="0"
                     />
                     <VTextField
@@ -254,6 +264,7 @@ onMounted(async () => {
                         type="number"
                         label="Interest Paid"
                         v-model="formData.interestPaid"
+                        :rules="[rules.maxDecimalPlaces(2)]"
                         :min="0"
                     />
 
@@ -263,10 +274,11 @@ onMounted(async () => {
                         type="number"
                         label="Fines Paid"
                         v-model="formData.finesPaid"
+                        :rules="[rules.maxDecimalPlaces(2)]"
                         :min="0"
                     />
                 </div>
-                
+
                 <!-- Only show dues if Due is selected -->
                 <div v-if="transactionType === 'dues'">
                     <!-- Only show dues if Fine/Interest is selected -->
@@ -276,6 +288,7 @@ onMounted(async () => {
                         type="number"
                         label="Amount Due"
                         v-model="formData.amountDue"
+                        :rules="[rules.maxDecimalPlaces(2)]"
                         :min="0"
                     />
                     <!-- TODO: Automatically generate interest value?? -->
@@ -284,6 +297,7 @@ onMounted(async () => {
                         type="number"
                         label="Interest Due"
                         v-model="formData.interestDue"
+                        :rules="[rules.maxDecimalPlaces(2)]"
                         :min="0"
                     />
 
@@ -292,6 +306,7 @@ onMounted(async () => {
                         type="number"
                         label="Fines Due"
                         v-model="formData.finesDue"
+                        :rules="[rules.maxDecimalPlaces(2)]"
                         :min="0"
                     />
                 </div>
@@ -305,7 +320,8 @@ onMounted(async () => {
                         v-model="formData.balance"
                         :min="0"
                         :max="props.originalLoanAmount"
-                    />    
+                        :rules="[rules.maxDecimalPlaces(2)]"
+                    />
                 </div>
                 <div class="btn-wrapper">
                     <VBtn
@@ -317,7 +333,7 @@ onMounted(async () => {
                         Submit
                     </VBtn>
                 </div>
-    
+
                 <VAlert
                     v-if="errorAlert"
                     v-model="errorAlert"

@@ -2,6 +2,18 @@
 import { ref, onMounted, reactive } from 'vue'
 import { API_URL } from '../../constants'
 
+const rules = {
+    maxDecimalPlaces: (decimalPlaces) => {
+        return (v) =>
+            ((v) => {
+                v = parseFloat(v)
+                if (!v) return 0
+                if (Math.floor(v) === v) return 0
+                return v.toString().split('.')[1].length || 0
+            })(v) <= decimalPlaces || `Must not have more than ${decimalPlaces} decimal places`
+    }
+}
+
 const props = defineProps({
     header: {
         type: String,
@@ -83,6 +95,7 @@ onMounted(async () => {
                                 placeholder="Unit"
                                 type="number"
                                 v-model="formData.interest_rate.value"
+                                :rules="[rules.maxDecimalPlaces(2)]"
                             />
                         </div>
 
@@ -108,6 +121,7 @@ onMounted(async () => {
                                 placeholder="Unit"
                                 type="number"
                                 v-model="formData.time.value"
+                                :rules="[rules.maxDecimalPlaces(2)]"
                             />
                         </div>
 

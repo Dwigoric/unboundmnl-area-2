@@ -8,7 +8,16 @@ const memberSearchStore = useMemberSearchStore()
 
 // Define constants
 const rules = {
-    required: (v) => !!v || 'This field is required'
+    required: (v) => !!v || 'This field is required',
+    maxDecimalPlaces: (decimalPlaces) => {
+        return (v) =>
+            ((v) => {
+                v = parseFloat(v)
+                if (!v) return 0
+                if (Math.floor(v) === v) return 0
+                return v.toString().split('.')[1].length || 0
+            })(v) <= decimalPlaces || `Must not have more than ${decimalPlaces} decimal places`
+    }
 }
 
 const formatDate = function (date) {
@@ -116,7 +125,7 @@ const submit = async function () {
                 :min="0"
                 :max="100"
                 v-model="depositData.interestRate"
-                :rules="[rules.required]"
+                :rules="[rules.required, rules.maxDecimalPlaces(2)]"
             />
             <!-- <VTextField class="ml-3" label="Time" /> -->
             <VTextField
@@ -125,7 +134,7 @@ const submit = async function () {
                 v-model="depositData.originalDepositAmount"
                 type="number"
                 :min="0"
-                :rules="[rules.required]"
+                :rules="[rules.required, rules.maxDecimalPlaces(2)]"
             />
             <VTextField
                 class="ml-3"
@@ -134,7 +143,6 @@ const submit = async function () {
                 type="number"
                 :min="0"
             />
-
 
             <!-- TODO: Connect this button to a method to add to the database -->
             <div class="btn-wrapper">

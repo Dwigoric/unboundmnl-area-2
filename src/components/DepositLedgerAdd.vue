@@ -12,6 +12,15 @@ const rules = {
             officers.map((officer) => officer.title).includes(v.title) ||
             'This field must be a valid officer'
         )
+    },
+    maxDecimalPlaces: (decimalPlaces) => {
+        return (v) =>
+            ((v) => {
+                v = parseFloat(v)
+                if (!v) return 0
+                if (Math.floor(v) === v) return 0
+                return v.toString().split('.')[1].length || 0
+            })(v) <= decimalPlaces || `Must not have more than ${decimalPlaces} decimal places`
     }
 }
 const formatDate = function (date) {
@@ -52,14 +61,19 @@ const formData = reactive({
     officerInCharge: ''
 })
 
+// TODO: this throws an error, fix it later
+// eslint-disable-next-line vue/return-in-computed-property
 const newBalance = computed(() => {
     // Compute the new balance differently depending on whether transaction is deposit or withdrawal
     if (formData.transactionType === 'Deposit' || formData.transactionType === 'deposit') {
-        return props.runningAmount + Number(formData.amount) + Number(formData.interest);
-    } else if (formData.transactionType === 'Withdrawal' || formData.transactionType === 'withdrawal') {
-        return props.runningAmount - Number(formData.amount);
+        return props.runningAmount + Number(formData.amount) + Number(formData.interest)
+    } else if (
+        formData.transactionType === 'Withdrawal' ||
+        formData.transactionType === 'withdrawal'
+    ) {
+        return props.runningAmount - Number(formData.amount)
     }
-});
+})
 
 const officers = reactive([])
 
@@ -68,7 +82,7 @@ const submit = async function () {
     if (!valid) return
 
     formData.balance = newBalance
-    
+
     const preprocessedFormData = { ...formData }
     preprocessedFormData.officerInCharge = { ...preprocessedFormData.officerInCharge.value }
 
@@ -124,91 +138,93 @@ onMounted(async () => {
         <VForm id="loan-ledger-form" ref="form">
             <!-- Only show form once user has selected transaction type -->
 
-                <div class="d-flex flex-row">
-                    <VTextField
-                        class="ml-3"
-                        type="date"
-                        label="* Date of Payment"
-                        v-model="formData.transactionDate"
-                        :rules="[rules.required]"
-                    />
-                    <VTextField
-                        class="ml-3"
-                        label="* GV/OR Number"
-                        v-model="formData.ORNumber"
-                        :rules="[rules.required]"
-                    />
-                </div>
-                <div class="d-flex flex-row">
-                    <VTextField
-                        class="ml-3"
-                        type="date"
-                        label="* Date of Entry"
-                        v-model="formData.submissionDate"
-                        :rules="[rules.required]"
-                    />
-                    <v-combobox
-                        class="ml-3"
-                        label="* Officer in Charge"
-                        :items="officers"
-                        v-model="formData.officerInCharge"
-                        :rules="[rules.required, rules.isOfficer]"
-                    ></v-combobox>
-                </div>
-                <VSelect
+            <div class="d-flex flex-row">
+                <VTextField
                     class="ml-3"
-                    label="* Transaction Type"
-                    v-model="formData.transactionType"
-                    :items="['Deposit', 'Withdrawal']"
+                    type="date"
+                    label="* Date of Payment"
+                    v-model="formData.transactionDate"
                     :rules="[rules.required]"
-                ></VSelect>
+                />
+                <VTextField
+                    class="ml-3"
+                    label="* GV/OR Number"
+                    v-model="formData.ORNumber"
+                    :rules="[rules.required]"
+                />
+            </div>
+            <div class="d-flex flex-row">
+                <VTextField
+                    class="ml-3"
+                    type="date"
+                    label="* Date of Entry"
+                    v-model="formData.submissionDate"
+                    :rules="[rules.required]"
+                />
+                <v-combobox
+                    class="ml-3"
+                    label="* Officer in Charge"
+                    :items="officers"
+                    v-model="formData.officerInCharge"
+                    :rules="[rules.required, rules.isOfficer]"
+                ></v-combobox>
+            </div>
+            <VSelect
+                class="ml-3"
+                label="* Transaction Type"
+                v-model="formData.transactionType"
+                :items="['Deposit', 'Withdrawal']"
+                :rules="[rules.required]"
+            ></VSelect>
 
-                <div v-if="formData.transactionType !== ''">
-                    <VTextField 
-                        class="ml-3" 
-                        type="number" 
-                        label="Amount" 
-                        v-model="formData.amount" />
-                    <VTextField    
-                        class="ml-3" 
-                        type="number" 
-                        label="Balance" 
-                        v-model="newBalance" />
-                    <!-- Only show interest earned if deposit transaction -->
-                    <div v-if="formData.transactionType === 'Deposit'">
-                        <VTextField
-                            
-                            class="ml-3"
-                            type="number"
-                            label="Interest Earned"
-                            v-model="formData.interest"
-                        />
-                    </div>
+            <div v-if="formData.transactionType !== ''">
+                <VTextField
+                    class="ml-3"
+                    type="number"
+                    label="Amount"
+                    v-model="formData.amount"
+                    :rules="[rules.maxDecimalPlaces(2)]"
+                />
+                <VTextField
+                    class="ml-3"
+                    type="number"
+                    label="Balance"
+                    v-model="newBalance"
+                    :rules="[rules.maxDecimalPlaces(2)]"
+                />
+                <!-- Only show interest earned if deposit transaction -->
+                <div v-if="formData.transactionType === 'Deposit'">
+                    <VTextField
+                        class="ml-3"
+                        type="number"
+                        label="Interest Earned"
+                        v-model="formData.interest"
+                        :rules="[rules.maxDecimalPlaces(2)]"
+                    />
                 </div>
+            </div>
 
-    
-                <div class="btn-wrapper">
-                    <VBtn
-                        prepend-icon="mdi-check"
-                        class="capitalize btn"
-                        :loading="loading"
-                        @click.prevent="submit"
-                    >
-                        Submit
-                    </VBtn>
-                </div>
-    
-                <VAlert
-                    v-if="errorAlert"
-                    v-model="errorAlert"
-                    type="error"
-                    closable=""
-                    density="comfortable"
-                    elevation="5"
+            <div class="btn-wrapper">
+                <VBtn
+                    prepend-icon="mdi-check"
+                    class="capitalize btn"
+                    :loading="loading"
+                    @click.prevent="submit"
                 >
-                    {{ errorMessage }}
-                </VAlert>
+                    Submit
+                </VBtn>
+            </div>
 
+            <VAlert
+                v-if="errorAlert"
+                v-model="errorAlert"
+                type="error"
+                closable=""
+                density="comfortable"
+                elevation="5"
+            >
+                {{ errorMessage }}
+            </VAlert>
         </VForm>
     </div>
 </template>

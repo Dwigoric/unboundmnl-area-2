@@ -2,6 +2,18 @@
 import { ref, onMounted, reactive } from 'vue'
 import { API_URL } from '../../constants'
 
+const rules = {
+    maxDecimalPlaces: (decimalPlaces) => {
+        return (v) =>
+            ((v) => {
+                v = parseFloat(v)
+                if (!v) return 0
+                if (Math.floor(v) === v) return 0
+                return v.toString().split('.')[1].length || 0
+            })(v) <= decimalPlaces || `Must not have more than ${decimalPlaces} decimal places`
+    }
+}
+
 const props = defineProps({
     header: {
         type: String,
@@ -88,6 +100,7 @@ onMounted(async () => {
                                 variant="underlined"
                                 placeholder="Value"
                                 type="number"
+                                :rules="[rules.maxDecimalPlaces(2)]"
                                 v-model="formData.interest_rate.value"
                             />
                         </div>
@@ -113,6 +126,7 @@ onMounted(async () => {
                                 variant="underlined"
                                 placeholder="Value"
                                 type="number"
+                                :rules="[rules.maxDecimalPlaces(2)]"
                                 v-model="formData.time.value"
                             />
                         </div>
@@ -140,6 +154,7 @@ onMounted(async () => {
                                 variant="underlined"
                                 placeholder="Value"
                                 type="number"
+                                :rules="[rules.maxDecimalPlaces(2)]"
                                 v-model="formData.service_fee.value"
                                 :disabled="!formData.service_fee.enabled"
                             />
@@ -172,6 +187,7 @@ onMounted(async () => {
                                 variant="underlined"
                                 placeholder="Value"
                                 type="number"
+                                :rules="[rules.maxDecimalPlaces(2)]"
                                 v-model="formData.capital_build_up.value"
                                 :disabled="!formData.capital_build_up.enabled"
                             />
@@ -204,6 +220,7 @@ onMounted(async () => {
                                 variant="underlined"
                                 placeholder="Value"
                                 type="number"
+                                :rules="[rules.maxDecimalPlaces(2)]"
                                 v-model="formData.savings.value"
                                 :disabled="!formData.savings.enabled"
                             />
