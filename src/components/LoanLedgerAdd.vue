@@ -1,5 +1,7 @@
 <script setup>
 import { ref, onMounted, watch, reactive, computed } from 'vue'
+import Decimal from 'decimal.js'
+
 import { API_URL } from '../constants'
 
 import 'gridjs/dist/theme/mermaid.css'
@@ -82,11 +84,10 @@ const formData = reactive({
 const transactionType = ref('')
 
 const newBalance = computed(() => {
-    const dues = Number(formData.interestDue) + Number(formData.finesDue)
-    const payments =
-        Number(formData.amountPaid) + Number(formData.interestPaid) + Number(formData.finesPaid)
+    const dues = Decimal(formData.interestDue).add(formData.finesDue)
+    const payments = Decimal(formData.amountPaid).add(formData.interestPaid).add(formData.finesPaid)
 
-    return props.balance - payments + dues
+    return parseFloat(Decimal(props.balance).sub(payments).add(dues))
 })
 
 const officers = reactive([])
