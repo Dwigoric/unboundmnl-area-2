@@ -28,7 +28,7 @@ const isAddPopupActive = ref(false) // for add transaction pop up
 const isPopupActive = ref(false) // for edit transaction pop up
 const originalLoanAmount = ref(0) // for dynamically calculating balance in form
 const totalAmountPaid = ref(0) // for dynamically calculating balance in form
-const balance = ref(0);
+const balance = ref(0)
 
 const currentlyEditedTransactionID = ref('')
 
@@ -87,12 +87,12 @@ const loanTransactionColumns = [
     { name: 'Fines Due' },
     { name: 'Fines Paid' },
     { name: 'Date of Entry' },
-    { name: 'Officer in Charge' },
+    { name: 'Officer in Charge' }
 ]
 
 // Give each transaction column a minimum width to properly fit the content
-loanTransactionColumns.forEach(col => {
-    col.width = '225px';
+loanTransactionColumns.forEach((col) => {
+    col.width = '225px'
 })
 
 const setPopupAdd = () => {
@@ -116,12 +116,12 @@ const getLoanInfo = async () => {
     if (resJson) {
         const loanData = resJson.loan
         rawLoanData.value = loanData
-        
+
         // Also assign the original loan amount to the reactive variable
         originalLoanAmount.value = loanData.originalLoanAmount
-        
+
         // Store value of balance
-        balance.value = loanData.balance;
+        balance.value = loanData.balance
 
         formData.amount = loanData.originalLoanAmount
         formData.loanee = loanData.username
@@ -174,10 +174,10 @@ function getTotalAmountPaid(ledgerTransactions) {
     var totalAmountPaid = 0
     // For every transaction in the ledger, add its amount paid to a total sum
 
-    ledgerTransactions.forEach( transaction => {
-        let amountPaid = transaction[4]; // index for amount paid
-        totalAmountPaid += amountPaid;
-    });
+    ledgerTransactions.forEach((transaction) => {
+        let amountPaid = transaction[4] // index for amount paid
+        totalAmountPaid += amountPaid
+    })
 
     return totalAmountPaid
 }
@@ -237,9 +237,10 @@ onMounted(async () => {
         <div id="loan-info-wrapper" class="d-flex justify-space-between">
             <!-- Left -->
             <div id="loan-amount-cell" class="h-75 w-30 pa-2">
-                <p>Original Loan Amount:</p>
-                <p class="loan-amount">{{ formattedLoanAmount }}</p>
-                <p> Balance: {{ formattedBalance }} </p> <!-- TODO: remove this! -->
+                <p>Outstanding Balance:</p>
+                <p class="loan-amount">{{ formattedBalance }}</p>
+                <p>Original Loan Amount: {{ formattedLoanAmount }}</p>
+                <!-- TODO: remove this! -->
                 <div class="d-flex flex-row">
                     <p>Loanee:</p>
                     <p class="font-weight-bold ml-3">{{ formData.loanee }}</p>
@@ -421,7 +422,8 @@ onMounted(async () => {
                         "
                         :originalLoanAmount="originalLoanAmount"
                         :balance="balance"
-                    /> <!-- NOTE: we should not be doing the solution above na -->
+                    />
+                    <!-- NOTE: we should not be doing the solution above na -->
                 </VCard>
             </template>
         </VDialog>
@@ -510,7 +512,6 @@ onMounted(async () => {
 }
 
 th.gridjs-th {
-    
 }
 
 th .gridjs-th {

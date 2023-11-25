@@ -27,7 +27,8 @@ const items = reactive([])
 const headers = [
     { title: 'Type of Loan', key: 'type' },
     { title: 'Loanee', key: 'loanee' },
-    { title: 'Amount of Loan', key: 'amount' },
+    { title: 'Original Amount of Loan', key: 'amount' },
+    { title: 'Outstanding Balance', key: 'balance' },
     { title: 'Submission Date', key: 'submissionDate' },
     { title: 'Status', key: 'status' },
     { title: 'Due Date', key: 'dueDate' },
@@ -122,6 +123,10 @@ onMounted(async () => {
                 id: loan.loanID,
                 loanee: loan.username,
                 type: LOAN_TYPES[loan.loanType],
+                balance: Intl.NumberFormat('en-US', {
+                    style: 'currency',
+                    currency: 'PHP'
+                }).format(Number(loan.balance)),
                 amount: Intl.NumberFormat('en-US', {
                     style: 'currency',
                     currency: 'PHP'
