@@ -235,7 +235,7 @@ onMounted(async () => {
                         })
                     }}
                 </v-chip>
-                <v-tooltip location="top" v-if="Date.now() > new Date(value).getTime()">
+                <v-tooltip location="top" v-if="value && Date.now() > new Date(value).getTime()">
                     <template #activator="{ props }">
                         <v-icon v-bind="props">mdi-alert</v-icon>
                     </template>
