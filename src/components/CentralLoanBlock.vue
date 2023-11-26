@@ -1,6 +1,6 @@
 <script setup>
 // Packages
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, onBeforeMount, onMounted } from 'vue'
 
 // Project constants
 import { API_URL, LOAN_TYPES } from '../constants'
@@ -20,10 +20,7 @@ const props = defineProps({
     }
 })
 
-// Reactive variables
-const search = ref('')
-const releaseLoading = ref([])
-const items = reactive([])
+// Constants
 const headers = [
     { title: 'Type of Loan', key: 'type' },
     { title: 'Loanee', key: 'loanee' },
@@ -34,6 +31,23 @@ const headers = [
     { title: 'Due Date', key: 'dueDate' },
     { title: 'View Loan Ledger', key: 'id' }
 ]
+const buildStatus = {
+    pending: ['Pending', 'purple'],
+    approved: ['Approved (for release)', 'orange'],
+    released: ['Approved (released)', 'success'],
+    rejected: ['Rejected', 'red'],
+    complete: ['Complete', 'blue']
+}
+const notificationSettings = {
+    period_1: 0,
+    period_2: 0,
+    period_3: 0
+}
+
+// Reactive variables
+const search = ref('')
+const releaseLoading = ref([])
+const items = reactive([])
 
 if (props.username) headers.splice(1, 1)
 
@@ -67,10 +81,9 @@ const getDateColor = (dueDate) => {
     const diffTime = Math.abs(currentDate - new Date(dueDate))
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
 
-    // TODO: Refer to settings for the number of days
-    if (diffDays <= 7) return 'red'
-    else if (diffDays <= 14) return 'orange'
-    else if (diffDays <= 21) return 'yellow'
+    if (diffDays <= notificationSettings.period_1) return 'red'
+    else if (diffDays <= notificationSettings.period_2) return 'orange'
+    else if (diffDays <= notificationSettings.period_3) return 'yellow'
     else return 'green'
 }
 
@@ -97,14 +110,22 @@ const markAsReleased = async (loanID) => {
     releaseLoading.value.splice(releaseLoading.value.indexOf(loanID), 1)
 }
 
-const buildStatus = {
-    pending: ['Pending', 'purple'],
-    approved: ['Approved (for release)', 'orange'],
-    released: ['Approved (released)', 'success'],
-    rejected: ['Rejected', 'red'],
-    complete: ['Complete', 'blue']
-}
+// Lifecycle hooks
+onBeforeMount(async () => {
+    const res = await fetch(`${API_URL}/settings/notifications`, {
+        method: 'GET',
+        headers: {
+            Authorization: `Bearer ${window.$cookies.get('credentials').token}`
+        }
+    })
 
+    if (res.status === 200) {
+        const { settings } = await res.json()
+        notificationSettings.period_1 = settings.notification_period_1
+        notificationSettings.period_2 = settings.notification_period_2
+        notificationSettings.period_3 = settings.notification_period_3
+    }
+})
 onMounted(async () => {
     const url = props.username ? `/user/${props.username}` : ''
     const params = new URLSearchParams()
