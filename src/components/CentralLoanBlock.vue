@@ -223,7 +223,10 @@ onMounted(async () => {
             </template>
 
             <template v-slot:item.dueDate="{ value }">
-                <v-chip :color="getDateColor(value)" v-if="value">
+                <v-chip
+                    :color="Date.now() > new Date(value).getTime() ? 'red' : getDateColor(value)"
+                    v-if="value"
+                >
                     {{
                         new Date(value).toLocaleDateString('en-PH', {
                             year: 'numeric',
