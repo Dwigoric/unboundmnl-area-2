@@ -77,13 +77,8 @@ const formData = reactive({
     finesPaid: 0,
     interestDue: 0,
     officerInCharge: '',
-    payment: false,
-    dues: true,
-    readjustment: false
+    transactionType: ''
 })
-
-// Reactive variable to determine what type of transaction the user is making for the loan ledger.
-const transactionType = ref('')
 
 const newBalance = computed(() => {
     const dues = Decimal(formData.interestDue).add(formData.finesDue)
@@ -140,36 +135,39 @@ const submit = async function () {
 }
 
 // Watch the transaction type to reset formData back to default if switching transaction type
-watch(transactionType, (transaction) => {
-    console.log(`I PICKED THIS TRANSACTION TYPE: ${transaction}`)
+watch(
+    () => formData.transactionType,
+    (transaction) => {
+        console.log(`I PICKED THIS TRANSACTION TYPE: ${transaction}`)
 
-    // If selected transaction is payments
-    if (transaction === 'payments') {
-        formData.amountPaid = 0
-        formData.amountDue = 0
-        formData.interestDue = 0
-        formData.balance = props.balance
-        formData.payment = true
-        formData.dues = false
-        formData.readjustment = false
-    } else if (transaction === 'dues') {
-        formData.amountPaid = 0
-        formData.interestPaid = 0
-        formData.finesPaid = 0
-        formData.balance = props.balance
-        formData.payment = false
-        formData.dues = true
-        formData.readjustment = false
-    } else if (transaction === 'readjustment') {
-        formData.balance = props.balance
-        formData.readjustment = true
-        formData.amountDue = 0
-        formData.amountPaid = 0
-        formData.interestDue = 0
-        formData.interestPaid = 0
-        formData.finesPaid = 0
+        // If selected transaction is payments
+        if (transaction === 'payments') {
+            formData.amountPaid = 0
+            formData.amountDue = 0
+            formData.interestDue = 0
+            formData.balance = props.balance
+            formData.payment = true
+            formData.dues = false
+            formData.readjustment = false
+        } else if (transaction === 'dues') {
+            formData.amountPaid = 0
+            formData.interestPaid = 0
+            formData.finesPaid = 0
+            formData.balance = props.balance
+            formData.payment = false
+            formData.dues = true
+            formData.readjustment = false
+        } else if (transaction === 'readjustment') {
+            formData.balance = props.balance
+            formData.readjustment = true
+            formData.amountDue = 0
+            formData.amountPaid = 0
+            formData.interestDue = 0
+            formData.interestPaid = 0
+            formData.finesPaid = 0
+        }
     }
-})
+)
 
 onMounted(async () => {
     const officersRes = await fetch(`${API_URL}/officers/`, {
@@ -195,7 +193,7 @@ onMounted(async () => {
         <VForm id="loan-ledger-form" ref="form">
             <h2 class="ml-3 py-3">Transaction Type</h2>
             <div class="d-flex justify-center w-100">
-                <v-radio-group v-model="transactionType" inline="">
+                <v-radio-group v-model="formData.transactionType" inline="">
                     <v-radio label="Payment" value="payment"></v-radio>
                     <v-radio label="Dues" value="dues"></v-radio>
                     <v-radio label="Balance Readjustment" value="readjustment"></v-radio>
@@ -203,7 +201,7 @@ onMounted(async () => {
             </div>
 
             <!-- Only show form once user has selected transaction type -->
-            <div v-if="transactionType !== ''">
+            <div v-if="formData.transactionType !== ''">
                 <div class="d-flex flex-row mb-3">
                     <VTextField
                         class="ml-3"
@@ -243,7 +241,7 @@ onMounted(async () => {
                 </div>
 
                 <!-- Only show payments if Payments is Selected -->
-                <div v-if="transactionType === 'payment'">
+                <div v-if="formData.transactionType === 'payment'">
                     <h3 class="ml-3 py-3">Payments</h3>
                     <VTextField
                         class="ml-3"
@@ -283,7 +281,7 @@ onMounted(async () => {
                 </div>
 
                 <!-- Only show dues if Due is selected -->
-                <div v-if="transactionType === 'dues'">
+                <div v-if="formData.transactionType === 'dues'">
                     <!-- Only show dues if Fine/Interest is selected -->
                     <h3 class="ml-3 py-3">Dues</h3>
                     <VTextField
@@ -314,7 +312,7 @@ onMounted(async () => {
                     />
                 </div>
 
-                <div v-if="transactionType === 'readjustment'">
+                <div v-if="formData.transactionType === 'readjustment'">
                     <h3 class="ml-3 py-3">Balance Readjustment</h3>
                     <VTextField
                         class="ml-3"
