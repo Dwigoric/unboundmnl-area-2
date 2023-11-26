@@ -1,6 +1,6 @@
 <script setup>
 // Import Packages
-import { reactive, onMounted } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
 import jwt_decode from 'jwt-decode'
 
 // Import Components
@@ -15,21 +15,22 @@ import { API_URL } from '../constants'
 
 // Define reactive variables
 const officers = reactive([])
-
-// Grab token from cookies
-const { token } = window.$cookies.get('credentials')
-const { type } = jwt_decode(token)
+const type = ref('')
 
 /**
  * Grabs all officers registered in the database.
  */
 async function getAllOfficers() {
-    // retrieve token
-    const params = new URLSearchParams()
-    params.set('access_token', token)
+    // Grab token from cookies
+    const { token } = window.$cookies.get('credentials')
+    const decodedJwt = jwt_decode(token)
+    type.value = decodedJwt.type
 
     try {
-        const response = await fetch(`${API_URL}/officers?${params}`)
+        const response = await fetch(`${API_URL}/officers`, {
+            method: 'GET',
+            headers: { Authorization: `Bearer ${token}` }
+        })
         const officersResponse = await response.json()
         const officersArray = officersResponse.officers
         addToOfficers(...officersArray)

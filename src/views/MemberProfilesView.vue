@@ -29,16 +29,16 @@ async function getAllUsers() {
 
     let url = ''
     const params = new URLSearchParams()
-    params.set('access_token', token)
     if (searchQuery.value) {
         params.set('username', searchQuery.value)
         url += `search?${params}`
-    } else {
-        url += `?${params}`
     }
 
     try {
-        const response = await fetch(`${API_URL}/users/${url}`)
+        const response = await fetch(`${API_URL}/users/${url}`, {
+            method: 'GET',
+            headers: { Authorization: `Bearer ${token}` }
+        })
         users.value = await response.json()
     } catch (e) {
         console.error(e)

@@ -62,13 +62,11 @@ const submit = async () => {
 const fetchPDF = async () => {
     const { token } = window.$cookies.get('credentials')
 
-    const params = new URLSearchParams()
-    params.set('access_token', token)
-
     // Fetch PDF file
-    const formBytes = await fetch(
-        `${API_URL}/private/${FILENAMES.LOAN_APPLICATION}?${params}`
-    ).then((res) => res.arrayBuffer())
+    const formBytes = await fetch(`${API_URL}/private/${FILENAMES.LOAN_APPLICATION}`, {
+        method: 'GET',
+        headers: { Authorization: `Bearer ${token}` }
+    }).then((res) => res.arrayBuffer())
 
     // Load a PDFDocument from the existing PDF bytes
     const pdfDoc = await PDFDocument.load(formBytes)

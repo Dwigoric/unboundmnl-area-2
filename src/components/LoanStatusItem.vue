@@ -43,11 +43,11 @@ const fetchLoans = async () => {
     }
 
     const params = new URLSearchParams()
-    params.set('access_token', token)
     params.set('status', props.status)
-    const { error, message, loans } = await fetch(`${API_URL}/loans?${params}`).then((res) =>
-        res.json()
-    )
+    const { error, message, loans } = await fetch(`${API_URL}/loans?${params}`, {
+        method: 'GET',
+        headers: { Authorization: `Bearer ${token}` }
+    }).then((res) => res.json())
 
     if (error) {
         console.error(message)

@@ -15,11 +15,10 @@ export const useCurrentUserStore = defineStore('currentUser', () => {
 
         if (!credentials || !credentials.token) return
 
-        const params = new URLSearchParams()
-        params.set('access_token', credentials.token)
-        const { officer } = await fetch(`${API_URL}/officers/${id.value}?${params}`).then((res) =>
-            res.json()
-        )
+        const { officer } = await fetch(`${API_URL}/officers/${id.value}`, {
+            method: 'GET',
+            headers: { Authorization: `Bearer ${credentials.token}` }
+        }).then((res) => res.json())
 
         if (officer) {
             const isAdmin = officer.username === 'admin'

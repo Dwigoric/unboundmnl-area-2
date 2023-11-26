@@ -53,9 +53,11 @@ const getUserData = async () => {
     }
 
     const params = new URLSearchParams()
-    params.set('access_token', credentials.token)
     params.set('username', user.value)
-    const loanees = await fetch(`${API_URL}/users/search?${params}`).then((res) => res.json())
+    const loanees = await fetch(`${API_URL}/users/search?${params}`, {
+        method: 'GET',
+        headers: { Authorization: `Bearer ${credentials.token}` }
+    }).then((res) => res.json())
 
     if (!loanees.length || loanees[0].username !== user.value) {
         errorAlert.value = true
@@ -79,9 +81,11 @@ const searchMember = async () => {
     }
 
     const params = new URLSearchParams()
-    params.set('access_token', credentials.token)
     params.set('username', searchUsername.value)
-    const loanees = await fetch(`${API_URL}/users/search?${params}`).then((res) => res.json())
+    const loanees = await fetch(`${API_URL}/users/search?${params}`, {
+        method: 'GET',
+        headers: { Authorization: `Bearer ${credentials.token}` }
+    }).then((res) => res.json())
 
     searchedMembers.splice(
         0,

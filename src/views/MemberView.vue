@@ -32,9 +32,11 @@ onMounted(async () => {
     const { token } = window.$cookies.get('credentials')
 
     const params = new URLSearchParams()
-    params.set('access_token', token)
     params.set('username', props.username)
-    const users = await fetch(`${API_URL}/users/search?${params}`).then((res) => res.json())
+    const users = await fetch(`${API_URL}/users/search?${params}`, {
+        method: 'GET',
+        headers: { Authorization: `Bearer ${token}` }
+    }).then((res) => res.json())
 
     const matchedUser = users[0]
     if (!matchedUser || matchedUser.username !== props.username) {
