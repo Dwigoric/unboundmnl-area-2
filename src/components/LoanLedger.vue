@@ -137,7 +137,7 @@ const getLoanInfo = async () => {
             formData.coborrowerName = 'No coborrower'
         }
         formData.status = loanData.status
-        if (formData.status == 'released'){
+        if (formData.status == 'released') {
             formData.status = 'Approved (Released)'
         }
     }
@@ -295,7 +295,7 @@ onMounted(async () => {
                 <div class="d-flex">
                     <!-- Edit Status -->
                     <v-dialog width="1200">
-                        <template v-slot:activator="{ props }">
+                        <template #activator="{ props }">
                             <v-btn
                                 prepend-icon="mdi-square-edit-outline"
                                 class="edit-loan-btn capitalize mr-2 text-white"
@@ -307,7 +307,7 @@ onMounted(async () => {
                         </template>
 
                         <!-- Form popup -->
-                        <template v-slot:default="{ isActive }">
+                        <template #default="{ isActive }">
                             <v-card close-on-back contained class="form-wrapper">
                                 <v-container>
                                     <v-row justify="end">
@@ -339,7 +339,7 @@ onMounted(async () => {
 
                     <!-- Edit Loan -->
                     <v-dialog width="1200">
-                        <template v-slot:activator="{ props }">
+                        <template #activator="{ props }">
                             <v-btn
                                 prepend-icon="mdi-square-edit-outline"
                                 class="edit-loan-btn capitalize mr-2 text-white"
@@ -351,7 +351,7 @@ onMounted(async () => {
                         </template>
 
                         <!-- Form popup -->
-                        <template v-slot:default="{ isActive }">
+                        <template #default="{ isActive }">
                             <v-card close-on-back contained class="form-wrapper">
                                 <v-container>
                                     <v-row justify="end">
@@ -383,7 +383,7 @@ onMounted(async () => {
 
                     <!-- Delete Loan -->
                     <v-dialog width="600">
-                        <template v-slot:activator="{ props }">
+                        <template #activator="{ props }">
                             <v-btn
                                 prepend-icon="mdi-trash-can-outline"
                                 class="edit-loan-btn capitalize mr-2"
@@ -395,7 +395,7 @@ onMounted(async () => {
                         </template>
 
                         <!-- Form popup -->
-                        <template v-slot:default="{ isActive }">
+                        <template #default="{ isActive }">
                             <v-card close-on-back contained class="form-wrapper">
                                 <v-container>
                                     <v-row justify="end">

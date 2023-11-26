@@ -77,7 +77,7 @@ onMounted(getAllUsers)
 
                     <div class="btn-wrapper">
                         <v-dialog width="1200">
-                            <template v-slot:activator="{ props }">
+                            <template #activator="{ props }">
                                 <!-- Create Member Profile Button -->
                                 <v-btn
                                     class="btn capitalize-text"
@@ -88,7 +88,7 @@ onMounted(getAllUsers)
                             </template>
 
                             <!-- Form popup -->
-                            <template v-slot:default="{ isActive }">
+                            <template #default="{ isActive }">
                                 <v-card close-on-back contained class="form-wrapper">
                                     <v-container>
                                         <v-row justify="end">

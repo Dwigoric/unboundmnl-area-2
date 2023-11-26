@@ -34,7 +34,7 @@ const setUser = () => {
 
 <template>
     <v-hover>
-        <template v-slot:default="{ isHovering, props }">
+        <template #default="{ isHovering, props }">
             <v-card
                 class="officer-profile-btn w-100 d-flex align-center rounded-lg elevation-2 pa-2 mb-3"
                 v-bind="props"
@@ -56,7 +56,7 @@ const setUser = () => {
                     <!-- Update Officer Profile Button -->
                     <div class="updatebtn-wrapper">
                         <v-dialog width="900">
-                            <template v-slot:activator="{ props }">
+                            <template #activator="{ props }">
                                 <v-btn
                                     v-bind="props"
                                     icon="mdi-square-edit-outline"
@@ -66,7 +66,7 @@ const setUser = () => {
                             </template>
 
                             <!-- Form popup -->
-                            <template v-slot:default="{ isActive }">
+                            <template #default="{ isActive }">
                                 <v-card close-on-back contained class="form-wrapper">
                                     <v-container>
                                         <div class="d-flex flex-row">
@@ -102,13 +102,13 @@ const setUser = () => {
                     <!-- Delete Officer Profile Button -->
                     <div class="deletebtn-wrapper">
                         <v-dialog width="600">
-                            <template v-slot:activator="{ props }">
+                            <template #activator="{ props }">
                                 <v-btn v-bind="props" icon="mdi-trash-can-outline" variant="plain">
                                 </v-btn>
                             </template>
 
                             <!-- Form popup -->
-                            <template v-slot:default="{ isActive }">
+                            <template #default="{ isActive }">
                                 <v-card close-on-back contained class="form-wrapper">
                                     <v-container>
                                         <v-row justify="end">

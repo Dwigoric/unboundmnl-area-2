@@ -104,7 +104,7 @@ onMounted(async () => {
             :search="search"
             sticky=""
         >
-            <template v-slot:item.holder="{ value }">
+            <template #item.holder="{ value }">
                 <v-btn
                     class="text-none bg-blue-darken-1"
                     @click.prevent="visitMemberProfile(value)"
@@ -112,7 +112,7 @@ onMounted(async () => {
                     {{ value }}
                 </v-btn>
             </template>
-            <template v-slot:item.id="{ value }">
+            <template #item.id="{ value }">
                 <v-btn
                     class="text-none bg-blue-darken-1"
                     @click.prevent="visitDepositLedger(value)"
