@@ -1,28 +1,18 @@
 <script setup>
 // Packages
-import { ref, onMounted } from 'vue'
-import { Grid } from 'gridjs'
+import { ref } from 'vue'
 
 // Project constants
-import { API_URL, LOAN_TYPES } from '../constants'
+import { API_URL } from '../constants'
 
+// Stores
 import { useCurrentUserStore } from '../stores/currentUser.js'
 const currentUserStore = useCurrentUserStore()
-
-// Stylesheets
-import 'gridjs/dist/theme/mermaid.css'
-
-// Reactive variables
-const loanStatusTableUser = ref()
-const loanStatusUser = ref()
-const errorAlert = ref(false)
-const errorMessage = ref('')
-const processing = ref(false)
 
 // Props
 const props = defineProps({
     data: {
-        type: Array,
+        type: Object,
         required: true
     },
     onsubmit: {
@@ -31,33 +21,26 @@ const props = defineProps({
     }
 })
 
+// Reactive variables
+const errorAlert = ref(false)
+const errorMessage = ref('')
+const processing = ref(false)
+const headers = [
+    { title: 'Loanee', key: 'loanee' },
+    { title: 'Type of Loan', key: 'loanType' },
+    { title: 'Amount of Loan', key: 'originalLoanAmount' },
+    { title: 'Submission Date', key: 'submissionDate' }
+]
+
 // Methods
 const decide = async (toApprove) => {
     processing.value = true
 
-    const credentials = window.$cookies.get('credentials')
-
-    if (!credentials) {
-        errorAlert.value = true
-        errorMessage.value = 'No credentials found'
-        return
-    }
-
-    const { token } = credentials
-
-    if (!token) {
-        errorAlert.value = true
-        errorMessage.value = 'No token found'
-        return
-    }
-
-    console.log(props.data[0])
-
-    const { error, message } = await fetch(`${API_URL}/loans/${props.data[0]}/review`, {
+    const { error, message } = await fetch(`${API_URL}/loans/${props.data.id}/review`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`
+            Authorization: `Bearer ${window.$cookies.get('credentials').token}`
         },
         body: JSON.stringify({
             approved: toApprove,
@@ -79,53 +62,36 @@ const decide = async (toApprove) => {
         alert('Loan was processed!')
     }
 
-    props.onsubmit(props.data[0])
+    props.onsubmit(props.data.id)
 }
-
-// Lifecycle hooks
-onMounted(() => {
-    loanStatusUser.value = new Grid({
-        columns: [
-            {
-                name: 'Loan ID',
-                hidden: true
-            },
-            'Loanee',
-            {
-                name: 'Type of Loan',
-                formatter: (cell) => LOAN_TYPES[cell]
-            },
-            {
-                name: 'Amount of Loan',
-                formatter: (cell) =>
-                    Intl.NumberFormat('en-US', { style: 'currency', currency: 'PHP' }).format(
-                        Number(cell)
-                    )
-            }
-        ],
-        data: [props.data],
-        className: {
-            // Define your class names here
-        },
-        style: {
-            table: {
-                // Define your table styles here
-            },
-            tr: {
-                // Define row styles here
-            }
-        }
-    })
-
-    // Render loanStatus in corresponding reference
-    loanStatusUser.value.render(loanStatusTableUser.value)
-})
 </script>
 
 <template>
     <h2 class="header-wrapper">Change the status of the loan below</h2>
     <div class="wrapper">
-        <div id="loan-status-wrapper" ref="loanStatusTableUser" class="w-100 px-4"></div>
+        <v-data-table-virtual :headers="headers" :items="[data]">
+            <template #item.loanee="{ value }">
+                <v-btn
+                    class="text-none bg-blue-darken-1"
+                    :to="{ name: 'Profile View', params: { username: value } }"
+                >
+                    {{ value }}
+                </v-btn>
+            </template>
+
+            <template #item.originalLoanAmount="{ value }">
+                {{
+                    Intl.NumberFormat('en-US', {
+                        style: 'currency',
+                        currency: 'PHP'
+                    }).format(Number(value))
+                }}
+            </template>
+
+            <template #item.submissionDate="{ value }">
+                {{ new Date(value).toLocaleDateString('en-PH', { dateStyle: 'long' }) }}
+            </template>
+        </v-data-table-virtual>
         <VAlert
             v-if="errorAlert"
             v-model="errorAlert"

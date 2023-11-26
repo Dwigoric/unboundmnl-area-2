@@ -1,10 +1,6 @@
 <script setup>
 // Packages
-import { ref, onMounted } from 'vue'
-import { Grid, h } from 'gridjs'
-
-// Stylesheets
-import 'gridjs/dist/theme/mermaid.css'
+import { ref, reactive, onMounted } from 'vue'
 
 // Vue components
 import LoanStatusItemPopup from './LoanStatusItemPopup.vue'
@@ -20,33 +16,23 @@ const props = defineProps({
 })
 
 // Reactive variables
-const loanStatusTable = ref()
-const loanStatus = ref()
-const isPopupActive = ref(false)
-const data = ref([])
-const popupData = ref([])
+const search = ref('')
+const items = reactive([])
+const headers = [
+    { title: 'Loanee', key: 'loanee' },
+    { title: 'Type of Loan', key: 'loanType' },
+    { title: 'Amount of Loan', key: 'originalLoanAmount' },
+    { title: 'Submission Date', key: 'submissionDate' },
+    { title: 'Change Status', key: 'id' }
+]
 
 // Methods
 const fetchLoans = async () => {
-    const credentials = window.$cookies.get('credentials')
-
-    if (!credentials) {
-        console.error('No credentials found')
-        return
-    }
-
-    const { token } = credentials
-
-    if (!token) {
-        console.error('No token found')
-        return
-    }
-
     const params = new URLSearchParams()
     params.set('status', props.status)
     const { error, message, loans } = await fetch(`${API_URL}/loans?${params}`, {
         method: 'GET',
-        headers: { Authorization: `Bearer ${token}` }
+        headers: { Authorization: `Bearer ${window.$cookies.get('credentials').token}` }
     }).then((res) => res.json())
 
     if (error) {
@@ -54,138 +40,86 @@ const fetchLoans = async () => {
         return
     }
 
-    data.value = loans.map((loan) => [
-        loan.loanID,
-        loan.username,
-        loan.loanType,
-        loan.originalLoanAmount,
-        loan.status
-    ])
-}
-
-const setPopupLoan = (loanId) => {
-    if (data.value.length === 0) return
-
-    popupData.value = data.value.find((loan) => loan[0] === loanId)
-    isPopupActive.value = true
+    items.push(
+        ...loans.map((loan) => ({
+            id: loan.loanID,
+            loanee: loan.username,
+            loanType: LOAN_TYPES[loan.loanType],
+            originalLoanAmount: loan.originalLoanAmount,
+            submissionDate: loan.submissionDate,
+            status: loan.status
+        }))
+    )
 }
 
 const removeLoanFromGrid = (loanID) => {
-    isPopupActive.value = false
-
-    const index = data.value.findIndex((loan) => loan[0] === loanID)
-    data.value.splice(index, 1)
-
-    // Remove search and pagination plugins first
-    loanStatus.value.plugin.remove('pagination')
-    loanStatus.value.plugin.remove('search')
-
-    loanStatus.value
-        .updateConfig({
-            data: data.value,
-            search: true,
-            pagination: { limit: 10 }
-        })
-        .forceRender()
+    const index = items.findIndex((loan) => loan[0] === loanID)
+    items.splice(index, 1)
 }
 
 // Lifecycle hooks
-onMounted(async () => {
-    await fetchLoans()
-
-    loanStatus.value = new Grid({
-        columns: [
-            { name: 'Loan ID', hidden: true },
-            'Loanee',
-            {
-                name: 'Type of Loan',
-                formatter: (cell) => LOAN_TYPES[cell]
-            },
-            {
-                name: 'Amount of Loan',
-                formatter: (cell) =>
-                    Intl.NumberFormat('en-US', { style: 'currency', currency: 'PHP' }).format(
-                        Number(cell)
-                    )
-            },
-            {
-                name: 'Change Status',
-                formatter: (cell, row) => {
-                    return h(
-                        'v-hover',
-                        {
-                            className: 'py-2 mb-4 px-4 border rounded-md',
-                            onClick: () => setPopupLoan(row.cells[0].data)
-                        },
-                        'Loan Status'
-                    )
-                }
-            }
-        ],
-        pagination: { limit: 10 },
-        search: true,
-        sort: true,
-        resizable: true,
-        fixedHeader: true,
-        data: data.value,
-        className: {
-            // Define your class names here
-        },
-        style: {
-            table: {
-                // Define your table styles here
-            },
-            tr: {
-                // Define row styles here
-            }
-        }
-    }).render(loanStatusTable.value)
-})
-
-// Reactive variables
-const search = ref('')
-const items = data
-const headers = [
-    { title: 'Loanee', key: 'loanee' },
-    { title: 'Type of Loan', key: 'loanType' },
-    { title: 'Amount of Loan', key: 'originalLoanAmount' },
-    { title: 'Change Status', key: 'status' }
-]
+onMounted(fetchLoans)
 </script>
 
 <template>
-    <!-- <v-data-table
-            :headers="headers"
-            :items="items"
-            hover=""
-            multi-sort=""
-            :search="search"
-            sticky=""
+    <v-data-table
+        :headers="headers"
+        :items="items"
+        hover=""
+        multi-sort=""
+        :search="search"
+        sticky=""
     >
-    </v-data-table> -->
-    <div id="loan-status-wrapper" ref="loanStatusTable" class="w-100 px-4"></div>
-    <VDialog width="1200" v-model="isPopupActive">
-        <!-- Form popup -->
-        <template #default="{ isActive }">
-            <VCard close-on-back contained class="form-wrapper">
-                <VContainer>
-                    <VRow justify="end">
-                        <VCardActions>
-                            <VBtn
-                                class="ma-2 capitalize-text"
-                                color="var(--vt-c-blue)"
-                                @click="isActive.value = false"
-                                icon="mdi-close"
-                            >
-                            </VBtn>
-                        </VCardActions>
-                    </VRow>
-                </VContainer>
-
-                <LoanStatusItemPopup :data="popupData" :onsubmit="removeLoanFromGrid" />
-            </VCard>
+        <template #item.loanee="{ value }">
+            <v-btn
+                class="text-none bg-blue-darken-1"
+                :to="{ name: 'Profile View', params: { username: value } }"
+            >
+                {{ value }}
+            </v-btn>
         </template>
-    </VDialog>
+
+        <template #item.originalLoanAmount="{ value }">
+            {{
+                Intl.NumberFormat('en-US', {
+                    style: 'currency',
+                    currency: 'PHP'
+                }).format(Number(value))
+            }}
+        </template>
+
+        <template #item.submissionDate="{ value }">
+            {{ new Date(value).toLocaleDateString('en-PH', { dateStyle: 'long' }) }}
+        </template>
+
+        <template #item.id="{ item }">
+            <VDialog width="1200">
+                <template #activator="{ props }">
+                    <v-btn v-bind="props" icon="mdi-pencil" density="comfortable" />
+                </template>
+
+                <template #default="{ isActive }">
+                    <VCard close-on-back contained class="form-wrapper">
+                        <VContainer>
+                            <VRow justify="end">
+                                <VCardActions>
+                                    <VBtn
+                                        class="ma-2 capitalize-text"
+                                        color="var(--vt-c-blue)"
+                                        @click="isActive.value = false"
+                                        icon="mdi-close"
+                                    >
+                                    </VBtn>
+                                </VCardActions>
+                            </VRow>
+                        </VContainer>
+
+                        <LoanStatusItemPopup :data="item" :onsubmit="removeLoanFromGrid" />
+                    </VCard>
+                </template>
+            </VDialog>
+        </template>
+    </v-data-table>
 </template>
 
 <style>
