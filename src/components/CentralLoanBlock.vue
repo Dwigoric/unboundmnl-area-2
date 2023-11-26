@@ -234,6 +234,12 @@ onMounted(async () => {
                         })
                     }}
                 </v-chip>
+                <v-tooltip location="top" v-if="Date.now() > new Date(value).getTime()">
+                    <template v-slot:activator="{ props }">
+                        <v-icon v-bind="props">mdi-alert</v-icon>
+                    </template>
+                    <span>This loan is overdue!</span>
+                </v-tooltip>
             </template>
 
             <template v-slot:item.id="{ value }">
