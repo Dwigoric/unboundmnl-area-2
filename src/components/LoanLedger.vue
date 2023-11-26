@@ -136,6 +136,10 @@ const getLoanInfo = async () => {
         } else {
             formData.coborrowerName = 'No coborrower'
         }
+        formData.status = loanData.status
+        if (formData.status == 'released'){
+            formData.status = 'Approved (Released)'
+        }
     }
 
     const ledgerRes = await fetch(`${API_URL}/loans/${props.loanID}/ledger`, {
@@ -256,34 +260,82 @@ onMounted(async () => {
                 <div class="d-flex justify-space-evenly align-center pa-2">
                     <div class="d-flex flex-column loan-info-cell grid-left-border h-100 px-4">
                         <p>Loan Approval Date:</p>
-                        <p class="loan-properties font-weight-bold mt-n2">
+                        <p class="font-weight-bold text-capitalize">
                             {{ formData.approvalDate }}
                         </p>
                     </div>
                     <div class="d-flex flex-column loan-info-cell grid-left-border h-100 px-4">
                         <p>Type of Loan:</p>
-                        <p class="loan-properties font-weight-bold mt-n2">{{ formData.type }}</p>
+                        <p class="font-weight-bold text-capitalize">{{ formData.type }}</p>
                     </div>
                     <div class="d-flex flex-column loan-info-cell grid-left-border h-100 px-4">
                         <p>Term of Loan:</p>
-                        <p class="loan-properties font-weight-bold mt-n2">{{ formData.term }}</p>
+                        <p class="font-weight-bold text-capitalize">{{ formData.term }}</p>
                     </div>
                     <div class="d-flex flex-column loan-info-cell grid-left-border h-100 px-4">
                         <p>Mode of Payment:</p>
-                        <p class="loan-properties font-weight-bold mt-n2">
+                        <p class="font-weight-bold text-capitalize">
                             {{ formData.paymentFrequency }}
                         </p>
                     </div>
                     <div class="d-flex flex-column loan-info-cell grid-left-border h-100 px-4">
                         <p>Coborrower Name:</p>
-                        <p class="loan-properties font-weight-bold mt-n2">
+                        <p class="font-weight-bold text-capitalize">
                             {{ formData.coborrowerName }}
+                        </p>
+                    </div>
+                    <div class="d-flex flex-column loan-info-cell grid-left-border h-100 px-4">
+                        <p>Status:</p>
+                        <p class="font-weight-bold text-capitalize">
+                            {{ formData.status }}
                         </p>
                     </div>
                 </div>
 
                 <div class="d-flex">
-                    <!-- <p>Action buttons:</p> -->
+                    <!-- Edit Status -->
+                    <v-dialog width="1200">
+                        <template v-slot:activator="{ props }">
+                            <v-btn
+                                prepend-icon="mdi-square-edit-outline"
+                                class="edit-loan-btn capitalize mr-2 text-white"
+                                v-bind="props"
+                                text="Edit Loan Status"
+                                color="var(--vt-c-blue-very-dark)"
+                            >
+                            </v-btn>
+                        </template>
+
+                        <!-- Form popup -->
+                        <template v-slot:default="{ isActive }">
+                            <v-card close-on-back contained class="form-wrapper">
+                                <v-container>
+                                    <v-row justify="end">
+                                        <v-card-actions>
+                                            <v-btn
+                                                class="ma-2 capitalize-text"
+                                                color="var(--vt-c-blue)"
+                                                @click="isActive.value = false"
+                                                icon="mdi-close"
+                                            >
+                                            </v-btn>
+                                        </v-card-actions>
+                                    </v-row>
+                                </v-container>
+                                <LoanEdit
+                                    :loanID="loanID"
+                                    :autofill="rawLoanData"
+                                    :onsubmit="
+                                        async () => {
+                                            await getLoanInfo()
+                                            rerenderTable()
+                                            isActive.value = false
+                                        }
+                                    "
+                                />
+                            </v-card>
+                        </template>
+                    </v-dialog>
 
                     <!-- Edit Loan -->
                     <v-dialog width="1200">

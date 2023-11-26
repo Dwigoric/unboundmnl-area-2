@@ -16,11 +16,11 @@ const tab = ref('pending')
 
         <div class="d-flex flex-column w-100 pl-8">
             <!-- Top Bar of Dashboard -->
-            <DashboardTopBar :breadcrumbs="['Loans', 'Loan Status']" />
+            <DashboardTopBar :breadcrumbs="['Loans', 'Pending Loans']" />
 
             <!-- Main Dashboard Body -->
             <div class="dashboard-body d-flex flex-column h-100 py-4">
-                <h2>All Pending Loans</h2>
+                <h2>Pending Loans</h2>
 
                 <ContentBlock
                     :width="100"

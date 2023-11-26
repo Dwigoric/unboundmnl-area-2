@@ -1,6 +1,4 @@
 <script setup>
-import IconLogo from '../components/IconLogo.vue'
-
 // Import packages
 import { storeToRefs } from 'pinia'
 
