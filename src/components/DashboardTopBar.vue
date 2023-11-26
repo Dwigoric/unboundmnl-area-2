@@ -1,6 +1,5 @@
 <script setup>
 import UserProfile from '../components/UserProfile.vue'
-import NotificationBtn from '../components/NotificationBtn.vue'
 
 // Dynamically define the breadcrumbs for the DashboardTopBar
 defineProps({

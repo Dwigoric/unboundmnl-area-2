@@ -26,7 +26,6 @@ const headers = [
     { title: 'Loanee', key: 'loanee' },
     { title: 'Original Amount of Loan', key: 'amount' },
     { title: 'Outstanding Balance', key: 'balance' },
-    { title: 'Submission Date', key: 'submissionDate' },
     { title: 'Status', key: 'status' },
     { title: 'Due Date', key: 'dueDate' },
     { title: 'View Loan Ledger', key: 'id' }
@@ -152,7 +151,6 @@ onMounted(async () => {
                     style: 'currency',
                     currency: 'PHP'
                 }).format(Number(loan.originalLoanAmount)),
-                submissionDate: loan.submissionDate,
                 status: loan.status,
                 dueDate: loan.dueDate
             }))
