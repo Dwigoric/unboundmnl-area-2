@@ -95,7 +95,8 @@ onMounted(fetchLoans)
         <template #item.id="{ item }">
             <VDialog width="1200">
                 <template #activator="{ props }">
-                    <v-btn v-bind="props" icon="mdi-pencil" density="comfortable" />
+                    <v-btn v-bind="props" icon="mdi-pencil" density="comfortable" color="var(--vt-c-blue)" class="text-white"
+     />
                 </template>
 
                 <template #default="{ isActive }">

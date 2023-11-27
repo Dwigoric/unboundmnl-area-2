@@ -209,7 +209,7 @@ onMounted(async () => {
 
             <template #item.status="{ value, item }">
                 <v-chip :color="buildStatus[value][1]"> {{ buildStatus[value][0] }} </v-chip>
-                <v-btn
+                <!-- <v-btn
                     class="bg-teal-lighten-3 ml-2 text-none"
                     density="comfortable"
                     variant="text"
@@ -219,7 +219,7 @@ onMounted(async () => {
                     @click.prevent="markAsReleased(item.id)"
                 >
                     Mark as released
-                </v-btn>
+                </v-btn> -->
             </template>
 
             <template #item.dueDate="{ value }">
@@ -237,7 +237,7 @@ onMounted(async () => {
                 </v-chip>
                 <v-tooltip location="top" v-if="value && Date.now() > new Date(value).getTime()">
                     <template #activator="{ props }">
-                        <v-icon v-bind="props">mdi-alert</v-icon>
+                        <v-icon v-bind="props" color="var(--vt-c-red)">mdi-alert</v-icon>
                     </template>
                     <span>This loan is overdue!</span>
                 </v-tooltip>

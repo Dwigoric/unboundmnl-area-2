@@ -12,6 +12,8 @@ import LoanLedgerEdit from '../components/LoanLedgerEdit.vue'
 import LoanLedgerAdd from '../components/LoanLedgerAdd.vue'
 import LoanEdit from '../components/LoanDepositEdit.vue'
 import DeletePrompt from '../components/DeletePrompt.vue'
+import LoanStatusEdit from '../components/LoanStatusEdit.vue'
+
 
 import router from '../router'
 
@@ -296,11 +298,11 @@ onMounted(async () => {
                     <!-- Edit Status -->
                     <v-dialog width="1200">
                         <template #activator="{ props }">
-                            <v-btn
-                                prepend-icon="mdi-square-edit-outline"
+                            <v-btn v-if="formData.status == 'approved'" 
+                                prepend-icon="mdi-check-underline-circle-outline"
                                 class="edit-loan-btn capitalize mr-2 text-white"
                                 v-bind="props"
-                                text="Edit Loan Status"
+                                text="Mark Loan as Released"
                                 color="var(--vt-c-blue-very-dark)"
                             >
                             </v-btn>
@@ -322,16 +324,8 @@ onMounted(async () => {
                                         </v-card-actions>
                                     </v-row>
                                 </v-container>
-                                <LoanEdit
+                                <LoanStatusEdit
                                     :loanID="loanID"
-                                    :autofill="rawLoanData"
-                                    :onsubmit="
-                                        async () => {
-                                            await getLoanInfo()
-                                            rerenderTable()
-                                            isActive.value = false
-                                        }
-                                    "
                                 />
                             </v-card>
                         </template>
@@ -340,7 +334,7 @@ onMounted(async () => {
                     <!-- Edit Loan -->
                     <v-dialog width="1200">
                         <template #activator="{ props }">
-                            <v-btn
+                            <v-btn 
                                 prepend-icon="mdi-square-edit-outline"
                                 class="edit-loan-btn capitalize mr-2 text-white"
                                 v-bind="props"
