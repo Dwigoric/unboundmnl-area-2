@@ -25,7 +25,7 @@ const tab = ref('pending')
                 <ContentBlock
                     :width="100"
                     :height="100"
-                    :maxWidth="80"
+                    :maxWidth="100"
                     :unit="'%'"
                     :maxUnit="'vw'"
                     :bg-color="'#FFF'"

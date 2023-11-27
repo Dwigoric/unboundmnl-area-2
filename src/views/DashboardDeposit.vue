@@ -24,7 +24,7 @@ import CentralCapitalBlock from '../components/CentralCapitalBlock.vue'
                     :height="100"
                     :maxWidth="1600"
                     :unit="'%'"
-                    :maxUnit="'px'"
+                    :maxUnit="'vw'"
                     :bg-color="'#FFF'"
                 >
                     <CentralCapitalBlock />

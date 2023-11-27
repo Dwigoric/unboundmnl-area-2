@@ -160,7 +160,7 @@ onMounted(async () => {
 </script>
 
 <template>
-    <v-card>
+
         <v-card-title class="d-flex align-center w-25">
             <v-text-field
                 v-model="search"
@@ -252,7 +252,6 @@ onMounted(async () => {
                 />
             </template>
         </v-data-table>
-    </v-card>
 </template>
 
 <style>
