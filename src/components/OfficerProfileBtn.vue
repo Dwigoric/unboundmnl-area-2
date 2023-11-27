@@ -49,9 +49,9 @@ onMounted(() => {
                 </div>
 
                 <!-- Actions -->
-                <div class="officer-actions-box ml-auto d-flex">
+                <div class="officer-actions-box ml-auto d-flex" v-if="isAdmin">
                     <!-- Update Officer Profile Button -->
-                    <div class="updatebtn-wrapper" v-if="isAdmin">
+                    <div class="updatebtn-wrapper">
                         <v-dialog width="900">
                             <template #activator="{ props }">
                                 <v-btn
