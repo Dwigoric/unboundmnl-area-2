@@ -5,8 +5,6 @@ import { API_URL } from '../../constants'
 
 import ContentBlock from '../../components/ContentBlock.vue'
 
-const tab = ref('emergency')
-
 const errorMessage = ref('')
 const errorAlert = ref(false)
 
@@ -51,9 +49,7 @@ const submit = async function () {
     }
 }
 
-onMounted(async () => {
-    await updateAutofill()
-})
+onMounted(updateAutofill)
 </script>
 
 <template>
@@ -65,7 +61,7 @@ onMounted(async () => {
                     <div class="row-tab mb-n5">
                         <div class="label d-flex">
                             <div>Notification Period 1</div>
-                            <v-chip size="small" class="ml-2" color="blue"> Blue </v-chip>
+                            <v-chip size="small" class="ml-2" color="red"> Red </v-chip>
                         </div>
 
                         <div class="w-25">
@@ -103,7 +99,7 @@ onMounted(async () => {
                     <div class="row-tab mb-n5">
                         <div class="label d-flex">
                             <div>Notification Period 3</div>
-                            <v-chip size="small" class="ml-2" color="red"> Red </v-chip>
+                            <v-chip size="small" class="ml-2" color="blue"> Blue </v-chip>
                         </div>
 
                         <div class="w-25">

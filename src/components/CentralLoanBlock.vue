@@ -82,7 +82,7 @@ const getDateColor = (dueDate) => {
 
     if (diffDays <= notificationSettings.period_1) return 'red'
     else if (diffDays <= notificationSettings.period_2) return 'orange'
-    else if (diffDays <= notificationSettings.period_3) return 'yellow'
+    else if (diffDays <= notificationSettings.period_3) return 'blue'
     else return 'green'
 }
 
@@ -160,56 +160,52 @@ onMounted(async () => {
 </script>
 
 <template>
+    <v-card-title class="d-flex align-center w-25">
+        <v-text-field
+            v-model="search"
+            prepend-inner-icon="mdi-magnify"
+            density="compact"
+            label="Search"
+            single-line=""
+            flat=""
+            hide-details
+            variant="solo-filled"
+        ></v-text-field>
+    </v-card-title>
 
-        <v-card-title class="d-flex align-center w-25">
-            <v-text-field
-                v-model="search"
-                prepend-inner-icon="mdi-magnify"
-                density="compact"
-                label="Search"
-                single-line=""
-                flat=""
-                hide-details
-                variant="solo-filled"
-            ></v-text-field>
-        </v-card-title>
+    <v-data-table
+        :headers="headers"
+        :items="items"
+        hover=""
+        multi-sort=""
+        :search="search"
+        sticky=""
+        :sort-by="[
+            { key: 'status', order: 'asc' },
+            { key: 'dueDate', order: 'asc' }
+        ]"
+    >
+        <template #item.loanee="{ value }">
+            <v-btn class="text-none bg-blue-darken-1" @click.prevent="visitMemberProfile(value)">
+                {{ value }}
+            </v-btn>
+        </template>
 
-        <v-data-table
-            :headers="headers"
-            :items="items"
-            hover=""
-            multi-sort=""
-            :search="search"
-            sticky=""
-            :sort-by="[
-                { key: 'status', order: 'asc' },
-                { key: 'dueDate', order: 'asc' }
-            ]"
-        >
-            <template #item.loanee="{ value }">
-                <v-btn
-                    class="text-none bg-blue-darken-1"
-                    @click.prevent="visitMemberProfile(value)"
-                >
-                    {{ value }}
-                </v-btn>
-            </template>
+        <template #item.submissionDate="{ value }">
+            <v-chip>
+                {{
+                    new Date(value).toLocaleDateString('en-PH', {
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric'
+                    })
+                }}
+            </v-chip>
+        </template>
 
-            <template #item.submissionDate="{ value }">
-                <v-chip>
-                    {{
-                        new Date(value).toLocaleDateString('en-PH', {
-                            year: 'numeric',
-                            month: 'short',
-                            day: 'numeric'
-                        })
-                    }}
-                </v-chip>
-            </template>
-
-            <template #item.status="{ value, item }">
-                <v-chip :color="buildStatus[value][1]"> {{ buildStatus[value][0] }} </v-chip>
-                <!-- <v-btn
+        <template #item.status="{ value, item }">
+            <v-chip :color="buildStatus[value][1]"> {{ buildStatus[value][0] }} </v-chip>
+            <!-- <v-btn
                     class="bg-teal-lighten-3 ml-2 text-none"
                     density="comfortable"
                     variant="text"
@@ -220,38 +216,38 @@ onMounted(async () => {
                 >
                     Mark as released
                 </v-btn> -->
-            </template>
+        </template>
 
-            <template #item.dueDate="{ value }">
-                <v-chip
-                    :color="Date.now() > new Date(value).getTime() ? 'red' : getDateColor(value)"
-                    v-if="value"
-                >
-                    {{
-                        new Date(value).toLocaleDateString('en-PH', {
-                            year: 'numeric',
-                            month: 'short',
-                            day: 'numeric'
-                        })
-                    }}
-                </v-chip>
-                <v-tooltip location="top" v-if="value && Date.now() > new Date(value).getTime()">
-                    <template #activator="{ props }">
-                        <v-icon v-bind="props" color="var(--vt-c-red)">mdi-alert</v-icon>
-                    </template>
-                    <span>This loan is overdue!</span>
-                </v-tooltip>
-            </template>
+        <template #item.dueDate="{ value }">
+            <v-chip
+                :color="Date.now() > new Date(value).getTime() ? 'red' : getDateColor(value)"
+                v-if="value"
+            >
+                {{
+                    new Date(value).toLocaleDateString('en-PH', {
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric'
+                    })
+                }}
+            </v-chip>
+            <v-tooltip location="top" v-if="value && Date.now() > new Date(value).getTime()">
+                <template #activator="{ props }">
+                    <v-icon v-bind="props" color="var(--vt-c-red)">mdi-alert</v-icon>
+                </template>
+                <span>This loan is overdue!</span>
+            </v-tooltip>
+        </template>
 
-            <template #item.id="{ value }">
-                <v-btn
-                    class="text-none bg-blue-darken-1"
-                    @click.prevent="visitLoanLedger(value)"
-                    density="comfortable"
-                    icon="mdi-arrow-right-circle"
-                />
-            </template>
-        </v-data-table>
+        <template #item.id="{ value }">
+            <v-btn
+                class="text-none bg-blue-darken-1"
+                @click.prevent="visitLoanLedger(value)"
+                density="comfortable"
+                icon="mdi-arrow-right-circle"
+            />
+        </template>
+    </v-data-table>
 </template>
 
 <style>
