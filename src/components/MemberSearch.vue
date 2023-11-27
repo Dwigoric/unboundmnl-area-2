@@ -37,38 +37,6 @@ const errorMessage = ref('')
 const searchedMembers = reactive([])
 
 // Define methods
-const getUserData = async () => {
-    if (!user.value) {
-        errorAlert.value = true
-        errorMessage.value = 'Please enter a username'
-        return
-    }
-
-    const credentials = window.$cookies.get('credentials')
-
-    if (!credentials || !credentials.token) {
-        errorAlert.value = true
-        errorMessage.value = 'Please log in as officer to continue'
-        return
-    }
-
-    const params = new URLSearchParams()
-    params.set('username', user.value)
-    const loanees = await fetch(`${API_URL}/users/search?${params}`, {
-        method: 'GET',
-        headers: { Authorization: `Bearer ${credentials.token}` }
-    }).then((res) => res.json())
-
-    if (!loanees.length || loanees[0].username !== user.value) {
-        errorAlert.value = true
-        errorMessage.value = 'No user found with that username'
-    } else {
-        errorAlert.value = false
-        errorMessage.value = ''
-        memberSearchStore.setData(loanees[0])
-    }
-}
-
 const searchMember = async () => {
     if (!searchUsername.value) return
 
@@ -91,8 +59,8 @@ const searchMember = async () => {
         0,
         searchedMembers.length,
         ...loanees.slice(0, 5).map((loanee) => ({
-            name: `${loanee.name.last}, ${loanee.name.given}`,
-            username: loanee.username
+            ...loanee,
+            parsedName: `${loanee.name.last}, ${loanee.name.given}`
         }))
     )
 
@@ -100,9 +68,8 @@ const searchMember = async () => {
 }
 
 const sendToNext = async () => {
-    await getUserData()
-
-    if (errorAlert.value) return
+    const memberData = searchedMembers.find((member) => member.username === user.value)
+    memberSearchStore.setData(memberData)
 
     router.push({ name: props.to })
 }
@@ -128,7 +95,7 @@ watch(searchUsername, () => {
                     v-model="user"
                     v-model:search="searchUsername"
                     :items="searchedMembers"
-                    item-title="name"
+                    item-title="parsedName"
                     item-value="username"
                     prepend-inner-icon="mdi-magnify"
                     label="Search Member by Username"
@@ -150,11 +117,12 @@ watch(searchUsername, () => {
                             </VListItemTitle>
                         </VListItem>
                     </template>
-                    <template #item="{ item }">
-                        <VListItem>
-                            <VListItemTitle>{{ item.title }}</VListItemTitle>
-                            <VListItemSubtitle>{{ item.props.value }}</VListItemSubtitle>
-                        </VListItem>
+                    <template #item="{ props, item }">
+                        <VListItem
+                            v-bind="props"
+                            :title="item.title"
+                            :subtitle="item.props.value"
+                        />
                     </template>
                 </VAutocomplete>
                 <VAlert
