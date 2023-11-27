@@ -205,17 +205,6 @@ onMounted(async () => {
 
         <template #item.status="{ value, item }">
             <v-chip :color="buildStatus[value][1]"> {{ buildStatus[value][0] }} </v-chip>
-            <!-- <v-btn
-                    class="bg-teal-lighten-3 ml-2 text-none"
-                    density="comfortable"
-                    variant="text"
-                    prepend-icon="mdi-send-check"
-                    v-if="value === 'approved'"
-                    :loading="releaseLoading.includes(item.id)"
-                    @click.prevent="markAsReleased(item.id)"
-                >
-                    Mark as released
-                </v-btn> -->
         </template>
 
         <template #item.dueDate="{ value }">
