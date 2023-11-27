@@ -1,4 +1,5 @@
 <script setup>
+
 // Import packages
 import { storeToRefs } from 'pinia'
 
@@ -35,7 +36,6 @@ const logout = () => {
             :margin="20"
             class="navigation-drawer pa-md-4"
             theme="dark"
-            permanent=""
         >
             <div class="navigation-title-box">
                 <svg width="260" height="80" xmlns="http://www.w3.org/2000/svg">
@@ -63,15 +63,6 @@ const logout = () => {
                     class="mt-1"
                     >New Loan Application
                 </v-list-item>
-
-                <!-- <v-list-item
-                    to="/loan-transaction"
-                    link=""
-                    prepend-icon="mdi-checkbook"
-                    rounded="lg"
-                    class="mt-1"
-                    >Enter Loan Transaction
-                </v-list-item> -->
 
                 <v-list-item
                     to="/loan-status"
