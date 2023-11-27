@@ -67,7 +67,7 @@ const submitForm = async () => {
                             <!-- Password -->
                             <div class="row-tab">
                                 <div class="label">
-                                    <div>* New Password:</div>
+                                    <div>New Password:</div>
                                 </div>
 
                                 <VTextField
@@ -90,7 +90,7 @@ const submitForm = async () => {
                             <!-- Password -->
                             <div class="row-tab">
                                 <div class="label">
-                                    <div>* Re-enter New Password:</div>
+                                    <div>Re-enter New Password:</div>
                                 </div>
 
                                 <VTextField
