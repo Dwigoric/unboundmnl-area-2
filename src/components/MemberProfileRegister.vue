@@ -349,7 +349,7 @@ watch(
                         class="username-pw-input"
                         v-model="userData.tin_no"
                         id="login-tin-number"
-                        :rules="[FORM_RULES.required]"
+                        :rules="[FORM_RULES.required, FORM_RULES.tin]"
                         label="Enter TIN Number (XXX-XXX-XXX-XXX)"
                     />
                 </div>

@@ -8,5 +8,8 @@ export const FORM_RULES = Object.freeze({
         (v && /^[a-zA-Z0-9_]+$/.test(v)) || 'Username can only be alphanumeric and underscore',
     password: (v) =>
         (v && !/^(.{0,7}|[^0-9]*|[^A-Z]*|[^a-z]*|[a-zA-Z0-9]*)$/.test(v)) ||
-        'Password must contain at least one uppercase, one lowercase, one number and one special character'
+        'Password must contain at least one uppercase, one lowercase, one number and one special character',
+    tin: (v) =>
+        (v && /^[0-9]{3}-[0-9]{3}-[0-9]{3}-[0-9]{3}$/.test(v)) ||
+        'TIN number must be of the format XXX-XXX-XXX-XXX where X is a number from 0 to 9'
 })
