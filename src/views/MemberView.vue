@@ -1,6 +1,6 @@
 <script setup>
 // Import Packages
-import { onMounted } from 'vue'
+import { onBeforeMount } from 'vue'
 import router from '../router'
 
 // Project constants
@@ -25,7 +25,7 @@ const props = defineProps({
 })
 
 // Lifecycle hooks
-onMounted(async () => {
+onBeforeMount(async () => {
     if (profileDataStore.profileData && profileDataStore.profileData.username === props.username)
         return
 
@@ -67,7 +67,9 @@ onMounted(async () => {
                     </div>
 
                     <div class="right pa-2">
-                        <MemberProfileRight />
+                        <VExpandTransition>
+                            <MemberProfileRight />
+                        </VExpandTransition>
                     </div>
                 </div>
             </div>

@@ -92,7 +92,7 @@ const prefillForm = async function () {
 
                 <div class="row-tab">
                     <div class="label">
-                        <div>Classification:</div>
+                        <div>* Classification:</div>
                     </div>
 
                     <VRadioGroup
@@ -109,7 +109,7 @@ const prefillForm = async function () {
                 <!-- Term of Loan -->
                 <div class="row-tab">
                     <div class="label">
-                        <div>Term:</div>
+                        <div>* Term:</div>
                     </div>
                     <VTextField
                         type="number"
@@ -123,7 +123,7 @@ const prefillForm = async function () {
                 <!-- Mode of Repayment -->
                 <div class="row-tab">
                     <div class="label">
-                        <div>Mode of Repayment:</div>
+                        <div>* Mode of Repayment:</div>
                     </div>
                     <VSelect
                         class="username-pw-input"
@@ -138,7 +138,7 @@ const prefillForm = async function () {
                 <!-- Type of Loan -->
                 <div class="row-tab">
                     <div class="label">
-                        <div>Type:</div>
+                        <div>* Type:</div>
                     </div>
 
                     <VSelect
@@ -151,32 +151,34 @@ const prefillForm = async function () {
                     />
                 </div>
 
-                <div v-if="loanData.type !== ''" class="row-tab">
-                    <div class="label">
-                        <div>Amount:</div>
-                    </div>
+                <VExpandTransition>
+                    <div v-if="loanData.type !== ''" class="row-tab">
+                        <div class="label">
+                            <div>* Amount:</div>
+                        </div>
 
-                    <div style="width: 68%">
-                        <VTextField
-                            v-model="loanData.amount"
-                            id="loan-amount"
-                            :rules="[
-                                FORM_RULES.required,
-                                (v) => {
-                                    if (v <= loanData.minAmount) {
-                                        return `Amount must be greater than ${loanData.minAmount}`
-                                    }
-                                    return true
-                                },
-                                rules.maxDecimalPlaces(2)
-                            ]"
-                            label="Enter Loan Amount"
-                            type="number"
-                            :min="0"
-                            :step="100"
-                        />
+                        <div style="width: 68%">
+                            <VTextField
+                                v-model="loanData.amount"
+                                id="loan-amount"
+                                :rules="[
+                                    FORM_RULES.required,
+                                    (v) => {
+                                        if (v <= loanData.minAmount) {
+                                            return `Amount must be greater than ${loanData.minAmount}`
+                                        }
+                                        return true
+                                    },
+                                    rules.maxDecimalPlaces(2)
+                                ]"
+                                label="Enter Loan Amount"
+                                type="number"
+                                :min="0"
+                                :step="100"
+                            />
+                        </div>
                     </div>
-                </div>
+                </VExpandTransition>
 
                 <div class="row-tab">
                     <div class="label">

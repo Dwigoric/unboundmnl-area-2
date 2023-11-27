@@ -74,7 +74,10 @@ onMounted(async () => {
                 approvalDate: new Date(deposit.approvalDate).toLocaleDateString('en-PH', {
                     dateStyle: 'long'
                 }),
-                interestRate: deposit.interestRate
+                interestRate: Intl.NumberFormat('en-PH', {
+                    style: 'percent',
+                    maximumFractionDigits: 2
+                }).format(deposit.interestRate / 100)
             }))
         )
     }

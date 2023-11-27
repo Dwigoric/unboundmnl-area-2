@@ -14,7 +14,6 @@ import LoanEdit from '../components/LoanDepositEdit.vue'
 import DeletePrompt from '../components/DeletePrompt.vue'
 import LoanStatusEdit from '../components/LoanStatusEdit.vue'
 
-
 import router from '../router'
 
 // Define props for the component
@@ -298,7 +297,8 @@ onMounted(async () => {
                     <!-- Edit Status -->
                     <v-dialog width="1200">
                         <template #activator="{ props }">
-                            <v-btn v-if="formData.status == 'approved'" 
+                            <v-btn
+                                v-if="formData.status == 'approved'"
                                 prepend-icon="mdi-check-underline-circle-outline"
                                 class="edit-loan-btn capitalize mr-2 text-white"
                                 v-bind="props"
@@ -326,6 +326,12 @@ onMounted(async () => {
                                 </v-container>
                                 <LoanStatusEdit
                                     :loanID="loanID"
+                                    :onsubmit="
+                                        () => {
+                                            formData.status = 'released'
+                                            isActive.value = false
+                                        }
+                                    "
                                 />
                             </v-card>
                         </template>
@@ -334,7 +340,7 @@ onMounted(async () => {
                     <!-- Edit Loan -->
                     <v-dialog width="1200">
                         <template #activator="{ props }">
-                            <v-btn 
+                            <v-btn
                                 prepend-icon="mdi-square-edit-outline"
                                 class="edit-loan-btn capitalize mr-2 text-white"
                                 v-bind="props"

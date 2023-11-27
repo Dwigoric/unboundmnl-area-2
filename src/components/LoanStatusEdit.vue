@@ -1,9 +1,9 @@
 <script setup>
 // Packages
-import { reactive, ref, onMounted } from 'vue'
+import { reactive, ref } from 'vue'
 
 // Reactive variables
-const releaseLoading = ref([])
+const loading = ref(false)
 const items = reactive([])
 
 // Project constants
@@ -14,12 +14,17 @@ const props = defineProps({
     loanID: {
         type: [Number, String],
         default: null
+    },
+    onsubmit: {
+        type: Function,
+        default: () => {}
     }
 })
 
-const markAsReleased = async (loanID) => {
-    releaseLoading.value.push(loanID)
-    const res = await fetch(`${API_URL}/loans/${loanID}`, {
+const markAsReleased = async () => {
+    loading.value = true
+
+    const res = await fetch(`${API_URL}/loans/${props.loanID}`, {
         method: 'PATCH',
         headers: {
             'Content-Type': 'application/json',
@@ -30,17 +35,10 @@ const markAsReleased = async (loanID) => {
         })
     })
 
-    if (res.status === 200) {
-        const { dueDate } = await res.json()
-        const index = items.findIndex((item) => item.id === loanID)
-        items[index].status = 'released'
-        items[index].dueDate = dueDate
-    }
-
-    releaseLoading.value.splice(releaseLoading.value.indexOf(loanID), 1)
+    console.log('hello from status edit')
+    props.onsubmit()
+    loading.value = false
 }
-
-
 </script>
 
 <template>
@@ -50,8 +48,7 @@ const markAsReleased = async (loanID) => {
 
         <!-- Edit transaction form -->
         <VForm id="loan-ledger-edit-form" ref="form">
-            
-            <p class="ml-3"> Are you sure you want to mark this loan as released?</p>
+            <p class="ml-3">Are you sure you want to mark this loan as released?</p>
 
             <!-- Date of Release -->
             <!-- Only if it needs date -->
@@ -67,15 +64,13 @@ const markAsReleased = async (loanID) => {
                 />
             </div> -->
 
-
             <div class="btn-wrapper">
-                <VBtn 
-                    prepend-icon="mdi-check" 
-                    class="capitalize btn" 
-                    :loading="releaseLoading.includes(loanID)"
-                    @click.prevent="markAsReleased(loanID)"
-                    >
-
+                <VBtn
+                    prepend-icon="mdi-check"
+                    class="capitalize btn"
+                    :loading="loading"
+                    @click.prevent="markAsReleased"
+                >
                     Yes
                 </VBtn>
             </div>

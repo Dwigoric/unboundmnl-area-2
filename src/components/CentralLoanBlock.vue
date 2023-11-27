@@ -45,7 +45,6 @@ const notificationSettings = {
 
 // Reactive variables
 const search = ref('')
-const releaseLoading = ref([])
 const items = reactive([])
 
 if (props.username) headers.splice(1, 1)
@@ -84,29 +83,6 @@ const getDateColor = (dueDate) => {
     else if (diffDays <= notificationSettings.period_2) return 'orange'
     else if (diffDays <= notificationSettings.period_3) return 'blue'
     else return 'green'
-}
-
-const markAsReleased = async (loanID) => {
-    releaseLoading.value.push(loanID)
-    const res = await fetch(`${API_URL}/loans/${loanID}`, {
-        method: 'PATCH',
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${window.$cookies.get('credentials').token}`
-        },
-        body: JSON.stringify({
-            status: 'released'
-        })
-    })
-
-    if (res.status === 200) {
-        const { dueDate } = await res.json()
-        const index = items.findIndex((item) => item.id === loanID)
-        items[index].status = 'released'
-        items[index].dueDate = dueDate
-    }
-
-    releaseLoading.value.splice(releaseLoading.value.indexOf(loanID), 1)
 }
 
 // Lifecycle hooks
@@ -205,17 +181,6 @@ onMounted(async () => {
 
         <template #item.status="{ value, item }">
             <v-chip :color="buildStatus[value][1]"> {{ buildStatus[value][0] }} </v-chip>
-            <!-- <v-btn
-                    class="bg-teal-lighten-3 ml-2 text-none"
-                    density="comfortable"
-                    variant="text"
-                    prepend-icon="mdi-send-check"
-                    v-if="value === 'approved'"
-                    :loading="releaseLoading.includes(item.id)"
-                    @click.prevent="markAsReleased(item.id)"
-                >
-                    Mark as released
-                </v-btn> -->
         </template>
 
         <template #item.dueDate="{ value }">
