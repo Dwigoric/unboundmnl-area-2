@@ -17,7 +17,7 @@ const tab = ref('loans')
 
 <template>
     <!-- Details -->
-    <ContentBlock :width="100" :height="100" :unit="'%'">
+    <ContentBlock :width="100" :height="100" :unit="'%'" v-if="profileData.username">
         <div class="d-flex flex-column mt-2">
             <v-tabs v-model="tab" color="primary">
                 <v-tab value="loans">
