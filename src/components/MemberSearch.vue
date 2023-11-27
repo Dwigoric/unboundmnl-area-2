@@ -135,7 +135,7 @@ watch(searchUsername, () => {
                     clearable=""
                     auto-select-first
                 >
-                    <template v-slot:no-data>
+                    <template #no-data>
                         <VListItem>
                             <VListItemTitle v-if="!searchUsername">
                                 Enter the member's name or username to search for them...
@@ -150,7 +150,7 @@ watch(searchUsername, () => {
                             </VListItemTitle>
                         </VListItem>
                     </template>
-                    <template v-slot:item="{ item }">
+                    <template #item="{ item }">
                         <VListItem>
                             <VListItemTitle>{{ item.title }}</VListItemTitle>
                             <VListItemSubtitle>{{ item.props.value }}</VListItemSubtitle>
@@ -170,7 +170,7 @@ watch(searchUsername, () => {
             </div>
             <div class="create-member mt-n5" v-if="canCreateNewMember">
                 <v-dialog width="1200">
-                    <template v-slot:activator="{ props }">
+                    <template #activator="{ props }">
                         <!-- Create Member Profile Button -->
                         <v-btn
                             class="capitalize-text mt-2"
@@ -183,7 +183,7 @@ watch(searchUsername, () => {
                     </template>
 
                     <!-- Form popup -->
-                    <template v-slot:default="{ isActive }">
+                    <template #default="{ isActive }">
                         <v-card close-on-back contained class="form-wrapper">
                             <v-container>
                                 <v-row justify="end">

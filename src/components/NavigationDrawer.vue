@@ -141,11 +141,9 @@ const logout = () => {
                     class="mt-1"
                     >Admin
                 </v-list-item>
-
-
             </v-list>
 
-            <template v-slot:append>
+            <template #append>
                 <div class="pa-3">
                     <v-btn class="logout-btn" block="" @click.prevent="logout"> Logout </v-btn>
                 </div>

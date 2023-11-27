@@ -67,7 +67,7 @@ onMounted(getAllOfficers)
                 <div class="upper-wrapper">
                     <div class="btn-wrapper" v-if="type === 'admin'">
                         <v-dialog width="900">
-                            <template v-slot:activator="{ props }">
+                            <template #activator="{ props }">
                                 <!-- Create Officer Profile Button -->
                                 <v-btn
                                     class="btn capitalize-text"
@@ -78,7 +78,7 @@ onMounted(getAllOfficers)
                             </template>
 
                             <!-- Form popup -->
-                            <template v-slot:default="{ isActive }">
+                            <template #default="{ isActive }">
                                 <v-card close-on-back contained class="form-wrapper">
                                     <v-container>
                                         <v-row justify="end">

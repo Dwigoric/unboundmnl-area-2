@@ -186,7 +186,7 @@ onMounted(async () => {
                 { key: 'dueDate', order: 'asc' }
             ]"
         >
-            <template v-slot:item.loanee="{ value }">
+            <template #item.loanee="{ value }">
                 <v-btn
                     class="text-none bg-blue-darken-1"
                     @click.prevent="visitMemberProfile(value)"
@@ -195,7 +195,7 @@ onMounted(async () => {
                 </v-btn>
             </template>
 
-            <template v-slot:item.submissionDate="{ value }">
+            <template #item.submissionDate="{ value }">
                 <v-chip>
                     {{
                         new Date(value).toLocaleDateString('en-PH', {
@@ -207,7 +207,7 @@ onMounted(async () => {
                 </v-chip>
             </template>
 
-            <template v-slot:item.status="{ value, item }">
+            <template #item.status="{ value, item }">
                 <v-chip :color="buildStatus[value][1]"> {{ buildStatus[value][0] }} </v-chip>
                 <v-btn
                     class="bg-teal-lighten-3 ml-2 text-none"
@@ -222,7 +222,7 @@ onMounted(async () => {
                 </v-btn>
             </template>
 
-            <template v-slot:item.dueDate="{ value }">
+            <template #item.dueDate="{ value }">
                 <v-chip
                     :color="Date.now() > new Date(value).getTime() ? 'red' : getDateColor(value)"
                     v-if="value"
@@ -235,15 +235,15 @@ onMounted(async () => {
                         })
                     }}
                 </v-chip>
-                <v-tooltip location="top" v-if="Date.now() > new Date(value).getTime()">
-                    <template v-slot:activator="{ props }">
+                <v-tooltip location="top" v-if="value && Date.now() > new Date(value).getTime()">
+                    <template #activator="{ props }">
                         <v-icon v-bind="props">mdi-alert</v-icon>
                     </template>
                     <span>This loan is overdue!</span>
                 </v-tooltip>
             </template>
 
-            <template v-slot:item.id="{ value }">
+            <template #item.id="{ value }">
                 <v-btn
                     class="text-none bg-blue-darken-1"
                     @click.prevent="visitLoanLedger(value)"
