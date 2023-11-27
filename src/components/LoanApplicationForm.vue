@@ -151,32 +151,34 @@ const prefillForm = async function () {
                     />
                 </div>
 
-                <div v-if="loanData.type !== ''" class="row-tab">
-                    <div class="label">
-                        <div>* Amount:</div>
-                    </div>
+                <VExpandTransition>
+                    <div v-if="loanData.type !== ''" class="row-tab">
+                        <div class="label">
+                            <div>* Amount:</div>
+                        </div>
 
-                    <div style="width: 68%">
-                        <VTextField
-                            v-model="loanData.amount"
-                            id="loan-amount"
-                            :rules="[
-                                FORM_RULES.required,
-                                (v) => {
-                                    if (v <= loanData.minAmount) {
-                                        return `Amount must be greater than ${loanData.minAmount}`
-                                    }
-                                    return true
-                                },
-                                rules.maxDecimalPlaces(2)
-                            ]"
-                            label="Enter Loan Amount"
-                            type="number"
-                            :min="0"
-                            :step="100"
-                        />
+                        <div style="width: 68%">
+                            <VTextField
+                                v-model="loanData.amount"
+                                id="loan-amount"
+                                :rules="[
+                                    FORM_RULES.required,
+                                    (v) => {
+                                        if (v <= loanData.minAmount) {
+                                            return `Amount must be greater than ${loanData.minAmount}`
+                                        }
+                                        return true
+                                    },
+                                    rules.maxDecimalPlaces(2)
+                                ]"
+                                label="Enter Loan Amount"
+                                type="number"
+                                :min="0"
+                                :step="100"
+                            />
+                        </div>
                     </div>
-                </div>
+                </VExpandTransition>
 
                 <div class="row-tab">
                     <div class="label">
