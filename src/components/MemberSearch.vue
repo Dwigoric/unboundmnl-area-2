@@ -174,7 +174,12 @@ watch(searchUsername, () => {
             </div>
 
             <div class="btn-wrapper">
-                <VBtn type="submit" class="btn capitalize-text" @click.prevent="sendToNext">
+                <VBtn
+                    type="submit"
+                    class="btn capitalize-text"
+                    @click.prevent="sendToNext"
+                    :disabled="!user"
+                >
                     Next
                 </VBtn>
             </div>
