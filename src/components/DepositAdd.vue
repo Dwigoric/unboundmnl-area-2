@@ -105,7 +105,7 @@ const submit = async function () {
         <VForm id="deposit-form" ref="form">
             <v-select
                 class="ml-3"
-                label="Deposit Category"
+                label="* Deposit Category"
                 :items="depositCategories"
                 v-model="depositData.category"
                 :rules="[FORM_RULES.required]"
@@ -113,7 +113,7 @@ const submit = async function () {
 
             <VTextField
                 type="date"
-                label="Approval Date"
+                label="* Approval Date"
                 class="ml-3"
                 v-model="depositData.approvalDate"
                 :rules="[FORM_RULES.required]"
@@ -122,7 +122,7 @@ const submit = async function () {
             <!-- TODO: Will be autofilled for Sprint 4 using Settings Tab -->
             <VTextField
                 class="ml-3"
-                label="Interest Rate %"
+                label="* Interest Rate %"
                 type="number"
                 :min="0"
                 :max="100"
@@ -132,7 +132,7 @@ const submit = async function () {
             <!-- <VTextField class="ml-3" label="Time" /> -->
             <VTextField
                 class="ml-3"
-                label="Deposit Amount"
+                label="* Deposit Amount"
                 v-model="depositData.originalDepositAmount"
                 type="number"
                 :min="0"
@@ -140,7 +140,7 @@ const submit = async function () {
             />
             <VTextField
                 class="ml-3"
-                label="Running Amount"
+                label="* Running Amount"
                 v-model="depositData.originalDepositAmount"
                 type="number"
                 :min="0"

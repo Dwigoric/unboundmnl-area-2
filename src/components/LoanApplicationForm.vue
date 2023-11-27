@@ -92,7 +92,7 @@ const prefillForm = async function () {
 
                 <div class="row-tab">
                     <div class="label">
-                        <div>Classification:</div>
+                        <div>* Classification:</div>
                     </div>
 
                     <VRadioGroup
@@ -109,7 +109,7 @@ const prefillForm = async function () {
                 <!-- Term of Loan -->
                 <div class="row-tab">
                     <div class="label">
-                        <div>Term:</div>
+                        <div>* Term:</div>
                     </div>
                     <VTextField
                         type="number"
@@ -123,7 +123,7 @@ const prefillForm = async function () {
                 <!-- Mode of Repayment -->
                 <div class="row-tab">
                     <div class="label">
-                        <div>Mode of Repayment:</div>
+                        <div>* Mode of Repayment:</div>
                     </div>
                     <VSelect
                         class="username-pw-input"
@@ -138,7 +138,7 @@ const prefillForm = async function () {
                 <!-- Type of Loan -->
                 <div class="row-tab">
                     <div class="label">
-                        <div>Type:</div>
+                        <div>* Type:</div>
                     </div>
 
                     <VSelect
@@ -153,7 +153,7 @@ const prefillForm = async function () {
 
                 <div v-if="loanData.type !== ''" class="row-tab">
                     <div class="label">
-                        <div>Amount:</div>
+                        <div>* Amount:</div>
                     </div>
 
                     <div style="width: 68%">
