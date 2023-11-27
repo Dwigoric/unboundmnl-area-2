@@ -1,5 +1,6 @@
 // Import packages
 import { createRouter, createWebHistory } from 'vue-router'
+import jwt_decode from 'jwt-decode'
 import NProgress from 'nprogress'
 
 // Import view components
@@ -244,6 +245,10 @@ const router = createRouter({
             beforeEnter: (to, from, next) => {
                 const credentials = window.$cookies.get('credentials')
                 if (!credentials || !credentials.token) next({ name: 'Login' })
+
+                const { token } = credentials
+                const decoded = jwt_decode(token)
+                if (decoded.type !== 'admin') next({ name: 'Loan Dashboard' })
                 else next()
             }
         },
@@ -255,6 +260,10 @@ const router = createRouter({
             beforeEnter: (to, from, next) => {
                 const credentials = window.$cookies.get('credentials')
                 if (!credentials || !credentials.token) next({ name: 'Login' })
+
+                const { token } = credentials
+                const decoded = jwt_decode(token)
+                if (decoded.type !== 'admin') next({ name: 'Loan Dashboard' })
                 else next()
             }
         },
@@ -266,6 +275,10 @@ const router = createRouter({
             beforeEnter: (to, from, next) => {
                 const credentials = window.$cookies.get('credentials')
                 if (!credentials || !credentials.token) next({ name: 'Login' })
+
+                const { token } = credentials
+                const decoded = jwt_decode(token)
+                if (decoded.type !== 'admin') next({ name: 'Loan Dashboard' })
                 else next()
             }
         }

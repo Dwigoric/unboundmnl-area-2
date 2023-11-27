@@ -1,9 +1,8 @@
 <script setup>
-
-import { ref } from 'vue'
-
 // Import packages
+import { ref, onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
+import jwt_decode from 'jwt-decode'
 
 // Import router
 import router from '../router'
@@ -16,7 +15,7 @@ const currentUserStore = storeToRefs(useCurrentUserStore())
 
 // Reactive Variables
 const rail = ref(false)
-
+const isAdmin = ref(false)
 
 // Define methods
 const logout = () => {
@@ -33,6 +32,12 @@ const logout = () => {
     // Redirect to login page
     router.replace({ name: 'Login' })
 }
+
+// Lifecycle hooks
+onMounted(() => {
+    const { type } = jwt_decode(window.$cookies.get('credentials').token)
+    isAdmin.value = type === 'admin'
+})
 </script>
 
 <template>
@@ -45,8 +50,7 @@ const logout = () => {
             :rail="rail"
             @click="rail = false"
             rail-width="90"
-        >   
-
+        >
             <div v-if="rail == false" class="navigation-title-box">
                 <svg width="260" height="80" xmlns="http://www.w3.org/2000/svg">
                     <image href="../assets/logo-full.svg" width="250" height="100" />
@@ -59,11 +63,8 @@ const logout = () => {
                 </svg>
             </div>
 
-            
             <v-list density="compact">
-                <v-list-subheader v-if="rail == false"
-                    class="mt-4 mb-n3 ml-n3"
-                    title="LOANS">
+                <v-list-subheader v-if="rail == false" class="mt-4 mb-n3 ml-n3" title="LOANS">
                 </v-list-subheader>
 
                 <v-list-item
@@ -73,7 +74,7 @@ const logout = () => {
                     rounded="lg"
                     class="mt-1"
                     title="Loan Dashboard"
-                    >
+                >
                 </v-list-item>
 
                 <v-list-item
@@ -83,7 +84,7 @@ const logout = () => {
                     rounded="lg"
                     class="mt-1"
                     title="New Loan Application"
-                    >
+                >
                 </v-list-item>
 
                 <v-list-item
@@ -93,12 +94,10 @@ const logout = () => {
                     rounded="lg"
                     class="mt-1"
                     title="Pending Loans"
-                    >
+                >
                 </v-list-item>
 
-                <v-list-subheader v-if="rail == false"
-                    class="mt-4 mb-n3 ml-n3"
-                    title="DEPOSITS">  
+                <v-list-subheader v-if="rail == false" class="mt-4 mb-n3 ml-n3" title="DEPOSITS">
                 </v-list-subheader>
 
                 <v-list-item
@@ -108,7 +107,7 @@ const logout = () => {
                     rounded="lg"
                     class="mt-1"
                     title="Deposit Dashboard"
-                    >
+                >
                 </v-list-item>
 
                 <v-list-item
@@ -118,12 +117,10 @@ const logout = () => {
                     rounded="lg"
                     class="mt-1"
                     title="Enter Deposit"
-                    >
+                >
                 </v-list-item>
 
-                <v-list-subheader v-if="rail == false"
-                    class="mt-4 mb-n3 ml-n3"
-                    title="PROFILES">
+                <v-list-subheader v-if="rail == false" class="mt-4 mb-n3 ml-n3" title="PROFILES">
                 </v-list-subheader>
 
                 <v-list-item
@@ -133,7 +130,7 @@ const logout = () => {
                     rounded="lg"
                     class="mt-1"
                     title="Officer Profiles"
-                    >
+                >
                 </v-list-item>
 
                 <v-list-item
@@ -143,48 +140,52 @@ const logout = () => {
                     rounded="lg"
                     class="mt-1"
                     title="Member Profiles"
-                    >
+                >
                 </v-list-item>
 
-                <v-list-subheader v-if="rail == false"
-                    class="mt-4 mb-n3 ml-n3"
-                    title="SETTINGS">
-                </v-list-subheader>
-
-                <v-list-item
-                    to="/settings/loans-and-deposits"
-                    link=""
-                    prepend-icon="mdi-table-cog"
-                    rounded="lg"
-                    class="mt-1"
-                    title="Loans & Deposits"
+                <div v-if="isAdmin">
+                    <v-list-subheader
+                        v-if="rail == false"
+                        class="mt-4 mb-n3 ml-n3"
+                        title="SETTINGS"
                     >
-                </v-list-item>
+                    </v-list-subheader>
 
-                <v-list-item
-                    to="/settings/notification"
-                    link=""
-                    prepend-icon="mdi-bell-cog"
-                    rounded="lg"
-                    class="mt-1"
-                    title="Notifications"
+                    <v-list-item
+                        to="/settings/loans-and-deposits"
+                        link=""
+                        prepend-icon="mdi-table-cog"
+                        rounded="lg"
+                        class="mt-1"
+                        title="Loans & Deposits"
                     >
-                </v-list-item>
+                    </v-list-item>
 
-                <v-list-item
-                    to="/settings/admin"
-                    link=""
-                    prepend-icon="mdi-account-cog"
-                    rounded="lg"
-                    class="mt-1"
-                    title="Admin"
+                    <v-list-item
+                        to="/settings/notification"
+                        link=""
+                        prepend-icon="mdi-bell-cog"
+                        rounded="lg"
+                        class="mt-1"
+                        title="Notifications"
                     >
-                </v-list-item>
+                    </v-list-item>
+
+                    <v-list-item
+                        to="/settings/admin"
+                        link=""
+                        prepend-icon="mdi-account-cog"
+                        rounded="lg"
+                        class="mt-1"
+                        title="Admin"
+                    >
+                    </v-list-item>
+                </div>
             </v-list>
 
             <template #append>
                 <div class="d-flex flex-column w-100" v-if="rail == false">
-                    <div class="" >
+                    <div class="">
                         <div class="d-flex justify-end">
                             <v-btn
                                 variant="text"
@@ -192,24 +193,19 @@ const logout = () => {
                                 @click.stop="rail = !rail"
                             ></v-btn>
                         </div>
-    
-                        <v-btn 
-                            class="logout-btn w-100" 
-                            @click.prevent="logout"
-                            > Logout 
-                        </v-btn>
+
+                        <v-btn class="logout-btn w-100" @click.prevent="logout"> Logout </v-btn>
                     </div>
                 </div>
 
                 <v-slot v-if="rail == true">
                     <v-btn
-                    variant="text"
-                    icon="mdi-chevron-right"
-                    @click.stop="rail = !rail"
+                        variant="text"
+                        icon="mdi-chevron-right"
+                        @click.stop="rail = !rail"
                     ></v-btn>
                 </v-slot>
             </template>
-
         </v-navigation-drawer>
         <v-main style="height: 94vh"></v-main>
     </v-layout>
