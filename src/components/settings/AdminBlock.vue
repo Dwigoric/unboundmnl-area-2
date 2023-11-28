@@ -56,8 +56,8 @@ const submitForm = async () => {
 </script>
 
 <template>
-    <ContentBlock :width="45" :height="43" :unit="'%'" :padding="3">
-        <div class="w-100 rounded-lg pb-5">
+    <ContentBlock :width="100" :height="100" :unit="'%'" :padding="2">
+        <div class="rounded-lg">
             <VForm ref="form">
                 <div class="">
                     <div class="form-wrapper">
@@ -179,7 +179,6 @@ const submitForm = async () => {
     display: flex;
     justify-content: flex-end;
     margin-top: 7%;
-    margin-right: 2%;
 }
 
 .bg {
