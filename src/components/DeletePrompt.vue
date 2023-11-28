@@ -51,13 +51,12 @@ const deleteMember = async function () {
         return
     }
 
-    const result = await fetch(`${API_URL}/users/delete`, {
-        method: 'POST',
+    const result = await fetch(`${API_URL}/users/${props.identifier}`, {
+        method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`
-        },
-        body: JSON.stringify({ username: props.identifier })
+        }
     })
 
     errorMessage.value = ''

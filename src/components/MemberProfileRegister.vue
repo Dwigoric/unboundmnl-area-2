@@ -116,8 +116,8 @@ const updateUser = async function () {
         return false
     }
 
-    const result = await fetch(`${API_URL}/users/edit`, {
-        method: 'POST',
+    const result = await fetch(`${API_URL}/users/${userData.username}`, {
+        method: 'PATCH',
         headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`
@@ -161,8 +161,8 @@ const registerUser = async function () {
         return false
     }
 
-    const result = await fetch(`${API_URL}/users/add`, {
-        method: 'POST',
+    const result = await fetch(`${API_URL}/users/`, {
+        method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`
