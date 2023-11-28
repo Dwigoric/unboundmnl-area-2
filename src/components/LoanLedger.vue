@@ -1,7 +1,7 @@
 <script setup>
 // Import packages
 import { ref, onMounted, computed, reactive } from 'vue'
-import { Grid } from 'gridjs'
+import { Grid, h } from 'gridjs'
 import 'gridjs/dist/theme/mermaid.css'
 
 // Import constants
@@ -29,6 +29,7 @@ const isAddPopupActive = ref(false) // for add transaction pop up
 const isPopupActive = ref(false) // for edit transaction pop up
 const originalLoanAmount = ref(0) // for dynamically calculating balance in form
 const balance = ref(0)
+var loanReleased = ''; // for monitoring whether loan is released or not
 
 const currentlyEditedTransactionID = ref('')
 
@@ -132,7 +133,8 @@ const getLoanInfo = async () => {
             formData.coborrowerName = 'No coborrower'
         }
         formData.status = loanData.status
-        if (formData.status === 'released') {
+        loanReleased = loanData.status
+        if (formData.status == 'released') {
             formData.status = 'Approved (Released)'
         }
     }
@@ -291,7 +293,7 @@ onMounted(async () => {
                     <v-dialog width="1200">
                         <template #activator="{ props }">
                             <v-btn
-                                v-if="formData.status === 'approved'"
+                                v-if="formData.status == 'approved'"
                                 prepend-icon="mdi-check-underline-circle-outline"
                                 class="edit-loan-btn capitalize mr-2 text-white"
                                 v-bind="props"
@@ -426,13 +428,13 @@ onMounted(async () => {
         <div id="loan-payments-wrapper" ref="loanPaymentsTable" class="w-100"></div>
         <VBtn
             @click="setPopupAdd"
-            block=""
+            block
             size="large"
             density="compact"
             rounded="lg"
             prepend-icon="mdi-plus-circle"
             class="capitalize btn"
-            :disabled="formData.status !== 'released'"
+            :disabled="loanReleased !== 'released'"
         >
             Add New Transaction
         </VBtn>
@@ -443,7 +445,7 @@ onMounted(async () => {
         <VDialog width="1000" v-model="isAddPopupActive">
             <template #default="{ isActive }">
                 <VCard close-on-back contained class="form-wrapper">
-                    <VContainer fluid="">
+                    <VContainer fluid>
                         <VRow justify="end">
                             <VCardActions>
                                 <VBtn
@@ -478,7 +480,7 @@ onMounted(async () => {
         <VDialog width="1000" v-model="isPopupActive">
             <template #default="{ isActive }">
                 <VCard close-on-back contained class="form-wrapper">
-                    <VContainer fluid="">
+                    <VContainer fluid>
                         <VRow justify="end">
                             <VCardActions>
                                 <VBtn
