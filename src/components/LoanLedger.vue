@@ -29,7 +29,7 @@ const isAddPopupActive = ref(false) // for add transaction pop up
 const isPopupActive = ref(false) // for edit transaction pop up
 const originalLoanAmount = ref(0) // for dynamically calculating balance in form
 const balance = ref(0)
-var loanReleased = ''; // for monitoring whether loan is released or not
+const loanReleased = ref(false) // for monitoring whether loan is released or not
 
 const currentlyEditedTransactionID = ref('')
 
@@ -133,9 +133,9 @@ const getLoanInfo = async () => {
             formData.coborrowerName = 'No coborrower'
         }
         formData.status = loanData.status
-        loanReleased = loanData.status
-        if (formData.status == 'released') {
+        if (formData.status === 'released') {
             formData.status = 'Approved (Released)'
+            loanReleased.value = true
         }
     }
 
@@ -323,7 +323,8 @@ onMounted(async () => {
                                     :loanID="loanID"
                                     :onsubmit="
                                         () => {
-                                            formData.status = 'released'
+                                            formData.status = 'Approved (Released)'
+                                            loanReleased = true
                                             isActive.value = false
                                         }
                                     "
@@ -434,7 +435,7 @@ onMounted(async () => {
             rounded="lg"
             prepend-icon="mdi-plus-circle"
             class="capitalize btn"
-            :disabled="loanReleased !== 'released'"
+            :disabled="!loanReleased"
         >
             Add New Transaction
         </VBtn>
