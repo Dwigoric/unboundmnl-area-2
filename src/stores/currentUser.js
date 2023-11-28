@@ -7,6 +7,7 @@ import { API_URL } from '../constants'
 
 export const useCurrentUserStore = defineStore('currentUser', () => {
     const name = reactive({ given: '', middle: '', last: '' })
+    const username = ref('')
     const id = ref('')
     const role = ref('')
 
@@ -21,6 +22,7 @@ export const useCurrentUserStore = defineStore('currentUser', () => {
         }).then((res) => res.json())
 
         if (officer) {
+            username.value = officer.username
             const isAdmin = officer.username === 'admin'
             name.given = isAdmin ? 'Admin' : officer.name.given
             name.middle = isAdmin ? '' : officer.name.middle
@@ -30,5 +32,5 @@ export const useCurrentUserStore = defineStore('currentUser', () => {
         }
     }
 
-    return { name, id, role, fetchUser }
+    return { name, username, id, role, fetchUser }
 })
