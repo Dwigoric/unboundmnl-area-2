@@ -77,7 +77,8 @@ const formData = reactive({
     finesPaid: 0,
     interestDue: 0,
     officerInCharge: '',
-    transactionType: ''
+    transactionType: '',
+    readjustment: false
 })
 
 const newBalance = computed(() => {
@@ -138,7 +139,6 @@ const submit = async function () {
 watch(
     () => formData.transactionType,
     (transaction) => {
-        console.log(`I PICKED THIS TRANSACTION TYPE: ${transaction}`)
 
         // If selected transaction is payments
         if (transaction === 'payments') {
@@ -261,6 +261,7 @@ onMounted(async () => {
                         v-model="formData.amountPaid"
                         :rules="[rules.maxDecimalPlaces(2)]"
                         :min="0"
+                        :max="props.balance"
                     />
                     <VTextField
                         class="ml-3"

@@ -28,8 +28,8 @@ const ledgerData = ref([])
 const isAddPopupActive = ref(false) // for add transaction pop up
 const isPopupActive = ref(false) // for edit transaction pop up
 const originalLoanAmount = ref(0) // for dynamically calculating balance in form
-const totalAmountPaid = ref(0) // for dynamically calculating balance in form
 const balance = ref(0)
+var loanReleased = ''; // for monitoring whether loan is released or not
 
 const currentlyEditedTransactionID = ref('')
 
@@ -100,11 +100,6 @@ const setPopupAdd = () => {
     isAddPopupActive.value = true
 }
 
-const setPopupEdit = (data) => {
-    currentlyEditedTransactionID.value = data
-    isPopupActive.value = true
-}
-
 const getLoanInfo = async () => {
     // Fetch loan properties from the database by using the loanID property!
     const resJson = await fetch(`${API_URL}/loans/${props.loanID}`, {
@@ -138,6 +133,7 @@ const getLoanInfo = async () => {
             formData.coborrowerName = 'No coborrower'
         }
         formData.status = loanData.status
+        loanReleased = loanData.status
         if (formData.status == 'released') {
             formData.status = 'Approved (Released)'
         }
@@ -169,7 +165,6 @@ const getLoanInfo = async () => {
             transaction.officerInCharge.last === ' '
                 ? 'Admin'
                 : `${transaction.officerInCharge.last}, ${transaction.officerInCharge.given}`
-            // grab the field for fines due
         ]
     })
 }
@@ -439,6 +434,7 @@ onMounted(async () => {
             rounded="lg"
             prepend-icon="mdi-plus-circle"
             class="capitalize btn"
+            :disabled="loanReleased !== 'released'"
         >
             Add New Transaction
         </VBtn>
