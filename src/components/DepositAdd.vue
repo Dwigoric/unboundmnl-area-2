@@ -121,6 +121,7 @@ const submit = async function () {
 
             <!-- TODO: Will be autofilled for Sprint 4 using Settings Tab -->
             <VTextField
+                v-number-only
                 class="ml-3"
                 label="* Interest Rate %"
                 type="number"
@@ -131,6 +132,7 @@ const submit = async function () {
             />
             <!-- <VTextField class="ml-3" label="Time" /> -->
             <VTextField
+                v-number-only
                 class="ml-3"
                 label="* Deposit Amount"
                 v-model="depositData.originalDepositAmount"
@@ -139,6 +141,7 @@ const submit = async function () {
                 :rules="[FORM_RULES.required, rules.maxDecimalPlaces(2)]"
             />
             <VTextField
+                v-number-only
                 class="ml-3"
                 label="* Running Amount"
                 v-model="depositData.originalDepositAmount"

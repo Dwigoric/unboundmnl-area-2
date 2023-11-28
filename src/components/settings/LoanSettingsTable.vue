@@ -100,6 +100,7 @@ onMounted(async () => {
                                 variant="underlined"
                                 placeholder="Value"
                                 type="number"
+                                v-number-only
                                 :rules="[rules.maxDecimalPlaces(2)]"
                                 v-model="formData.interest_rate.value"
                             />
@@ -126,6 +127,7 @@ onMounted(async () => {
                                 variant="underlined"
                                 placeholder="Value"
                                 type="number"
+                                v-number-only
                                 :rules="[rules.maxDecimalPlaces(2)]"
                                 v-model="formData.time.value"
                             />
@@ -154,6 +156,7 @@ onMounted(async () => {
                                 variant="underlined"
                                 placeholder="Value"
                                 type="number"
+                                v-number-only
                                 :rules="[rules.maxDecimalPlaces(2)]"
                                 v-model="formData.service_fee.value"
                                 :disabled="!formData.service_fee.enabled"
@@ -187,6 +190,7 @@ onMounted(async () => {
                                 variant="underlined"
                                 placeholder="Value"
                                 type="number"
+                                v-number-only
                                 :rules="[rules.maxDecimalPlaces(2)]"
                                 v-model="formData.capital_build_up.value"
                                 :disabled="!formData.capital_build_up.enabled"
@@ -220,6 +224,7 @@ onMounted(async () => {
                                 variant="underlined"
                                 placeholder="Value"
                                 type="number"
+                                v-number-only
                                 :rules="[rules.maxDecimalPlaces(2)]"
                                 v-model="formData.savings.value"
                                 :disabled="!formData.savings.enabled"

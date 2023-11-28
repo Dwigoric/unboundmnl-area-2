@@ -245,6 +245,7 @@ onMounted(async () => {
                     <h3 class="ml-3 py-3">Payments</h3>
                     <VTextField
                         class="ml-3"
+                        v-number-only
                         type="number"
                         label="Balance (Automatically Calculated)"
                         disabled=""
@@ -254,6 +255,7 @@ onMounted(async () => {
                     />
                     <VTextField
                         class="ml-3"
+                        v-number-only
                         type="number"
                         label="Amount Paid"
                         v-model="formData.amountPaid"
@@ -262,6 +264,7 @@ onMounted(async () => {
                     />
                     <VTextField
                         class="ml-3"
+                        v-number-only
                         type="number"
                         label="Interest Paid"
                         v-model="formData.interestPaid"
@@ -272,6 +275,7 @@ onMounted(async () => {
                     <!-- Fines Paid -->
                     <VTextField
                         class="ml-3"
+                        v-number-only
                         type="number"
                         label="Fines Paid"
                         v-model="formData.finesPaid"
@@ -286,6 +290,7 @@ onMounted(async () => {
                     <h3 class="ml-3 py-3">Dues</h3>
                     <VTextField
                         class="ml-3"
+                        v-number-only
                         type="number"
                         label="Amount Due"
                         v-model="formData.amountDue"
@@ -295,6 +300,7 @@ onMounted(async () => {
                     <!-- TODO: Automatically generate interest value?? -->
                     <VTextField
                         class="ml-3"
+                        v-number-only
                         type="number"
                         label="Interest Due"
                         v-model="formData.interestDue"
@@ -304,6 +310,7 @@ onMounted(async () => {
 
                     <VTextField
                         class="ml-3"
+                        v-number-only
                         type="number"
                         label="Fines Due"
                         v-model="formData.finesDue"
@@ -316,6 +323,7 @@ onMounted(async () => {
                     <h3 class="ml-3 py-3">Balance Readjustment</h3>
                     <VTextField
                         class="ml-3"
+                        v-number-only
                         type="number"
                         label="New Balance"
                         v-model="formData.balance"

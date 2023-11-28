@@ -186,9 +186,22 @@ onMounted(async () => {
                 :items="['deposit', 'withdrawal']"
                 :rules="[FORM_RULES.required]"
             ></VSelect>
-            <VTextField class="ml-3" type="number" label="Amount" v-model="formData.amount" />
-            <VTextField class="ml-3" type="number" label="Balance" v-model="formData.balance" />
             <VTextField
+                v-number-only
+                class="ml-3"
+                type="number"
+                label="Amount"
+                v-model="formData.amount"
+            />
+            <VTextField
+                v-number-only
+                class="ml-3"
+                type="number"
+                label="Balance"
+                v-model="formData.balance"
+            />
+            <VTextField
+                v-number-only
                 class="ml-3"
                 type="number"
                 label="Interest Paid"

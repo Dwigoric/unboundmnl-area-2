@@ -141,6 +141,7 @@ onMounted(() => {
             </VSelect>
 
             <VTextField
+                v-number-only
                 class="ml-3"
                 type="number"
                 label="Loan Term"

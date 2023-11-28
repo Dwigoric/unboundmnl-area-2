@@ -396,6 +396,7 @@ watch(
                         v-model="userData.monthly_income"
                         id="login-monthly-income"
                         type="number"
+                        v-number-only
                         :rules="[FORM_RULES.required]"
                         label="Enter Monthly Income"
                     />

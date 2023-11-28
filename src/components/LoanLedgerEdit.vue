@@ -184,12 +184,14 @@ onMounted(async () => {
             </div>
             <VTextField
                 class="ml-3"
+                v-number-only
                 type="number"
                 label="Amount Paid"
                 v-model="formData.amountPaid"
             />
             <VTextField
                 class="ml-3"
+                v-number-only
                 type="number"
                 label="Balance"
                 v-model="formData.balance"
@@ -197,12 +199,14 @@ onMounted(async () => {
             />
             <VTextField
                 class="ml-3"
+                v-number-only
                 type="number"
                 label="Interest Paid"
                 v-model="formData.interestPaid"
             />
             <VTextField
                 class="ml-3"
+                v-number-only
                 type="number"
                 label="Fines Paid"
                 v-model="formData.finesPaid"
@@ -227,6 +231,7 @@ onMounted(async () => {
             <h3 class="ml-3 py-3">Dues</h3>
             <VTextField
                 class="ml-3"
+                v-number-only
                 type="number"
                 label="Amount Due"
                 v-model="formData.amountDue"
@@ -234,6 +239,7 @@ onMounted(async () => {
             <h3 class="ml-3 py-3">Payments</h3>
             <VTextField
                 class="ml-3"
+                v-number-only
                 type="number"
                 label="Amount Paid"
                 v-model="formData.amountPaid"
@@ -241,6 +247,7 @@ onMounted(async () => {
             <!-- Disabled because balance is derived from amountPaid -->
             <VTextField
                 class="ml-3"
+                v-number-only
                 type="number"
                 label="Balance"
                 disabled=""
@@ -248,12 +255,14 @@ onMounted(async () => {
             />
             <VTextField
                 class="ml-3"
+                v-number-only
                 type="number"
                 label="Interest Paid"
                 v-model="formData.interestPaid"
             />
             <VTextField
                 class="ml-3"
+                v-number-only
                 type="number"
                 label="Fines Paid"
                 v-model="formData.finesPaid"

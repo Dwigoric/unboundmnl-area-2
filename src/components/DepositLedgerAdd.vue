@@ -182,6 +182,7 @@ onMounted(async () => {
 
             <div v-if="formData.transactionType !== ''">
                 <VTextField
+                    v-number-only
                     class="ml-3"
                     type="number"
                     label="Amount"
@@ -189,6 +190,7 @@ onMounted(async () => {
                     :rules="[rules.maxDecimalPlaces(2)]"
                 />
                 <VTextField
+                    v-number-only
                     class="ml-3"
                     type="number"
                     label="Balance"
@@ -198,6 +200,7 @@ onMounted(async () => {
                 <!-- Only show interest earned if deposit transaction -->
                 <div v-if="formData.transactionType === 'Deposit'">
                     <VTextField
+                        v-number-only
                         class="ml-3"
                         type="number"
                         label="Interest Earned"

@@ -71,6 +71,7 @@ onMounted(updateAutofill)
                                 placeholder="Unit"
                                 suffix="days"
                                 type="number"
+                                v-number-only
                                 v-model="formData.notification_period_1"
                             />
                         </div>
@@ -90,6 +91,7 @@ onMounted(updateAutofill)
                                 placeholder="Unit"
                                 suffix="days"
                                 type="number"
+                                v-number-only
                                 v-model="formData.notification_period_2"
                             />
                         </div>
@@ -109,6 +111,7 @@ onMounted(updateAutofill)
                                 placeholder="Unit"
                                 suffix="days"
                                 type="number"
+                                v-number-only
                                 v-model="formData.notification_period_3"
                             />
                         </div>

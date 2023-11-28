@@ -94,6 +94,7 @@ onMounted(async () => {
                                 variant="underlined"
                                 placeholder="Unit"
                                 type="number"
+                                v-number-only
                                 v-model="formData.interest_rate.value"
                                 :rules="[rules.maxDecimalPlaces(2)]"
                             />
@@ -120,6 +121,7 @@ onMounted(async () => {
                                 variant="underlined"
                                 placeholder="Unit"
                                 type="number"
+                                v-number-only
                                 v-model="formData.time.value"
                                 :rules="[rules.maxDecimalPlaces(2)]"
                             />

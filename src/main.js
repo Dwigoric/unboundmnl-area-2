@@ -26,9 +26,40 @@ app.use(
             aliases,
             sets: {
                 mdi
-            },
+            }
         }
     })
 )
+
+// Create directive for number-only input
+app.directive('number-only', {
+    beforeMount(el) {
+        el.addEventListener('keydown', (e) => {
+            if (
+                e.key === 'Backspace' ||
+                e.key === 'Tab' ||
+                e.key === 'Delete' ||
+                e.key === 'ArrowLeft' ||
+                e.key === 'ArrowRight' ||
+                e.key === 'Home' ||
+                e.key === 'End'
+            ) {
+                return
+            }
+
+            if (e.key === '.') {
+                if (!el.value.includes('.')) {
+                    return
+                } else {
+                    e.preventDefault()
+                }
+            }
+
+            if (isNaN(e.key)) {
+                e.preventDefault()
+            }
+        })
+    }
+})
 
 app.mount('#app')

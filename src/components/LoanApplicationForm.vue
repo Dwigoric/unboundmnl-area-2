@@ -113,6 +113,7 @@ const prefillForm = async function () {
                     </div>
                     <VTextField
                         type="number"
+                        v-number-only
                         class="username-pw-input"
                         v-model="loanData.term"
                         :rules="[FORM_RULES.required]"
@@ -159,6 +160,8 @@ const prefillForm = async function () {
 
                         <div style="width: 68%">
                             <VTextField
+                                v-number-only
+                                type="number"
                                 v-model="loanData.amount"
                                 id="loan-amount"
                                 :rules="[
@@ -172,7 +175,6 @@ const prefillForm = async function () {
                                     rules.maxDecimalPlaces(2)
                                 ]"
                                 label="Enter Loan Amount"
-                                type="number"
                                 :min="0"
                                 :step="100"
                             />
