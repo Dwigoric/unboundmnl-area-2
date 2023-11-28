@@ -266,7 +266,7 @@ watch(
                 <!-- Middle Name -->
                 <div class="row-tab">
                     <div class="label">
-                        <div>* Middle name:</div>
+                        <div>Middle name:</div>
                     </div>
 
                     <VTextField
@@ -521,7 +521,7 @@ watch(
 
                         <div class="row-tab">
                             <div class="label">
-                                <div>Spouse's First Name:</div>
+                                <div>* Spouse's First Name:</div>
                             </div>
 
                             <VTextField
@@ -549,7 +549,7 @@ watch(
 
                         <div class="row-tab">
                             <div class="label">
-                                <div>Spouse's Last Name:</div>
+                                <div>* Spouse's Last Name:</div>
                             </div>
 
                             <VTextField
@@ -563,7 +563,7 @@ watch(
 
                         <div class="row-tab">
                             <div class="label">
-                                <div>Spouse's Date of Birth:</div>
+                                <div>* Spouse's Date of Birth:</div>
                             </div>
 
                             <VTextField
@@ -578,7 +578,7 @@ watch(
 
                         <div class="row-tab">
                             <div class="label">
-                                <div>Spouse's Place of Birth:</div>
+                                <div>* Spouse's Place of Birth:</div>
                             </div>
 
                             <VTextField
@@ -592,7 +592,7 @@ watch(
 
                         <div class="row-tab">
                             <div class="label">
-                                <div>Spouse's Contact Number:</div>
+                                <div>* Spouse's Contact Number:</div>
                             </div>
 
                             <VTextField
@@ -606,7 +606,7 @@ watch(
 
                         <div class="row-tab">
                             <div class="label">
-                                <div>Spouse's Occupation/Source of Income:</div>
+                                <div>* Spouse's Occupation/Source of Income:</div>
                             </div>
 
                             <VTextField

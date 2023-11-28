@@ -196,7 +196,7 @@ const prefillForm = async function () {
 
                         <div class="row-tab">
                             <div class="label">
-                                <div>Coborrower First Name:</div>
+                                <div>* Coborrower First Name:</div>
                             </div>
                             <VTextField
                                 class="username-pw-input"
@@ -218,7 +218,7 @@ const prefillForm = async function () {
                         </div>
                         <div class="row-tab">
                             <div class="label">
-                                <div>Coborrower Last Name:</div>
+                                <div>* Coborrower Last Name:</div>
                             </div>
                             <VTextField
                                 class="username-pw-input"
@@ -229,7 +229,7 @@ const prefillForm = async function () {
                         </div>
                         <div class="row-tab">
                             <div class="label">
-                                <div>Coborrower Date of Birth:</div>
+                                <div>* Coborrower Date of Birth:</div>
                             </div>
                             <VTextField
                                 class="username-pw-input"
@@ -241,7 +241,7 @@ const prefillForm = async function () {
                         </div>
                         <div class="row-tab">
                             <div class="label">
-                                <div>Coborrower Place of Birth:</div>
+                                <div>* Coborrower Place of Birth:</div>
                             </div>
                             <VTextField
                                 class="username-pw-input"
@@ -252,7 +252,7 @@ const prefillForm = async function () {
                         </div>
                         <div class="row-tab">
                             <div class="label">
-                                <div>Coborrower Occupation/Source of Income:</div>
+                                <div>* Coborrower Occupation/Source of Income:</div>
                             </div>
                             <VTextField
                                 class="username-pw-input"
@@ -263,7 +263,7 @@ const prefillForm = async function () {
                         </div>
                         <div class="row-tab">
                             <div class="label">
-                                <div>Coborrower Contact Number:</div>
+                                <div>* Coborrower Contact Number:</div>
                             </div>
                             <VTextField
                                 class="username-pw-input"
