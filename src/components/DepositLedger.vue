@@ -64,12 +64,12 @@ const capitalLedgerColumns = [
     { name: 'Interest' },
     { name: 'Balance' },
     { name: 'Date of Entry' },
-    { name: 'Officer in Charge' },
+    { name: 'Officer in Charge' }
 ]
 
 // Give each transaction column a minimum width to properly fit the content
-capitalLedgerColumns.forEach(col => {
-    col.width = '225px';
+capitalLedgerColumns.forEach((col) => {
+    col.width = '225px'
 })
 
 // Create a ref to hold new loanPaymentsTable template
@@ -192,10 +192,6 @@ onMounted(async () => {
                 <div class="d-flex flex-column loan-info-cell grid-left-border h-100 px-4">
                     <p class="font-weight-bold">Date:</p>
                     <p class="loan-properties">{{ formattedApprovalDate }}</p>
-                </div>
-                <div class="d-flex flex-column loan-info-cell grid-left-border h-100 px-4">
-                    <p class="font-weight-bold">Interest Rate:</p>
-                    <p class="loan-properties">{{ depositInterestRate }}%</p>
                 </div>
             </div>
         </div>

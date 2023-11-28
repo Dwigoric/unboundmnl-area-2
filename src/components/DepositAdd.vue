@@ -125,17 +125,6 @@ const submit = async function () {
                 :rules="[FORM_RULES.required]"
             ></VTextField>
 
-            <!-- TODO: Will be autofilled for Sprint 4 using Settings Tab -->
-            <VTextField
-                v-number-only
-                class="ml-3"
-                label="* Interest Rate %"
-                type="number"
-                :min="0"
-                :max="100"
-                v-model="depositData.interestRate"
-                :rules="[FORM_RULES.required, rules.maxDecimalPlaces(2)]"
-            />
             <!-- <VTextField class="ml-3" label="Time" /> -->
             <VTextField
                 v-number-only

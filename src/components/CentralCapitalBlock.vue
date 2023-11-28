@@ -27,7 +27,6 @@ const headers = [
     { title: 'Deposit Category', key: 'category' },
     { title: 'Deposit Holder', key: 'holder' },
     { title: 'Approval Date', key: 'approvalDate' },
-    { title: 'Interest Rate', key: 'interestRate' },
     { title: 'Ledger', key: 'id' }
 ]
 
