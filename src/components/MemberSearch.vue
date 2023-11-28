@@ -101,6 +101,7 @@ watch(searchUsername, () => {
                     label="Search Member by Username"
                     clearable=""
                     auto-select-first
+                    :custom-filter="() => true"
                 >
                     <template #no-data>
                         <VListItem>
