@@ -25,6 +25,7 @@ const props = defineProps({
 const errorAlert = ref(false)
 const errorMessage = ref('')
 const processing = ref(false)
+const snackbar = ref(false)
 const headers = [
     { title: 'Loanee', key: 'loanee' },
     { title: 'Type of Loan', key: 'loanType' },
@@ -59,7 +60,7 @@ const decide = async (toApprove) => {
         errorMessage.value = message
         return
     } else {
-        alert('Loan was processed!')
+        snackbar.value = true
     }
 
     props.onsubmit(props.data.id)
@@ -127,6 +128,7 @@ const decide = async (toApprove) => {
                 Reject Loan
             </v-btn>
         </div>
+        <v-snackbar v-model="snackbar" rounded="pill">Loan was processed!</v-snackbar>
     </div>
 </template>
 

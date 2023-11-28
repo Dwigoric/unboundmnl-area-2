@@ -32,6 +32,8 @@ const setting_keys = {
 
 const errorMessage = ref('')
 const errorAlert = ref(false)
+const loading = ref(false)
+const snackbar = ref(false)
 
 const formData = reactive({
     interest_rate: { unit: '', value: 0 },
@@ -56,6 +58,8 @@ const updateAutofill = async function () {
 }
 
 const submit = async function () {
+    loading.value = true
+
     const res = await fetch(`${API_URL}/settings/loans/${setting_keys[props.header]}`, {
         method: 'PATCH',
         headers: {
@@ -65,12 +69,14 @@ const submit = async function () {
         body: JSON.stringify({ ...formData })
     })
 
+    loading.value = false
+
     const { error, message } = await res.json()
 
     errorAlert.value = false
 
     if (!error) {
-        alert('Successfully updated settings!')
+        snackbar.value = true
     } else {
         errorAlert.value = true
         errorMessage.value = message
@@ -269,6 +275,9 @@ onMounted(async () => {
                     {{ errorMessage }}
                 </VAlert>
             </VForm>
+            <v-snackbar v-model="snackbar" rounded="pill"
+                >Successfully updated settings!
+            </v-snackbar>
         </div>
     </div>
 </template>

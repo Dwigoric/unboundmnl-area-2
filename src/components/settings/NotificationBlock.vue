@@ -1,12 +1,18 @@
 <script setup>
-// Import vue components
+// Packages
 import { ref, onMounted, reactive } from 'vue'
+
+// Project constants
 import { API_URL } from '../../constants'
 
+// Components
 import ContentBlock from '../../components/ContentBlock.vue'
 
+// Reactive varialbes
 const errorMessage = ref('')
 const errorAlert = ref(false)
+const loading = ref(false)
+const snackbar = ref(false)
 
 const formData = reactive({
     notification_period_1: 0,
@@ -14,6 +20,7 @@ const formData = reactive({
     notification_period_3: 0
 })
 
+// Methods
 const updateAutofill = async function () {
     const res = await fetch(`${API_URL}/settings/notifications`, {
         method: 'GET',
@@ -28,6 +35,8 @@ const updateAutofill = async function () {
 }
 
 const submit = async function () {
+    loading.value = true
+
     const res = await fetch(`${API_URL}/settings/notifications`, {
         method: 'PATCH',
         headers: {
@@ -37,12 +46,14 @@ const submit = async function () {
         body: JSON.stringify({ ...formData })
     })
 
+    loading.value = false
+
     const { error, message } = await res.json()
 
     errorAlert.value = false
 
     if (!error) {
-        alert('Successfully updated settings!')
+        snackbar.value = true
     } else {
         errorAlert.value = true
         errorMessage.value = message
@@ -140,6 +151,9 @@ onMounted(updateAutofill)
                     {{ errorMessage }}
                 </VAlert>
             </VForm>
+            <v-snackbar v-model="snackbar" rounded="pill"
+                >Successfully updated settings!
+            </v-snackbar>
         </div>
     </ContentBlock>
 </template>
