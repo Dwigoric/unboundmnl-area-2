@@ -52,13 +52,13 @@ onMounted(() => {
             rail-width="90"
         >
             <div v-if="rail == false" class="navigation-title-box">
-                <svg width="260" height="80" xmlns="http://www.w3.org/2000/svg">
+                <svg width="260" height="80" xmlns="http://www.w3.org/2000/svg" class="mt-n2">
                     <image href="../assets/logo-full.svg" width="250" height="100" />
                 </svg>
             </div>
 
             <div v-if="rail == true" class="navigation-title-box">
-                <svg width="50" height="80" xmlns="http://www.w3.org/2000/svg">
+                <svg width="50" height="80" xmlns="http://www.w3.org/2000/svg" class="mt-n6">
                     <image href="../assets/logo.svg" width="45" height="100" />
                 </svg>
             </div>
