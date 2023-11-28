@@ -1,6 +1,6 @@
 <script setup>
 // Packages
-import { ref, onMounted, watch, reactive, computed } from 'vue'
+import { ref, watch, reactive, computed } from 'vue'
 import Decimal from 'decimal.js'
 
 // Project constants
@@ -9,17 +9,20 @@ import { API_URL, FORM_RULES } from '../constants'
 // Stylesheets
 import 'gridjs/dist/theme/mermaid.css'
 
-// Import router
-import router from '../router'
+// Stores
+import { useCurrentUserStore } from '../stores/currentUser.js'
+const currentUserStore = useCurrentUserStore()
 
 // Define constants
+const currentUser = {
+    title: `${currentUserStore.name.last}, ${currentUserStore.name.given}`,
+    value: {
+        given: currentUserStore.name.given,
+        middle: currentUserStore.name.middle,
+        last: currentUserStore.name.last
+    }
+}
 const rules = {
-    isOfficer: (v) => {
-        return (
-            officers.map((officer) => officer.title).includes(v.title) ||
-            'This field must be a valid officer'
-        )
-    },
     maxDecimalPlaces: (decimalPlaces) => {
         return (v) =>
             ((v) => {
@@ -30,8 +33,6 @@ const rules = {
             })(v) <= decimalPlaces || `Must not have more than ${decimalPlaces} decimal places`
     }
 }
-
-// :rules="[rules.maxDecimalPlaces(2)]"
 
 const formatDate = function (date) {
     let year = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(date)
@@ -66,17 +67,21 @@ const props = defineProps({
 })
 
 const formData = reactive({
-    ORNumber: '',
     transactionDate: '',
-    submissionDate: formatDate(Date.now()),
-    amountPaid: 0,
+    ORNumber: '',
     amountDue: 0,
+    amountPaid: 0,
     balance: props.balance,
+    interestDue: 0,
     interestPaid: 0,
     finesDue: 0,
     finesPaid: 0,
-    interestDue: 0,
-    officerInCharge: '',
+    submissionDate: formatDate(Date.now()),
+    officerInCharge: {
+        given: currentUserStore.name.given,
+        middle: currentUserStore.name.middle,
+        last: currentUserStore.name.last
+    },
     transactionType: '',
     readjustment: false
 })
@@ -87,8 +92,6 @@ const newBalance = computed(() => {
 
     return parseFloat(Decimal(props.balance).sub(payments).add(dues))
 })
-
-const officers = reactive([])
 
 const submit = async function () {
     const { valid } = await form.value.validate()
@@ -102,18 +105,13 @@ const submit = async function () {
         formData.balance = newBalance
     }
 
-    const preprocessedFormData = { ...formData }
-    preprocessedFormData.officerInCharge = { ...preprocessedFormData.officerInCharge.value }
-
     const res = await fetch(`${API_URL}/loans/${props.loanID}/ledger`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${window.$cookies.get('credentials').token}`
         },
-        body: JSON.stringify({
-            ...preprocessedFormData
-        })
+        body: JSON.stringify(formData)
     })
     const { error, message } = await res.json()
 
@@ -126,12 +124,8 @@ const submit = async function () {
     } else {
         errorAlert.value = false
         errorMessage.value = ''
-        props.onsubmit()
-
-        // Then reload page to ensure that form saves new value
-        // Is there a more elegant way to do this?
-        router.go()
-        return true
+        formData.officerInCharge = currentUser.title
+        props.onsubmit({ ...formData })
     }
 }
 
@@ -139,7 +133,6 @@ const submit = async function () {
 watch(
     () => formData.transactionType,
     (transaction) => {
-
         // If selected transaction is payments
         if (transaction === 'payments') {
             formData.amountPaid = 0
@@ -168,22 +161,6 @@ watch(
         }
     }
 )
-
-onMounted(async () => {
-    const officersRes = await fetch(`${API_URL}/officers/`, {
-        headers: {
-            Authorization: `Bearer ${window.$cookies.get('credentials').token}`
-        }
-    })
-    const officersJson = await officersRes.json()
-
-    for (const officer of officersJson.officers) {
-        officers.push({
-            title: `${officer.name.last}, ${officer.name.given}`,
-            value: officer.name
-        })
-    }
-})
 </script>
 
 <template>
@@ -232,12 +209,23 @@ onMounted(async () => {
                     <v-combobox
                         class="ml-3"
                         label="* Officer in Charge"
-                        :items="officers"
-                        v-model="formData.officerInCharge"
-                        :rules="[FORM_RULES.required, rules.isOfficer]"
+                        :items="[{}]"
+                        v-model="currentUser"
+                        :rules="[FORM_RULES.required]"
                         hint="Which Loan Officer/Administrator is handling this loan?"
                         persistent-hint=""
-                    ></v-combobox>
+                        auto-select-first=""
+                        disabled="true"
+                    >
+                        <template #item="{ props }">
+                            <v-list-item v-bind="props">
+                                <v-list-item-title>
+                                    {{ currentUserStore.name.last }},
+                                    {{ currentUserStore.name.given }}
+                                </v-list-item-title>
+                            </v-list-item>
+                        </template>
+                    </v-combobox>
                 </div>
 
                 <!-- Only show payments if Payments is Selected -->

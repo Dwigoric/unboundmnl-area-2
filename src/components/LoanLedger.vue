@@ -77,7 +77,6 @@ const formattedBalance = computed(() => {
 })
 
 const loanTransactionColumns = [
-    { name: 'Transaction ID', hidden: true },
     { name: 'Date of Transaction' },
     { name: 'GV/OR Number' },
     { name: 'Amount Due' },
@@ -150,7 +149,6 @@ const getLoanInfo = async () => {
 
     ledgerData.value = ledgerJson.ledger.map((transaction) => {
         return [
-            transaction.transactionID,
             transaction.transactionDate.substring(0, 10),
             transaction.ORNumber,
             transaction.amountDue,
@@ -429,7 +427,7 @@ onMounted(async () => {
         <div id="loan-payments-wrapper" ref="loanPaymentsTable" class="w-100"></div>
         <VBtn
             @click="setPopupAdd"
-            block
+            block=""
             size="large"
             density="compact"
             rounded="lg"
@@ -463,8 +461,8 @@ onMounted(async () => {
                     <LoanLedgerAdd
                         :loanID="loanID"
                         :onsubmit="
-                            async () => {
-                                await getLoanInfo()
+                            async (newTx) => {
+                                ledgerData.push(Object.values(newTx))
                                 rerenderTable()
                                 isActive.value = false
                             }
