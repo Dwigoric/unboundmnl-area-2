@@ -18,6 +18,7 @@ const errorAlert = ref(false)
 const errorMessage = ref('')
 const disableSubmit = ref(false)
 const loading = ref(false)
+const snackbar = ref(false)
 
 // Submit loan application
 const submit = async () => {
@@ -53,7 +54,7 @@ const submit = async () => {
         errorAlert.value = false
         errorMessage.value = ''
         disableSubmit.value = true
-        alert('Loan Application Submitted!')
+        snackbar.value = true
         return true
     }
 }
@@ -242,6 +243,14 @@ onUnmounted(() => {
         >
             {{ errorMessage }}
         </VAlert>
+        <v-snackbar v-model="snackbar" rounded="pill"
+            >Loan application successfully submitted!
+            <template #actions>
+                <v-btn :to="{ name: 'Loan Status' }" variant="text" color="blue"
+                    >Go to Pending Loans</v-btn
+                >
+            </template>
+        </v-snackbar>
     </VContainer>
 </template>
 

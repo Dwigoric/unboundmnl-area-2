@@ -2,6 +2,9 @@
 // Packages
 import { ref, reactive } from 'vue'
 
+// Router
+import router from '../router/index.js'
+
 // Project constants
 import { API_URL, DEPOSIT_CATEGORIES, FORM_RULES } from '../constants'
 
@@ -22,6 +25,7 @@ const rules = {
     }
 }
 
+// Date formatter
 const formatDate = function (date) {
     let year = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(date)
     let month = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(date)
@@ -29,6 +33,7 @@ const formatDate = function (date) {
     return `${year}-${month}-${day}`
 }
 
+// Reactive variables
 const depositData = reactive({
     approvalDate: formatDate(Date.now()),
     category: '',
@@ -39,9 +44,10 @@ const depositData = reactive({
 
 const form = ref(null)
 const disableSubmit = ref(false)
-const errorAlert = ref('')
+const errorAlert = ref(false)
 const errorMessage = ref('')
 const loading = ref(false)
+const snackbar = ref(false)
 
 const depositCategories = reactive(
     Object.keys(DEPOSIT_CATEGORIES).map((key) => {
@@ -52,6 +58,7 @@ const depositCategories = reactive(
     })
 )
 
+//Methods
 const submit = async function () {
     const { valid } = await form.value.validate()
     if (!valid) return
@@ -92,8 +99,7 @@ const submit = async function () {
         errorAlert.value = false
         errorMessage.value = ''
         disableSubmit.value = true
-        alert('Deposit was processed!')
-        return true
+        snackbar.value = true
     }
 }
 </script>
@@ -144,7 +150,7 @@ const submit = async function () {
                 v-number-only
                 class="ml-3"
                 label="* Running Amount"
-                v-model="depositData.originalDepositAmount"
+                v-model="depositData.runningAmount"
                 type="number"
                 :min="0"
             />
@@ -173,6 +179,14 @@ const submit = async function () {
                 {{ errorMessage }}
             </VAlert>
         </VForm>
+        <v-snackbar v-model="snackbar" rounded="pill"
+            >Deposit successfully added!
+            <template #actions>
+                <v-btn :to="{ name: 'Deposit Dashboard' }" variant="text" color="blue"
+                    >Go to Deposit Dashboard</v-btn
+                >
+            </template>
+        </v-snackbar>
     </div>
 </template>
 
