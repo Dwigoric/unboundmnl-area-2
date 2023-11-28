@@ -9,7 +9,7 @@ const tab = ref('option-1')
 </script>
 
 <template>
-    <ContentBlock :width="100" :height="48" :unit="'%'" :padding="3">
+    <ContentBlock :width="100" :height="100" :unit="'%'" :padding="3">
         <h3>Deposit Settings</h3>
 
         <div class="d-flex flex-row mt-2">
