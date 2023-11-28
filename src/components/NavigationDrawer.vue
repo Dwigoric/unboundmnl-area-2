@@ -17,6 +17,16 @@ const currentUserStore = storeToRefs(useCurrentUserStore())
 const rail = ref(false)
 const isAdmin = ref(false)
 
+window.addEventListener('resize', () => {
+    const newScreenSize = window.innerWidth;
+    
+    if (newScreenSize <= 961){
+        rail.value = true
+    } else {
+        rail.value = false
+    }
+});
+
 // Define methods
 const logout = () => {
     // Reset currentUserStore
@@ -42,14 +52,15 @@ onMounted(() => {
 
 <template>
     <v-layout>
+
         <v-navigation-drawer
             :width="300"
             :margin="20"
-            class="navigation-drawer pa-md-4"
+            class="navigation-drawer"
             theme="dark"
             :rail="rail"
-            @click="rail = false"
             rail-width="90"
+            permanent
         >
             <div v-if="rail == false" class="navigation-title-box">
                 <svg width="260" height="80" xmlns="http://www.w3.org/2000/svg" class="mt-n2">
@@ -64,7 +75,7 @@ onMounted(() => {
             </div>
 
             <v-list density="compact">
-                <v-list-subheader v-if="rail == false" class="mt-4 mb-n3 ml-n3" title="LOANS">
+                <v-list-subheader v-if="rail == false" class="mt-4 mb-n3" title="LOANS">
                 </v-list-subheader>
 
                 <v-list-item
@@ -214,6 +225,7 @@ onMounted(() => {
 <style scoped>
 .navigation-drawer {
     background: var(--vt-c-blue-med-dark);
+    padding: 15px;
 }
 
 .navigation-title-box {
