@@ -98,7 +98,7 @@ watch(searchUsername, () => {
                     item-title="parsedName"
                     item-value="username"
                     prepend-inner-icon="mdi-magnify"
-                    label="Search Member by Username"
+                    label="Search Member by Name or Username"
                     clearable=""
                     auto-select-first
                     :custom-filter="() => true"
