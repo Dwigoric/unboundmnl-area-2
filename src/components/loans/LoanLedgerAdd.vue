@@ -93,6 +93,13 @@ const newBalance = computed(() => {
     return parseFloat(Decimal(props.balance).sub(payments).add(dues))
 })
 
+function getAmountDue(interestDue, finesDue) {
+    interestDue = Decimal(interestDue)
+    finesDue = Decimal(finesDue)
+
+    return parseFloat(interestDue.add(finesDue))
+}
+
 const submit = async function () {
     const { valid } = await form.value.validate()
     if (!valid) return
@@ -104,6 +111,8 @@ const submit = async function () {
         // Update balance to match that of form input
         formData.balance = newBalance
     }
+
+    formData.amountDue = getAmountDue(formData.interestDue, formData.finesDue);
 
     const res = await fetch(`${API_URL}/loans/${props.loanID}/ledger`, {
         credentials: 'omit',
@@ -275,16 +284,6 @@ watch(
                 <div v-if="formData.transactionType === 'dues'">
                     <!-- Only show dues if Fine/Interest is selected -->
                     <h3 class="ml-3 py-3">Dues</h3>
-                    <VTextField
-                        class="ml-3"
-                        v-number-only
-                        type="number"
-                        label="Amount Due"
-                        v-model="formData.amountDue"
-                        :rules="[rules.maxDecimalPlaces(2)]"
-                        :min="0"
-                    />
-                    <!-- TODO: Automatically generate interest value?? -->
                     <VTextField
                         class="ml-3"
                         v-number-only
