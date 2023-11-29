@@ -3,13 +3,13 @@
 import { ref, reactive, onBeforeMount, onMounted } from 'vue'
 
 // Project constants
-import { API_URL, LOAN_TYPES } from '../constants'
+import { API_URL, LOAN_TYPES } from '../../constants/index.js'
 
 // Import router
-import router from '../router'
+import router from '../../router/index.js'
 
 // Stores
-import { useProfileDataStore } from '../stores/profileData'
+import { useProfileDataStore } from '../../stores/profileData.js'
 const profileDataStore = useProfileDataStore()
 
 // Props

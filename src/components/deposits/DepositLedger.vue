@@ -5,11 +5,11 @@ import { Grid, h } from 'gridjs'
 import 'gridjs/dist/theme/mermaid.css'
 
 // Import constants
-import { API_URL } from '../constants/api_url.js'
+import { API_URL } from '../../constants/api_url.js'
 
 // Import components
-import DepositLedgerEdit from '../components/DepositLedgerEdit.vue'
-import DepositLedgerAdd from '../components/DepositLedgerAdd.vue'
+import DepositLedgerEdit from './DepositLedgerEdit.vue'
+import DepositLedgerAdd from './DepositLedgerAdd.vue'
 
 // Define props for the component
 const props = defineProps({

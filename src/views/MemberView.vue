@@ -8,8 +8,8 @@ import { API_URL } from '../constants'
 
 // Import vue components
 import NavigationDrawer from '../components/NavigationDrawer.vue'
-import MemberProfileLeft from '../components/MemberProfileLeft.vue'
-import MemberProfileRight from '../components/MemberProfileRight.vue'
+import MemberProfileLeft from '../components/profiles/MemberProfileLeft.vue'
+import MemberProfileRight from '../components/profiles/MemberProfileRight.vue'
 import DashboardTopBar from '../components/DashboardTopBar.vue'
 
 // Stores

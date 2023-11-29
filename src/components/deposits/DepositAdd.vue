@@ -3,13 +3,13 @@
 import { ref, reactive } from 'vue'
 
 // Router
-import router from '../router/index.js'
+import router from '../../router/index.js'
 
 // Project constants
-import { API_URL, DEPOSIT_CATEGORIES, FORM_RULES } from '../constants'
+import { API_URL, DEPOSIT_CATEGORIES, FORM_RULES } from '../../constants/index.js'
 
 // Stores
-import { useMemberSearchStore } from '../stores/memberSearch'
+import { useMemberSearchStore } from '../../stores/memberSearch.js'
 const memberSearchStore = useMemberSearchStore()
 
 // Define constants

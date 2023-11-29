@@ -6,7 +6,7 @@ import { ref, reactive, onMounted } from 'vue'
 import LoanStatusItemPopup from './LoanStatusItemPopup.vue'
 
 // Project constants
-import { API_URL, LOAN_TYPES } from '../constants'
+import { API_URL, LOAN_TYPES } from '../../constants/index.js'
 
 const props = defineProps({
     status: {
@@ -95,8 +95,13 @@ onMounted(fetchLoans)
         <template #item.id="{ item }">
             <VDialog width="1200">
                 <template #activator="{ props }">
-                    <v-btn v-bind="props" icon="mdi-pencil" density="comfortable" color="var(--vt-c-blue)" class="text-white"
-     />
+                    <v-btn
+                        v-bind="props"
+                        icon="mdi-pencil"
+                        density="comfortable"
+                        color="var(--vt-c-blue)"
+                        class="text-white"
+                    />
                 </template>
 
                 <template #default="{ isActive }">

@@ -6,7 +6,7 @@ import { useRoute } from 'vue-router'
 // Import components
 import NavigationDrawer from '../components/NavigationDrawer.vue'
 import ContentBlock from '../components/ContentBlock.vue'
-import StepCounter from '../components/StepCounter.vue'
+import StepCounter from '../components/loans/StepCounterLoanApp.vue'
 import DashboardTopBar from '../components/DashboardTopBar.vue'
 
 // Import path name constants

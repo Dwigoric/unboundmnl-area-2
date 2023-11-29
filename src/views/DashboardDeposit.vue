@@ -3,7 +3,7 @@
 import NavigationDrawer from '../components/NavigationDrawer.vue'
 import ContentBlock from '../components/ContentBlock.vue'
 import DashboardTopBar from '../components/DashboardTopBar.vue'
-import CentralCapitalBlock from '../components/CentralCapitalBlock.vue'
+import CentralCapitalBlock from '../components/deposits/CentralCapitalBlock.vue'
 </script>
 
 <template>
@@ -12,9 +12,7 @@ import CentralCapitalBlock from '../components/CentralCapitalBlock.vue'
 
         <div class="d-flex flex-column w-100 pl-8">
             <!-- Top Bar of Dashboard -->
-            <DashboardTopBar
-                :breadcrumbs="['Deposits', 'Deposit Dashboard']"
-            />
+            <DashboardTopBar :breadcrumbs="['Deposits', 'Deposit Dashboard']" />
             <h2>Shared Capital Dashboard</h2>
 
             <!-- Main Dashboard Body -->

@@ -7,7 +7,7 @@ import { psgc } from 'ph-locations'
 const { regions, provinces, citiesMunicipalities } = psgc
 
 // Import constants
-import { API_URL, FORM_RULES } from '../constants'
+import { API_URL, FORM_RULES } from '../../constants/index.js'
 
 // Define reactive variables
 const errorMessage = ref('')

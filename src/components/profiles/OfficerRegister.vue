@@ -3,7 +3,7 @@
 import { ref } from 'vue'
 
 // Import constants
-import { API_URL, FORM_RULES } from '../constants'
+import { API_URL, FORM_RULES } from '../../constants/index.js'
 
 // Define refs
 const given_name = ref('')

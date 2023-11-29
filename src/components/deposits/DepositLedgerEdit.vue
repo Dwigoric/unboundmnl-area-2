@@ -3,7 +3,7 @@
 import { ref, onMounted, reactive } from 'vue'
 
 // Project constants
-import { API_URL, FORM_RULES } from '../constants'
+import { API_URL, FORM_RULES } from '../../constants/index.js'
 
 // Stylesheets
 import 'gridjs/dist/theme/mermaid.css'
@@ -30,7 +30,7 @@ const errorMessage = ref('')
 const loading = ref(false)
 
 const props = defineProps({
-    loanID: {
+    depositID: {
         type: [Number, String],
         default: null
     },
@@ -48,29 +48,28 @@ const formData = reactive({
     ORNumber: '',
     transactionDate: '',
     submissionDate: formatDate(Date.now()),
-    amountDue: 0,
-    amountPaid: 0,
+    depositType: '',
+    amount: 0,
+    interest: 0,
     balance: 0,
-    interestPaid: 0,
-    finesPaid: 0,
     officerInCharge: ''
 })
-/*
-const newBalance = computed(() => {
-    return props.currentBalance - formData.amountPaid;
-})
-*/
+
 const officers = reactive([])
 
 const updateAutofill = async function () {
-    const res = await fetch(`${API_URL}/loans/${props.loanID}/ledger/${props.transactionID}`, {
-        method: 'GET',
-        headers: {
-            Authorization: `Bearer ${window.$cookies.get('credentials').token}`
+    const res = await fetch(
+        `${API_URL}/deposits/${props.depositID}/ledger/${props.transactionID}`,
+        {
+            method: 'GET',
+            headers: {
+                Authorization: `Bearer ${window.$cookies.get('credentials').token}`
+            }
         }
-    })
+    )
 
     const jsonData = await res.json()
+
     if (jsonData.error === false) {
         const transaction = jsonData.transaction
         transaction.transactionDate = transaction.transactionDate.substring(0, 10)
@@ -81,7 +80,6 @@ const updateAutofill = async function () {
             title: `${transactionOfficer.last}, ${transactionOfficer.given}`,
             value: transactionOfficer
         }
-
         Object.assign(formData, transaction)
     }
 }
@@ -93,10 +91,6 @@ const submit = async function () {
     loading.value = true
 
     const preprocessedFormData = { ...formData }
-
-    // Update the balance to match that of automatic calculations
-    //preprocessedFormData.balance = ;
-
     if (
         typeof preprocessedFormData.officerInCharge === 'string' ||
         preprocessedFormData.officerInCharge instanceof String
@@ -111,16 +105,19 @@ const submit = async function () {
     preprocessedFormData.interestPaid = Number(preprocessedFormData.interestPaid)
     preprocessedFormData.finesPaid = Number(preprocessedFormData.finesPaid)
 
-    const res = await fetch(`${API_URL}/loans/${props.loanID}/ledger/${props.transactionID}`, {
-        method: 'PATCH',
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${window.$cookies.get('credentials').token}`
-        },
-        body: JSON.stringify({
-            ...preprocessedFormData
-        })
-    })
+    const res = await fetch(
+        `${API_URL}/deposits/${props.depositID}/ledger/${props.transactionID}`,
+        {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${window.$cookies.get('credentials').token}`
+            },
+            body: JSON.stringify({
+                ...preprocessedFormData
+            })
+        }
+    )
     const { error, message } = await res.json()
 
     loading.value = false
@@ -133,7 +130,6 @@ const submit = async function () {
         errorAlert.value = false
         errorMessage.value = ''
         props.onsubmit()
-        // refresh?
         return true
     }
 }
@@ -160,19 +156,20 @@ onMounted(async () => {
 <template>
     <h2 class="header-wrapper">Edit Transaction</h2>
     <div class="wrapper">
+        <h3 class="w-100 px-4 mb-3">Current Deposit Data</h3>
+        <!-- TODO: Put current loan data table here; display the current so users have reference -->
         <div id="loan-ledger-wrapper" ref="loanLedgerRefTable" class="w-100 px-4"></div>
 
         <!-- Edit transaction form -->
-        <h3 class="w-100 px-4 mb-5">Edit the data below</h3>
-        <VForm id="loan-ledger-edit-form" ref="form">
+        <h3 class="w-100 px-4 mb-3 mt-5">Edit the data below</h3>
+        <!-- Add transaction form -->
+        <VForm id="loan-ledger-form" ref="form">
             <div class="d-flex flex-row">
                 <VTextField
                     class="ml-3"
                     type="date"
                     label="* Date of Payment"
                     v-model="formData.transactionDate"
-                    hint="When was the payment made?"
-                    persistent-hint=""
                     :rules="[FORM_RULES.required]"
                 />
                 <VTextField
@@ -182,34 +179,33 @@ onMounted(async () => {
                     :rules="[FORM_RULES.required]"
                 />
             </div>
-            <VTextField
+            <VSelect
                 class="ml-3"
+                label="* Deposit Type"
+                v-model="formData.depositType"
+                :items="['deposit', 'withdrawal']"
+                :rules="[FORM_RULES.required]"
+            ></VSelect>
+            <VTextField
                 v-number-only
+                class="ml-3"
                 type="number"
-                label="Amount Paid"
-                v-model="formData.amountPaid"
+                label="Amount"
+                v-model="formData.amount"
             />
             <VTextField
-                class="ml-3"
                 v-number-only
+                class="ml-3"
                 type="number"
                 label="Balance"
                 v-model="formData.balance"
-                disabled=""
             />
             <VTextField
-                class="ml-3"
                 v-number-only
+                class="ml-3"
                 type="number"
                 label="Interest Paid"
-                v-model="formData.interestPaid"
-            />
-            <VTextField
-                class="ml-3"
-                v-number-only
-                type="number"
-                label="Fines Paid"
-                v-model="formData.finesPaid"
+                v-model="formData.interest"
             />
             <div class="d-flex flex-row">
                 <VTextField
@@ -218,7 +214,7 @@ onMounted(async () => {
                     label="* Date of Entry"
                     v-model="formData.submissionDate"
                     :rules="[FORM_RULES.required]"
-                    disabled=""
+                    disabled
                 />
                 <v-combobox
                     class="ml-3"
@@ -228,53 +224,9 @@ onMounted(async () => {
                     :rules="[FORM_RULES.required, rules.isOfficer]"
                 ></v-combobox>
             </div>
-            <h3 class="ml-3 py-3">Dues</h3>
-            <VTextField
-                class="ml-3"
-                v-number-only
-                type="number"
-                label="Amount Due"
-                v-model="formData.amountDue"
-            />
-            <h3 class="ml-3 py-3">Payments</h3>
-            <VTextField
-                class="ml-3"
-                v-number-only
-                type="number"
-                label="Amount Paid"
-                v-model="formData.amountPaid"
-            />
-            <!-- Disabled because balance is derived from amountPaid -->
-            <VTextField
-                class="ml-3"
-                v-number-only
-                type="number"
-                label="Balance"
-                disabled=""
-                v-model="formData.balance"
-            />
-            <VTextField
-                class="ml-3"
-                v-number-only
-                type="number"
-                label="Interest Paid"
-                v-model="formData.interestPaid"
-            />
-            <VTextField
-                class="ml-3"
-                v-number-only
-                type="number"
-                label="Fines Paid"
-                v-model="formData.finesPaid"
-            />
 
             <div class="btn-wrapper">
-                <VBtn
-                    prepend-icon="mdi-check"
-                    class="capitalize btn"
-                    :loading="loading"
-                    @click.prevent="submit"
-                >
+                <VBtn prepend-icon="mdi-check" class="capitalize btn" @click.prevent="submit">
                     Submit
                 </VBtn>
             </div>

@@ -4,13 +4,13 @@ import { ref, watch, reactive, computed } from 'vue'
 import Decimal from 'decimal.js'
 
 // Project constants
-import { API_URL, FORM_RULES } from '../constants'
+import { API_URL, FORM_RULES } from '../../constants/index.js'
 
 // Stylesheets
 import 'gridjs/dist/theme/mermaid.css'
 
 // Stores
-import { useCurrentUserStore } from '../stores/currentUser.js'
+import { useCurrentUserStore } from '../../stores/currentUser.js'
 const currentUserStore = useCurrentUserStore()
 
 // Define constants

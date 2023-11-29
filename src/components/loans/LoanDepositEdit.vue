@@ -3,7 +3,7 @@
 import { reactive, ref, onMounted } from 'vue'
 
 // Project constants
-import { LOAN_TYPES, PAYMENT_FREQUENCIES, API_URL, FORM_RULES } from '../constants'
+import { LOAN_TYPES, PAYMENT_FREQUENCIES, API_URL, FORM_RULES } from '../../constants/index.js'
 
 // Props
 const props = defineProps({

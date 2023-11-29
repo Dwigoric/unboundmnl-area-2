@@ -7,7 +7,7 @@ const loading = ref(false)
 const items = reactive([])
 
 // Project constants
-import { API_URL } from '../constants'
+import { API_URL } from '../../constants/index.js'
 
 // Define props for the component
 const props = defineProps({

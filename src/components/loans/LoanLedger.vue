@@ -5,16 +5,16 @@ import { Grid, h } from 'gridjs'
 import 'gridjs/dist/theme/mermaid.css'
 
 // Import constants
-import { API_URL, LOAN_TYPES } from '../constants'
+import { API_URL, LOAN_TYPES } from '../../constants/index.js'
 
 // Import components
-import LoanLedgerEdit from '../components/LoanLedgerEdit.vue'
-import LoanLedgerAdd from '../components/LoanLedgerAdd.vue'
-import LoanEdit from '../components/LoanDepositEdit.vue'
-import DeletePrompt from '../components/DeletePrompt.vue'
-import LoanStatusEdit from '../components/LoanStatusEdit.vue'
+import LoanLedgerEdit from './LoanLedgerEdit.vue'
+import LoanLedgerAdd from './LoanLedgerAdd.vue'
+import LoanEdit from './LoanDepositEdit.vue'
+import DeletePrompt from '../DeletePrompt.vue'
+import LoanStatusEdit from './LoanStatusEdit.vue'
 
-import router from '../router'
+import router from '../../router/index.js'
 
 // Define props for the component
 const props = defineProps({

@@ -3,13 +3,13 @@
 import { ref, reactive } from 'vue'
 
 // Import router
-import router from '../router'
+import router from '../../router/index.js'
 
 // Import constants
-import { LOAN_TYPES, PAYMENT_FREQUENCIES, FORM_RULES } from '../constants'
+import { LOAN_TYPES, PAYMENT_FREQUENCIES, FORM_RULES } from '../../constants/index.js'
 
 // Import stores
-import { useApplicationFormStore } from '../stores/applicationForm'
+import { useApplicationFormStore } from '../../stores/applicationForm.js'
 const appFormStore = useApplicationFormStore()
 
 // Define constants

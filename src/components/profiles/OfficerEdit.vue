@@ -13,7 +13,7 @@ const showPassword = ref(false)
 const showConfirmPassword = ref(false)
 
 // Project constants
-import { API_URL, FORM_RULES } from '../constants'
+import { API_URL, FORM_RULES } from '../../constants/index.js'
 
 // Define constants
 const rules = {

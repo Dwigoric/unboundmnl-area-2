@@ -5,7 +5,7 @@ import { ref } from 'vue'
 import NavigationDrawer from '../components/NavigationDrawer.vue'
 import ContentBlock from '../components/ContentBlock.vue'
 import DashboardTopBar from '../components/DashboardTopBar.vue'
-import LoanStatusItem from '../components/LoanStatusItem.vue'
+import LoanStatusItem from '../components/loans/LoanStatusItem.vue'
 
 const tab = ref('pending')
 </script>

@@ -1,13 +1,13 @@
 <script setup>
 // Router
-import router from '../router'
+import router from '../../router/index.js'
 
 // Components
-import MemberProfileRegister from '../components/MemberProfileRegister.vue'
-import DeletePrompt from '../components/DeletePrompt.vue'
+import MemberProfileRegister from './MemberProfileRegister.vue'
+import DeletePrompt from '../DeletePrompt.vue'
 
 // Stores
-import { useProfileDataStore } from '../stores/profileData'
+import { useProfileDataStore } from '../../stores/profileData.js'
 const profileDataStore = useProfileDataStore()
 
 // Props

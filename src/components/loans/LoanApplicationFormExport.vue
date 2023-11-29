@@ -4,11 +4,11 @@ import { ref, onMounted, onUnmounted } from 'vue'
 import { PDFDocument, TextAlignment } from 'pdf-lib'
 
 // Import constants
-import { API_URL, FILENAMES } from '../constants'
+import { API_URL, FILENAMES } from '../../constants/index.js'
 
 // Import stores
-import { useApplicationFormStore } from '../stores/applicationForm'
-import { useMemberSearchStore } from '../stores/memberSearch'
+import { useApplicationFormStore } from '../../stores/applicationForm.js'
+import { useMemberSearchStore } from '../../stores/memberSearch.js'
 const appFormStore = useApplicationFormStore()
 const memberSearchStore = useMemberSearchStore()
 

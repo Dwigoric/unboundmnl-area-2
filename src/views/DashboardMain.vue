@@ -3,7 +3,7 @@
 import NavigationDrawer from '../components/NavigationDrawer.vue'
 import ContentBlock from '../components/ContentBlock.vue'
 import DashboardTopBar from '../components/DashboardTopBar.vue'
-import CentralLoanBlock from '../components/CentralLoanBlock.vue'
+import CentralLoanBlock from '../components/loans/CentralLoanBlock.vue'
 </script>
 
 <template>

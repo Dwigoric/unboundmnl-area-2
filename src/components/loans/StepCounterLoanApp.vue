@@ -3,7 +3,7 @@
 import { watch } from 'vue'
 
 // Import components
-import StepCounterTimelineItem from '../components/StepCounterTimelineItem.vue'
+import StepCounterTimelineItem from '../StepCounterTimelineItem.vue'
 
 let props = defineProps({
     step: {

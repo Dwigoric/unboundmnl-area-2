@@ -7,7 +7,7 @@ import { useDebounceFn } from '@vueuse/core'
 import router from '../router'
 
 // Import components
-import MemberProfileRegister from '../components/MemberProfileRegister.vue'
+import MemberProfileRegister from './profiles/MemberProfileRegister.vue'
 
 // Import constants
 import { API_URL } from '../constants'

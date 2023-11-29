@@ -5,8 +5,8 @@ import { watchDebounced } from '@vueuse/core'
 // Import vue components
 import NavigationDrawer from '../components/NavigationDrawer.vue'
 import ContentBlock from '../components/ContentBlock.vue'
-import MemberProfileRegister from '../components/MemberProfileRegister.vue'
-import UserProfileBtn from '../components/UserProfileBtn.vue'
+import MemberProfileRegister from '../components/profiles/MemberProfileRegister.vue'
+import UserProfileBtn from '../components/profiles/UserProfileBtn.vue'
 import DashboardTopBar from '../components/DashboardTopBar.vue'
 
 // Import Packages

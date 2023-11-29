@@ -1,6 +1,6 @@
 <script setup>
 // Import stores
-import { useCurrentUserStore } from '../stores/currentUser'
+import { useCurrentUserStore } from '../../stores/currentUser.js'
 
 // Define stores
 const currentUserStore = useCurrentUserStore()

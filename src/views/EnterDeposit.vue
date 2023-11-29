@@ -7,7 +7,7 @@ import { useRoute } from 'vue-router'
 import NavigationDrawer from '../components/NavigationDrawer.vue'
 import ContentBlock from '../components/ContentBlock.vue'
 import DashboardTopBar from '../components/DashboardTopBar.vue'
-import StepCounterLoanTransaction from '../components/StepCounterLoanTransaction.vue'
+import StepCounterLoanTransaction from '../components/StepCounterNewTransaction.vue'
 
 // Project constants needed
 import { PATH_NAMES } from '../constants'

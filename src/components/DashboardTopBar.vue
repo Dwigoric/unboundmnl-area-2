@@ -1,5 +1,5 @@
 <script setup>
-import UserProfile from '../components/UserProfile.vue'
+import UserProfile from './profiles/UserProfile.vue'
 
 // Dynamically define the breadcrumbs for the DashboardTopBar
 defineProps({
@@ -8,7 +8,6 @@ defineProps({
         default: ['Home']
     }
 })
-
 </script>
 
 <template>

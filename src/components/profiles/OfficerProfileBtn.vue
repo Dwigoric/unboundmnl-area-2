@@ -4,8 +4,8 @@ import { onMounted, ref } from 'vue'
 import jwt_decode from 'jwt-decode'
 
 // Components
-import DeletePrompt from '../components/DeletePrompt.vue'
-import OfficerEdit from '../components/OfficerEdit.vue'
+import DeletePrompt from '../DeletePrompt.vue'
+import OfficerEdit from './OfficerEdit.vue'
 
 // Props
 defineProps({

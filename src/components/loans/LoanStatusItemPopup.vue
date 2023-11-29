@@ -3,10 +3,10 @@
 import { ref } from 'vue'
 
 // Project constants
-import { API_URL } from '../constants'
+import { API_URL } from '../../constants/index.js'
 
 // Stores
-import { useCurrentUserStore } from '../stores/currentUser.js'
+import { useCurrentUserStore } from '../../stores/currentUser.js'
 const currentUserStore = useCurrentUserStore()
 
 // Props

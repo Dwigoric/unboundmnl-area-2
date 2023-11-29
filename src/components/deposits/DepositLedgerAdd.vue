@@ -3,7 +3,7 @@
 import { ref, onMounted, reactive, computed } from 'vue'
 
 // Project constants
-import { API_URL, FORM_RULES } from '../constants'
+import { API_URL, FORM_RULES } from '../../constants/index.js'
 
 // Stylesheets
 import 'gridjs/dist/theme/mermaid.css'

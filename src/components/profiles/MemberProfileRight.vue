@@ -3,12 +3,12 @@
 import { ref } from 'vue'
 
 // Components
-import ContentBlock from '../components/ContentBlock.vue'
-import CentralLoanBlock from './CentralLoanBlock.vue'
-import CentralDepositBlock from './CentralCapitalBlock.vue'
+import ContentBlock from '../ContentBlock.vue'
+import CentralLoanBlock from '../loans/CentralLoanBlock.vue'
+import CentralDepositBlock from '../deposits/CentralCapitalBlock.vue'
 
 // Stores
-import { useProfileDataStore } from '../stores/profileData'
+import { useProfileDataStore } from '../../stores/profileData.js'
 const { profileData } = useProfileDataStore()
 
 // Reactive variables

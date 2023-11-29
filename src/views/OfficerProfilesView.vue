@@ -6,8 +6,8 @@ import jwt_decode from 'jwt-decode'
 // Import Components
 import NavigationDrawer from '../components/NavigationDrawer.vue'
 import ContentBlock from '../components/ContentBlock.vue'
-import OfficerRegister from '../components/OfficerRegister.vue'
-import OfficerProfileBtn from '../components/OfficerProfileBtn.vue'
+import OfficerRegister from '../components/profiles/OfficerRegister.vue'
+import OfficerProfileBtn from '../components/profiles/OfficerProfileBtn.vue'
 import DashboardTopBar from '../components/DashboardTopBar.vue'
 
 // Important Constants

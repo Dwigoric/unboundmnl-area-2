@@ -1,10 +1,10 @@
 <script setup>
 // Import stores
-import { useProfileDataStore } from '../stores/profileData'
+import { useProfileDataStore } from '../../stores/profileData.js'
 const { profileData } = useProfileDataStore()
 
 // Components
-import ContentBlock from '../components/ContentBlock.vue'
+import ContentBlock from '../ContentBlock.vue'
 </script>
 
 <template>

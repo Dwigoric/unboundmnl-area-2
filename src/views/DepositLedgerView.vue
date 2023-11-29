@@ -7,7 +7,7 @@ import { useRoute } from 'vue-router'
 import NavigationDrawer from '../components/NavigationDrawer.vue'
 import ContentBlock from '../components/ContentBlock.vue'
 import DashboardTopBar from '../components/DashboardTopBar.vue'
-import DepositLedger from '../components/DepositLedger.vue'
+import DepositLedger from '../components/deposits/DepositLedger.vue'
 
 // Define props for the component
 /*

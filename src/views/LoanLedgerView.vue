@@ -1,13 +1,13 @@
 <script setup>
 // Import Packages
-import { ref } from 'vue';
-import { useRoute } from 'vue-router';
+import { ref } from 'vue'
+import { useRoute } from 'vue-router'
 
 // Import vue components
 import NavigationDrawer from '../components/NavigationDrawer.vue'
 import ContentBlock from '../components/ContentBlock.vue'
 import DashboardTopBar from '../components/DashboardTopBar.vue'
-import LoanLedger from '../components/LoanLedger.vue';
+import LoanLedger from '../components/loans/LoanLedger.vue'
 
 // Define props for the component
 /*
@@ -19,9 +19,8 @@ defineProps({
 })
 */
 // Receive props from the router
-const route = useRoute();
-const loanID = ref(route.params.id);
-
+const route = useRoute()
+const loanID = ref(route.params.id)
 </script>
 
 <template>
@@ -41,7 +40,7 @@ const loanID = ref(route.params.id);
                     :maxUnit="'vw'"
                     :bg-color="'#FFF'"
                 >
-                    <LoanLedger :loanID="loanID"/>
+                    <LoanLedger :loanID="loanID" />
                 </ContentBlock>
             </div>
         </div>
