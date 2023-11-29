@@ -64,14 +64,14 @@ onMounted(updateAutofill)
 </script>
 
 <template>
-    <ContentBlock :width="35" :height="43" :unit="'%'" :padding="3">
+    <ContentBlock :width="35" :height="100" :unit="'%'" :padding="3">
         <div class="wrapper w-100 rounded-lg pb-5">
             <VForm ref="form">
                 <div>
                     <!-- Notification 1 -->
                     <div class="row-tab mb-n5">
                         <div class="label d-flex">
-                            <div>Notification Period 1</div>
+                            <div>Demand Letter</div>
                             <v-chip size="small" class="ml-2" color="red"> Red </v-chip>
                         </div>
 
@@ -91,7 +91,7 @@ onMounted(updateAutofill)
                     <!-- Notification 2 -->
                     <div class="row-tab mb-n5">
                         <div class="label d-flex">
-                            <div>Notification Period 2</div>
+                            <div>Third Notice</div>
                             <v-chip size="small" class="ml-2" color="orange"> Orange </v-chip>
                         </div>
 
@@ -111,8 +111,48 @@ onMounted(updateAutofill)
                     <!-- Notification 2 -->
                     <div class="row-tab mb-n5">
                         <div class="label d-flex">
-                            <div>Notification Period 3</div>
+                            <div>Second Notice</div>
                             <v-chip size="small" class="ml-2" color="blue"> Blue </v-chip>
+                        </div>
+
+                        <div class="w-25">
+                            <VTextField
+                                class="mt-1 center-affix"
+                                variant="underlined"
+                                placeholder="Unit"
+                                suffix="days"
+                                type="number"
+                                v-number-only
+                                v-model="formData.notification_period_3"
+                            />
+                        </div>
+                    </div>
+
+                    <!-- Notification 4 -->
+                    <div class="row-tab mb-n5">
+                        <div class="label d-flex">
+                            <div>First Notice</div>
+                            <v-chip size="small" class="ml-2" color="purple"> Purple </v-chip>
+                        </div>
+
+                        <div class="w-25">
+                            <VTextField
+                                class="mt-1 center-affix"
+                                variant="underlined"
+                                placeholder="Unit"
+                                suffix="days"
+                                type="number"
+                                v-number-only
+                                v-model="formData.notification_period_3"
+                            />
+                        </div>
+                    </div>
+
+                    <!-- Notification 5 -->
+                    <div class="row-tab mb-n5">
+                        <div class="label d-flex">
+                            <div>Reminder</div>
+                            <v-chip size="small" class="ml-2" color="grey"> Grey </v-chip>
                         </div>
 
                         <div class="w-25">
