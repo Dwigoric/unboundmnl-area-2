@@ -2,12 +2,6 @@
 import { useDisplay } from 'vuetify'
 import { onMounted } from 'vue'
 
-const { mobile } = useDisplay()
-
-onMounted(() => {
-    console.log(mobile.value) // false
-})
-
 import UserProfile from './profiles/UserProfile.vue'
 
 // Dynamically define the breadcrumbs for the DashboardTopBar
@@ -20,7 +14,7 @@ defineProps({
 </script>
 
 <template>
-    <div v-if="!mobile" class="dashboard-top">
+    <div class="dashboard-top">
         <div class="breadcrumbs-wrapper">
             <v-breadcrumbs :items="breadcrumbs"></v-breadcrumbs>
         </div>
