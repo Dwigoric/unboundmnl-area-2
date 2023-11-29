@@ -24,7 +24,7 @@ const depositID = ref(route.params.id)
 </script>
 
 <template>
-    <div class="bg-off-wwhite d-flex px-4 py-2 overflow-auto">
+    <div class="bg-off-wwhite d-flex px-4 py-2">
         <NavigationDrawer />
         <div class="d-flex flex-column w-100 pl-8">
             <!-- Top Bar of Dashboard -->
