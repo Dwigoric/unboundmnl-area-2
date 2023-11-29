@@ -465,6 +465,7 @@ onMounted(async () => {
                         :onsubmit="
                             async (newTx) => {
                                 ledgerData.push(Object.values(newTx))
+                                await getLoanInfo()
                                 rerenderTable()
                                 isActive.value = false
                             }
