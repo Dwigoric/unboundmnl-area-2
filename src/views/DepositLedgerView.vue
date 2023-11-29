@@ -24,7 +24,7 @@ const depositID = ref(route.params.id)
 </script>
 
 <template>
-    <div class="bg-off-wwhite d-flex px-4 py-2">
+    <div class="bg-off-wwhite d-flex px-4 py-2 overflow-auto">
         <NavigationDrawer />
         <div class="d-flex flex-column w-100 pl-8">
             <!-- Top Bar of Dashboard -->
@@ -32,13 +32,11 @@ const depositID = ref(route.params.id)
 
             <h2>Deposit Ledger</h2>
 
-            <div class="dashboard-body d-flex flex-column h-100 py-4">
+            <div class="dashboard-body ledger-block d-flex flex-column h-100 py-4">
                 <ContentBlock
                     :width="100"
                     :height="100"
-                    :maxWidth="80"
                     :unit="'%'"
-                    :maxUnit="'vw'"
                     :bg-color="'#FFF'"
                 >
                     <DepositLedger :depositID="depositID" />
@@ -47,3 +45,9 @@ const depositID = ref(route.params.id)
         </div>
     </div>
 </template>
+
+<style scoped>
+.ledger-block {
+    min-width: 1280px;
+}
+</style>

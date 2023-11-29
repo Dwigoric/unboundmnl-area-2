@@ -76,24 +76,24 @@ const formattedBalance = computed(() => {
     )
 })
 
-const loanTransactionColumns = [
-    { name: 'Date of Transaction' },
-    { name: 'GV/OR Number' },
-    { name: 'Amount Due' },
-    { name: 'Amount Paid' },
-    { name: 'Balance' },
-    { name: 'Interest Due' },
-    { name: 'Interest Paid' },
-    { name: 'Fines Due' },
-    { name: 'Fines Paid' },
-    { name: 'Date of Entry' },
-    { name: 'Officer in Charge' }
+const headers = [
+    { title: 'Date of Transaction', key: "0" },
+    { title: 'GV/OR Number', key: "1" },
+    { title: 'Amount Due', key: "2" },
+    { title: 'Amount Paid', key: "3" },
+    { title: 'Balance', key: "4" },
+    { title: 'Interest Due', key: "5" },
+    { title: 'Interest Paid', key: "6" },
+    { title: 'Fines Due', key: "7" },
+    { title: 'Fines Paid', key: "8" },
+    { title: 'Date of Entry', key: "9" },
+    { title: 'Officer in Charge', key: "10" }
 ]
 
-// Give each transaction column a minimum width to properly fit the content
-loanTransactionColumns.forEach((col) => {
-    col.width = '225px'
-})
+// // Give each transaction column a minimum width to properly fit the content
+// loanTransactionColumns.forEach((col) => {
+//     col.width = '225px'
+// })
 
 const setPopupAdd = () => {
     isAddPopupActive.value = true
@@ -203,42 +203,45 @@ const rerenderTable = function () {
 // Ideally, we do a fetch request to the database to grab the data.
 onMounted(async () => {
     await getLoanInfo()
+    console.log(ledgerData.value)
 
-    // Grid for all the loan's payments
-    loanPayments.value = new Grid({
-        columns: loanTransactionColumns,
-        data: ledgerData.value,
-        search: true,
-        sort: true,
-        resizable: true,
-        fixedHeader: true,
-        className: {
-            th: 'pa-3',
-            td: 'pa-2',
-            tr: 'my-16 py-3'
-        },
-        style: {
-            tr: {
-                'margin-bottom': '1rem'
-            }
-        }
-    })
+    // // Grid for all the loan's payments
+    // loanPayments.value = new Grid({
+    //     columns: loanTransactionColumns,
+    //     data: ledgerData.value,
+    //     search: true,
+    //     sort: true,
+    //     resizable: true,
+    //     fixedHeader: true,
+    //     className: {
+    //         th: 'pa-3',
+    //         td: 'pa-2',
+    //         tr: 'my-16 py-3'
+    //     },
+    //     style: {
+    //         tr: {
+    //             'margin-bottom': '1rem'
+    //         }
+    //     }
+    // })
 
-    // Render loanPayments in corresponding reference
-    loanPayments.value.render(loanPaymentsTable.value)
+    // // Render loanPayments in corresponding reference
+    // loanPayments.value.render(loanPaymentsTable.value)
 
-    // Call getTotalAmountPaid
-    formData.totalAmountPaid = getTotalAmountPaid(ledgerData.value)
+    // // Call getTotalAmountPaid
+    // formData.totalAmountPaid = getTotalAmountPaid(ledgerData.value)
 })
 </script>
 
 <template>
-    <div class="w-100">
+    <div class="w-100 d-flex flex-column">
         <div id="loan-info-wrapper" class="d-flex justify-space-between">
             <!-- Left -->
-            <div id="loan-amount-cell" class="h-75 w-30 pa-2">
-                <p>Outstanding Balance:</p>
-                <p class="loan-amount">{{ formattedBalance }}</p>
+            <div id="loan-amount-cell" class="d-flex flex-column h-75 w-30 pa-2">
+                <div>
+                    <p>Outstanding Balance:</p>
+                    <p class="loan-amount">{{ formattedBalance }}</p>
+                </div>
                 <p>Original Loan Amount: {{ formattedLoanAmount }}</p>
                 <!-- TODO: remove this! -->
                 <div class="d-flex flex-row">
@@ -426,7 +429,17 @@ onMounted(async () => {
 
         <v-divider :thickness="1" class="mt-3 mb-3 border-opacity-70" />
 
-        <div id="loan-payments-wrapper" ref="loanPaymentsTable" class="w-100"></div>
+        <!-- Ledger -->
+        <!-- <div id="loan-payments-wrapper" ref="loanPaymentsTable" class="w-100"></div> -->
+        <v-data-table
+            :headers="headers"
+            :items="ledgerData"
+            hover=""
+            multi-sort=""
+            :search="search"
+            sticky=""
+        >
+        </v-data-table>
         <VBtn
             @click="setPopupAdd"
             block=""

@@ -56,21 +56,20 @@ const formattedApprovalDate = computed(() => {
 })
 
 const capitalLedgerColumns = [
-    { name: 'Transaction ID', hidden: true },
-    { name: 'Date of Payment' },
-    { name: 'GV/OR Number' },
-    { name: 'Transaction Type' },
-    { name: 'Amount' },
-    { name: 'Interest' },
-    { name: 'Balance' },
-    { name: 'Date of Entry' },
-    { name: 'Officer in Charge' }
+    { title: 'Date of Payment', key: '1'},
+    { title: 'GV/OR Number', key: '2' },
+    { title: 'Transaction Type', key: '3' },
+    { title: 'Amount', key: '4' },
+    { title: 'Interest', key: '5' },
+    { title: 'Balance', key: '6' },
+    { title: 'Date of Entry', key: '7' },
+    { title: 'Officer in Charge', key: '8' }
 ]
 
-// Give each transaction column a minimum width to properly fit the content
-capitalLedgerColumns.forEach((col) => {
-    col.width = '225px'
-})
+// // Give each transaction column a minimum width to properly fit the content
+// capitalLedgerColumns.forEach((col) => {
+//     col.width = '225px'
+// })
 
 // Create a ref to hold new loanPaymentsTable template
 const capitalLedgerTable = ref()
@@ -200,7 +199,17 @@ onMounted(async () => {
 
         <v-divider :thickness="1" class="mt-3 mb-3 border-opacity-70" />
 
-        <div id="capital-ledger-wrapper" ref="capitalLedgerTable" class="w-100"></div>
+        <!-- Ledger -->
+        <!-- <div id="capital-ledger-wrapper" ref="capitalLedgerTable" class="w-100"></div> -->
+        <v-data-table
+            :headers="capitalLedgerColumns"
+            :items="ledgerData"
+            hover=""
+            multi-sort=""
+            :search="search"
+            sticky=""
+        >
+        </v-data-table>
 
         <VBtn
             @click="setPopupAdd"
