@@ -1,21 +1,28 @@
 <script setup>
 // Packages
-import { ref, onMounted, reactive, computed } from 'vue'
+import { ref, reactive, computed } from 'vue'
 
 // Project constants
 import { API_URL, FORM_RULES } from '../../constants/index.js'
 
-// Stylesheets
-import 'gridjs/dist/theme/mermaid.css'
+// Stores
+import { useCurrentUserStore } from '../../stores/currentUser.js'
+const currentUserStore = useCurrentUserStore()
 
 // Define constants
+const currentUser = {
+    title:
+        currentUserStore.username === 'admin'
+            ? 'Admin'
+            : `${currentUserStore.name.last}, ${currentUserStore.name.given}`,
+    value: {
+        given: currentUserStore.name.given,
+        middle: currentUserStore.name.middle,
+        last: currentUserStore.name.last
+    }
+}
+
 const rules = {
-    isOfficer: (v) => {
-        return (
-            officers.map((officer) => officer.title).includes(v.title) ||
-            'This field must be a valid officer'
-        )
-    },
     maxDecimalPlaces: (decimalPlaces) => {
         return (v) =>
             ((v) => {
@@ -61,7 +68,11 @@ const formData = reactive({
     amount: 0,
     interest: 0,
     balance: 0,
-    officerInCharge: ''
+    officerInCharge: {
+        given: currentUserStore.name.given,
+        middle: currentUserStore.name.middle,
+        last: currentUserStore.name.last
+    }
 })
 
 // TODO: this throws an error, fix it later
@@ -78,16 +89,11 @@ const newBalance = computed(() => {
     }
 })
 
-const officers = reactive([])
-
 const submit = async function () {
     const { valid } = await form.value.validate()
     if (!valid) return
 
     formData.balance = newBalance
-
-    const preprocessedFormData = { ...formData }
-    preprocessedFormData.officerInCharge = { ...preprocessedFormData.officerInCharge.value }
 
     loading.value = true
 
@@ -98,9 +104,7 @@ const submit = async function () {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${window.$cookies.get('credentials').token}`
         },
-        body: JSON.stringify({
-            ...preprocessedFormData
-        })
+        body: JSON.stringify(formData)
     })
     const { error, message } = await res.json()
 
@@ -113,27 +117,11 @@ const submit = async function () {
     } else {
         errorAlert.value = false
         errorMessage.value = ''
-        props.onsubmit()
+        formData.officerInCharge = currentUser.title
+        props.onsubmit({ ...formData })
         return true
     }
 }
-
-onMounted(async () => {
-    const officersRes = await fetch(`${API_URL}/officers/`, {
-        credentials: 'omit',
-        headers: {
-            Authorization: `Bearer ${window.$cookies.get('credentials').token}`
-        }
-    })
-    const officersJson = await officersRes.json()
-
-    for (const officer of officersJson.officers) {
-        officers.push({
-            title: `${officer.name.last}, ${officer.name.given}`,
-            value: officer.name
-        })
-    }
-})
 </script>
 
 <template>
@@ -169,9 +157,11 @@ onMounted(async () => {
                 <v-combobox
                     class="ml-3"
                     label="* Officer in Charge"
-                    :items="officers"
-                    v-model="formData.officerInCharge"
+                    :items="[{}]"
+                    v-model="currentUser"
                     :rules="[FORM_RULES.required, rules.isOfficer]"
+                    auto-select-first=""
+                    disabled="true"
                 ></v-combobox>
             </div>
             <VSelect

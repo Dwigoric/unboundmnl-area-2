@@ -1,8 +1,6 @@
 <script setup>
 // Import packages
-import { ref, onMounted, computed } from 'vue'
-import { Grid, h } from 'gridjs'
-import 'gridjs/dist/theme/mermaid.css'
+import { ref, reactive, onMounted, computed } from 'vue'
 
 // Import constants
 import { API_URL } from '../../constants/api_url.js'
@@ -19,8 +17,7 @@ const props = defineProps({
     }
 })
 
-const ledgerData = ref([])
-const popupData = ref([])
+const ledgerData = reactive([])
 const isAddPopupActive = ref(false) // for add transaction pop up
 const isPopupActive = ref(false) // for edit transaction pop up
 
@@ -29,11 +26,7 @@ const setPopupAdd = () => {
     isAddPopupActive.value = true
 }
 
-const setPopupEdit = (data) => {
-    currentlyEditedTransactionID.value = data
-    isPopupActive.value = true
-}
-
+const search = ref('')
 const depositAmount = ref(0)
 const depositRunningAmount = ref(0)
 const depositOwner = ref('')
@@ -56,26 +49,15 @@ const formattedApprovalDate = computed(() => {
 })
 
 const capitalLedgerColumns = [
-    { title: 'Date of Payment', key: '1'},
-    { title: 'GV/OR Number', key: '2' },
-    { title: 'Transaction Type', key: '3' },
-    { title: 'Amount', key: '4' },
-    { title: 'Interest', key: '5' },
-    { title: 'Balance', key: '6' },
-    { title: 'Date of Entry', key: '7' },
-    { title: 'Officer in Charge', key: '8' }
+    { title: 'Date of Payment', key: 'transactionDate' },
+    { title: 'GV/OR Number', key: 'ORNumber' },
+    { title: 'Transaction Type', key: 'transactionType' },
+    { title: 'Amount', key: 'amount' },
+    { title: 'Interest', key: 'interest' },
+    { title: 'Balance', key: 'balance' },
+    { title: 'Date of Entry', key: 'submissionDate' },
+    { title: 'Officer in Charge', key: 'officerInCharge' }
 ]
-
-// // Give each transaction column a minimum width to properly fit the content
-// capitalLedgerColumns.forEach((col) => {
-//     col.width = '225px'
-// })
-
-// Create a ref to hold new loanPaymentsTable template
-const capitalLedgerTable = ref()
-
-// Create a ref to hold new grid instance
-const capital = ref()
 
 const getDepositInfo = async () => {
     // Fetch loan properties from the database by using the loanID property!
@@ -108,70 +90,26 @@ const getDepositInfo = async () => {
 
     const ledgerJson = await ledgerRes.json()
 
-    ledgerData.value = ledgerJson.ledger.map((transaction) => {
-        return [
-            transaction.transactionID,
-            transaction.transactionDate.substring(0, 10),
-            transaction.ORNumber,
-            transaction.transactionType,
-            transaction.amount,
-            transaction.interest,
-            transaction.balance,
-            transaction.submissionDate.substring(0, 10),
-            transaction.officerInCharge.given === 'Admin' &&
-            transaction.officerInCharge.last === ' '
-                ? 'Admin'
-                : `${transaction.officerInCharge.last}, ${transaction.officerInCharge.given}`
-        ]
-    })
-}
-
-// rerender the table
-const rerenderTable = function () {
-    // can't do anything about the errors that show up when running this, it's a bug in gridjs
-    // https://github.com/grid-js/gridjs/issues/1291
-    capital.value
-        .updateConfig({
-            search: true,
-            pagination: true,
-            data: ledgerData.value
+    ledgerJson.ledger.forEach((transaction) => {
+        ledgerData.push({
+            transactionDate: transaction.transactionDate.substring(0, 10),
+            ORNumber: transaction.ORNumber,
+            transactionType: transaction.transactionType,
+            amount: transaction.amount,
+            interest: transaction.interest,
+            balance: transaction.balance,
+            submissionDate: transaction.submissionDate.substring(0, 10),
+            officerInCharge:
+                transaction.officerInCharge.given === 'Admin' &&
+                transaction.officerInCharge.last === ' '
+                    ? 'Admin'
+                    : `${transaction.officerInCharge.last}, ${transaction.officerInCharge.given}`
         })
-        .forceRender()
+    })
 }
 
 // Ideally, we do a fetch request to the database to grab the data.
-onMounted(async () => {
-    await getDepositInfo()
-
-    // Grid for all the loan's payments
-    capital.value = new Grid({
-        columns: capitalLedgerColumns,
-        data: ledgerData.value,
-        pagination: {
-            limit: 10
-        },
-        search: true,
-        sort: true,
-        resizable: true,
-        fixedHeader: true,
-        className: {
-            th: 'pa-3',
-            td: 'pa-2',
-            tr: 'my-16 py-3'
-        },
-        style: {
-            th: {
-                'min-width': '250px'
-            },
-            tr: {
-                'margin-bottom': '1rem'
-            }
-        }
-    })
-
-    // Render capital in corresponding reference
-    capital.value.render(capitalLedgerTable.value)
-})
+onMounted(getDepositInfo)
 </script>
 
 <template>
@@ -200,7 +138,6 @@ onMounted(async () => {
         <v-divider :thickness="1" class="mt-3 mb-3 border-opacity-70" />
 
         <!-- Ledger -->
-        <!-- <div id="capital-ledger-wrapper" ref="capitalLedgerTable" class="w-100"></div> -->
         <v-data-table
             :headers="capitalLedgerColumns"
             :items="ledgerData"
@@ -244,9 +181,8 @@ onMounted(async () => {
                     <DepositLedgerAdd
                         :depositID="depositID"
                         :onsubmit="
-                            async () => {
-                                await getDepositInfo()
-                                rerenderTable()
+                            async (newTx) => {
+                                ledgerData.push(newTx)
                                 isActive.value = false
                             }
                         "
@@ -280,7 +216,6 @@ onMounted(async () => {
                         :onsubmit="
                             async () => {
                                 await getDepositInfo()
-                                rerenderTable()
                                 isActive.value = false
                             }
                         "
