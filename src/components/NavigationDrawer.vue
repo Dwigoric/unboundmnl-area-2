@@ -18,14 +18,10 @@ const rail = ref(false)
 const isAdmin = ref(false)
 
 window.addEventListener('resize', () => {
-    const newScreenSize = window.innerWidth;
-    
-    if (newScreenSize <= 961){
-        rail.value = true
-    } else {
-        rail.value = false
-    }
-});
+    const newScreenSize = window.innerWidth
+
+    rail.value = newScreenSize <= 961
+})
 
 // Define methods
 const logout = () => {
@@ -52,7 +48,6 @@ onMounted(() => {
 
 <template>
     <v-layout>
-
         <v-navigation-drawer
             :width="300"
             :margin="20"
@@ -60,22 +55,22 @@ onMounted(() => {
             theme="dark"
             :rail="rail"
             rail-width="90"
-            permanent
+            permanent=""
         >
-            <div v-if="rail == false" class="navigation-title-box">
+            <div v-if="rail === false" class="navigation-title-box">
                 <svg width="260" height="80" xmlns="http://www.w3.org/2000/svg" class="mt-n2">
-                    <image href="../assets/logo-full.svg" width="250" height="100" />
+                    <image href="/assets/logo-full.svg" width="250" height="100" />
                 </svg>
             </div>
 
-            <div v-if="rail == true" class="navigation-title-box">
+            <div v-if="rail === true" class="navigation-title-box">
                 <svg width="50" height="80" xmlns="http://www.w3.org/2000/svg" class="mt-n6">
-                    <image href="../assets/logo.svg" width="45" height="100" />
+                    <image href="/assets/logo.svg" width="45" height="100" />
                 </svg>
             </div>
 
             <v-list density="compact">
-                <v-list-subheader v-if="rail == false" class="mt-4 mb-n3" title="LOANS">
+                <v-list-subheader v-if="rail === false" class="mt-4 mb-n3" title="LOANS">
                 </v-list-subheader>
 
                 <v-list-item
@@ -108,7 +103,7 @@ onMounted(() => {
                 >
                 </v-list-item>
 
-                <v-list-subheader v-if="rail == false" class="mt-4 mb-n3 ml-n3" title="DEPOSITS">
+                <v-list-subheader v-if="rail === false" class="mt-4 mb-n3 ml-n3" title="DEPOSITS">
                 </v-list-subheader>
 
                 <v-list-item
@@ -131,7 +126,7 @@ onMounted(() => {
                 >
                 </v-list-item>
 
-                <v-list-subheader v-if="rail == false" class="mt-4 mb-n3 ml-n3" title="PROFILES">
+                <v-list-subheader v-if="rail === false" class="mt-4 mb-n3 ml-n3" title="PROFILES">
                 </v-list-subheader>
 
                 <v-list-item
@@ -156,7 +151,7 @@ onMounted(() => {
 
                 <div v-if="isAdmin">
                     <v-list-subheader
-                        v-if="rail == false"
+                        v-if="rail === false"
                         class="mt-4 mb-n3 ml-n3"
                         title="SETTINGS"
                     >
@@ -195,7 +190,7 @@ onMounted(() => {
             </v-list>
 
             <template #append>
-                <div class="d-flex flex-column w-100" v-if="rail == false">
+                <div class="d-flex flex-column w-100" v-if="rail === false">
                     <div class="">
                         <div class="d-flex justify-end">
                             <v-btn
@@ -209,7 +204,7 @@ onMounted(() => {
                     </div>
                 </div>
 
-                <v-slot v-if="rail == true">
+                <v-slot v-if="rail === true">
                     <v-btn
                         variant="text"
                         icon="mdi-chevron-right"

@@ -8,7 +8,7 @@ import App from './App.vue'
 import router from './router'
 
 // Import stylesheets
-import '../src/assets/base.css'
+import '../public/assets/base.css'
 import 'vuetify/lib/styles/main.css'
 import '@mdi/font/css/materialdesignicons.css'
 import 'nprogress/nprogress.css'

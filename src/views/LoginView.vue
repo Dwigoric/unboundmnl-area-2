@@ -73,10 +73,9 @@ const logIn = async () => {
                 <div class="d-flex justify-center w-100">
                     <!-- BUG: DOESNT SCALE AAAAAAAAAA -->
                     <svg width="300" height="80" xmlns="http://www.w3.org/2000/svg" class="ml-n5">
-                        <image href="../assets/logo-full-black.svg" width="300" height="100" />
+                        <image href="/assets/logo-full-black.svg" width="300" height="100" />
                     </svg>
                 </div>
-                
 
                 <div class="error-msg-wrapper">
                     <VAlert
@@ -141,7 +140,7 @@ const logIn = async () => {
 .bg {
     height: 100vh;
     width: 100vw;
-    background-image: url('../assets/bg.svg');
+    background-image: url('/assets/bg.svg');
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center center;
