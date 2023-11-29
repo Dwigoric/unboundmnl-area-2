@@ -1,11 +1,9 @@
 <script setup>
 // Import packages
 import { ref, onMounted, computed, reactive } from 'vue'
-import { Grid, h } from 'gridjs'
-import 'gridjs/dist/theme/mermaid.css'
 
 // Import constants
-import { API_URL, LOAN_TYPES } from '../../constants/index.js'
+import { API_URL, LOAN_TYPES } from '../../constants'
 
 // Import components
 import LoanLedgerEdit from './LoanLedgerEdit.vue'
@@ -24,7 +22,8 @@ const props = defineProps({
     }
 })
 
-const ledgerData = ref([])
+const search = ref('')
+const ledgerData = reactive([])
 const isAddPopupActive = ref(false) // for add transaction pop up
 const isPopupActive = ref(false) // for edit transaction pop up
 const originalLoanAmount = ref(0) // for dynamically calculating balance in form
@@ -33,11 +32,6 @@ const loanReleased = ref(false) // for monitoring whether loan is released or no
 
 const currentlyEditedTransactionID = ref('')
 
-// Create a ref to hold new loanPaymentsTable template
-const loanPaymentsTable = ref()
-
-// Create a ref to hold new grid instance
-const loanPayments = ref()
 const rawLoanData = ref()
 
 const formData = reactive({
@@ -77,23 +71,18 @@ const formattedBalance = computed(() => {
 })
 
 const headers = [
-    { title: 'Date of Transaction', key: "0" },
-    { title: 'GV/OR Number', key: "1" },
-    { title: 'Amount Due', key: "2" },
-    { title: 'Amount Paid', key: "3" },
-    { title: 'Balance', key: "4" },
-    { title: 'Interest Due', key: "5" },
-    { title: 'Interest Paid', key: "6" },
-    { title: 'Fines Due', key: "7" },
-    { title: 'Fines Paid', key: "8" },
-    { title: 'Date of Entry', key: "9" },
-    { title: 'Officer in Charge', key: "10" }
+    { title: 'Date of Transaction', key: 'transactionDate' },
+    { title: 'GV/OR Number', key: 'ORNumber' },
+    { title: 'Amount Due', key: 'amountDue' },
+    { title: 'Amount Paid', key: 'amountPaid' },
+    { title: 'Balance', key: 'balance' },
+    { title: 'Interest Due', key: 'interestDue' },
+    { title: 'Interest Paid', key: 'interestPaid' },
+    { title: 'Fines Due', key: 'finesDue' },
+    { title: 'Fines Paid', key: 'finesPaid' },
+    { title: 'Date of Entry', key: 'submissionDate' },
+    { title: 'Officer in Charge', key: 'officerInCharge' }
 ]
-
-// // Give each transaction column a minimum width to properly fit the content
-// loanTransactionColumns.forEach((col) => {
-//     col.width = '225px'
-// })
 
 const setPopupAdd = () => {
     isAddPopupActive.value = true
@@ -149,88 +138,29 @@ const getLoanInfo = async () => {
 
     const ledgerJson = await ledgerRes.json()
 
-    ledgerData.value = ledgerJson.ledger.map((transaction) => {
-        return [
-            transaction.transactionDate.substring(0, 10),
-            transaction.ORNumber,
-            transaction.amountDue,
-            transaction.amountPaid,
-            transaction.balance,
-            transaction.interestDue,
-            transaction.interestPaid,
-            transaction.finesDue,
-            transaction.finesPaid,
-            transaction.submissionDate.substring(0, 10),
-            transaction.officerInCharge.given === 'Admin' &&
-            transaction.officerInCharge.last === ' '
-                ? 'Admin'
-                : `${transaction.officerInCharge.last}, ${transaction.officerInCharge.given}`
-        ]
-    })
-}
-
-// Combines all the amounts paid for all the loan transactions
-function getTotalAmountPaid(ledgerTransactions) {
-    var totalAmountPaid = 0
-    // For every transaction in the ledger, add its amount paid to a total sum
-
-    ledgerTransactions.forEach((transaction) => {
-        let amountPaid = transaction[4] // index for amount paid
-        totalAmountPaid += amountPaid
-    })
-
-    return totalAmountPaid
-}
-
-// rerender the table
-const rerenderTable = function () {
-    // can't do anything about the errors that show up when running this, it's a bug in gridjs
-    // https://github.com/grid-js/gridjs/issues/1291
-
-    // Remove search and pagination plugins first
-    loanPayments.value.plugin.remove('pagination')
-    loanPayments.value.plugin.remove('search')
-
-    loanPayments.value
-        .updateConfig({
-            search: true,
-            pagination: { limit: 10 },
-            data: ledgerData.value
+    ledgerJson.ledger.forEach((transaction) => {
+        ledgerData.push({
+            transactionDate: transaction.transactionDate.substring(0, 10),
+            ORNumber: transaction.ORNumber,
+            amountDue: transaction.amountDue,
+            amountPaid: transaction.amountPaid,
+            balance: transaction.balance,
+            interestDue: transaction.interestDue,
+            interestPaid: transaction.interestPaid,
+            finesDue: transaction.finesDue,
+            finesPaid: transaction.finesPaid,
+            submissionDate: transaction.submissionDate.substring(0, 10),
+            officerInCharge:
+                transaction.officerInCharge.given === 'Admin' &&
+                transaction.officerInCharge.last === ' '
+                    ? 'Admin'
+                    : `${transaction.officerInCharge.last}, ${transaction.officerInCharge.given}`
         })
-        .forceRender()
+    })
 }
 
 // Ideally, we do a fetch request to the database to grab the data.
-onMounted(async () => {
-    await getLoanInfo()
-    console.log(ledgerData.value)
-
-    // // Grid for all the loan's payments
-    // loanPayments.value = new Grid({
-    //     columns: loanTransactionColumns,
-    //     data: ledgerData.value,
-    //     search: true,
-    //     sort: true,
-    //     resizable: true,
-    //     fixedHeader: true,
-    //     className: {
-    //         th: 'pa-3',
-    //         td: 'pa-2',
-    //         tr: 'my-16 py-3'
-    //     },
-    //     style: {
-    //         tr: {
-    //             'margin-bottom': '1rem'
-    //         }
-    //     }
-    // })
-
-    // // Render loanPayments in corresponding reference
-    // loanPayments.value.render(loanPaymentsTable.value)
-
-    // // Call getTotalAmountPaid
-    // formData.totalAmountPaid = getTotalAmountPaid(ledgerData.value)
-})
+onMounted(getLoanInfo)
 </script>
 
 <template>
@@ -296,7 +226,7 @@ onMounted(async () => {
                     <v-dialog width="1200">
                         <template #activator="{ props }">
                             <v-btn
-                                v-if="formData.status == 'approved'"
+                                v-if="formData.status === 'approved'"
                                 prepend-icon="mdi-check-underline-circle-outline"
                                 class="edit-loan-btn capitalize mr-2 text-white"
                                 v-bind="props"
@@ -371,7 +301,6 @@ onMounted(async () => {
                                     :onsubmit="
                                         async () => {
                                             await getLoanInfo()
-                                            rerenderTable()
                                             isActive.value = false
                                         }
                                     "
@@ -430,7 +359,6 @@ onMounted(async () => {
         <v-divider :thickness="1" class="mt-3 mb-3 border-opacity-70" />
 
         <!-- Ledger -->
-        <!-- <div id="loan-payments-wrapper" ref="loanPaymentsTable" class="w-100"></div> -->
         <v-data-table
             :headers="headers"
             :items="ledgerData"
@@ -477,9 +405,7 @@ onMounted(async () => {
                         :loanID="loanID"
                         :onsubmit="
                             async (newTx) => {
-                                ledgerData.push(Object.values(newTx))
-                                await getLoanInfo()
-                                rerenderTable()
+                                ledgerData.push(newTx)
                                 isActive.value = false
                             }
                         "

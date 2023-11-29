@@ -6,16 +6,16 @@ import Decimal from 'decimal.js'
 // Project constants
 import { API_URL, FORM_RULES } from '../../constants/index.js'
 
-// Stylesheets
-import 'gridjs/dist/theme/mermaid.css'
-
 // Stores
 import { useCurrentUserStore } from '../../stores/currentUser.js'
 const currentUserStore = useCurrentUserStore()
 
 // Define constants
 const currentUser = {
-    title: `${currentUserStore.name.last}, ${currentUserStore.name.given}`,
+    title:
+        currentUserStore.username === 'admin'
+            ? 'Admin'
+            : `${currentUserStore.name.last}, ${currentUserStore.name.given}`,
     value: {
         given: currentUserStore.name.given,
         middle: currentUserStore.name.middle,
