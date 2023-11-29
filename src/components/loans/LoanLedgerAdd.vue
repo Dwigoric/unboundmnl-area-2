@@ -83,8 +83,7 @@ const formData = reactive({
         middle: currentUserStore.name.middle,
         last: currentUserStore.name.last
     },
-    transactionType: '',
-    readjustment: false
+    transactionType: ''
 })
 
 const newBalance = computed(() => {
@@ -101,7 +100,7 @@ const submit = async function () {
     loading.value = true
 
     // If transaction is NOT readjustment
-    if (formData.readjustment === false) {
+    if (formData.transactionType !== 'readjustment') {
         // Update balance to match that of form input
         formData.balance = newBalance
     }
@@ -143,7 +142,6 @@ watch(
             formData.balance = props.balance
             formData.payment = true
             formData.dues = false
-            formData.readjustment = false
         } else if (transaction === 'dues') {
             formData.amountPaid = 0
             formData.interestPaid = 0
@@ -151,10 +149,8 @@ watch(
             formData.balance = props.balance
             formData.payment = false
             formData.dues = true
-            formData.readjustment = false
         } else if (transaction === 'readjustment') {
             formData.balance = props.balance
-            formData.readjustment = true
             formData.amountDue = 0
             formData.amountPaid = 0
             formData.interestDue = 0
