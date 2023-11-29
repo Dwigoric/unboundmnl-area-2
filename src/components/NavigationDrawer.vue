@@ -232,7 +232,7 @@ onMounted(() => {
 <style scoped>
 .navigation-drawer {
     background: var(--vt-c-blue-med-dark);
-    padding: 15px;
+    padding: 18px;
 }
 
 .navigation-title-box {
