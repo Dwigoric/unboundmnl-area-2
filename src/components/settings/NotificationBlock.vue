@@ -8,7 +8,7 @@ import { API_URL } from '../../constants'
 // Components
 import ContentBlock from '../../components/ContentBlock.vue'
 
-// Reactive varialbes
+// Reactive variables
 const errorMessage = ref('')
 const errorAlert = ref(false)
 const loading = ref(false)
@@ -21,6 +21,17 @@ const formData = reactive({
     third_notice: 3,
     demand_letter: 1
 })
+
+// Constants
+const rules = {
+    lessThanReminder: (value) => value < formData.reminder || 'Must be less than reminder',
+    lessThanFirstNotice: (value) =>
+        value < formData.first_notice || 'Must be less than first notice',
+    lessThanSecondNotice: (value) =>
+        value < formData.second_notice || 'Must be less than second notice',
+    lessThanThirdNotice: (value) =>
+        value < formData.third_notice || 'Must be less than third notice'
+}
 
 // Methods
 const updateAutofill = async function () {
@@ -88,6 +99,12 @@ onMounted(updateAutofill)
                                 type="number"
                                 v-number-only
                                 v-model="formData.demand_letter"
+                                :rules="[
+                                    rules.lessThanReminder,
+                                    rules.lessThanFirstNotice,
+                                    rules.lessThanSecondNotice,
+                                    rules.lessThanThirdNotice
+                                ]"
                             />
                         </div>
                     </div>
@@ -108,6 +125,11 @@ onMounted(updateAutofill)
                                 type="number"
                                 v-number-only
                                 v-model="formData.third_notice"
+                                :rules="[
+                                    rules.lessThanReminder,
+                                    rules.lessThanFirstNotice,
+                                    rules.lessThanSecondNotice
+                                ]"
                             />
                         </div>
                     </div>
@@ -128,6 +150,7 @@ onMounted(updateAutofill)
                                 type="number"
                                 v-number-only
                                 v-model="formData.second_notice"
+                                :rules="[rules.lessThanReminder, rules.lessThanFirstNotice]"
                             />
                         </div>
                     </div>
@@ -148,6 +171,7 @@ onMounted(updateAutofill)
                                 type="number"
                                 v-number-only
                                 v-model="formData.first_notice"
+                                :rules="[rules.lessThanReminder]"
                             />
                         </div>
                     </div>
