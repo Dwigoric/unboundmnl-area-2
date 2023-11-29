@@ -93,6 +93,7 @@ const submit = async function () {
     }
 
     const res = await fetch(`${API_URL}/loans/${props.loanID}`, {
+        credentials: 'omit',
         method: 'PATCH',
         headers: {
             'Content-Type': 'application/json',

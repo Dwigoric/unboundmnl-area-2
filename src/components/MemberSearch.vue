@@ -51,6 +51,7 @@ const searchMember = async () => {
     const params = new URLSearchParams()
     params.set('username', searchUsername.value)
     const loanees = await fetch(`${API_URL}/users/search?${params}`, {
+        credentials: 'omit',
         method: 'GET',
         headers: { Authorization: `Bearer ${credentials.token}` }
     }).then((res) => res.json())

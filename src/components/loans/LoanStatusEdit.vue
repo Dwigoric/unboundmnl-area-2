@@ -25,6 +25,7 @@ const markAsReleased = async () => {
     loading.value = true
 
     const res = await fetch(`${API_URL}/loans/${props.loanID}`, {
+        credentials: 'omit',
         method: 'PATCH',
         headers: {
             'Content-Type': 'application/json',
@@ -35,7 +36,6 @@ const markAsReleased = async () => {
         })
     })
 
-    console.log('hello from status edit')
     props.onsubmit()
     loading.value = false
 }

@@ -31,6 +31,7 @@ const fetchLoans = async () => {
     const params = new URLSearchParams()
     params.set('status', props.status)
     const { error, message, loans } = await fetch(`${API_URL}/loans?${params}`, {
+        credentials: 'omit',
         method: 'GET',
         headers: { Authorization: `Bearer ${window.$cookies.get('credentials').token}` }
     }).then((res) => res.json())

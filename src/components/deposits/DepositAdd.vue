@@ -69,6 +69,7 @@ const submit = async function () {
     depositData.runningAmount = depositData.originalDepositAmount
 
     const res = await fetch(`${API_URL}/deposits/user/${memberSearchStore.data.username}`, {
+        credentials: 'omit',
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',

@@ -35,6 +35,7 @@ const submit = async () => {
     const { error, message } = await fetch(
         `${API_URL}/loans/user/${memberSearchStore.data.username}`,
         {
+            credentials: 'omit',
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -65,6 +66,7 @@ const fetchPDF = async () => {
 
     // Fetch PDF file
     const formBytes = await fetch(`${API_URL}/private/${FILENAMES.LOAN_APPLICATION}`, {
+        credentials: 'omit',
         method: 'GET',
         headers: { Authorization: `Bearer ${token}` }
     }).then((res) => res.arrayBuffer())

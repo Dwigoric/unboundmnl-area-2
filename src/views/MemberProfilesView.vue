@@ -36,6 +36,7 @@ async function getAllUsers() {
 
     try {
         const response = await fetch(`${API_URL}/users/${url}`, {
+            credentials: 'omit',
             method: 'GET',
             headers: { Authorization: `Bearer ${token}` }
         })

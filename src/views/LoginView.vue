@@ -30,6 +30,7 @@ const logIn = async () => {
     loading.value = true
 
     const { token, message } = await fetch(`${API_URL}/auth/login`, {
+        credentials: 'omit',
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

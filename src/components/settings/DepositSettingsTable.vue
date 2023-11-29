@@ -39,6 +39,7 @@ const formData = reactive({
 
 const updateAutofill = async function () {
     const res = await fetch(`${API_URL}/settings/deposits`, {
+        credentials: 'omit',
         method: 'GET',
         headers: {
             Authorization: `Bearer ${window.$cookies.get('credentials').token}`
@@ -55,6 +56,7 @@ const submit = async function () {
     loading.value = true
 
     const res = await fetch(`${API_URL}/settings/deposits/${setting_keys[props.header]}`, {
+        credentials: 'omit',
         method: 'PATCH',
         headers: {
             'Content-Type': 'application/json',

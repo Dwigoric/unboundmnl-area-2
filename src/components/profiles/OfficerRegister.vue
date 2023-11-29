@@ -44,6 +44,7 @@ const createOfficer = async () => {
 
     // Send request
     const { uuid, message } = await fetch(`${API_URL}/auth/register-officer`, {
+        credentials: 'omit',
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

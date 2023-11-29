@@ -17,6 +17,7 @@ export const useCurrentUserStore = defineStore('currentUser', () => {
         if (!credentials || !credentials.token) return
 
         const { officer } = await fetch(`${API_URL}/officers/${id.value}`, {
+            credentials: 'omit',
             method: 'GET',
             headers: { Authorization: `Bearer ${credentials.token}` }
         }).then((res) => res.json())

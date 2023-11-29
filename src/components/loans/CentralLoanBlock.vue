@@ -88,6 +88,7 @@ const getDateColor = (dueDate) => {
 // Lifecycle hooks
 onBeforeMount(async () => {
     const res = await fetch(`${API_URL}/settings/notifications`, {
+        credentials: 'omit',
         method: 'GET',
         headers: {
             Authorization: `Bearer ${window.$cookies.get('credentials').token}`
@@ -106,6 +107,7 @@ onMounted(async () => {
     const params = new URLSearchParams()
     params.set('status', 'approved,released')
     const res = await fetch(`${API_URL}/loans${url}?${params}`, {
+        credentials: 'omit',
         method: 'GET',
         headers: {
             Authorization: `Bearer ${window.$cookies.get('credentials').token}`

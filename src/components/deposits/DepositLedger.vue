@@ -81,6 +81,7 @@ const capital = ref()
 const getDepositInfo = async () => {
     // Fetch loan properties from the database by using the loanID property!
     const jsonRes = await fetch(`${API_URL}/deposits/${props.depositID}`, {
+        credentials: 'omit',
         method: 'GET',
         headers: {
             Authorization: `Bearer ${window.$cookies.get('credentials').token}`
@@ -99,6 +100,7 @@ const getDepositInfo = async () => {
     }
 
     const ledgerRes = await fetch(`${API_URL}/deposits/${props.depositID}/ledger`, {
+        credentials: 'omit',
         method: 'GET',
         headers: {
             Authorization: `Bearer ${window.$cookies.get('credentials').token}`

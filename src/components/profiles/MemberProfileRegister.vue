@@ -117,6 +117,7 @@ const updateUser = async function () {
     }
 
     const result = await fetch(`${API_URL}/users/${userData.username}`, {
+        credentials: 'omit',
         method: 'PATCH',
         headers: {
             'Content-Type': 'application/json',
@@ -162,6 +163,7 @@ const registerUser = async function () {
     }
 
     const result = await fetch(`${API_URL}/users/`, {
+        credentials: 'omit',
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',

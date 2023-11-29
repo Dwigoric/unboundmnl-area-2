@@ -52,6 +52,7 @@ const deleteMember = async function () {
     }
 
     const result = await fetch(`${API_URL}/users/${props.identifier}`, {
+        credentials: 'omit',
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',
@@ -80,6 +81,7 @@ const deleteOfficer = async function () {
     const { token } = credentials
 
     const result = await fetch(`${API_URL}/officers/${props.identifier}`, {
+        credentials: 'omit',
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` }
     })
@@ -104,6 +106,7 @@ const deleteLoan = async function () {
     const { token } = credentials
 
     const result = await fetch(`${API_URL}/loans/${props.identifier}`, {
+        credentials: 'omit',
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',

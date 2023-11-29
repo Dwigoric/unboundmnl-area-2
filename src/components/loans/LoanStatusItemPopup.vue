@@ -38,6 +38,7 @@ const decide = async (toApprove) => {
     processing.value = true
 
     const { error, message } = await fetch(`${API_URL}/loans/${props.data.id}/review`, {
+        credentials: 'omit',
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

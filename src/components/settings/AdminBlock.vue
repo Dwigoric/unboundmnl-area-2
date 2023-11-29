@@ -34,6 +34,7 @@ const submitForm = async () => {
     const { token } = window.$cookies.get('credentials')
 
     const res = await fetch(`${API_URL}/officers/admin/password`, {
+        credentials: 'omit',
         method: 'PATCH',
         headers: {
             'Content-Type': 'application/json',

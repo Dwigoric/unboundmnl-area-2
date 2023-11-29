@@ -23,6 +23,7 @@ const formData = reactive({
 // Methods
 const updateAutofill = async function () {
     const res = await fetch(`${API_URL}/settings/notifications`, {
+        credentials: 'omit',
         method: 'GET',
         headers: {
             Authorization: `Bearer ${window.$cookies.get('credentials').token}`
@@ -38,6 +39,7 @@ const submit = async function () {
     loading.value = true
 
     const res = await fetch(`${API_URL}/settings/notifications`, {
+        credentials: 'omit',
         method: 'PATCH',
         headers: {
             'Content-Type': 'application/json',

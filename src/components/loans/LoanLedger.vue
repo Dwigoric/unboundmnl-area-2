@@ -102,6 +102,7 @@ const setPopupAdd = () => {
 const getLoanInfo = async () => {
     // Fetch loan properties from the database by using the loanID property!
     const resJson = await fetch(`${API_URL}/loans/${props.loanID}`, {
+        credentials: 'omit',
         method: 'GET',
         headers: {
             Authorization: `Bearer ${window.$cookies.get('credentials').token}`
@@ -139,6 +140,7 @@ const getLoanInfo = async () => {
     }
 
     const ledgerRes = await fetch(`${API_URL}/loans/${props.loanID}/ledger`, {
+        credentials: 'omit',
         method: 'GET',
         headers: {
             Authorization: `Bearer ${window.$cookies.get('credentials').token}`

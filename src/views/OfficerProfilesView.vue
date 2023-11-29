@@ -28,6 +28,7 @@ async function getAllOfficers() {
 
     try {
         const response = await fetch(`${API_URL}/officers`, {
+            credentials: 'omit',
             method: 'GET',
             headers: { Authorization: `Bearer ${token}` }
         })

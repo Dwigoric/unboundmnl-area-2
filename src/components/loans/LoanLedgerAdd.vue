@@ -106,6 +106,7 @@ const submit = async function () {
     }
 
     const res = await fetch(`${API_URL}/loans/${props.loanID}/ledger`, {
+        credentials: 'omit',
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',

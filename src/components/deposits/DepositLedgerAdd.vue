@@ -92,6 +92,7 @@ const submit = async function () {
     loading.value = true
 
     const res = await fetch(`${API_URL}/deposits/${props.depositID}/ledger`, {
+        credentials: 'omit',
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
@@ -119,6 +120,7 @@ const submit = async function () {
 
 onMounted(async () => {
     const officersRes = await fetch(`${API_URL}/officers/`, {
+        credentials: 'omit',
         headers: {
             Authorization: `Bearer ${window.$cookies.get('credentials').token}`
         }

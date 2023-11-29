@@ -56,6 +56,7 @@ onMounted(async () => {
     const url = props.username ? `/user/${props.username}` : ''
 
     const res = await fetch(`${API_URL}/deposits${url}`, {
+        credentials: 'omit',
         method: 'GET',
         headers: {
             Authorization: `Bearer ${window.$cookies.get('credentials').token}`

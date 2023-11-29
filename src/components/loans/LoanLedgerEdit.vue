@@ -64,6 +64,7 @@ const officers = reactive([])
 
 const updateAutofill = async function () {
     const res = await fetch(`${API_URL}/loans/${props.loanID}/ledger/${props.transactionID}`, {
+        credentials: 'omit',
         method: 'GET',
         headers: {
             Authorization: `Bearer ${window.$cookies.get('credentials').token}`
@@ -112,6 +113,7 @@ const submit = async function () {
     preprocessedFormData.finesPaid = Number(preprocessedFormData.finesPaid)
 
     const res = await fetch(`${API_URL}/loans/${props.loanID}/ledger/${props.transactionID}`, {
+        credentials: 'omit',
         method: 'PATCH',
         headers: {
             'Content-Type': 'application/json',
@@ -140,6 +142,7 @@ const submit = async function () {
 
 onMounted(async () => {
     const officersRes = await fetch(`${API_URL}/officers/`, {
+        credentials: 'omit',
         headers: {
             Authorization: `Bearer ${window.$cookies.get('credentials').token}`
         }

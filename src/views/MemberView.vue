@@ -34,6 +34,7 @@ onBeforeMount(async () => {
     const params = new URLSearchParams()
     params.set('username', props.username)
     const users = await fetch(`${API_URL}/users/search?${params}`, {
+        credentials: 'omit',
         method: 'GET',
         headers: { Authorization: `Bearer ${token}` }
     }).then((res) => res.json())
