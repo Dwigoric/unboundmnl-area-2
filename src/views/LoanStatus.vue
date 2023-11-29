@@ -27,7 +27,6 @@ const tab = ref('pending')
                     :height="100"
                     :maxWidth="100"
                     :unit="'%'"
-                    :maxUnit="'vw'"
                     :bg-color="'#FFF'"
                 >
                     <div class="d-flex flex-column ml-2">

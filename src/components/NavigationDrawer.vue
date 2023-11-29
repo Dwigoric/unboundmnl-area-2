@@ -3,6 +3,15 @@
 import { ref, onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
 import jwt_decode from 'jwt-decode'
+import { useDisplay } from 'vuetify'
+
+const { mobile } = useDisplay()
+
+onMounted(() => {
+    if (mobile) {
+        rail.value = true
+    }
+})
 
 // Import router
 import router from '../router'
@@ -19,7 +28,7 @@ const isAdmin = ref(false)
 
 window.addEventListener('resize', () => {
     const newScreenSize = window.innerWidth
-
+    
     rail.value = newScreenSize <= 961
 })
 
@@ -47,7 +56,8 @@ onMounted(() => {
 </script>
 
 <template>
-    <v-layout>
+        <v-layout>
+
         <v-navigation-drawer
             :width="300"
             :margin="20"
@@ -215,6 +225,8 @@ onMounted(() => {
         </v-navigation-drawer>
         <v-main style="height: 94vh"></v-main>
     </v-layout>
+
+    
 </template>
 
 <style scoped>

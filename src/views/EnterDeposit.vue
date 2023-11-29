@@ -47,7 +47,6 @@ onMounted(() => updateStepCounter(route.path))
                     :height="100"
                     :maxWidth="100"
                     :unit="'%'"
-                    :maxUnit="'vw'"
                     :bg-color="'#FFF'"
                 >
                     <StepCounterLoanTransaction :step="step" />
@@ -58,7 +57,6 @@ onMounted(() => updateStepCounter(route.path))
                     :height="100"
                     :maxWidth="100"
                     :unit="'%'"
-                    :maxUnit="'vw'"
                     :bg-color="'#FFF'"
                 >
                     <RouterView />

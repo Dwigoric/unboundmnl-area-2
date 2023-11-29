@@ -37,6 +37,7 @@
 body {
     background-color: var(--vt-c-white-off);
     min-height: 100vh;
+    min-width: 320px;
     /* min-width: 100vw; */
     color: var(--color-text);
     transition:
@@ -56,6 +57,7 @@ body {
 
 .bg-off-white {
     background-color: var(--vt-c-white-off);
+    min-width: 1280px;
 }
 
 /** hover-scale-sm gives the subtle hover effect to all the floating components **/
