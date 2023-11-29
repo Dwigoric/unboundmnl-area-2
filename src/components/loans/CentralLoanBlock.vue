@@ -38,9 +38,11 @@ const buildStatus = {
     complete: ['Complete', 'blue']
 }
 const notificationSettings = {
-    period_1: 0,
-    period_2: 0,
-    period_3: 0
+    reminder: 0,
+    first_notice: 0,
+    second_notice: 0,
+    third_notice: 0,
+    demand_letter: 0
 }
 
 // Reactive variables
@@ -79,9 +81,11 @@ const getDateColor = (dueDate) => {
     const diffTime = Math.abs(currentDate - new Date(dueDate))
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
 
-    if (diffDays <= notificationSettings.period_1) return 'red'
-    else if (diffDays <= notificationSettings.period_2) return 'orange'
-    else if (diffDays <= notificationSettings.period_3) return 'blue'
+    if (diffDays <= notificationSettings.demand_letter) return 'red'
+    else if (diffDays <= notificationSettings.third_notice) return 'orange'
+    else if (diffDays <= notificationSettings.second_notice) return 'blue'
+    else if (diffDays <= notificationSettings.first_notice) return 'purple'
+    else if (diffDays <= notificationSettings.reminder) return 'grey'
     else return 'green'
 }
 
@@ -97,9 +101,7 @@ onBeforeMount(async () => {
 
     if (res.status === 200) {
         const { settings } = await res.json()
-        notificationSettings.period_1 = settings.notification_period_1
-        notificationSettings.period_2 = settings.notification_period_2
-        notificationSettings.period_3 = settings.notification_period_3
+        Object.assign(notificationSettings, settings)
     }
 })
 onMounted(async () => {

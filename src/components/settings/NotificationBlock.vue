@@ -15,9 +15,11 @@ const loading = ref(false)
 const snackbar = ref(false)
 
 const formData = reactive({
-    notification_period_1: 0,
-    notification_period_2: 0,
-    notification_period_3: 0
+    reminder: 14,
+    first_notice: 7,
+    second_notice: 5,
+    third_notice: 3,
+    demand_letter: 1
 })
 
 // Methods
@@ -85,7 +87,7 @@ onMounted(updateAutofill)
                                 suffix="days"
                                 type="number"
                                 v-number-only
-                                v-model="formData.notification_period_1"
+                                v-model="formData.demand_letter"
                             />
                         </div>
                     </div>
@@ -105,7 +107,7 @@ onMounted(updateAutofill)
                                 suffix="days"
                                 type="number"
                                 v-number-only
-                                v-model="formData.notification_period_2"
+                                v-model="formData.third_notice"
                             />
                         </div>
                     </div>
@@ -125,7 +127,7 @@ onMounted(updateAutofill)
                                 suffix="days"
                                 type="number"
                                 v-number-only
-                                v-model="formData.notification_period_3"
+                                v-model="formData.second_notice"
                             />
                         </div>
                     </div>
@@ -145,7 +147,7 @@ onMounted(updateAutofill)
                                 suffix="days"
                                 type="number"
                                 v-number-only
-                                v-model="formData.notification_period_3"
+                                v-model="formData.first_notice"
                             />
                         </div>
                     </div>
@@ -165,7 +167,7 @@ onMounted(updateAutofill)
                                 suffix="days"
                                 type="number"
                                 v-number-only
-                                v-model="formData.notification_period_3"
+                                v-model="formData.reminder"
                             />
                         </div>
                     </div>
