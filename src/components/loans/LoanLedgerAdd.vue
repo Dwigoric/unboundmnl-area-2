@@ -22,6 +22,7 @@ const currentUser = {
         last: currentUserStore.name.last
     }
 }
+
 const rules = {
     maxDecimalPlaces: (decimalPlaces) => {
         return (v) =>

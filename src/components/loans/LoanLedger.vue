@@ -6,9 +6,8 @@ import { ref, onMounted, computed, reactive } from 'vue'
 import { API_URL, LOAN_TYPES } from '../../constants'
 
 // Import components
-import LoanLedgerEdit from './LoanLedgerEdit.vue'
 import LoanLedgerAdd from './LoanLedgerAdd.vue'
-import LoanEdit from './LoanDepositEdit.vue'
+import LoanEdit from './LoanInfoEdit.vue'
 import DeletePrompt from '../DeletePrompt.vue'
 import LoanStatusEdit from './LoanStatusEdit.vue'
 
@@ -25,12 +24,9 @@ const props = defineProps({
 const search = ref('')
 const ledgerData = reactive([])
 const isAddPopupActive = ref(false) // for add transaction pop up
-const isPopupActive = ref(false) // for edit transaction pop up
 const originalLoanAmount = ref(0) // for dynamically calculating balance in form
 const balance = ref(0)
 const loanReleased = ref(false) // for monitoring whether loan is released or not
-
-const currentlyEditedTransactionID = ref('')
 
 const rawLoanData = ref()
 
@@ -413,39 +409,6 @@ onMounted(getLoanInfo)
                         :balance="balance"
                     />
                     <!-- NOTE: we should not be doing the solution above na -->
-                </VCard>
-            </template>
-        </VDialog>
-
-        <!-- Form popup for EDIT TRANSACTION-->
-        <VDialog width="1000" v-model="isPopupActive">
-            <template #default="{ isActive }">
-                <VCard close-on-back contained class="form-wrapper">
-                    <VContainer fluid>
-                        <VRow justify="end">
-                            <VCardActions>
-                                <VBtn
-                                    class="ma-2 capitalize-text"
-                                    color="var(--vt-c-blue)"
-                                    @click="isActive.value = false"
-                                    icon="mdi-close"
-                                >
-                                </VBtn>
-                            </VCardActions>
-                        </VRow>
-                    </VContainer>
-
-                    <LoanLedgerEdit
-                        :loanID="loanID"
-                        :transactionID="currentlyEditedTransactionID"
-                        :onsubmit="
-                            async () => {
-                                await getLoanInfo()
-                                rerenderTable()
-                                isActive.value = false
-                            }
-                        "
-                    />
                 </VCard>
             </template>
         </VDialog>
