@@ -9,6 +9,7 @@ import { API_URL } from '../../constants'
 import ContentBlock from '../../components/ContentBlock.vue'
 
 // Reactive variables
+const form = ref(null)
 const errorMessage = ref('')
 const errorAlert = ref(false)
 const loading = ref(false)
@@ -49,6 +50,9 @@ const updateAutofill = async function () {
 }
 
 const submit = async function () {
+    const { valid } = await form.value.validate()
+    if (!valid) return
+
     loading.value = true
 
     const res = await fetch(`${API_URL}/settings/notifications`, {
