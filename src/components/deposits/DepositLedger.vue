@@ -3,7 +3,7 @@
 import { ref, reactive, onMounted, computed } from 'vue'
 
 // Import constants
-import { API_URL } from '../../constants/api_url.js'
+import { API_URL, DEPOSIT_CATEGORIES } from '../../constants'
 
 // Import components
 import DepositLedgerEdit from './DepositLedgerEdit.vue'
@@ -75,7 +75,7 @@ const getDepositInfo = async () => {
         depositAmount.value = depositData.originalDepositAmount // change to running amount
         depositRunningAmount.value = depositData.runningAmount
         depositOwner.value = depositData.username
-        depositType.value = depositData.category
+        depositType.value = DEPOSIT_CATEGORIES[depositData.category]
         depositApprovalDate.value = depositData.approvalDate
         depositInterestRate.value = depositData.interestRate
     }
