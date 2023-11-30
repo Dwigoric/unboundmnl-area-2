@@ -2,6 +2,8 @@
 // Packages
 import { ref, onMounted, reactive } from 'vue'
 
+import { formatUTC, formatDate } from '../../modules/datetime/formatDate.js'
+
 // Project constants
 import { API_URL, FORM_RULES } from '../../constants/index.js'
 
@@ -16,12 +18,6 @@ const rules = {
             'This field must be a valid officer'
         )
     }
-}
-const formatDate = function (date) {
-    let year = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(date)
-    let month = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(date)
-    let day = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(date)
-    return `${year}-${month}-${day}`
 }
 
 const form = ref(null)
@@ -73,8 +69,8 @@ const updateAutofill = async function () {
 
     if (jsonData.error === false) {
         const transaction = jsonData.transaction
-        transaction.transactionDate = transaction.transactionDate.substring(0, 10)
-        transaction.submissionDate = transaction.submissionDate.substring(0, 10)
+        transaction.transactionDate = formatUTC(transaction.transactionDate)
+        transaction.submissionDate = formatUTC(transaction.submissionDate)
 
         const transactionOfficer = transaction.officerInCharge
         transaction.officerInCharge = {

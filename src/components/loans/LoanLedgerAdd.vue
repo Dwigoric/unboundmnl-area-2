@@ -2,13 +2,14 @@
 // Packages
 import { ref, watch, reactive, computed } from 'vue'
 import Decimal from 'decimal.js'
+import { formatDate } from '../../modules/datetime/formatDate.js'
 
 // Project constants
 import { API_URL, FORM_RULES } from '../../constants/index.js'
 
 // Stores
 import { useCurrentUserStore } from '../../stores/currentUser.js'
-import router from '../../router';
+import router from '../../router'
 const currentUserStore = useCurrentUserStore()
 
 // Define constants
@@ -34,13 +35,6 @@ const rules = {
                 return v.toString().split('.')[1].length || 0
             })(v) <= decimalPlaces || `Must not have more than ${decimalPlaces} decimal places`
     }
-}
-
-const formatDate = function (date) {
-    let year = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(date)
-    let month = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(date)
-    let day = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(date)
-    return `${year}-${month}-${day}`
 }
 
 const form = ref(null)
@@ -113,7 +107,7 @@ const submit = async function () {
         formData.balance = newBalance
     }
 
-    formData.amountDue = getAmountDue(formData.interestDue, formData.finesDue);
+    formData.amountDue = getAmountDue(formData.interestDue, formData.finesDue)
 
     const res = await fetch(`${API_URL}/loans/${props.loanID}/ledger`, {
         credentials: 'omit',

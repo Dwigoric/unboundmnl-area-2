@@ -2,6 +2,8 @@
 // Packages
 import { reactive, ref, onMounted } from 'vue'
 
+import { formatUTC } from '../../modules/datetime/formatDate.js'
+
 // Project constants
 import { LOAN_TYPES, PAYMENT_FREQUENCIES, API_URL, FORM_RULES } from '../../constants/index.js'
 
@@ -61,7 +63,7 @@ const updateAutofill = function () {
 
     if (props.autofill.coborrower) {
         Object.assign(formData.coborrower.name, props.autofill.coborrower.name)
-        formData.coborrower.birthday = props.autofill.coborrower.birthday.substring(0, 10)
+        formData.coborrower.birthday = formatUTC(props.autofill.coborrower.birthday)
         formData.coborrower.birthplace = props.autofill.coborrower.birthplace
         formData.coborrower.occupation = props.autofill.coborrower.occupation
         formData.coborrower.contact_no = props.autofill.coborrower.contact_no
