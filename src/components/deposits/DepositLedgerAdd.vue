@@ -1,6 +1,6 @@
 <script setup>
 // Packages
-import { ref, reactive, computed } from 'vue'
+import { ref, reactive, computed, watch } from 'vue'
 
 // Project constants
 import { API_URL, FORM_RULES } from '../../constants/index.js'
@@ -122,6 +122,18 @@ const submit = async function () {
         return true
     }
 }
+
+watch(
+    () => formData.transactionType,
+    (transaction => {
+        if (transaction === 'Deposit') {
+            formData.amount = 0;
+        } else if (transaction === 'Withdrawal') {
+            formData.amount = 0;
+            formData.interest = 0;
+        }
+    })
+)
 </script>
 
 <template>
@@ -174,23 +186,27 @@ const submit = async function () {
 
             <div v-if="formData.transactionType !== ''">
                 <VTextField
-                    v-number-only
                     class="ml-3"
-                    type="number"
-                    label="Amount"
-                    v-model="formData.amount"
-                    :rules="[rules.maxDecimalPlaces(2)]"
-                />
-                <VTextField
                     v-number-only
-                    class="ml-3"
                     type="number"
-                    label="Balance"
+                    label="Balance (Automatically Calculated)"
+                    disabled="true"
                     v-model="newBalance"
                     :rules="[rules.maxDecimalPlaces(2)]"
+                    :min="0"
                 />
+
                 <!-- Only show interest earned if deposit transaction -->
                 <div v-if="formData.transactionType === 'Deposit'">
+                    <VTextField
+                        v-number-only
+                        class="ml-3"
+                        type="number"
+                        label="Amount"
+                        v-model="formData.amount"
+                        :rules="[rules.maxDecimalPlaces(2)]"
+                        :min="0"
+                    />
                     <VTextField
                         v-number-only
                         class="ml-3"
@@ -198,6 +214,19 @@ const submit = async function () {
                         label="Interest Earned"
                         v-model="formData.interest"
                         :rules="[rules.maxDecimalPlaces(2)]"
+                    />
+                </div>
+                <!-- Show different amount fields since deposit amount has no limit, but withdrawal amount does. -->
+                <div v-else-if="formData.transactionType === 'Withdrawal'">
+                    <VTextField
+                        v-number-only
+                        class="ml-3"
+                        type="number"
+                        label="Amount"
+                        v-model="formData.amount"
+                        :rules="[rules.maxDecimalPlaces(2)]"
+                        :min="0"
+                        :max="props.runningAmount"
                     />
                 </div>
             </div>

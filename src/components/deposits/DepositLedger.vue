@@ -184,6 +184,7 @@ onMounted(getDepositInfo)
                             async (newTx) => {
                                 ledgerData.push(newTx)
                                 isActive.value = false
+                                depositRunningAmount = newTx.balance
                             }
                         "
                         :runningAmount="depositRunningAmount"

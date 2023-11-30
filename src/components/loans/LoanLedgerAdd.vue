@@ -8,6 +8,7 @@ import { API_URL, FORM_RULES } from '../../constants/index.js'
 
 // Stores
 import { useCurrentUserStore } from '../../stores/currentUser.js'
+import router from '../../router';
 const currentUserStore = useCurrentUserStore()
 
 // Define constants
@@ -135,7 +136,7 @@ const submit = async function () {
         errorAlert.value = false
         errorMessage.value = ''
         formData.officerInCharge = currentUser.title
-        props.onsubmit({ ...formData })
+        props.onsubmit({ ...formData }, newBalance)
     }
 }
 
@@ -243,10 +244,9 @@ watch(
                         v-number-only
                         type="number"
                         label="Balance (Automatically Calculated)"
-                        disabled=""
+                        disabled="true"
                         v-model="newBalance"
                         :min="0"
-                        persistent-hint=""
                     />
                     <VTextField
                         class="ml-3"

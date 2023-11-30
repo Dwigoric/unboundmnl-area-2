@@ -101,6 +101,7 @@ const submit = async function () {
         errorMessage.value = ''
         disableSubmit.value = true
         snackbar.value = true
+        router.go()
     }
 }
 </script>
@@ -126,7 +127,6 @@ const submit = async function () {
                 :rules="[FORM_RULES.required]"
             ></VTextField>
 
-            <!-- <VTextField class="ml-3" label="Time" /> -->
             <VTextField
                 v-number-only
                 class="ml-3"
@@ -136,16 +136,7 @@ const submit = async function () {
                 :min="0"
                 :rules="[FORM_RULES.required, rules.maxDecimalPlaces(2)]"
             />
-            <VTextField
-                v-number-only
-                class="ml-3"
-                label="* Running Amount"
-                v-model="depositData.runningAmount"
-                type="number"
-                :min="0"
-            />
 
-            <!-- TODO: Connect this button to a method to add to the database -->
             <div class="btn-wrapper">
                 <VBtn
                     prepend-icon="mdi-check"

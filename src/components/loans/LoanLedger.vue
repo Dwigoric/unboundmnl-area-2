@@ -403,12 +403,13 @@ onMounted(getLoanInfo)
                             async (newTx) => {
                                 ledgerData.push(newTx)
                                 isActive.value = false
+                                console.log(newTx.balance)
+                                balance = newTx.balance
                             }
                         "
                         :originalLoanAmount="originalLoanAmount"
                         :balance="balance"
                     />
-                    <!-- NOTE: we should not be doing the solution above na -->
                 </VCard>
             </template>
         </VDialog>
