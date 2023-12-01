@@ -1,3 +1,8 @@
+/**
+ * A store for storing information about the currently logged in user.
+ * @module stores/currentUser
+ */
+
 // Import packages
 import { ref, reactive } from 'vue'
 import { defineStore } from 'pinia'
@@ -5,12 +10,18 @@ import { defineStore } from 'pinia'
 // Import constants
 import { API_URL } from '../constants'
 
+/**
+ * Current user store
+ */
 export const useCurrentUserStore = defineStore('currentUser', () => {
     const name = reactive({ given: '', middle: '', last: '' })
     const username = ref('')
     const id = ref('')
     const role = ref('')
 
+    /**
+     * Gets the user's credentials from the database and copies it to the store.
+     */
     const fetchUser = async () => {
         const credentials = window.$cookies.get('credentials')
 
