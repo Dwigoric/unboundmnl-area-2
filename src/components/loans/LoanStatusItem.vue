@@ -19,15 +19,12 @@ const props = defineProps({
 const search = ref('')
 const items = reactive([])
 const snackbar = ref(false)
-let headers = [
+const headers = [
     { title: 'Loanee', key: 'loanee' },
     { title: 'Type of Loan', key: 'loanType' },
     { title: 'Amount of Loan', key: 'originalLoanAmount' },
     { title: 'Submission Date', key: 'submissionDate' }
 ]
-if (props.status === 'pending') {
-    headers.push({ title: 'Change Status', key: 'id' })
-}
 
 // Remove the "Change Status" column if the status is not pending
 if (props.status !== 'pending') headers.splice(4, 1)
