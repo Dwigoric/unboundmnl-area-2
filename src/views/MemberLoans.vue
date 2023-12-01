@@ -2,9 +2,8 @@
 // Import vue components
 import NavigationDrawer from '../components/NavigationDrawer.vue'
 import ContentBlock from '../components/ContentBlock.vue'
-import LoanLedger from '../components/LoanLedger.vue'
+import LoanLedger from '../components/loans/LoanLedger.vue'
 import DashboardTopBar from '../components/DashboardTopBar.vue'
-
 </script>
 
 <template>
@@ -17,8 +16,14 @@ import DashboardTopBar from '../components/DashboardTopBar.vue'
 
             <!-- Main Dashboard Body -->
             <div class="dashboard-body d-flex flex-column h-100 py-4">
-
-                <ContentBlock :width="100" :height="100" :maxWidth="1600" :unit="'%'" :maxUnit="'px'" :bg-color="'#FFF'">
+                <ContentBlock
+                    :width="100"
+                    :height="100"
+                    :maxWidth="1600"
+                    :unit="'%'"
+                    :maxUnit="'px'"
+                    :bg-color="'#FFF'"
+                >
                     <!-- <LoanStatusItem/> -->
                     <LoanLedger />
                 </ContentBlock>

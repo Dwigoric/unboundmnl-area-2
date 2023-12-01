@@ -15,9 +15,8 @@ const $cookies = inject('$cookies')
 const credentials = $cookies.get('credentials')
 if (credentials) {
     // Decode the token
-    const { uuid, role } = jwt_decode(credentials.token)
+    const { uuid } = jwt_decode(credentials.token)
     currentUserStore.id = uuid
-    currentUserStore.role = role
 
     // Fetch user
     currentUserStore.fetchUser()

@@ -7,7 +7,7 @@ import { useRoute } from 'vue-router'
 import NavigationDrawer from '../components/NavigationDrawer.vue'
 import ContentBlock from '../components/ContentBlock.vue'
 import DashboardTopBar from '../components/DashboardTopBar.vue'
-import StepCounterLoanTransaction from '../components/StepCounterLoanTransaction.vue'
+import StepCounterLoanTransaction from '../components/StepCounterNewTransaction.vue'
 
 // Project constants needed
 import { PATH_NAMES } from '../constants'
@@ -45,20 +45,18 @@ onMounted(() => updateStepCounter(route.path))
                 <ContentBlock
                     :width="100"
                     :height="100"
-                    :maxWidth="80"
+                    :maxWidth="100"
                     :unit="'%'"
-                    :maxUnit="'vw'"
                     :bg-color="'#FFF'"
                 >
-                    <StepCounterLoanTransaction />
+                    <StepCounterLoanTransaction :step="step" />
                 </ContentBlock>
 
                 <ContentBlock
                     :width="100"
                     :height="100"
-                    :maxWidth="80"
+                    :maxWidth="100"
                     :unit="'%'"
-                    :maxUnit="'vw'"
                     :bg-color="'#FFF'"
                 >
                     <RouterView />

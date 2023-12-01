@@ -1,12 +1,13 @@
 <script setup>
 // Import packages
-import { ref } from 'vue'
+import { ref, reactive, watch } from 'vue'
+import { useDebounceFn } from '@vueuse/core'
 
 // Import router
 import router from '../router'
 
 // Import components
-import MemberProfileRegister from '../components/MemberProfileRegister.vue'
+import MemberProfileRegister from './profiles/MemberProfileRegister.vue'
 
 // Import constants
 import { API_URL } from '../constants'
@@ -29,55 +30,59 @@ const props = defineProps({
 
 // Define reactive variables
 const searchUsername = ref(null)
+const user = ref(null)
+const searching = ref(false)
 const errorAlert = ref(false)
 const errorMessage = ref('')
+const searchedMembers = reactive([])
 
 // Define methods
-const getUserData = async () => {
-    if (!searchUsername.value) {
-        errorAlert.value = true
-        errorMessage.value = 'Please enter a username'
-        return
-    }
+const searchMember = async () => {
+    if (!searchUsername.value) return
 
     const credentials = window.$cookies.get('credentials')
 
-    if (!credentials) {
-        errorAlert.value = true
-        errorMessage.value = 'Please log in as officer to continue'
-        return
-    }
-
-    const { token } = credentials
-
-    if (!token) {
+    if (!credentials || !credentials.token) {
         errorAlert.value = true
         errorMessage.value = 'Please log in as officer to continue'
         return
     }
 
     const params = new URLSearchParams()
-    params.set('access_token', token)
     params.set('username', searchUsername.value)
-    const loanees = await fetch(`${API_URL}/users/search?${params}`).then((res) => res.json())
+    const loanees = await fetch(`${API_URL}/users/search?${params}`, {
+        credentials: 'omit',
+        method: 'GET',
+        headers: { Authorization: `Bearer ${credentials.token}` }
+    }).then((res) => res.json())
 
-    if (!loanees.length || loanees[0].username !== searchUsername.value) {
-        errorAlert.value = true
-        errorMessage.value = 'No user found with that username'
-    } else {
-        errorAlert.value = false
-        errorMessage.value = ''
-        memberSearchStore.setData(loanees[0])
-    }
+    searchedMembers.splice(
+        0,
+        searchedMembers.length,
+        ...loanees.slice(0, 5).map((loanee) => ({
+            ...loanee,
+            parsedName: `${loanee.name.last}, ${loanee.name.given}`
+        }))
+    )
+
+    searching.value = false
 }
 
 const sendToNext = async () => {
-    await getUserData()
-
-    if (errorAlert.value) return
+    const memberData = searchedMembers.find((member) => member.username === user.value)
+    memberSearchStore.setData(memberData)
 
     router.push({ name: props.to })
 }
+
+// Lifecycle hooks
+const searchDebounce = useDebounceFn(searchMember, 2000)
+watch(searchUsername, () => {
+    if (user.value !== null) return
+    searching.value = true
+    searchedMembers.splice(0, searchedMembers.length)
+    searchDebounce()
+})
 </script>
 
 <template>
@@ -87,13 +92,41 @@ const sendToNext = async () => {
 
             <!-- Search bar -->
             <div class="search-wrapper">
-                <v-text-field
-                    v-model="searchUsername"
+                <VAutocomplete
+                    v-model="user"
+                    v-model:search="searchUsername"
+                    :items="searchedMembers"
+                    item-title="parsedName"
+                    item-value="username"
                     prepend-inner-icon="mdi-magnify"
-                    label="Search Member by Username"
+                    label="Search Member by Name or Username"
                     clearable=""
-                    hide-details
-                />
+                    auto-select-first
+                    :custom-filter="() => true"
+                >
+                    <template #no-data>
+                        <VListItem>
+                            <VListItemTitle v-if="!searchUsername">
+                                Enter the member's name or username to search for them...
+                            </VListItemTitle>
+                            <VListItemTitle v-else-if="!searching">
+                                No results matching "<strong>{{ searchUsername }}</strong
+                                >" were found.
+                            </VListItemTitle>
+                            <VListItemTitle v-else>
+                                Searching for "<strong>{{ searchUsername }}</strong
+                                >"...
+                            </VListItemTitle>
+                        </VListItem>
+                    </template>
+                    <template #item="{ props, item }">
+                        <VListItem
+                            v-bind="props"
+                            :title="item.title"
+                            :subtitle="item.props.value"
+                        />
+                    </template>
+                </VAutocomplete>
                 <VAlert
                     v-if="errorAlert"
                     v-model="errorAlert"
@@ -105,9 +138,9 @@ const sendToNext = async () => {
                     {{ errorMessage }}
                 </VAlert>
             </div>
-            <div class="create-member" v-if="canCreateNewMember">
+            <div class="create-member mt-n5" v-if="canCreateNewMember">
                 <v-dialog width="1200">
-                    <template v-slot:activator="{ props }">
+                    <template #activator="{ props }">
                         <!-- Create Member Profile Button -->
                         <v-btn
                             class="capitalize-text mt-2"
@@ -120,7 +153,7 @@ const sendToNext = async () => {
                     </template>
 
                     <!-- Form popup -->
-                    <template v-slot:default="{ isActive }">
+                    <template #default="{ isActive }">
                         <v-card close-on-back contained class="form-wrapper">
                             <v-container>
                                 <v-row justify="end">
@@ -143,7 +176,12 @@ const sendToNext = async () => {
             </div>
 
             <div class="btn-wrapper">
-                <VBtn type="submit" class="btn capitalize-text" @click.prevent="sendToNext">
+                <VBtn
+                    type="submit"
+                    class="btn capitalize-text"
+                    @click.prevent="sendToNext"
+                    :disabled="!user"
+                >
                     Next
                 </VBtn>
             </div>

@@ -1,12 +1,13 @@
 <script setup>
+import { ref } from 'vue'
+
 // Import vue components
 import NavigationDrawer from '../components/NavigationDrawer.vue'
 import ContentBlock from '../components/ContentBlock.vue'
-import LoanLedger from '../components/LoanLedger.vue'
 import DashboardTopBar from '../components/DashboardTopBar.vue'
+import LoanStatusItem from '../components/loans/LoanStatusItem.vue'
 
-import LoanStatusItem from '../components/LoanStatusItem.vue'
-import MemberProfileRegister from '../components/MemberProfileRegister.vue'
+const tab = ref('pending')
 </script>
 
 <template>
@@ -15,21 +16,40 @@ import MemberProfileRegister from '../components/MemberProfileRegister.vue'
 
         <div class="d-flex flex-column w-100 pl-8">
             <!-- Top Bar of Dashboard -->
-            <DashboardTopBar :breadcrumbs="['Loans', 'Loan Status']" />
+            <DashboardTopBar :breadcrumbs="['Loans', 'Pending Loans']" />
 
             <!-- Main Dashboard Body -->
             <div class="dashboard-body d-flex flex-column h-100 py-4">
-                <h2>All Pending Loans</h2>
+                <h2>Pending Loans</h2>
 
                 <ContentBlock
                     :width="100"
                     :height="100"
-                    :maxWidth="80"
+                    :maxWidth="100"
                     :unit="'%'"
-                    :maxUnit="'vw'"
                     :bg-color="'#FFF'"
                 >
-                    <LoanStatusItem />
+                    <div class="d-flex flex-column ml-2">
+                        <v-tabs v-model="tab" color="primary">
+                            <v-tab value="pending">
+                                <div class="capitalize">Pending Loans</div>
+                            </v-tab>
+
+                            <v-tab value="rejected">
+                                <div class="capitalize">Rejected</div>
+                            </v-tab>
+                        </v-tabs>
+
+                        <v-window v-model="tab" class="ml-5 mt-2">
+                            <v-window-item value="pending">
+                                <LoanStatusItem />
+                            </v-window-item>
+
+                            <v-window-item value="rejected">
+                                <LoanStatusItem status="rejected" />
+                            </v-window-item>
+                        </v-window>
+                    </div>
                 </ContentBlock>
             </div>
         </div>

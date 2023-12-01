@@ -1,5 +1,10 @@
+/**
+ * Mapping of internal names to displayed names for deposit categories.
+ * @module constants/deposit_categories
+ */
+
 export const DEPOSIT_CATEGORIES = Object.freeze({
-    'share capital': 'Share Capital',
+    shareCapital: 'Share Capital',
     savings: 'Savings',
-    'time deposit': 'Time Deposit'
+    timeDeposit: 'Time Deposit'
 })

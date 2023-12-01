@@ -1,7 +1,14 @@
 <script setup>
 // Import packages
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import jwt_decode from 'jwt-decode'
+import { useDisplay } from 'vuetify'
+
+const { mobile } = useDisplay()
+
+onMounted(() => {
+    console.log(mobile.value) // false
+})
 
 // Import vue components
 import router from '../router'
@@ -23,10 +30,14 @@ const errorMessage = ref('')
 const errorAlert = ref(false)
 const remember = ref(false)
 const showPassword = ref(false)
+const loading = ref(false)
 
 // Define methods
 const logIn = async () => {
+    loading.value = true
+
     const { token, message } = await fetch(`${API_URL}/auth/login`, {
+        credentials: 'omit',
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -34,6 +45,8 @@ const logIn = async () => {
             password: password.value
         })
     }).then((res) => res.json())
+
+    loading.value = false
 
     if (!token) {
         errorMessage.value = message
@@ -62,11 +75,14 @@ const logIn = async () => {
 </script>
 
 <template>
-    <div class="bg">
+    <div v-if="!mobile" class="bg">
         <div class="wrapper">
             <div class="login">
-                <!-- TODO: Add logo -->
-                <div class="header">CSVMC</div>
+                <div class="d-flex justify-center w-100">
+                    <svg width="300" height="80" xmlns="http://www.w3.org/2000/svg" class="ml-n5">
+                        <image href="/assets/logo-full-black.svg" width="300" height="100" />
+                    </svg>
+                </div>
 
                 <div class="error-msg-wrapper">
                     <VAlert
@@ -111,7 +127,79 @@ const logIn = async () => {
                             </div>
                         </div>
 
-                        <VBtn type="submit" class="btn capitalize-text" @click.prevent="logIn">
+                        <VBtn
+                            type="submit"
+                            class="btn capitalize-text"
+                            :loading="loading"
+                            @click.prevent="logIn"
+                        >
+                            Log In
+                        </VBtn>
+                    </VForm>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div v-if="mobile" class="bg">
+        <div class="wrapper w-75">
+            <div class="login w-75">
+                <div class="d-flex justify-center w-100">
+                    <!-- BUG: DOESNT SCALE AAAAAAAAAA -->
+                    <svg width="150" height="100" xmlns="http://www.w3.org/2000/svg" class="mt-2">
+                        <image href="/assets/logo.svg" width="150" height="100" />
+                    </svg>
+                </div>
+
+                <div class="error-msg-wrapper">
+                    <VAlert
+                        v-if="errorAlert"
+                        v-model="errorAlert"
+                        type="error"
+                        variant="tonal"
+                        closable=""
+                    >
+                        {{ errorMessage }}
+                    </VAlert>
+                </div>
+
+                <div class="login-form-wrapper">
+                    <VForm id="login-form" ref="form">
+                        <VTextField
+                            class="username-pw-input"
+                            v-model="username"
+                            id="login-username"
+                            label="Username"
+                            required
+                        />
+                        <VTextField
+                            class="username-pw-input"
+                            v-model="password"
+                            id="login-pw"
+                            label="Password"
+                            required
+                            :type="showPassword ? 'text' : 'password'"
+                            :append-inner-icon="showPassword ? 'mdi-eye-off' : 'mdi-eye'"
+                            @click:append-inner="showPassword = !showPassword"
+                        />
+
+                        <div class="remember-me-wrapper">
+                            <div class="remember-me">
+                                <VCheckbox
+                                    id="checkbox"
+                                    v-model="remember"
+                                    color="var(--vt-c-blue)"
+                                    label="Remember Me"
+                                />
+                            </div>
+                        </div>
+
+                        <VBtn
+                            type="submit"
+                            class="btn capitalize-text"
+                            :loading="loading"
+                            @click.prevent="logIn"
+                        >
                             Log In
                         </VBtn>
                     </VForm>
@@ -126,7 +214,7 @@ const logIn = async () => {
 .bg {
     height: 100vh;
     width: 100vw;
-    background-image: url('../assets/bg.svg');
+    background-image: url('/assets/bg.svg');
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center center;
@@ -140,7 +228,7 @@ const logIn = async () => {
 }
 
 .wrapper {
-    min-width: 25vw;
+    min-width: 320px;
     min-height: 60vh;
 
     background: var(--vt-c-white);
@@ -149,6 +237,7 @@ const logIn = async () => {
     display: flex;
     justify-content: center;
     overflow: auto;
+    padding: 2%
 }
 
 .login {

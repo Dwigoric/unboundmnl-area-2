@@ -7,7 +7,7 @@ import { useRoute } from 'vue-router'
 import NavigationDrawer from '../components/NavigationDrawer.vue'
 import ContentBlock from '../components/ContentBlock.vue'
 import DashboardTopBar from '../components/DashboardTopBar.vue'
-import DepositLedger from '../components/DepositLedger.vue'
+import DepositLedger from '../components/deposits/DepositLedger.vue'
 
 // Define props for the component
 /*
@@ -32,13 +32,11 @@ const depositID = ref(route.params.id)
 
             <h2>Deposit Ledger</h2>
 
-            <div class="dashboard-body d-flex flex-column h-100 py-4">
+            <div class="dashboard-body ledger-block d-flex flex-column h-100 py-4">
                 <ContentBlock
                     :width="100"
                     :height="100"
-                    :maxWidth="80"
                     :unit="'%'"
-                    :maxUnit="'vw'"
                     :bg-color="'#FFF'"
                 >
                     <DepositLedger :depositID="depositID" />
@@ -47,3 +45,9 @@ const depositID = ref(route.params.id)
         </div>
     </div>
 </template>
+
+<style scoped>
+.ledger-block {
+    min-width: 1280px;
+}
+</style>

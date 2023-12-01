@@ -1,6 +1,8 @@
 <script setup>
-import UserProfile from '../components/UserProfile.vue'
-import NotificationBtn from '../components/NotificationBtn.vue'
+import { useDisplay } from 'vuetify'
+import { onMounted } from 'vue'
+
+import UserProfile from './profiles/UserProfile.vue'
 
 // Dynamically define the breadcrumbs for the DashboardTopBar
 defineProps({
@@ -9,7 +11,6 @@ defineProps({
         default: ['Home']
     }
 })
-
 </script>
 
 <template>
@@ -19,7 +20,7 @@ defineProps({
         </div>
 
         <div class="dashboard-top-right">
-            <NotificationBtn />
+            <!-- <NotificationBtn /> -->
             <UserProfile />
         </div>
     </div>

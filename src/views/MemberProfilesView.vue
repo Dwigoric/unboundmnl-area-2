@@ -5,8 +5,8 @@ import { watchDebounced } from '@vueuse/core'
 // Import vue components
 import NavigationDrawer from '../components/NavigationDrawer.vue'
 import ContentBlock from '../components/ContentBlock.vue'
-import MemberProfileRegister from '../components/MemberProfileRegister.vue'
-import UserProfileBtn from '../components/UserProfileBtn.vue'
+import MemberProfileRegister from '../components/profiles/MemberProfileRegister.vue'
+import UserProfileBtn from '../components/profiles/UserProfileBtn.vue'
 import DashboardTopBar from '../components/DashboardTopBar.vue'
 
 // Import Packages
@@ -29,16 +29,17 @@ async function getAllUsers() {
 
     let url = ''
     const params = new URLSearchParams()
-    params.set('access_token', token)
-    if (searchQuery.value !== '') {
+    if (searchQuery.value) {
         params.set('username', searchQuery.value)
         url += `search?${params}`
-    } else {
-        url += `?${params}`
     }
 
     try {
-        const response = await fetch(`${API_URL}/users/${url}`)
+        const response = await fetch(`${API_URL}/users/${url}`, {
+            credentials: 'omit',
+            method: 'GET',
+            headers: { Authorization: `Bearer ${token}` }
+        })
         users.value = await response.json()
     } catch (e) {
         console.error(e)
@@ -77,7 +78,7 @@ onMounted(getAllUsers)
 
                     <div class="btn-wrapper">
                         <v-dialog width="1200">
-                            <template v-slot:activator="{ props }">
+                            <template #activator="{ props }">
                                 <!-- Create Member Profile Button -->
                                 <v-btn
                                     class="btn capitalize-text"
@@ -88,7 +89,7 @@ onMounted(getAllUsers)
                             </template>
 
                             <!-- Form popup -->
-                            <template v-slot:default="{ isActive }">
+                            <template #default="{ isActive }">
                                 <v-card close-on-back contained class="form-wrapper">
                                     <v-container>
                                         <v-row justify="end">
