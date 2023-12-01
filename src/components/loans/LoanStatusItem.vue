@@ -27,6 +27,9 @@ const headers = [
     { title: 'Change Status', key: 'id' }
 ]
 
+// Remove the "Change Status" column if the status is not pending
+if (props.status !== 'pending') headers.splice(4, 1)
+
 // Methods
 const fetchLoans = async () => {
     const params = new URLSearchParams()
