@@ -24,7 +24,7 @@ const props = defineProps({
 const headers = [
     { title: 'Type of Loan', key: 'type' },
     { title: 'Loanee', key: 'loanee' },
-    { title: 'Original Amount of Loan', key: 'amount' },
+    { title: 'Original Amount of Loan', key: 'originalAmount' },
     { title: 'Outstanding Balance', key: 'balance' },
     { title: 'Status', key: 'status' },
     { title: 'Due Date', key: 'dueDate' },
@@ -123,14 +123,8 @@ onMounted(async () => {
                 id: loan.loanID,
                 loanee: loan.username,
                 type: LOAN_TYPES[loan.loanType],
-                balance: Intl.NumberFormat('en-US', {
-                    style: 'currency',
-                    currency: 'PHP'
-                }).format(Number(loan.balance)),
-                amount: Intl.NumberFormat('en-US', {
-                    style: 'currency',
-                    currency: 'PHP'
-                }).format(Number(loan.originalLoanAmount)),
+                balance: loan.balance,
+                originalAmount: loan.originalLoanAmount,
                 status: loan.status,
                 dueDate: loan.dueDate
             }))
@@ -181,6 +175,24 @@ onMounted(async () => {
                     })
                 }}
             </v-chip>
+        </template>
+
+        <template #item.balance="{ value }">
+            {{
+                Intl.NumberFormat('en-US', {
+                    style: 'currency',
+                    currency: 'PHP'
+                }).format(Number(value))
+            }}
+        </template>
+
+        <template #item.originalAmount="{ value }">
+            {{
+                Intl.NumberFormat('en-US', {
+                    style: 'currency',
+                    currency: 'PHP'
+                }).format(Number(value))
+            }}
         </template>
 
         <template #item.status="{ value, item }">
