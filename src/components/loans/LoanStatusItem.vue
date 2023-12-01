@@ -18,13 +18,15 @@ const props = defineProps({
 // Reactive variables
 const search = ref('')
 const items = reactive([])
-const headers = [
+let headers = [
     { title: 'Loanee', key: 'loanee' },
     { title: 'Type of Loan', key: 'loanType' },
     { title: 'Amount of Loan', key: 'originalLoanAmount' },
-    { title: 'Submission Date', key: 'submissionDate' },
-    { title: 'Change Status', key: 'id' }
+    { title: 'Submission Date', key: 'submissionDate' }
 ]
+if (props.status === 'pending') {
+    headers.push({ title: 'Change Status', key: 'id' })
+}
 
 // Methods
 const fetchLoans = async () => {
