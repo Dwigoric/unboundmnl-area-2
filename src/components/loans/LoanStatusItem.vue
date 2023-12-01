@@ -23,7 +23,8 @@ const headers = [
     { title: 'Loanee', key: 'loanee' },
     { title: 'Type of Loan', key: 'loanType' },
     { title: 'Amount of Loan', key: 'originalLoanAmount' },
-    { title: 'Submission Date', key: 'submissionDate' }
+    { title: 'Submission Date', key: 'submissionDate' },
+    { title: 'Change Status', key: 'id' }
 ]
 
 // Remove the "Change Status" column if the status is not pending
