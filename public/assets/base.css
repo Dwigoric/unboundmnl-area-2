@@ -38,7 +38,7 @@ body {
     background-color: var(--vt-c-white-off);
     min-height: 100vh;
     min-width: 320px;
-    /* min-width: 100vw; */
+    zoom: 0.95;
     color: var(--color-text);
     transition:
         color 0.5s,
