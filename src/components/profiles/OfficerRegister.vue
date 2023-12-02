@@ -99,7 +99,7 @@ const createOfficer = async () => {
     <div class="wrapper">
         <div class="header">
             <!-- TODO: Have officerAction input Update/Register -->
-            <div class="header-text">{{ officerAction }} Officer</div>
+            <div class="header-text">Create Officer Profile</div>
         </div>
 
         <div class="info-fields-wrapper">
@@ -252,12 +252,13 @@ const createOfficer = async () => {
     font-size: 1.5rem;
     font-weight: bold;
 
-    text-align: center;
     margin-bottom: 3%;
 }
 
 .header-text {
     margin-bottom: 3%;
+    margin-left: 8%;
+
 }
 
 .info-fields-wrapper {
