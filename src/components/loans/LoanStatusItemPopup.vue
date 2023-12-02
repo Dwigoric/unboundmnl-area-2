@@ -102,11 +102,21 @@ const decide = async (toApprove) => {
             {{ errorMessage }}
         </VAlert>
         <div class="ml-auto d-flex justify-end pt-4">
+
             <!-- Reject Loan -->
+            <v-btn
+                class="capitalize mr-2 text-white"
+                prepend-icon="mdi-close-thick"
+                color="var(--vt-c-red)"
+                :loading="processing"
+                @click.prevent="decide(false)"
+            >
+                Reject Loan
+            </v-btn>
+            <!-- Accept Loan -->
             <v-btn
                 class="capitalize"
                 prepend-icon="mdi-check-bold"
-                variant="plain"
                 color="green"
                 :loading="processing"
                 @click.prevent="decide(true)"
@@ -114,17 +124,7 @@ const decide = async (toApprove) => {
                 Accept Loan
             </v-btn>
 
-            <!-- Approve Loan -->
-            <v-btn
-                class="capitalize"
-                prepend-icon="mdi-close-thick"
-                variant="plain"
-                color="red"
-                :loading="processing"
-                @click.prevent="decide(false)"
-            >
-                Reject Loan
-            </v-btn>
+            
         </div>
     </div>
 </template>
