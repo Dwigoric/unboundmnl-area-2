@@ -1,10 +1,6 @@
 <script setup>
 // Packages
-import { reactive, ref } from 'vue'
-
-// Reactive variables
-const loading = ref(false)
-const items = reactive([])
+import { ref } from 'vue'
 
 // Project constants
 import { API_URL } from '../../constants/index.js'
@@ -25,6 +21,12 @@ const props = defineProps({
     }
 })
 
+// Reactive variables
+const loading = ref(false)
+const errorAlert = ref(false)
+const errorMessage = ref('')
+
+// Methods
 const markAsReleased = async () => {
     loading.value = true
 
@@ -36,9 +38,17 @@ const markAsReleased = async () => {
             Authorization: `Bearer ${window.$cookies.get('credentials').token}`
         },
         body: JSON.stringify({
-            status: 'released'
+            status: props.message.includes('complete') ? 'complete' : 'released'
         })
     })
+
+    if (!res.ok) {
+        const { message } = await res.json()
+        errorMessage.value = message
+        errorAlert.value = true
+        loading.value = false
+        return
+    }
 
     props.onsubmit()
     loading.value = false
@@ -48,9 +58,9 @@ const markAsReleased = async () => {
 <template>
     <div class="d-flex">
         <h2 class="header-wrapper mr-2">Mark Loan as</h2>
-        <h2 class="text-capitalize"> {{ message }}</h2>
+        <h2 class="text-capitalize">{{ message }}</h2>
     </div>
-    
+
     <div class="wrapper">
         <div id="loan-ledger-wrapper" ref="loanLedgerRefTable" class="w-10"></div>
 
@@ -60,7 +70,6 @@ const markAsReleased = async () => {
                 <p class="ml-3 mr-1">Are you sure you want to mark this loan as</p>
                 <p class="font-weight-bold">{{ message }}</p>
             </div>
-            
 
             <!-- Date of Release -->
             <!-- Only if it needs date -->
