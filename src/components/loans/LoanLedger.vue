@@ -218,7 +218,52 @@ onMounted(getLoanInfo)
                 </div>
 
                 <div class="d-flex">
-                    <!-- Edit Status -->
+
+                    <!-- Mark Loan as Complete -->
+                    <v-dialog width="1200">
+                        <template #activator="{ props }">
+                            <v-btn
+                                prepend-icon="mdi-check-underline-circle-outline"
+                                class="edit-loan-btn capitalize mr-2 text-white"
+                                v-bind="props"
+                                text="Mark Loan as Complete"
+                                color="success"
+                            >
+                            </v-btn>
+                        </template>
+
+                        <!-- Form popup -->
+                        <template #default="{ isActive }">
+                            <v-card close-on-back contained class="form-wrapper">
+                                <v-container>
+                                    <v-row justify="end">
+                                        <v-card-actions>
+                                            <v-btn
+                                                class="ma-2 capitalize-text"
+                                                color="var(--vt-c-blue)"
+                                                @click="isActive.value = false"
+                                                icon="mdi-close"
+                                            >
+                                            </v-btn>
+                                        </v-card-actions>
+                                    </v-row>
+                                </v-container>
+                                <LoanStatusEdit
+                                    :loanID="loanID"
+                                    :message="'complete?'"
+                                    :onsubmit="
+                                        () => {
+                                            formData.status = 'Approved (Released)'
+                                            loanReleased = true
+                                            isActive.value = false
+                                        }
+                                    "
+                                />
+                            </v-card>
+                        </template>
+                    </v-dialog>
+
+                    <!-- Mark Loan as Released -->
                     <v-dialog width="1200">
                         <template #activator="{ props }">
                             <v-btn
@@ -250,6 +295,7 @@ onMounted(getLoanInfo)
                                 </v-container>
                                 <LoanStatusEdit
                                     :loanID="loanID"
+                                    :message="'released?'"
                                     :onsubmit="
                                         () => {
                                             formData.status = 'Approved (Released)'

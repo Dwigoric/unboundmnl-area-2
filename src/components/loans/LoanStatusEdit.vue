@@ -18,6 +18,10 @@ const props = defineProps({
     onsubmit: {
         type: Function,
         default: () => {}
+    },
+    message: {
+        type: String,
+        default: null
     }
 })
 
@@ -42,13 +46,21 @@ const markAsReleased = async () => {
 </script>
 
 <template>
-    <h2 class="header-wrapper">Mark Loan as Released</h2>
+    <div class="d-flex">
+        <h2 class="header-wrapper mr-2">Mark Loan as</h2>
+        <h2 class="text-capitalize"> {{ message }}</h2>
+    </div>
+    
     <div class="wrapper">
         <div id="loan-ledger-wrapper" ref="loanLedgerRefTable" class="w-10"></div>
 
         <!-- Edit transaction form -->
         <VForm id="loan-ledger-edit-form" ref="form">
-            <p class="ml-3">Are you sure you want to mark this loan as released?</p>
+            <div class="d-flex">
+                <p class="ml-3 mr-1">Are you sure you want to mark this loan as</p>
+                <p class="font-weight-bold">{{ message }}</p>
+            </div>
+            
 
             <!-- Date of Release -->
             <!-- Only if it needs date -->
