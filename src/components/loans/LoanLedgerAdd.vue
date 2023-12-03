@@ -8,7 +8,7 @@ import { API_URL, FORM_RULES } from '../../constants/index.js'
 
 // Stores
 import { useCurrentUserStore } from '../../stores/currentUser.js'
-import router from '../../router';
+import router from '../../router'
 const currentUserStore = useCurrentUserStore()
 
 // Define constants
@@ -113,7 +113,21 @@ const submit = async function () {
         formData.balance = newBalance
     }
 
-    formData.amountDue = getAmountDue(formData.interestDue, formData.finesDue);
+    formData.amountDue = getAmountDue(formData.interestDue, formData.finesDue)
+
+    // Convert all empty strings to 0 values for numeric fields
+    for (const field of [
+        'amountDue',
+        'amountPaid',
+        'interestDue',
+        'interestPaid',
+        'finesDue',
+        'finesPaid'
+    ]) {
+        if (formData[field] === '') {
+            formData[field] = 0
+        }
+    }
 
     const res = await fetch(`${API_URL}/loans/${props.loanID}/ledger`, {
         credentials: 'omit',

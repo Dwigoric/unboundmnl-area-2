@@ -97,6 +97,13 @@ const submit = async function () {
 
     loading.value = true
 
+    // Convert all empty strings to 0 values for numeric fields
+    for (const field of ['amount', 'interest', 'balance']) {
+        if (formData[field] === '') {
+            formData[field] = 0
+        }
+    }
+
     const res = await fetch(`${API_URL}/deposits/${props.depositID}/ledger`, {
         credentials: 'omit',
         method: 'PUT',
@@ -125,14 +132,14 @@ const submit = async function () {
 
 watch(
     () => formData.transactionType,
-    (transaction => {
+    (transaction) => {
         if (transaction === 'Deposit') {
-            formData.amount = 0;
+            formData.amount = 0
         } else if (transaction === 'Withdrawal') {
-            formData.amount = 0;
-            formData.interest = 0;
+            formData.amount = 0
+            formData.interest = 0
         }
-    })
+    }
 )
 </script>
 
