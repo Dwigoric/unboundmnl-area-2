@@ -38,6 +38,10 @@ const tab = ref('pending')
                             <v-tab value="rejected">
                                 <div class="capitalize">Rejected</div>
                             </v-tab>
+
+                            <v-tab value="complete">
+                                <div class="capitalize">Complete</div>
+                            </v-tab>
                         </v-tabs>
 
                         <v-window v-model="tab" class="ml-5 mt-2">
@@ -47,6 +51,10 @@ const tab = ref('pending')
 
                             <v-window-item value="rejected">
                                 <LoanStatusItem status="rejected" />
+                            </v-window-item>
+
+                            <v-window-item value="complete">
+                                <LoanStatusItem status="complete" />
                             </v-window-item>
                         </v-window>
                     </div>
