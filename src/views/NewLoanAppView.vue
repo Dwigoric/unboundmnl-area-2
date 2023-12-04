@@ -4,7 +4,6 @@ import { ref, watch, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 
 // Import components
-import NavigationDrawer from '../components/NavigationDrawer.vue'
 import ContentBlock from '../components/ContentBlock.vue'
 import StepCounter from '../components/loans/StepCounterLoanApp.vue'
 import DashboardTopBar from '../components/DashboardTopBar.vue'
@@ -33,25 +32,21 @@ onMounted(() => updateStepCounter(route.path))
 </script>
 
 <template>
-    <div class="bg-off-white d-flex px-4 py-2">
-        <NavigationDrawer />
+    <div class="d-flex flex-column w-100 pl-8">
+        <!-- Top Bar of Dashboard -->
+        <DashboardTopBar :breadcrumbs="['Loans', 'Create a New Loan Application']" />
 
-        <div class="d-flex flex-column w-100 pl-8">
-            <!-- Top Bar of Dashboard -->
-            <DashboardTopBar :breadcrumbs="['Loans', 'Create a New Loan Application']" />
-
-            <!-- Main Dashboard Body -->
+        <!-- Main Dashboard Body -->
+        <div class="dashboard-body d-flex flex-column h-100 py-4">
+            <h2>Create a New Loan Application</h2>
             <div class="dashboard-body d-flex flex-column h-100 py-4">
-                <h2>Create a New Loan Application</h2>
-                <div class="dashboard-body d-flex flex-column h-100 py-4">
-                    <ContentBlock :width="100" :height="100" :unit="'%'" :bg-color="'#FFF'">
-                        <StepCounter :step="step" />
-                    </ContentBlock>
+                <ContentBlock :width="100" :height="100" :unit="'%'" :bg-color="'#FFF'">
+                    <StepCounter :step="step" />
+                </ContentBlock>
 
-                    <ContentBlock :width="100" :height="100" :unit="'%'" :bg-color="'#FFF'">
-                        <RouterView />
-                    </ContentBlock>
-                </div>
+                <ContentBlock :width="100" :height="100" :unit="'%'" :bg-color="'#FFF'">
+                    <RouterView />
+                </ContentBlock>
             </div>
         </div>
     </div>

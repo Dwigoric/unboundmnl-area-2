@@ -4,7 +4,6 @@ import { ref, watch, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 
 // Vue components
-import NavigationDrawer from '../components/NavigationDrawer.vue'
 import ContentBlock from '../components/ContentBlock.vue'
 import DashboardTopBar from '../components/DashboardTopBar.vue'
 import StepCounterLoanTransaction from '../components/StepCounterNewTransaction.vue'
@@ -31,37 +30,21 @@ onMounted(() => updateStepCounter(route.path))
 </script>
 
 <template>
-    <div class="bg-off-white d-flex px-4 py-2">
-        <NavigationDrawer />
+    <div class="d-flex flex-column w-100 pl-8">
+        <!-- Top Bar of Dashboard -->
+        <DashboardTopBar :breadcrumbs="['Deposits', 'Enter Deposit']" />
 
-        <div class="d-flex flex-column w-100 pl-8">
-            <!-- Top Bar of Dashboard -->
-            <DashboardTopBar :breadcrumbs="['Deposits', 'Enter Deposit']" />
+        <!-- Main Dashboard Body -->
+        <div class="dashboard-body d-flex flex-column h-100 py-4">
+            <h2>Enter Deposit</h2>
 
-            <!-- Main Dashboard Body -->
-            <div class="dashboard-body d-flex flex-column h-100 py-4">
-                <h2>Enter Deposit</h2>
+            <ContentBlock :width="100" :height="100" :maxWidth="100" :unit="'%'" :bg-color="'#FFF'">
+                <StepCounterLoanTransaction :step="step" />
+            </ContentBlock>
 
-                <ContentBlock
-                    :width="100"
-                    :height="100"
-                    :maxWidth="100"
-                    :unit="'%'"
-                    :bg-color="'#FFF'"
-                >
-                    <StepCounterLoanTransaction :step="step" />
-                </ContentBlock>
-
-                <ContentBlock
-                    :width="100"
-                    :height="100"
-                    :maxWidth="100"
-                    :unit="'%'"
-                    :bg-color="'#FFF'"
-                >
-                    <RouterView />
-                </ContentBlock>
-            </div>
+            <ContentBlock :width="100" :height="100" :maxWidth="100" :unit="'%'" :bg-color="'#FFF'">
+                <RouterView />
+            </ContentBlock>
         </div>
     </div>
 </template>
