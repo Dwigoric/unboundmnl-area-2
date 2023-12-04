@@ -3,34 +3,20 @@
 import { ref, onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
 import jwt_decode from 'jwt-decode'
-import { useDisplay } from 'vuetify'
-
-const { mobile } = useDisplay()
-
-onMounted(() => {
-    if (mobile) {
-        rail.value = true
-    }
-})
 
 // Import router
 import router from '../router'
 
 // Import stores
 import { useCurrentUserStore } from '../stores/currentUser'
+import { usePrefsStore } from '../stores/prefs'
 
 // Define stores
 const currentUserStore = storeToRefs(useCurrentUserStore())
+const prefsStore = usePrefsStore()
 
 // Reactive Variables
-const rail = ref(false)
 const isAdmin = ref(false)
-
-window.addEventListener('resize', () => {
-    const newScreenSize = window.innerWidth
-    
-    rail.value = newScreenSize <= 961
-})
 
 // Define methods
 const logout = () => {
@@ -48,39 +34,52 @@ const logout = () => {
     router.replace({ name: 'Login' })
 }
 
+const sidebarReactivity = () => {
+    const windowWidth = window.innerWidth
+
+    prefsStore.setPreferences({ closeSidebar: windowWidth <= 961 })
+}
+
 // Lifecycle hooks
 onMounted(() => {
     const { type } = jwt_decode(window.$cookies.get('credentials').token)
     isAdmin.value = type === 'admin'
 })
+
+onMounted(sidebarReactivity)
+
+window.addEventListener('resize', sidebarReactivity)
 </script>
 
 <template>
-        <v-layout>
-
+    <v-layout>
         <v-navigation-drawer
             :width="300"
             :margin="20"
             class="navigation-drawer"
             theme="dark"
-            :rail="rail"
+            :rail="prefsStore.preferences.closeSidebar"
             rail-width="90"
             permanent=""
         >
-            <div v-if="rail === false" class="navigation-title-box">
+            <div v-if="!prefsStore.preferences.closeSidebar" class="navigation-title-box">
                 <svg width="260" height="80" xmlns="http://www.w3.org/2000/svg" class="mt-n2">
                     <image href="/assets/logo-full.svg" width="250" height="100" />
                 </svg>
             </div>
 
-            <div v-if="rail === true" class="navigation-title-box">
+            <div v-if="prefsStore.preferences.closeSidebar" class="navigation-title-box">
                 <svg width="50" height="80" xmlns="http://www.w3.org/2000/svg" class="mt-n6">
                     <image href="/assets/logo.svg" width="45" height="100" />
                 </svg>
             </div>
 
             <v-list density="compact">
-                <v-list-subheader v-if="rail === false" class="mt-4 mb-n3" title="LOANS">
+                <v-list-subheader
+                    v-if="!prefsStore.preferences.closeSidebar"
+                    class="mt-4 mb-n3"
+                    title="LOANS"
+                >
                 </v-list-subheader>
 
                 <v-list-item
@@ -113,7 +112,11 @@ onMounted(() => {
                 >
                 </v-list-item>
 
-                <v-list-subheader v-if="rail === false" class="mt-4 mb-n3 ml-n3" title="DEPOSITS">
+                <v-list-subheader
+                    v-if="!prefsStore.preferences.closeSidebar"
+                    class="mt-4 mb-n3 ml-n3"
+                    title="DEPOSITS"
+                >
                 </v-list-subheader>
 
                 <v-list-item
@@ -136,7 +139,11 @@ onMounted(() => {
                 >
                 </v-list-item>
 
-                <v-list-subheader v-if="rail === false" class="mt-4 mb-n3 ml-n3" title="PROFILES">
+                <v-list-subheader
+                    v-if="!prefsStore.preferences.closeSidebar"
+                    class="mt-4 mb-n3 ml-n3"
+                    title="PROFILES"
+                >
                 </v-list-subheader>
 
                 <v-list-item
@@ -161,7 +168,7 @@ onMounted(() => {
 
                 <div v-if="isAdmin">
                     <v-list-subheader
-                        v-if="rail === false"
+                        v-if="!prefsStore.preferences.closeSidebar"
                         class="mt-4 mb-n3 ml-n3"
                         title="SETTINGS"
                     >
@@ -200,13 +207,17 @@ onMounted(() => {
             </v-list>
 
             <template #append>
-                <div class="d-flex flex-column w-100" v-if="rail === false">
+                <div class="d-flex flex-column w-100" v-if="!prefsStore.preferences.closeSidebar">
                     <div class="">
                         <div class="d-flex justify-end">
                             <v-btn
                                 variant="text"
                                 icon="mdi-chevron-left"
-                                @click.stop="rail = !rail"
+                                @click.stop="
+                                    prefsStore.setPreferences({
+                                        closeSidebar: !prefsStore.preferences.closeSidebar
+                                    })
+                                "
                             ></v-btn>
                         </div>
 
@@ -214,19 +225,21 @@ onMounted(() => {
                     </div>
                 </div>
 
-                <v-slot v-if="rail === true">
+                <v-slot v-if="prefsStore.preferences.closeSidebar">
                     <v-btn
                         variant="text"
                         icon="mdi-chevron-right"
-                        @click.stop="rail = !rail"
+                        @click.stop="
+                            prefsStore.setPreferences({
+                                closeSidebar: !prefsStore.preferences.closeSidebar
+                            })
+                        "
                     ></v-btn>
                 </v-slot>
             </template>
         </v-navigation-drawer>
         <v-main style="height: 94vh"></v-main>
     </v-layout>
-
-    
 </template>
 
 <style scoped>
