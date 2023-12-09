@@ -221,13 +221,16 @@ onUnmounted(() => {
 
 <template>
     <embed :src="pdfUrl" type="application/pdf" width="100%" height="720px" />
-    <VContainer class="d-flex justify-end ga-3">
-        <VBtn :href="pdfUrl" download="Loan Application Form.pdf" class="bg-purple-darken-3">
+    <div class="d-flex justify-end ga-3">
+        <VBtn :href="pdfUrl" 
+            download="Loan Application Form.pdf" 
+            class="bg-purple-darken-3 text-capitalize"
+            prepend-icon="mdi-download">
             Download application form as PDF
         </VBtn>
         <VBtn
             type="submit"
-            class="bg-orange-darken-4"
+            class="bg-orange-darken-4 text-capitalize"
             :loading="loading"
             @click.prevent="submit"
             :disabled="disableSubmit"
@@ -253,7 +256,7 @@ onUnmounted(() => {
                 >
             </template>
         </v-snackbar>
-    </VContainer>
+    </div>
 </template>
 
 <style scoped></style>
