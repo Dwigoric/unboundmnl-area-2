@@ -1,3 +1,8 @@
+/**
+ * Module for storing frontend routes.
+ * @module router
+ */
+
 // Import packages
 import { createRouter, createWebHistory } from 'vue-router'
 import jwt_decode from 'jwt-decode'
@@ -31,9 +36,15 @@ NProgress.configure({ showSpinner: false })
 // Import path name constants
 import { PATH_NAMES } from '../constants'
 
+/**
+ * Frontend routes.
+ */
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes: [
+        /**
+         * Login page
+         */
         {
             path: '/',
             name: 'Login',
@@ -44,6 +55,9 @@ const router = createRouter({
                 else next()
             }
         },
+        /**
+         * Loan dashboard
+         */
         {
             path: '/dashboard',
             name: 'Loan Dashboard',
@@ -54,6 +68,9 @@ const router = createRouter({
                 else next()
             }
         },
+        /**
+         * Member profiles list
+         */
         {
             path: '/member-profiles',
             name: 'Member Profiles View',
@@ -64,6 +81,9 @@ const router = createRouter({
                 else next()
             }
         },
+        /**
+         * Individual member profile view
+         */
         {
             path: '/member-profiles/:username',
             name: 'Profile View',
@@ -75,6 +95,9 @@ const router = createRouter({
                 else next()
             }
         },
+        /**
+         * Officer profile list view
+         */
         {
             path: '/officer-profiles',
             name: 'Officer Register',
@@ -85,21 +108,33 @@ const router = createRouter({
                 else next()
             }
         },
+        /**
+         * Loan application form
+         */
         {
             path: '/new-loan-application',
             name: 'New Loan Application',
             component: NewLoanApplication,
             children: [
+                /**
+                 * Default path
+                 */
                 {
                     path: '',
                     redirect: '/new-loan-application/' + PATH_NAMES.APP_FORM.MEMBER_INPUT
                 },
+                /**
+                 * Loan application form (step 1) - Member search
+                 */
                 {
                     path: PATH_NAMES.APP_FORM.MEMBER_INPUT,
                     name: 'Loan Application Member Input',
                     component: MemberSearch,
                     props: { to: 'Loan Application Details' }
                 },
+                /**
+                 * Loan application form (step 2) - Application details form
+                 */
                 {
                     path: PATH_NAMES.APP_FORM.APPLICATION_DETAILS,
                     name: 'Loan Application Details',
@@ -111,6 +146,9 @@ const router = createRouter({
                         else next()
                     }
                 },
+                /**
+                 * Loan application form (step 3) - Export to PDF and submit
+                 */
                 {
                     path: PATH_NAMES.APP_FORM.EXPORT_FORM,
                     name: 'Export Application Form',
@@ -129,6 +167,9 @@ const router = createRouter({
                 else next()
             }
         },
+        /**
+         * Ledger for individual loans.
+         */
         {
             path: '/loan-ledger/:id',
             name: 'Loan Ledger',
@@ -140,6 +181,9 @@ const router = createRouter({
                 else next()
             }
         },
+        /**
+         * Pending and rejected loans view.
+         */
         {
             path: '/loan-status',
             name: 'Loan Status',
@@ -150,6 +194,9 @@ const router = createRouter({
                 else next()
             }
         },
+        /**
+         * Page for adding loan transactions (unused)
+         */
         {
             path: '/loan-transaction',
             name: 'Loan Transaction',
@@ -183,6 +230,9 @@ const router = createRouter({
                 else next()
             }
         },
+        /**
+         * Deposit dashboard view
+         */
         {
             path: '/deposit-dashboard',
             name: 'Deposit Dashboard',
@@ -193,6 +243,9 @@ const router = createRouter({
                 else next()
             }
         },
+        /**
+         * Deposit creation form
+         */
         {
             path: '/enter-deposit',
             name: 'Enter Deposit',
@@ -226,6 +279,9 @@ const router = createRouter({
                 else next()
             }
         },
+        /**
+         * Ledger view for individual deposits.
+         */
         {
             path: '/deposit-ledger/:id',
             name: 'Deposit Ledger',
@@ -237,6 +293,9 @@ const router = createRouter({
                 else next()
             }
         },
+        /**
+         * Loan and deposit settings view.
+         */
         {
             path: '/settings/loans-and-deposits',
             name: 'Loans and Deposits Settings',
@@ -252,6 +311,9 @@ const router = createRouter({
                 else next()
             }
         },
+        /**
+         * Notification settings view.
+         */
         {
             path: '/settings/notification',
             name: 'Notification Settings',
@@ -267,6 +329,9 @@ const router = createRouter({
                 else next()
             }
         },
+        /**
+         * Administrator settings view (password change screen)
+         */
         {
             path: '/settings/admin',
             name: 'Admin Settings',

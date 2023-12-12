@@ -1,3 +1,8 @@
+/**
+ * Rules for frontend validation.
+ * @module constants/rules
+ */
+
 export const FORM_RULES = Object.freeze({
     required: (v) => !!v || 'Required',
     min6: (v) => (v && v.length >= 6) || 'Minimum of 6 characters',

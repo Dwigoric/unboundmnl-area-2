@@ -6,6 +6,8 @@ import { psgc } from 'ph-locations'
 // Philippine locations
 const { regions, provinces, citiesMunicipalities } = psgc
 
+import { formatUTC } from '../../modules/datetime/formatDate.js'
+
 // Import constants
 import { API_URL, FORM_RULES } from '../../constants/index.js'
 
@@ -89,9 +91,9 @@ const submitForm = async function () {
 const autofillFormIfPossible = function () {
     if (props.autofill) {
         let autofillData = { ...props.autofill }
-        autofillData.birthday = autofillData.birthday.substring(0, 10)
+        autofillData.birthday = formatUTC(autofillData.birthday)
         if (autofillData.spouse) {
-            autofillData.spouse.birthday = autofillData.spouse.birthday.substring(0, 10)
+            autofillData.spouse.birthday = formatUTC(autofillData.spouse.birthday)
         } else {
             delete autofillData.spouse
         }

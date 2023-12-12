@@ -1,3 +1,8 @@
+/**
+ * Path name constants for redirects.
+ * @module constants/path_names
+ */
+
 export const PATH_NAMES = Object.freeze({
     APP_FORM: {
         MEMBER_INPUT: 'member-input',

@@ -1,6 +1,7 @@
 <script setup>
 // Packages
 import { ref, reactive } from 'vue'
+import { formatDate } from '../../modules/datetime/formatDate.js'
 
 // Router
 import router from '../../router/index.js'
@@ -23,14 +24,6 @@ const rules = {
                 return v.toString().split('.')[1].length || 0
             })(v) <= decimalPlaces || `Must not have more than ${decimalPlaces} decimal places`
     }
-}
-
-// Date formatter
-const formatDate = function (date) {
-    let year = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(date)
-    let month = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(date)
-    let day = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(date)
-    return `${year}-${month}-${day}`
 }
 
 // Reactive variables

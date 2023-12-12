@@ -1361,6 +1361,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"async@npm:^3.2.3":
+  version: 3.2.5
+  resolution: "async@npm:3.2.5"
+  checksum: 323c3615c3f0ab1ac25a6f953296bc0ac3213d5e0f1c0debdb12964e55963af288d570293c11e44f7967af58c06d2a88d0ea588c86ec0fbf62fa98037f604a0f
+  languageName: node
+  linkType: hard
+
 "asynckit@npm:^0.4.0":
   version: 0.4.0
   resolution: "asynckit@npm:0.4.0"
@@ -1523,7 +1530,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chalk@npm:^4.0.0":
+"chalk@npm:^4.0.0, chalk@npm:^4.0.2":
   version: 4.1.2
   resolution: "chalk@npm:4.1.2"
   dependencies:
@@ -1809,6 +1816,17 @@ __metadata:
   bin:
     editorconfig: bin/editorconfig
   checksum: bd0a7236f31a7f54801cb6f3222508d4f872a24e440bef30ee29f4ba667c0741724e52e0ad521abe3409b12cdafd8384bb751de9b2a2ee5f845c740edd2e742f
+  languageName: node
+  linkType: hard
+
+"ejs@npm:^3.0.1":
+  version: 3.1.9
+  resolution: "ejs@npm:3.1.9"
+  dependencies:
+    jake: "npm:^10.8.5"
+  bin:
+    ejs: bin/cli.js
+  checksum: 71f56d37540d2c2d71701f0116710c676f75314a3e997ef8b83515d5d4d2b111c5a72725377caeecb928671bacb84a0d38135f345904812e989847057d59f21a
   languageName: node
   linkType: hard
 
@@ -2220,6 +2238,15 @@ __metadata:
   dependencies:
     flat-cache: "npm:^3.0.4"
   checksum: 099bb9d4ab332cb93c48b14807a6918a1da87c45dce91d4b61fd40e6505d56d0697da060cb901c729c90487067d93c9243f5da3dc9c41f0358483bfdebca736b
+  languageName: node
+  linkType: hard
+
+"filelist@npm:^1.0.4":
+  version: 1.0.4
+  resolution: "filelist@npm:1.0.4"
+  dependencies:
+    minimatch: "npm:^5.0.1"
+  checksum: 4b436fa944b1508b95cffdfc8176ae6947b92825483639ef1b9a89b27d82f3f8aa22b21eed471993f92709b431670d4e015b39c087d435a61e1bb04564cf51de
   languageName: node
   linkType: hard
 
@@ -2771,6 +2798,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"jake@npm:^10.8.5":
+  version: 10.8.7
+  resolution: "jake@npm:10.8.7"
+  dependencies:
+    async: "npm:^3.2.3"
+    chalk: "npm:^4.0.2"
+    filelist: "npm:^1.0.4"
+    minimatch: "npm:^3.1.2"
+  bin:
+    jake: bin/cli.js
+  checksum: ad1cfe398836df4e6962954e5095597c21c5af1ea5a4182f6adf0869df8aca467a2eeca7869bf44f47120f4dd4ea52589d16050d295c87a5906c0d744775acc3
+  languageName: node
+  linkType: hard
+
 "js-beautify@npm:^1.14.9":
   version: 1.14.11
   resolution: "js-beautify@npm:1.14.11"
@@ -2802,6 +2843,18 @@ __metadata:
   bin:
     js-yaml: bin/js-yaml.js
   checksum: c138a34a3fd0d08ebaf71273ad4465569a483b8a639e0b118ff65698d257c2791d3199e3f303631f2cb98213fa7b5f5d6a4621fd0fff819421b990d30d967140
+  languageName: node
+  linkType: hard
+
+"jsdoc-vuejs@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "jsdoc-vuejs@npm:4.0.0"
+  dependencies:
+    ejs: "npm:^3.0.1"
+  peerDependencies:
+    "@vue/compiler-sfc": ">= 3.0.0"
+    jsdoc: ">=3.0.0"
+  checksum: c4bed665bdfc2b9dce787ac19c4ec050a72dba84ab4578755b05e795e2616029e933f6c167fd499afd73b6e43c5938d5ca5f61bff68fad904b388b86bdcf34cc
   languageName: node
   linkType: hard
 
@@ -3101,6 +3154,15 @@ __metadata:
   dependencies:
     brace-expansion: "npm:^1.1.7"
   checksum: e0b25b04cd4ec6732830344e5739b13f8690f8a012d73445a4a19fbc623f5dd481ef7a5827fde25954cd6026fede7574cc54dc4643c99d6c6b653d6203f94634
+  languageName: node
+  linkType: hard
+
+"minimatch@npm:^5.0.1":
+  version: 5.1.6
+  resolution: "minimatch@npm:5.1.6"
+  dependencies:
+    brace-expansion: "npm:^2.0.1"
+  checksum: 126b36485b821daf96d33b5c821dac600cc1ab36c87e7a532594f9b1652b1fa89a1eebcaad4dff17c764dce1a7ac1531327f190fed5f97d8f6e5f889c116c429
   languageName: node
   linkType: hard
 
@@ -4280,6 +4342,7 @@ __metadata:
     eslint: "npm:^8.54.0"
     eslint-plugin-vue: "npm:^9.18.1"
     gridjs: "npm:^6.0.6"
+    jsdoc-vuejs: "npm:^4.0.0"
     jsdom: "npm:^23.0.0"
     jwt-decode: "npm:3.x"
     nprogress: "npm:^0.2.0"
@@ -4294,6 +4357,9 @@ __metadata:
     vue-cookies: "npm:^1.8.3"
     vue-router: "npm:^4.2.5"
     vuetify: "npm:^3.4.4"
+  dependenciesMeta:
+    jsdoc-vuejs@4.0.0:
+      unplugged: true
   languageName: unknown
   linkType: soft
 

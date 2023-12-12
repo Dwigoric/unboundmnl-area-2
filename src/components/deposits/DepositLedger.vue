@@ -5,6 +5,8 @@ import { ref, reactive, onMounted, computed } from 'vue'
 // Import constants
 import { API_URL, DEPOSIT_CATEGORIES } from '../../constants'
 
+import { formatUTC } from '../../modules/datetime/formatDate.js'
+
 // Import components
 import DepositLedgerEdit from './DepositLedgerEdit.vue'
 import DepositLedgerAdd from './DepositLedgerAdd.vue'
@@ -43,9 +45,9 @@ const formattedDepositAmount = computed(() => {
     )
 })
 
-// Format the approval date of the laon
+// Format the approval date of the loan
 const formattedApprovalDate = computed(() => {
-    return depositApprovalDate.value.substring(0, 10)
+    return formatUTC(depositApprovalDate.value)
 })
 
 const capitalLedgerColumns = [
@@ -92,13 +94,13 @@ const getDepositInfo = async () => {
 
     ledgerJson.ledger.forEach((transaction) => {
         ledgerData.push({
-            transactionDate: transaction.transactionDate.substring(0, 10),
+            transactionDate: formatUTC(transaction.transactionDate),
             ORNumber: transaction.ORNumber,
             transactionType: transaction.transactionType,
             amount: transaction.amount,
             interest: transaction.interest,
             balance: transaction.balance,
-            submissionDate: transaction.submissionDate.substring(0, 10),
+            submissionDate: formatUTC(transaction.submissionDate),
             officerInCharge:
                 transaction.officerInCharge.given === 'Admin' &&
                 transaction.officerInCharge.last === ' '

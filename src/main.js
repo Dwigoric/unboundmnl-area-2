@@ -1,3 +1,8 @@
+/**
+ * Module containing the main app
+ * @module main
+ */
+
 // Import packages
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
@@ -12,7 +17,10 @@ import 'vuetify/lib/styles/main.css'
 import '@mdi/font/css/materialdesignicons.css'
 import 'nprogress/nprogress.css'
 
-// Build the app
+/**
+ * Main Vue file for application
+ * @object {App.App}
+ */
 const app = createApp(App)
 
 app.use(createPinia())

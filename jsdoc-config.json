@@ -1,6 +1,6 @@
 {
     "plugins": [
-      "c:/Users/Justin/AppData/Roaming/npm/node_modules/jsdoc-vuejs"
+      ".yarn/unplugged/jsdoc-vuejs-virtual-b8d35093ba/node_modules/jsdoc-vuejs"
     ],
     "source": {
       "includePattern": "\\.(vue|js)$"

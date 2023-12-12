@@ -13,6 +13,8 @@ import LoanStatusEdit from './LoanStatusEdit.vue'
 
 import router from '../../router/index.js'
 
+import { formatUTC } from '../../modules/datetime/formatDate.js'
+
 // Define props for the component
 const props = defineProps({
     loanID: {
@@ -110,7 +112,7 @@ const getLoanInfo = async () => {
         formData.paymentFrequency =
             loanData.paymentFrequency.substring(0, 1).toUpperCase() +
             loanData.paymentFrequency.substring(1)
-        formData.approvalDate = loanData.approvalDate.substring(0, 10)
+        formData.approvalDate = formatUTC(loanData.approvalDate)
         if (loanData.coborrower) {
             formData.coborrowerName = `${loanData.coborrower.name.last}, ${loanData.coborrower.name.given}`
         } else {
@@ -131,7 +133,7 @@ const getLoanInfo = async () => {
 
     ledgerJson.ledger.forEach((transaction) => {
         ledgerData.push({
-            transactionDate: transaction.transactionDate.substring(0, 10),
+            transactionDate: formatUTC(transaction.transactionDate),
             ORNumber: transaction.ORNumber,
             amountDue: transaction.amountDue,
             amountPaid: transaction.amountPaid,
@@ -140,7 +142,7 @@ const getLoanInfo = async () => {
             interestPaid: transaction.interestPaid,
             finesDue: transaction.finesDue,
             finesPaid: transaction.finesPaid,
-            submissionDate: transaction.submissionDate.substring(0, 10),
+            submissionDate: formatUTC(transaction.submissionDate),
             officerInCharge:
                 transaction.officerInCharge.given === 'Admin' &&
                 transaction.officerInCharge.last === ' '
