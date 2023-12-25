@@ -131,7 +131,7 @@ onMounted(getDepositInfo)
                     <p class="loan-properties">{{ depositType }}</p>
                 </div>
                 <div class="d-flex flex-column loan-info-cell grid-left-border h-100 px-4">
-                    <p class="font-weight-bold">Date:</p>
+                    <p class="font-weight-bold">Date of Deposit:</p>
                     <p class="loan-properties">{{ formattedApprovalDate }}</p>
                 </div>
             </div>

@@ -18,6 +18,7 @@ const props = defineProps({
 // Reactive variables
 const search = ref('')
 const items = reactive([])
+const snackbar = ref(false)
 const headers = [
     { title: 'Loanee', key: 'loanee' },
     { title: 'Type of Loan', key: 'loanType' },
@@ -25,6 +26,9 @@ const headers = [
     { title: 'Submission Date', key: 'submissionDate' },
     { title: 'Change Status', key: 'id' }
 ]
+
+// Remove the "Change Status" column if the status is not pending
+if (props.status !== 'pending') headers.splice(4, 1)
 
 // Methods
 const fetchLoans = async () => {
@@ -54,6 +58,8 @@ const fetchLoans = async () => {
 }
 
 const removeLoanFromGrid = (loanID) => {
+    snackbar.value = true
+
     const index = items.findIndex((loan) => loan[0] === loanID)
     items.splice(index, 1)
 }
@@ -127,6 +133,7 @@ onMounted(fetchLoans)
             </VDialog>
         </template>
     </v-data-table>
+    <v-snackbar v-model="snackbar" rounded="pill">Loan was processed!</v-snackbar>
 </template>
 
 <style>

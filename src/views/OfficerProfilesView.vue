@@ -4,7 +4,6 @@ import { ref, reactive, onMounted } from 'vue'
 import jwt_decode from 'jwt-decode'
 
 // Import Components
-import NavigationDrawer from '../components/NavigationDrawer.vue'
 import ContentBlock from '../components/ContentBlock.vue'
 import OfficerRegister from '../components/profiles/OfficerRegister.vue'
 import OfficerProfileBtn from '../components/profiles/OfficerProfileBtn.vue'
@@ -54,76 +53,71 @@ onMounted(getAllOfficers)
 </script>
 
 <template>
-    <div class="bg-off-white d-flex px-4 py-2">
-        <NavigationDrawer />
+    <div class="d-flex flex-column w-100 pl-8">
+        <!-- Top Bar of Dashboard -->
+        <DashboardTopBar :breadcrumbs="['Profiles', 'Officer Profiles']" />
 
-        <div class="d-flex flex-column w-100 pl-8">
-            <!-- Top Bar of Dashboard -->
-            <DashboardTopBar :breadcrumbs="['Profiles', 'Officer Profiles']" />
+        <!-- Main Dashboard Body -->
+        <div class="dashboard-body d-flex flex-column h-100 py-3">
+            <h2>Officer Profiles</h2>
 
-            <!-- Main Dashboard Body -->
-            <div class="dashboard-body d-flex flex-column h-100 py-3">
-                <h2>Officer Profiles</h2>
+            <div class="upper-wrapper">
+                <div class="btn-wrapper" v-if="type === 'admin'">
+                    <v-dialog width="900">
+                        <template #activator="{ props }">
+                            <!-- Create Officer Profile Button -->
+                            <v-btn
+                                class="btn capitalize-text"
+                                v-bind="props"
+                                text="Create Officer Profile"
+                            >
+                            </v-btn>
+                        </template>
 
-                <div class="upper-wrapper">
-                    <div class="btn-wrapper" v-if="type === 'admin'">
-                        <v-dialog width="900">
-                            <template #activator="{ props }">
-                                <!-- Create Officer Profile Button -->
-                                <v-btn
-                                    class="btn capitalize-text"
-                                    v-bind="props"
-                                    text="Create Officer Profile"
-                                >
-                                </v-btn>
-                            </template>
+                        <!-- Form popup -->
+                        <template #default="{ isActive }">
+                            <v-card close-on-back contained class="form-wrapper">
+                                <v-container>
+                                    <v-row justify="end">
+                                        <v-card-actions>
+                                            <v-btn
+                                                class="ma-2 capitalize-text"
+                                                color="var(--vt-c-blue)"
+                                                @click="isActive.value = false"
+                                                icon="mdi-close"
+                                            >
+                                            </v-btn>
+                                        </v-card-actions>
+                                    </v-row>
+                                </v-container>
 
-                            <!-- Form popup -->
-                            <template #default="{ isActive }">
-                                <v-card close-on-back contained class="form-wrapper">
-                                    <v-container>
-                                        <v-row justify="end">
-                                            <v-card-actions>
-                                                <v-btn
-                                                    class="ma-2 capitalize-text"
-                                                    color="var(--vt-c-blue)"
-                                                    @click="isActive.value = false"
-                                                    icon="mdi-close"
-                                                >
-                                                </v-btn>
-                                            </v-card-actions>
-                                        </v-row>
-                                    </v-container>
-
-                                    <!-- TODO: officerAction must be 'Register' -->
-                                    <OfficerRegister
-                                        :add-to-officers="addToOfficers"
-                                        :close-dialog="() => (isActive.value = false)"
-                                    />
-                                </v-card>
-                            </template>
-                        </v-dialog>
-                    </div>
+                                <OfficerRegister
+                                    :add-to-officers="addToOfficers"
+                                    :close-dialog="() => (isActive.value = false)"
+                                />
+                            </v-card>
+                        </template>
+                    </v-dialog>
                 </div>
-                <!--
+            </div>
+            <!--
                 <div v-for="officer in officersArray" :key="officer">
                     <h2>cool</h2>
                 </div>
                 -->
-                <ContentBlock :width="100" :height="100" :unit="'%'" :bg-color="'#FFF'">
-                    <!-- Render list of officers-->
-                    <div
-                        v-for="officer in officers"
-                        :key="officer.uuid"
-                        class="officer-list-box d-flex flex-column"
-                    >
-                        <OfficerProfileBtn
-                            :officer="officer"
-                            :removeFunc="() => removeOfficer(officer.uuid)"
-                        />
-                    </div>
-                </ContentBlock>
-            </div>
+            <ContentBlock :width="100" :height="100" :unit="'%'" :bg-color="'#FFF'">
+                <!-- Render list of officers-->
+                <div
+                    v-for="officer in officers"
+                    :key="officer.uuid"
+                    class="officer-list-box d-flex flex-column"
+                >
+                    <OfficerProfileBtn
+                        :officer="officer"
+                        :removeFunc="() => removeOfficer(officer.uuid)"
+                    />
+                </div>
+            </ContentBlock>
         </div>
     </div>
 </template>

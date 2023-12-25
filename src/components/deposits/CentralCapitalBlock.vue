@@ -71,13 +71,8 @@ onMounted(async () => {
                 id: deposit.depositID,
                 category: DEPOSIT_CATEGORIES[deposit.category],
                 holder: deposit.username,
-                approvalDate: new Date(deposit.approvalDate).toLocaleDateString('en-PH', {
-                    dateStyle: 'long'
-                }),
-                interestRate: Intl.NumberFormat('en-PH', {
-                    style: 'percent',
-                    maximumFractionDigits: 2
-                }).format(deposit.interestRate / 100)
+                approvalDate: deposit.approvalDate,
+                interestRate: deposit.interestRate
             }))
         )
     }
@@ -115,6 +110,24 @@ onMounted(async () => {
                     {{ value }}
                 </v-btn>
             </template>
+
+            <template #item.approvalDate="{ value }">
+                {{
+                    new Date(value).toLocaleDateString('en-PH', {
+                        dateStyle: 'long'
+                    })
+                }}
+            </template>
+
+            <template #item.interestRate="{ value }">
+                {{
+                    Intl.NumberFormat('en-PH', {
+                        style: 'percent',
+                        maximumFractionDigits: 2
+                    }).format(value / 100)
+                }}
+            </template>
+
             <template #item.id="{ value }">
                 <v-btn
                     class="text-none bg-blue-darken-1"

@@ -3,7 +3,6 @@
 import { watchDebounced } from '@vueuse/core'
 
 // Import vue components
-import NavigationDrawer from '../components/NavigationDrawer.vue'
 import ContentBlock from '../components/ContentBlock.vue'
 import MemberProfileRegister from '../components/profiles/MemberProfileRegister.vue'
 import UserProfileBtn from '../components/profiles/UserProfileBtn.vue'
@@ -54,79 +53,75 @@ onMounted(getAllUsers)
 </script>
 
 <template>
-    <div class="bg-off-white d-flex px-4 py-2">
-        <NavigationDrawer />
+    <div class="d-flex flex-column w-100 pl-8">
+        <!-- Top Bar of Dashboard -->
+        <DashboardTopBar :breadcrumbs="['Profiles', 'Member Profiles']" />
 
-        <div class="d-flex flex-column w-100 pl-8">
-            <!-- Top Bar of Dashboard -->
-            <DashboardTopBar :breadcrumbs="['Profiles', 'Member Profiles']" />
+        <!-- Main Dashboard Body -->
+        <div class="dashboard-body d-flex flex-column h-100 py-3">
+            <h2>Member Profiles</h2>
 
-            <!-- Main Dashboard Body -->
-            <div class="dashboard-body d-flex flex-column h-100 py-3">
-                <h2>Member Profiles</h2>
-
-                <div class="upper-wrapper">
-                    <!-- Search bar -->
-                    <div class="search-wrapper">
-                        <v-text-field
-                            v-model="searchQuery"
-                            prepend-inner-icon="mdi-magnify"
-                            label="Search Member"
-                            clearable=""
-                        />
-                    </div>
-
-                    <div class="btn-wrapper">
-                        <v-dialog width="1200">
-                            <template #activator="{ props }">
-                                <!-- Create Member Profile Button -->
-                                <v-btn
-                                    class="btn capitalize-text"
-                                    v-bind="props"
-                                    text="Create Member Profile"
-                                >
-                                </v-btn>
-                            </template>
-
-                            <!-- Form popup -->
-                            <template #default="{ isActive }">
-                                <v-card close-on-back contained class="form-wrapper">
-                                    <v-container>
-                                        <v-row justify="end">
-                                            <v-card-actions>
-                                                <v-btn
-                                                    class="ma-2 capitalize-text"
-                                                    color="var(--vt-c-blue)"
-                                                    @click="isActive.value = false"
-                                                    icon="mdi-close"
-                                                >
-                                                </v-btn>
-                                            </v-card-actions>
-                                        </v-row>
-                                    </v-container>
-
-                                    <MemberProfileRegister
-                                        :onsubmit="
-                                            () => getAllUsers().then(() => (isActive.value = false))
-                                        "
-                                    />
-                                </v-card>
-                            </template>
-                        </v-dialog>
-                    </div>
+            <div class="upper-wrapper">
+                <!-- Search bar -->
+                <div class="search-wrapper">
+                    <v-text-field
+                        v-model="searchQuery"
+                        prepend-inner-icon="mdi-magnify"
+                        label="Search Member"
+                        clearable=""
+                    />
                 </div>
 
-                <ContentBlock :width="100" :height="102" :unit="'%'" :bg-color="'#FFF'">
-                    <!-- List of members -->
-                    <div
-                        v-for="user in users"
-                        :key="user.username"
-                        class="officer-list-box d-flex flex-column"
-                    >
-                        <UserProfileBtn :user="user" :onsubmit="getAllUsers" />
-                    </div>
-                </ContentBlock>
+                <div class="btn-wrapper">
+                    <v-dialog width="1200">
+                        <template #activator="{ props }">
+                            <!-- Create Member Profile Button -->
+                            <v-btn
+                                class="btn capitalize-text"
+                                v-bind="props"
+                                text="Create Member Profile"
+                            >
+                            </v-btn>
+                        </template>
+
+                        <!-- Form popup -->
+                        <template #default="{ isActive }">
+                            <v-card close-on-back contained class="form-wrapper">
+                                <v-container>
+                                    <v-row justify="end">
+                                        <v-card-actions>
+                                            <v-btn
+                                                class="ma-2 capitalize-text"
+                                                color="var(--vt-c-blue)"
+                                                @click="isActive.value = false"
+                                                icon="mdi-close"
+                                            >
+                                            </v-btn>
+                                        </v-card-actions>
+                                    </v-row>
+                                </v-container>
+
+                                <MemberProfileRegister
+                                    :onsubmit="
+                                        () => getAllUsers().then(() => (isActive.value = false))
+                                    "
+                                />
+                            </v-card>
+                        </template>
+                    </v-dialog>
+                </div>
             </div>
+
+            <ContentBlock :width="100" :height="102" :unit="'%'" :bg-color="'#FFF'">
+                <!-- List of members -->
+                <div
+                    v-for="user in users"
+                    :key="user.username"
+                    class="officer-list-box d-flex flex-column"
+                >
+                    <UserProfileBtn :user="user" :onsubmit="getAllUsers" />
+                </div>
+            </ContentBlock>
         </div>
     </div>
 </template>

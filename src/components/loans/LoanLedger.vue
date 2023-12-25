@@ -28,7 +28,6 @@ const ledgerData = reactive([])
 const isAddPopupActive = ref(false) // for add transaction pop up
 const originalLoanAmount = ref(0) // for dynamically calculating balance in form
 const balance = ref(0)
-const loanReleased = ref(false) // for monitoring whether loan is released or not
 
 const rawLoanData = ref()
 
@@ -120,10 +119,6 @@ const getLoanInfo = async () => {
             formData.coborrowerName = 'No coborrower'
         }
         formData.status = loanData.status
-        if (formData.status === 'released') {
-            formData.status = 'Approved (Released)'
-            loanReleased.value = true
-        }
     }
 
     const ledgerRes = await fetch(`${API_URL}/loans/${props.loanID}/ledger`, {
@@ -220,7 +215,51 @@ onMounted(getLoanInfo)
                 </div>
 
                 <div class="d-flex">
-                    <!-- Edit Status -->
+                    <!-- Mark Loan as Complete -->
+                    <v-dialog width="1200">
+                        <template #activator="{ props }">
+                            <v-btn
+                                v-if="formData.status === 'released'"
+                                prepend-icon="mdi-check-underline-circle-outline"
+                                class="edit-loan-btn capitalize mr-2 text-white"
+                                v-bind="props"
+                                text="Mark Loan as Complete"
+                                color="success"
+                            >
+                            </v-btn>
+                        </template>
+
+                        <!-- Form popup -->
+                        <template #default="{ isActive }">
+                            <v-card close-on-back contained class="form-wrapper">
+                                <v-container>
+                                    <v-row justify="end">
+                                        <v-card-actions>
+                                            <v-btn
+                                                class="ma-2 capitalize-text"
+                                                color="var(--vt-c-blue)"
+                                                @click="isActive.value = false"
+                                                icon="mdi-close"
+                                            >
+                                            </v-btn>
+                                        </v-card-actions>
+                                    </v-row>
+                                </v-container>
+                                <LoanStatusEdit
+                                    :loanID="loanID"
+                                    :message="'complete?'"
+                                    :onsubmit="
+                                        () => {
+                                            formData.status = 'complete'
+                                            isActive.value = false
+                                        }
+                                    "
+                                />
+                            </v-card>
+                        </template>
+                    </v-dialog>
+
+                    <!-- Mark Loan as Released -->
                     <v-dialog width="1200">
                         <template #activator="{ props }">
                             <v-btn
@@ -252,10 +291,10 @@ onMounted(getLoanInfo)
                                 </v-container>
                                 <LoanStatusEdit
                                     :loanID="loanID"
+                                    :message="'released?'"
                                     :onsubmit="
                                         () => {
-                                            formData.status = 'Approved (Released)'
-                                            loanReleased = true
+                                            formData.status = 'released'
                                             isActive.value = false
                                         }
                                     "
@@ -374,7 +413,7 @@ onMounted(getLoanInfo)
             rounded="lg"
             prepend-icon="mdi-plus-circle"
             class="capitalize btn"
-            :disabled="!loanReleased"
+            :disabled="formData.status !== 'released'"
         >
             Add New Transaction
         </VBtn>
@@ -385,7 +424,7 @@ onMounted(getLoanInfo)
         <VDialog width="1000" v-model="isAddPopupActive">
             <template #default="{ isActive }">
                 <VCard close-on-back contained class="form-wrapper">
-                    <VContainer fluid>
+                    <VContainer fluid="">
                         <VRow justify="end">
                             <VCardActions>
                                 <VBtn

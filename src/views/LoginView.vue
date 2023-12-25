@@ -46,11 +46,10 @@ const logIn = async () => {
         })
     }).then((res) => res.json())
 
-    loading.value = false
-
     if (!token) {
         errorMessage.value = message
         errorAlert.value = true
+        loading.value = false
         return
     }
 
@@ -68,6 +67,8 @@ const logIn = async () => {
 
     // Fetch user
     await currentUserStore.fetchUser()
+
+    loading.value = false
 
     // Redirect to dashboard
     return router.replace({ name: 'Loan Dashboard' })
@@ -237,7 +238,7 @@ const logIn = async () => {
     display: flex;
     justify-content: center;
     overflow: auto;
-    padding: 2%
+    padding: 2%;
 }
 
 .login {

@@ -25,7 +25,6 @@ const props = defineProps({
 const errorAlert = ref(false)
 const errorMessage = ref('')
 const processing = ref(false)
-const snackbar = ref(false)
 const headers = [
     { title: 'Loanee', key: 'loanee' },
     { title: 'Type of Loan', key: 'loanType' },
@@ -60,8 +59,6 @@ const decide = async (toApprove) => {
         errorAlert.value = true
         errorMessage.value = message
         return
-    } else {
-        snackbar.value = true
     }
 
     props.onsubmit(props.data.id)
@@ -105,11 +102,21 @@ const decide = async (toApprove) => {
             {{ errorMessage }}
         </VAlert>
         <div class="ml-auto d-flex justify-end pt-4">
+
             <!-- Reject Loan -->
+            <v-btn
+                class="capitalize mr-2 text-white"
+                prepend-icon="mdi-close-thick"
+                color="var(--vt-c-red)"
+                :loading="processing"
+                @click.prevent="decide(false)"
+            >
+                Reject Loan
+            </v-btn>
+            <!-- Accept Loan -->
             <v-btn
                 class="capitalize"
                 prepend-icon="mdi-check-bold"
-                variant="plain"
                 color="green"
                 :loading="processing"
                 @click.prevent="decide(true)"
@@ -117,19 +124,8 @@ const decide = async (toApprove) => {
                 Accept Loan
             </v-btn>
 
-            <!-- Approve Loan -->
-            <v-btn
-                class="capitalize"
-                prepend-icon="mdi-close-thick"
-                variant="plain"
-                color="red"
-                :loading="processing"
-                @click.prevent="decide(false)"
-            >
-                Reject Loan
-            </v-btn>
+            
         </div>
-        <v-snackbar v-model="snackbar" rounded="pill">Loan was processed!</v-snackbar>
     </div>
 </template>
 

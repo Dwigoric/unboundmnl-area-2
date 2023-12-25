@@ -1,6 +1,6 @@
 <script setup>
 // Packages
-import { ref, reactive, onBeforeMount, onMounted } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
 
 // Project constants
 import { API_URL, LOAN_TYPES } from '../../constants/index.js'
@@ -24,7 +24,7 @@ const props = defineProps({
 const headers = [
     { title: 'Type of Loan', key: 'type' },
     { title: 'Loanee', key: 'loanee' },
-    { title: 'Original Amount of Loan', key: 'amount' },
+    { title: 'Original Amount of Loan', key: 'originalAmount' },
     { title: 'Outstanding Balance', key: 'balance' },
     { title: 'Status', key: 'status' },
     { title: 'Due Date', key: 'dueDate' },
@@ -37,13 +37,13 @@ const buildStatus = {
     rejected: ['Rejected', 'red'],
     complete: ['Complete', 'blue']
 }
-const notificationSettings = {
+const notificationSettings = reactive({
     reminder: 0,
     first_notice: 0,
     second_notice: 0,
     third_notice: 0,
     demand_letter: 0
-}
+})
 
 // Reactive variables
 const search = ref('')
@@ -90,8 +90,9 @@ const getDateColor = (dueDate) => {
 }
 
 // Lifecycle hooks
-onBeforeMount(async () => {
-    const res = await fetch(`${API_URL}/settings/notifications`, {
+onMounted(async () => {
+    // Get notification settings for due date periods
+    let res = await fetch(`${API_URL}/settings/notifications`, {
         credentials: 'omit',
         method: 'GET',
         headers: {
@@ -99,16 +100,16 @@ onBeforeMount(async () => {
         }
     })
 
-    if (res.status === 200) {
+    if (res.ok) {
         const { settings } = await res.json()
         Object.assign(notificationSettings, settings)
     }
-})
-onMounted(async () => {
+
+    // Get loans
     const url = props.username ? `/user/${props.username}` : ''
     const params = new URLSearchParams()
     params.set('status', 'approved,released')
-    const res = await fetch(`${API_URL}/loans${url}?${params}`, {
+    res = await fetch(`${API_URL}/loans${url}?${params}`, {
         credentials: 'omit',
         method: 'GET',
         headers: {
@@ -116,21 +117,15 @@ onMounted(async () => {
         }
     })
 
-    if (res.status === 200) {
+    if (res.ok) {
         const { loans } = await res.json()
         items.push(
             ...loans.map((loan) => ({
                 id: loan.loanID,
                 loanee: loan.username,
                 type: LOAN_TYPES[loan.loanType],
-                balance: Intl.NumberFormat('en-US', {
-                    style: 'currency',
-                    currency: 'PHP'
-                }).format(Number(loan.balance)),
-                amount: Intl.NumberFormat('en-US', {
-                    style: 'currency',
-                    currency: 'PHP'
-                }).format(Number(loan.originalLoanAmount)),
+                balance: loan.balance,
+                originalAmount: loan.originalLoanAmount,
                 status: loan.status,
                 dueDate: loan.dueDate
             }))
@@ -181,6 +176,24 @@ onMounted(async () => {
                     })
                 }}
             </v-chip>
+        </template>
+
+        <template #item.balance="{ value }">
+            {{
+                Intl.NumberFormat('en-US', {
+                    style: 'currency',
+                    currency: 'PHP'
+                }).format(Number(value))
+            }}
+        </template>
+
+        <template #item.originalAmount="{ value }">
+            {{
+                Intl.NumberFormat('en-US', {
+                    style: 'currency',
+                    currency: 'PHP'
+                }).format(Number(value))
+            }}
         </template>
 
         <template #item.status="{ value, item }">

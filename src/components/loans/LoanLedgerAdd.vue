@@ -9,7 +9,6 @@ import { API_URL, FORM_RULES } from '../../constants/index.js'
 
 // Stores
 import { useCurrentUserStore } from '../../stores/currentUser.js'
-import router from '../../router'
 const currentUserStore = useCurrentUserStore()
 
 // Define constants
@@ -82,15 +81,17 @@ const formData = reactive({
 })
 
 const newBalance = computed(() => {
-    const dues = Decimal(formData.interestDue).add(formData.finesDue)
-    const payments = Decimal(formData.amountPaid).add(formData.interestPaid).add(formData.finesPaid)
+    const dues = Decimal(formData.interestDue || 0).add(formData.finesDue || 0)
+    const payments = Decimal(formData.amountPaid || 0)
+        .add(formData.interestPaid || 0)
+        .add(formData.finesPaid || 0)
 
     return parseFloat(Decimal(props.balance).sub(payments).add(dues))
 })
 
 function getAmountDue(interestDue, finesDue) {
-    interestDue = Decimal(interestDue)
-    finesDue = Decimal(finesDue)
+    interestDue = Decimal(interestDue || 0)
+    finesDue = Decimal(finesDue || 0)
 
     return parseFloat(interestDue.add(finesDue))
 }
@@ -108,6 +109,20 @@ const submit = async function () {
     }
 
     formData.amountDue = getAmountDue(formData.interestDue, formData.finesDue)
+
+    // Convert all empty strings to 0 values for numeric fields
+    for (const field of [
+        'amountDue',
+        'amountPaid',
+        'interestDue',
+        'interestPaid',
+        'finesDue',
+        'finesPaid'
+    ]) {
+        if (formData[field] === '') {
+            formData[field] = 0
+        }
+    }
 
     const res = await fetch(`${API_URL}/loans/${props.loanID}/ledger`, {
         credentials: 'omit',

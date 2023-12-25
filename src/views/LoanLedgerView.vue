@@ -4,7 +4,6 @@ import { ref } from 'vue'
 import { useRoute } from 'vue-router'
 
 // Import vue components
-import NavigationDrawer from '../components/NavigationDrawer.vue'
 import ContentBlock from '../components/ContentBlock.vue'
 import DashboardTopBar from '../components/DashboardTopBar.vue'
 import LoanLedger from '../components/loans/LoanLedger.vue'
@@ -24,24 +23,15 @@ const loanID = ref(route.params.id)
 </script>
 
 <template>
-    <div class="bg-off-white d-flex px-4 py-2">
-        <NavigationDrawer />
-        <div class="d-flex flex-column w-100 pl-8">
-            <!-- Top Bar of Dashboard -->
-            <DashboardTopBar :breadcrumbs="['Loans', `Loan Ledger`]" />
-            <h2>Loan Ledger</h2>
+    <div class="d-flex flex-column w-100 pl-8">
+        <!-- Top Bar of Dashboard -->
+        <DashboardTopBar :breadcrumbs="['Loans', `Loan Ledger`]" />
+        <h2>Loan Ledger</h2>
 
-            <div class="dashboard-body ledger-block d-flex flex-column h-100 py-4">
-                <ContentBlock
-                    :width="100"
-                    :height="100"
-                    :unit="'%'"
-                    :bg-color="'#FFF'"
-                >
-                
-                    <LoanLedger :loanID="loanID" />
-                </ContentBlock>
-            </div>
+        <div class="dashboard-body ledger-block d-flex flex-column h-100 py-4">
+            <ContentBlock :width="100" :height="100" :unit="'%'" :bg-color="'#FFF'">
+                <LoanLedger :loanID="loanID" />
+            </ContentBlock>
         </div>
     </div>
 </template>
